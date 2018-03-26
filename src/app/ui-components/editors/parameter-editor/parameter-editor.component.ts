@@ -36,7 +36,8 @@ export class ParameterEditorComponent extends Viewer{
         OutputPortTypes.Three, 
         OutputPortTypes.Text, 
         OutputPortTypes.Code, 
-        OutputPortTypes.Console 
+        OutputPortTypes.Console, 
+        OutputPortTypes.Cesium
     ]; 
 
 	  constructor(injector: Injector, public dialog: MatDialog){  
@@ -139,6 +140,9 @@ export class ParameterEditorComponent extends Viewer{
       }
       else if(type == OutputPortTypes.Console){
         return "Console";
+      }
+      else if(type == OutputPortTypes.Cesium){
+        return "Cesium";
       }
       else{
         return "Not Identifiable"

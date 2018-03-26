@@ -32,6 +32,7 @@
     "@types/three": "^0.84.27",
     "angular-split": "^1.0.0-rc.0",
     "angular-tree-component": "^6.0.0",
+    "cesium": "^1.43.0",
     "circular-json": "^0.4.0",
     "core-js": "^2.4.1",
     "gs-json": "^0.1.67",

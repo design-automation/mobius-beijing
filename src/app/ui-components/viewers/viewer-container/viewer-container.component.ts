@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class ViewerContainerComponent extends Viewer implements OnInit {
 
   	private _layout_subscription: Subscription;
-  	group: {value: number} = {value: 5};
+  	group: {value: number} = {value: 500};
   	_lock:  boolean = false;
 
 	constructor(injector: Injector, private layoutService: LayoutService){ 
@@ -45,7 +45,7 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 	}
 
 	switchToHelp(): void{
-		this.updateGroupValue(4);
+		this.updateGroupValue(400);
 	}
 
 	switchToConsole(): void{

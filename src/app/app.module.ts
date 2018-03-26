@@ -11,6 +11,7 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { TreeModule } from 'angular-tree-component';
 
 import { FlowchartService } from './global-services/flowchart.service';
+import { ConsoleService } from './global-services/console.service';
 import { LayoutService } from './global-services/layout.service'; 
 
 /*import { ModuleService } from './global-services/module.service';
@@ -25,6 +26,7 @@ import { FlowchartViewerComponent } from './ui-components/editors/flowchart-view
 
 import { CodeViewerComponent } from './ui-components/viewers/code-viewer/code-viewer.component';
 import { GeometryViewerComponent } from './ui-components/viewers/geometry-viewer/geometry-viewer.component';
+import { CesiumViewerComponent } from './ui-components/viewers/cesium-viewer/cesium-viewer.component';
 import { ModuleViewerComponent } from './ui-components/viewers/module-viewer/module-viewer.component';
 import { ParameterViewerComponent } from './ui-components/viewers/parameter-viewer/parameter-viewer.component';
 import { ModuleboxComponent } from './ui-components/controls/modulebox/modulebox.component';
@@ -40,7 +42,8 @@ import { HelpViewerComponent } from './ui-components/help/help-viewer/help-viewe
 import { MobiusAbout, HelpFundamentals, HelpModel } from './ui-components/help/info-viewer/help.template';
 
 import { GSViewer } from './gs-viewer/gs-viewer.module';
-import { ConsoleService } from './global-services/console.service';
+import { MobiusCesium } from './mobius-cesium/mobius-cesium.module';
+
 
 import { FileLoadDialogComponent } from './ui-components/dialogs/file-load-dialog.component';
 import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.component';
@@ -52,6 +55,7 @@ import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.
     FlowchartViewerComponent,
     CodeViewerComponent,
     GeometryViewerComponent,
+    CesiumViewerComponent,
     FlowchartControlsComponent,
     ModuleViewerComponent,
     ProcedureEditorComponent,
@@ -86,7 +90,8 @@ import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.
     AngularSplitModule, 
     TreeModule,
     CustomMaterialModule,
-    GSViewer
+    GSViewer, 
+    MobiusCesium
   ],
   providers: [FlowchartService, LayoutService, ConsoleService],
   bootstrap: [AppComponent]
