@@ -47,16 +47,12 @@ import { FileLoadDialogComponent } from './ui-components/dialogs/file-load-dialo
 import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.component';
 import { MobiusEditorComponent } from './ui-components/main/mobius-editor/mobius-editor.component';
 import { MobiusViewerComponent } from './ui-components/main/mobius-viewer/mobius-viewer.component';
-import { PageNotFoundComponent } from './ui-components/main/page-not-found/page-not-found.component';
+import { LandingComponent } from './ui-components/main/mobius-landing/landing.component';
 
 const appRoutes: Routes = [
-  { path: 'mobius-modeller/editor', component: MobiusEditorComponent },
-  { path: 'mobius-modeller/:id',      component: MobiusViewerComponent },
-  { path: 'mobius-modeller',
-    redirectTo: '/landing',
-    pathMatch: 'full'
-  },
-  { path: '**', component: PageNotFoundComponent }
+  { path: 'editor', component: MobiusEditorComponent },
+  { path: 'viewer/:id',      component: MobiusViewerComponent },
+  { path: '**', component: LandingComponent }
 ];
 
 @NgModule({
@@ -88,7 +84,7 @@ const appRoutes: Routes = [
     GraphEdgeComponent,
     MobiusEditorComponent,
     MobiusViewerComponent,
-    PageNotFoundComponent
+    LandingComponent
   ],
   entryComponents: [
     ModuleboxComponent,
