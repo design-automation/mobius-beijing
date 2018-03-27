@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 
@@ -44,6 +45,19 @@ import { ConsoleService } from './global-services/console.service';
 
 import { FileLoadDialogComponent } from './ui-components/dialogs/file-load-dialog.component';
 import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.component';
+import { MobiusEditorComponent } from './ui-components/main/mobius-editor/mobius-editor.component';
+import { MobiusViewerComponent } from './ui-components/main/mobius-viewer/mobius-viewer.component';
+import { PageNotFoundComponent } from './ui-components/main/page-not-found/page-not-found.component';
+
+const appRoutes: Routes = [
+  { path: 'mobius-modeller/editor', component: MobiusEditorComponent },
+  { path: 'mobius-modeller/:id',      component: MobiusViewerComponent },
+  { path: 'mobius-modeller',
+    redirectTo: '/landing',
+    pathMatch: 'full'
+  },
+  { path: '**', component: PageNotFoundComponent }
+];
 
 @NgModule({
   declarations: [
@@ -71,7 +85,10 @@ import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.
     HelpFundamentals,
     HelpModel,
     FileLoadDialogComponent,
-    GraphEdgeComponent
+    GraphEdgeComponent,
+    MobiusEditorComponent,
+    MobiusViewerComponent,
+    PageNotFoundComponent
   ],
   entryComponents: [
     ModuleboxComponent,
@@ -79,6 +96,10 @@ import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.
     FileLoadDialogComponent
   ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    ),
     BrowserModule,
     HttpClientModule, 
     FormsModule,
