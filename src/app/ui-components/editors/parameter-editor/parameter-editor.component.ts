@@ -124,6 +124,9 @@ export class ParameterEditorComponent extends Viewer{
       else if(type == InputPortTypes.Slider){
         return "Slider";
       }
+      else if(type == InputPortTypes.URL){
+        return "WebURL";
+      }
       else{
         return "Not Identifiable"
       }

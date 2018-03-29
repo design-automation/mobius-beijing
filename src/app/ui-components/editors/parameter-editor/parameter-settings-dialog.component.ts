@@ -90,4 +90,18 @@ export class ParameterSettingsDialogComponent {
       reader.readAsText(file);
     }
 
+    
+    url = "";
+    handleURL($event, input){
+      fetch('https://' + this.url)
+      .then(response => response.json())
+      .then(json => 
+        input.setDefaultValue(JSON.stringify(json))
+      )
+    }
+
+    clear($event, input){
+      input.setDefaultValue(undefined);
+    }
+
 }

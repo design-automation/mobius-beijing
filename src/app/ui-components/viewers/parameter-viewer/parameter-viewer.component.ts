@@ -115,4 +115,13 @@ export class ParameterViewerComponent extends Viewer {
     
     }
 
+    url = "";
+    handleURL($event, input){
+      fetch('https://' + this.url)
+      .then(response => response.json())
+      .then(json => 
+        input.setComputedValue(JSON.stringify(json))
+      )
+    }
+
 }

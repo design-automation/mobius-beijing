@@ -63,6 +63,14 @@
 				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
 			</div>
 
+			<!-- if input type == URL -->
+			<div class="value" 
+				*ngIf="inp.getType() == InputPortTypes.URL">
+				http://<input type="text" [(ngModel)]="url">
+				<button (click)="handleURL($event, inp)">Get Data</button>
+				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
+			</div>
+
 		</div>
 
 			<!-- todo: disable if port is connected -->
