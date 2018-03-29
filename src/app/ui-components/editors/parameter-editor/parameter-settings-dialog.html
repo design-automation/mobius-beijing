@@ -49,7 +49,21 @@
 		  	<!-- <mat-hint>Enter the default value</mat-hint> -->
 		  </mat-form-field>
 
+
+
 	</form>
+</div>
+
+<div *ngIf='type == inputPortTypes.FilePicker'>
+	<!-- if input type == FilePicker -->
+	<div class="value">
+		<input type="file" id="file" (change)="handleFileInput($event.target.files, input)">
+		<br><br>
+		<div *ngIf="input.getDefaultValue()">
+			<h3>Default File:</h3> 
+			<div style="max-height: 150px; overflow-y: auto">{{input.getDefaultValue()}}</div>
+		</div>
+	</div>
 </div>
 
 <!-- <div *ngIf='type == inputPortTypes.File'>

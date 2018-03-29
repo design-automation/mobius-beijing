@@ -26,9 +26,10 @@ export class ParameterEditorComponent extends Viewer{
     // shift to iport
     inputPortOpts: InputPortTypes[] = [
         InputPortTypes.Input,
-        InputPortTypes.Slider 
+        InputPortTypes.Slider, 
         // InputPortTypes.ColorPicker, 
-        // InputPortTypes.FilePicker, 
+        InputPortTypes.FilePicker,
+        InputPortTypes.URL 
         // InputPortTypes.Dropdown
     ]; 
 
@@ -194,6 +195,7 @@ export class ParameterEditorComponent extends Viewer{
 
       }
     }
+
 }
 
 

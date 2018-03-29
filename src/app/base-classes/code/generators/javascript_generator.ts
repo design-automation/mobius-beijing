@@ -96,7 +96,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 					}
 				}
 				else{
-					param_values.push(inputs[i].getValue());
+					let val = inputs[i].getValue();
+					param_values.push(val);
 				}
 			}
 

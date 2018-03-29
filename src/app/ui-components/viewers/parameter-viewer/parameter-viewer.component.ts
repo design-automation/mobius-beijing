@@ -45,7 +45,6 @@ export class ParameterViewerComponent extends Viewer {
     // }
 
     updateComputedValue($event, input, value?: any): void{
-
       if($event.srcElement){
         value = $event.srcElement.value;
         value = value.trim();
@@ -94,6 +93,26 @@ export class ParameterViewerComponent extends Viewer {
     executeFlowchart($event): void{
         $event.stopPropagation();
         this.flowchartService.execute();
+    }
+
+    handleFileInput(fileList, input){
+      let file: File = fileList[0];
+      var reader = new FileReader();
+      let fs = this.flowchartService;
+      reader.onload = (function(reader)
+      {
+          return function()
+          {
+              var contents = reader.result;
+              /*var lines = contents.split('\n');
+              contents = lines.join("\\\n");*/
+              input.setComputedValue(contents);
+              fs.update();
+          }
+      })(reader);
+
+      reader.readAsText(file);
+    
     }
 
 }
