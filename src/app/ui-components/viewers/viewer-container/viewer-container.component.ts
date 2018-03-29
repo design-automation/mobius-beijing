@@ -40,6 +40,7 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 	}
 
 	updateGroupValue(value: number): void{
+		console.log(value);
 		this.group.value = value;
 		this.layoutService.setViewContainer(value); 
 	}

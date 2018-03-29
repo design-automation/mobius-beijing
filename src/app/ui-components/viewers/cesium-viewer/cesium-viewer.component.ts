@@ -4,7 +4,6 @@ import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IPort } from '../../../base-classes/port/PortModule';
 
 import * as gs from 'gs-json';
-import DEFAULT_FILE from '../../../../assets/json-files/sg.json';
 
 @Component({
   selector: 'app-cesium-viewer',
@@ -14,7 +13,7 @@ import DEFAULT_FILE from '../../../../assets/json-files/sg.json';
 export class CesiumViewerComponent extends Viewer implements OnInit{
 
 	_port: IPort;
-	gs_dummy_data: any; 
+	gs_dummy_data: any = undefined; 
 
 	constructor(injector: Injector){ 
 		super(injector, "Cesium Viewer", "Displays geometry with each node in cesium viewer");  
@@ -38,7 +37,7 @@ export class CesiumViewerComponent extends Viewer implements OnInit{
             this.gs_dummy_data = portValue;
           }
           else{
-            this.gs_dummy_data = DEFAULT_FILE;
+            this.gs_dummy_data = undefined;
           }
         }
       }
