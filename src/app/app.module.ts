@@ -48,6 +48,9 @@ import { MobiusCesium } from './mobius-cesium/mobius-cesium.module';
 import { FileLoadDialogComponent } from './ui-components/dialogs/file-load-dialog.component';
 import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.component';
 
+
+import { ShortNamePipe } from './pipes/short-name.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,7 +78,8 @@ import { GraphEdgeComponent } from './ui-components/graph/graph-edge/graph-edge.
     HelpFundamentals,
     HelpModel,
     FileLoadDialogComponent,
-    GraphEdgeComponent
+    GraphEdgeComponent,
+    ShortNamePipe
   ],
   entryComponents: [
     ModuleboxComponent,

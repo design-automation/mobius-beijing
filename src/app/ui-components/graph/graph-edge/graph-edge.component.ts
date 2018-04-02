@@ -53,7 +53,7 @@ export class GraphEdgeComponent implements OnInit {
         canvas.height = this.getHeight();
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        context.lineWidth = 3;
+        context.lineWidth = 2;
 
         context.strokeStyle = this.temporary ? '#8AA8C0' : '#395D73';
 
