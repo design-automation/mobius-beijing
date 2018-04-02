@@ -11280,7 +11280,7 @@ if (true /*environment.production*/) {
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* enableProdMode */])();
 }
 // needs ./assets/cesium for deployment on server
-window['CESIUM_BASE_URL'] = '/assets/cesium';
+window['CESIUM_BASE_URL'] = 'docs/assets/cesium';
 Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
 
 
