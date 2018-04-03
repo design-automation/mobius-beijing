@@ -97,10 +97,18 @@ export class CodeGeneratorJS extends CodeGenerator{
 				}
 				else{
 					let val = inputs[i].getValue();
-					console.log(typeof val);
 					param_values.push(val);
 				}
 			}
+
+			param_values = param_values.map(function(p){
+				if(p === undefined){
+					return "undefined";
+				}
+				else{
+					return p;
+				}
+			});
 
 			// make function call and assign to variable of same name
 			fn_call = "let " + node.getName() +  "=" + node.getName() + node.getVersion() + "( " + param_values.join(", ") + " );" ;
