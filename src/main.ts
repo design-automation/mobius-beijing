@@ -9,6 +9,6 @@ if (true/*environment.production*/) {
 }
 
 // needs ./assets/cesium for deployment on server
-window['CESIUM_BASE_URL'] = '/assets/cesium';
+window['CESIUM_BASE_URL'] = './assets/cesium';
 
 platformBrowserDynamic().bootstrapModule(AppModule);
