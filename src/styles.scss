@@ -383,6 +383,11 @@ span.addBtn{
 	padding-left: $default-side-padding !important;
 }
 
+// checkboxes
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background{
+	background-color: $color1;
+}
+
 
 .mat-input-wrapper{
 	font-family: 'Ubuntu Mono', monospace !important;

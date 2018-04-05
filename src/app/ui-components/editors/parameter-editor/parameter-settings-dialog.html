@@ -82,6 +82,17 @@
 
 </div>
 
+
+<!-- checkbox -->
+<div *ngIf='type == inputPortTypes.Checkbox'>
+	<div>
+		<mat-checkbox #val 
+		(change)="input.setDefaultValue(val.checked)" 
+		[checked]="input.getDefaultValue()"></mat-checkbox>
+	</div>
+</div>
+
+
 <!-- <div *ngIf='type == inputPortTypes.File'>
 	Sunt dolor in officia veniam id tempor occaecat sint ea exercitation ut aliqua esse eu laborum elit commodo ea amet magna id consequat dolor occaecat esse id tempor labore nulla nisi velit mollit voluptate.
 </div>

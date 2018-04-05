@@ -24,16 +24,16 @@
                         [gutterSize]="layout.gutter" 
                         [useTransition]="layout.useTransition">
 
-                    <split-area [size]="20" order="1">
+                    <split-area [size]="layout.size.top" order="1">
                       <app-panel panel_id="top"></app-panel>
                     </split-area>
 
-                    <split-area [size]="0" order="2">
+                    <split-area [size]="layout.size.middle" order="2">
                       <app-panel panel_id="middle"></app-panel>
                     </split-area>
 
                     <!-- fixed -->
-                    <split-area [size]="80" order="3">
+                    <split-area [size]="layout.size.bottom" order="3">
                       <app-panel panel_id="bottom"></app-panel>
                     </split-area>
 

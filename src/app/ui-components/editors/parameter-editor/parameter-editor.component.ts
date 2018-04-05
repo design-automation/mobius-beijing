@@ -29,7 +29,8 @@ export class ParameterEditorComponent extends Viewer{
         InputPortTypes.Slider, 
         // InputPortTypes.ColorPicker, 
         InputPortTypes.FilePicker,
-        InputPortTypes.URL 
+        InputPortTypes.URL,
+        InputPortTypes.Checkbox
         // InputPortTypes.Dropdown
     ]; 
 
@@ -126,6 +127,9 @@ export class ParameterEditorComponent extends Viewer{
       }
       else if(type == InputPortTypes.URL){
         return "WebURL";
+      }
+      else if(type == InputPortTypes.Checkbox){
+        return "Checkbox";
       }
       else{
         return "Not Identifiable"

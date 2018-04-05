@@ -67,6 +67,13 @@
 				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
 			</div>
 
+			<!-- if input type == Checkbox -->
+			<div class="param-value" 
+				*ngIf="inp.getType() == InputPortTypes.Checkbox">
+				<mat-checkbox #val (change)="updateComputedValue($event, inp, val.checked)" 
+				[checked]="inp.getValue()"></mat-checkbox>
+			</div>
+
 		</div>
 
 			<!-- todo: disable if port is connected -->
