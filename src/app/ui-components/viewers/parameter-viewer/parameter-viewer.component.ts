@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, ElementRef, ViewChild } from '@angular/core';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
@@ -17,7 +17,11 @@ export class ParameterViewerComponent extends Viewer {
 
     InputPortTypes = InputPortTypes;
 
-  	constructor(injector: Injector){  super(injector, "parameter-viewer"); }
+    @ViewChild('cesium_param_container') el:ElementRef;
+
+  	constructor(injector: Injector){  
+        super(injector, "parameter-viewer"); 
+     }
 
   	ngOnInit() {
       this.update();

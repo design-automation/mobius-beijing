@@ -5,6 +5,18 @@ div.mat-input-wrapper.mat-form-field-wrapper{
 	padding: 0;
 }
 
+
+$text-height: 12px;
+$default-height: 2*$text-height;
+
+.box-text-values{
+	font-size: $text-height;
+	height: $default-height;
+	line-height: $default-height;
+	text-align: center;
+	color: #395D73;
+}
+
 .viewer{
 	font-family: 'Ubuntu Mono', monospace;
 	display: flex; 
@@ -35,7 +47,7 @@ div.mat-input-wrapper.mat-form-field-wrapper{
 			justify-content: space-equally;
 			font-size: $fsize1;
 			line-height: 18px;
-			border-bottom: 1px solid $color2;
+			//border-bottom: 1px solid $color2;
 			width: 100%;
 			padding: 2px 0px;
 			.info{
@@ -80,7 +92,7 @@ div.mat-input-wrapper.mat-form-field-wrapper{
 					width: 100px;
 					textarea{
 						//height: auto !important;
-						font-family: 'Ubuntu Mono', monospace !important;
+						//font-family: 'Ubuntu Mono', monospace !important;
 					}
 				}
 				.slider-container{
@@ -152,5 +164,126 @@ div.mat-input-wrapper.mat-form-field-wrapper{
 		background-color: $color4;
 		color:$color5;
 	}
+}
+
+
+
+#param-container-cesium{
+	overflow-x: hidden;
+	padding: 3px;
+	margin-top: 5px;
+
+	display: flex; 
+	flex-direction: column;
+	justify-content: flex-start;
+
+	.mat-input-element{
+		vertical-align: middle !important;
+		font-family: 'Roboto', sans-serif;
+
+		textarea{
+			padding-left: 5px;
+		}
+
+		.mat-input-wrapper{
+			border-bottom: none !important;
+		}
+	}
+
+	textarea{
+		height: $default-height;
+		font-size: 12px;
+		line-height: $default-height;
+		border: 1px solid $color1;
+		text-align: center;
+	}
+	
+	.single-param-container{
+		display: flex; 
+		flex-direction: row; 
+		flex-wrap: wrap;
+
+		margin: 0px 0px 5px 0px; 
+		padding: 0px;
+
+		font-family: 'Roboto', sans-serif;
+
+		.param-name{
+			width: 90px;
+			min-height: $default-height;
+			line-height: $default-height;
+			vertical-align: middle;
+			word-wrap: break-word;
+			padding-left: 5px;
+			font-size: $text-height;
+		}
+
+		.param-value{
+			min-width: 40px;
+			padding: 0px; 
+			margin: 0px 0px 0px 10px;
+			flex-grow: 1;
+
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+
+			// text fields
+			.content{
+				width: 100%; 
+				height: 100%;
+				vertical-align: middle;
+
+				.mat-input-container{
+					width: 100%;
+					
+					.mat-input-wrapper{
+						border-bottom: 0px;
+					}
+					
+			
+				}
+				
+			}
+
+			// sliders
+			.curr-value{
+				width: 40px;	
+				height: $default-height;
+
+			}
+
+			.slider-container{
+
+				display: flex;
+				flex-direction: row;
+				
+				flex-grow: 1;
+				margin-left: 5px;
+
+				.content{
+					@extend .box-text-values;
+					width: 40px;
+				}
+
+				.mat-slider-horizontal{
+					padding: 0px;
+					height: $default-height;
+
+					min-width: 50px;
+
+					flex-grow: 1;
+
+					.mat-slider-wrapper{
+						top: $text-height !important;
+					}
+
+				}
+				
+			}
+		}
+
+	}
+
 }
 

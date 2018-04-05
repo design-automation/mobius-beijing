@@ -387,9 +387,10 @@ span.addBtn{
 .mat-input-wrapper{
 	font-family: 'Ubuntu Mono', monospace !important;
 	padding: 0 !important;
-	border-bottom: 1px solid $color2 !important;
+	//border-bottom: 1px solid $color2 !important;
 	font-size: $fsize2 !important;
 	color: $color1;
+	width: 40px;
 }
 
 .mat-input-infix{
@@ -440,9 +441,12 @@ mat-dialog-container{
 }
 
 .mat-slider{
-	width: 90% !important;
+	width: 60% !important;
 }
 
+.mat-slider-wrapper{
+	top: 12px !important;
+}
 
 split-area{
 	div{
