@@ -1,13 +1,12 @@
 <div class="viewer">
 
-	<div class="container" id="param-container-cesium">
+	<div class="container" id="param-container-cesium"  #cesium_param_container>
 
 		<div class="default" *ngIf='_inputs == undefined || _inputs.length == 0'>
 			No Inputs
 		</div>
  
 		<div class='paramater-container single-param-container' *ngFor="let inp of _inputs" >
-			
 			<div class="param-name">
 				{{ inp.getName() }}
 			</div>
@@ -28,7 +27,7 @@
 			</div> 
 
 			<!-- if input type == Slider -->
-			<div class="value" 
+			<div class="param-value" 
 				*ngIf="inp.getType() == InputPortTypes.Slider">
 				<mat-form-field class="curr-value">
 					<textarea matInput 
@@ -39,7 +38,7 @@
             			value="{{ getValue(inp) }}">
             		</textarea>
 				</mat-form-field>
-				<div class="slider-container">
+				<div class="slider-container" *ngIf="el.nativeElement.offsetWidth > 200">
 					<span class='content'>{{inp.getOpts().min}}</span>
 					<mat-slider min="{{inp.getOpts().min}}" 
 								max="{{inp.getOpts().max}}" 
@@ -54,14 +53,14 @@
 			</div>
 
 			<!-- if input type == FilePicker -->
-			<div class="value" 
+			<div class="param-value" 
 				*ngIf="inp.getType() == InputPortTypes.FilePicker">
 				<input type="file" id="file" (change)="handleFileInput($event.target.files, inp)">
 				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
 			</div>
 
 			<!-- if input type == URL -->
-			<div class="value" 
+			<div class="param-value" 
 				*ngIf="inp.getType() == InputPortTypes.URL">
 				http://<input type="text" [(ngModel)]="url">
 				<button (click)="handleURL($event, inp)">Get Data</button>
