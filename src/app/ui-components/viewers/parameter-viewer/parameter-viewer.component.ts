@@ -49,6 +49,8 @@ export class ParameterViewerComponent extends Viewer {
     // }
 
     updateComputedValue($event, input, value?: any): void{
+
+      // for input
       if($event.srcElement){
         value = $event.srcElement.value;
         value = value.trim();
@@ -64,14 +66,13 @@ export class ParameterViewerComponent extends Viewer {
 
     getValue(port :InputPort): any{
 
-        /*if(port.isConnected()){
-          let address = port.getValue().port;
-          let otp = this.flowchartService.getFlowchart().getNodeByIndex(address[0]).getOutputByIndex(address[1]);
-          return otp.getValue();
+        if(port.getType() == InputPortTypes.Checkbox){
+          return port.getValue() || false;
         }
-        else{*/
+        else{
           return (port.getValue() || " ");
-        //}
+        }
+
     }
   	//
   	//	this update runs when there is a message from other viewers that something changed; 
