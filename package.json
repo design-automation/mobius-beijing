@@ -1,9 +1,9 @@
 {
-  "name": "mobius-modeller",
+  "name": "mobius-cesium-modeller",
   "version": "0.0.0",
   "license": "MIT",
   "config": {
-    "dev_url": "https://akshatamohanty.github.io/mobius-modeller/",
+    "dev_url": "https://akshatamohanty.github.io/mobius-cesium/",
     "prod_url": "https://phtj.github.io/mobius-modeller/"
   },
   "scripts": {
@@ -45,7 +45,7 @@
     "rxjs": "^5.5.2",
     "three": "^0.88.0",
     "three-orbit-controls": "^82.1.0",
-    "turf-modelling": "^0.1.5",
+    "turf-modelling": "^0.1.6",
     "typescript-compiler": "^1.4.1",
     "zone.js": "^0.8.14"
   },
