@@ -154,3 +154,49 @@ div.mat-input-wrapper.mat-form-field-wrapper{
 	}
 }
 
+
+
+#param-container-cesium{
+	background-color: #F0B0B0;
+	overflow: hidden;
+	height: 100%;
+	padding: 3px;
+
+	display: flex; 
+	flex-direction: column;
+	justify-content: flex-start;
+
+	*{
+		border: 1px solid black;
+	}
+	
+	.single-param-container{
+		display: flex; 
+		flex-direction: row; 
+		flex-wrap: wrap;
+
+		max-height: 30px;
+
+		margin: 0px; 
+		padding: 0px;
+
+		font-family: 'Roboto, sans-serif';
+
+		.param-name{
+			min-width: 100px;
+		}
+
+		.param-value{
+			min-width: 200px;
+			flex-grow: 1;
+
+			background-color: green;
+			.content{
+				width: 100%; 
+				height: 100%;
+			}
+		}
+
+	}
+
+}

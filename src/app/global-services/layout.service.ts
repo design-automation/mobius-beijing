@@ -14,8 +14,8 @@ export class LayoutService {
         size: {
           main: 70, 
           side: 30, 
-          top: 33, 
-          middle: 33, 
+          top: 10, 
+          middle: 10, 
           bottom: 33
         },
         content: {

@@ -1,22 +1,19 @@
 <div class="viewer">
 
-	<div class="container">
+	<div class="container" id="param-container-cesium">
 
 		<div class="default" *ngIf='_inputs == undefined || _inputs.length == 0'>
 			No Inputs
 		</div>
  
-		<div class='paramater-container' *ngFor="let inp of _inputs" >
+		<div class='paramater-container single-param-container' *ngFor="let inp of _inputs" >
 			
-			<div class="info">
-				<div class='param'>
-					<!--<span class='label'>Name</span>-->
-					<span class='content'>{{ inp.getName() }}</span>
-				</div>
+			<div class="param-name">
+				{{ inp.getName() }}
 			</div>
 
 			<!-- if input type == Input -->
-			<div class="value" *ngIf="inp.getType() == InputPortTypes.Input">
+			<div class="param-value" *ngIf="inp.getType() == InputPortTypes.Input">
 				<form  class='content'>
 					<mat-form-field>
 						<textarea matInput 
