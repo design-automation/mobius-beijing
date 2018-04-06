@@ -8,6 +8,9 @@ export class DataService {
   private subject = new Subject<any>();
   ColorValue:string;
   HeightValue:string;
+  CheckHide:boolean;
+  CheckCom:boolean;
+  CheckOcc:boolean;
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
