@@ -3,4 +3,4 @@
 </p>
 
 
-<div *ngFor="let f of fs" style="width: 300px; height: 150px; border: 1px solid gray;">{{f}}</div>
+<div *ngFor="let f of all_files" style="width: 300px; height: 150px; border: 1px solid gray;" (click)="loadFile(f)">{{f}}</div>

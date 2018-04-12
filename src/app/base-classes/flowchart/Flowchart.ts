@@ -23,6 +23,8 @@ export class Flowchart implements IFlowchart{
 
 	private _lastSaved: Date;
 
+	private _globals = [];
+
 	//
 	//	constructor needs 2 arguments  - username and icodegenerator
 	//

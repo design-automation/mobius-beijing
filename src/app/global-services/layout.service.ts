@@ -10,6 +10,7 @@ export class LayoutService {
 
   	private layout = {
         useTransition: true,
+        mode: 'Editor',
         gutter: 7,
         size: {
           main: 70, 
@@ -34,6 +35,22 @@ export class LayoutService {
     _fnObj: {module: string, name: string};
 
   	constructor() { }
+
+    toggleMode(): void{
+        if(this.layout.mode == 'Editor'){
+        this.layout.mode = 'Viewer';
+        this.layout.size.top = 0; 
+        this.layout.size.middle = 0; 
+        this.layout.size.bottom = 100; 
+      }
+      else{
+        this.layout.mode = 'Editor';
+        this.layout.size.top = 33; 
+        this.layout.size.middle = 33; 
+        this.layout.size.bottom = 33; 
+
+      }
+    }
 
     // handing subscriptions
     private subject = new Subject<any>();

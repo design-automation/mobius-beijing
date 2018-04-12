@@ -11,7 +11,8 @@ export class MobiusEditorComponent implements OnInit {
 	ngOnInit() {
 	}
 
-    layout; 
+	layout;
+	toggle;
     supported: boolean = false;
 
     constructor(private layoutService: LayoutService){ 
@@ -19,6 +20,7 @@ export class MobiusEditorComponent implements OnInit {
     	let browser: string = this.checkBrowser();
     	if(browser == "Chrome"){
     		this.layout = layoutService.getAssets(); 
+    		this.toggle = layoutService.toggleMode;
     		this.supported = true;
     	}
     	else{
@@ -26,7 +28,6 @@ export class MobiusEditorComponent implements OnInit {
     		this.supported = false;
     	}
 
-    	
     	window.onbeforeunload = function(e) {
 		  var dialogText = 'Dialog text here';
 		  e.returnValue = dialogText;
