@@ -22,6 +22,9 @@ export interface IFlowchart{
 	getAuthor(): string; 
 	getSummary(): string;
 
+	globals();
+	globals(arr);
+
 	// icodegenerator
 
 	// get / set

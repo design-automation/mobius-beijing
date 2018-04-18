@@ -24,6 +24,7 @@ export class Flowchart implements IFlowchart{
 	private _lastSaved: Date;
 
 	private _globals = [];
+	private _visibleNode;
 
 	//
 	//	constructor needs 2 arguments  - username and icodegenerator
@@ -50,12 +51,20 @@ export class Flowchart implements IFlowchart{
 		return "This is a flowchart, with " + this._nodes.length + " nodes, written by " + this._author;
 	}
 
-	get global(): any{
+	get globals(): any{
 		return this._globals;
 	}
 
 	set globals(arr: any){
 		this._globals = arr;
+	}
+
+	set visibleNode(id: number){
+		this._visibleNode = this._nodes[id];
+	}
+
+	get visibleNode(){
+		return this._visibleNode;
 	}
 
 	//

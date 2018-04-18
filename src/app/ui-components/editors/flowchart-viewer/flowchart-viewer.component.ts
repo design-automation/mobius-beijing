@@ -264,8 +264,14 @@ export class FlowchartViewerComponent extends Viewer{
   //  Events
   //
   //
+  deselect($event){
+     $event.stopPropagation();
+     this.flowchartService.selectNode(undefined, undefined);
+  }
+
   clickNode($event: Event, nodeIndex: number): void{
     // select the node
+    $event.stopPropagation();
     this.flowchartService.selectNode(nodeIndex);
   }
 

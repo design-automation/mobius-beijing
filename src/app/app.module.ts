@@ -62,6 +62,7 @@ const appRoutes: Routes = [
 
 
 import { ShortNamePipe } from './pipes/short-name.pipe';
+import { PublishSettingsComponent } from './ui-components/editors/publish-settings/publish-settings.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { ShortNamePipe } from './pipes/short-name.pipe';
     MobiusViewerComponent,
     LandingComponent,
     MobiusGalleryComponent,
-    ShortNamePipe
+    ShortNamePipe,
+    PublishSettingsComponent
   ],
   entryComponents: [
     ModuleboxComponent,

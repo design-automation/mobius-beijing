@@ -1,13 +1,12 @@
 <div class="editor">
 	
-	<!-- <div class="default" *ngIf="!isVisible">
-		No Node Selected
-	</div> -->
-
 	<div class="default" *ngIf="!isVisible">
+		No Node Selected
+	</div>
+
+	<!-- <div class="default" *ngIf="!isVisible">
 		<h3>Global Variables</h3>
 		<div class='row'>
-			<!--<span class='label'>Name</span>-->
 			<span class='content' contenteditable="true" (blur)="updatePortName($event, inp)" spellcheck="false">
 			</span>
 		</div>
@@ -19,7 +18,7 @@
      	    <option>node 3</option>
      	    <option>node 4</option>
         </select>
-	</div>
+	</div> -->
 	
 	<!-- @Derek: Modify gutterSize/gutterColor/size -->
 	<!-- https://bertrandg.github.io/angular-split/#/documentation -->
@@ -27,8 +26,7 @@
 			  direction="horizontal" 
 			  gutterColor="white"
               [gutterSize]="7" 
-              [useTransition]="true"
-              >
+              [useTransition]="true">
 
 		<split-area [visible]="isVisible" [size]="30" order="1">
 			<app-modulebox></app-modulebox>
