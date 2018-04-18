@@ -21,7 +21,7 @@ export class MobiusGalleryComponent implements OnInit {
   }
 
   loadFile(filename): void{
-  	//console.log("load file: ", filename);
+  	console.log("load file: ", filename);
   	/*this.http.get('./assets/json-files/'+filename)
   		.pipe(
         tap(heroes => this.log(`fetched heroes`)),
