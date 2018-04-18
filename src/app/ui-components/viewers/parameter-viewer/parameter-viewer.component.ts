@@ -12,7 +12,7 @@ import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule
 export class ParameterViewerComponent extends Viewer {
 
 	  _node: IGraphNode;
-	  _inputs: InputPort[];
+	  _inputs: InputPort[]|any;
     isVisible: boolean = false;
 
     InputPortTypes = InputPortTypes;
@@ -29,7 +29,7 @@ export class ParameterViewerComponent extends Viewer {
 
     reset(): void{
       this._node = undefined; 
-      this._inputs = [];
+      this._inputs = this.flowchartService.getFlowchart().globals();//[];
     }
 
   	// addInput(): void{
@@ -87,7 +87,8 @@ export class ParameterViewerComponent extends Viewer {
          this.isVisible = true;
       }
       else{
-        this.isVisible = false;
+        //this.isVisible = false;
+         this._inputs = this.flowchartService.getFlowchart().globals;
       }
   	}
     

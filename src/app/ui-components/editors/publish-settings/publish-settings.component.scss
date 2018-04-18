@@ -1,0 +1,175 @@
+@import '~scss/globals';
+.publish-settings{
+	line-height: 16px;
+	font-size: 12px;
+	text-align: left;
+}
+
+
+.addBtn{
+	font-size: $fsize2;
+}
+
+.viewer{
+	@extend .viewer;
+
+	display: flex;
+	flex-direction: column;
+
+	/*.port-heading{
+		font-size: $fsize2;
+		line-height: $header-height;
+		padding: 0px 4px;
+		text-align: center;
+	}*/
+
+	.port {
+		font-family: 'Ubuntu Mono', monospace;
+		display: flex; 
+		flex-flow: row nowrap; 
+		justify-content: space-between!important;
+		padding-left: $default-side-padding;
+		height: auto;
+		min-height: 24px;
+
+		//margin: 2px;
+		border-bottom: 1px solid $color2;
+		//border-top: 1px dashed $color2;
+
+		background-color: white;
+
+		&:hover{
+			.content{
+				flex-flow: row wrap;
+				height: auto !important;
+			}
+			.controls{
+				display: flex;
+				//opacity: 100%;
+			}
+		}
+
+		span{
+			width: 100px;
+			height: $fsize2;
+			//border-bottom: 1px solid $color2 !important;
+			&:hover{
+				//border-bottom: 1px solid $color4 !important;
+			}
+		}
+		.content{
+			//width: 100px;
+			display: flex;
+			flex-flow: row nowrap;
+			height: $fsize1;
+			font-size: $fsize2;
+			line-height: $fsize1;
+			justify-content: space-between;
+			padding: 0;
+			margin: 2px 0px;
+			
+			.row{
+				height: 20px !important;
+			}
+			span{
+				padding:0 !important;
+				text-align: center !important;
+				border-bottom: 1px solid $color2;
+				margin-right: 5px;
+				//height: $fsize2 !important;
+				//line-height: $fsize1 !important;
+			}
+
+			select{
+				font-size: $fsize2;
+				font-family: 'Ubuntu Mono', monospace;
+				width: 100px;
+				border: 0px !important;
+
+				color: $color1;
+			}
+			/*.row{				
+				display: flex; 
+				flex-direction: row;
+
+				.label{
+					display: inline-block;
+					text-transform: uppercase;
+					font-size: 10px; 
+					color: gray; 
+					width: 100px;
+				}
+
+				.content{
+					min-width: 50px;
+
+					&.undefined{
+						border-bottom: 1px dashed blue;
+					}
+				}
+			}*/
+
+		}
+
+		.controls{
+			margin:0 !important;
+			display: none;
+			//opacity: 0;
+
+			button{
+				max-width: $fsize1 !important;
+				height: $fsize1;
+				min-width: $fsize1 !important;
+				padding: 0px !important; 
+				flex-grow: 0 !important;
+				flex-shrink: 0 !important;
+				mat-icon{
+					height: $fsize2;
+					vertical-align: top !important;
+					font-size: $fsize1 !important;
+					text-align: left !important;
+				}
+				&:hover{
+					background-color: $color3 !important;
+					mat-icon{
+						color: $color5 !important;
+					}
+				}
+			}
+			//.btn:hover{
+				//cursor: pointer;
+				//border-bottom: 1px dashed blue;
+			//}
+		}
+	
+	}
+}
+
+.hidden{
+	display: inline-block !important;
+	visibility: hidden !important;
+}
+
+.container{
+	overflow: hidden !important;
+
+	mat-expansion-panel-header{
+		background-color: $color3 !important;
+		border-top: 1px solid $color2 !important;
+		border-bottom: 1px solid $color2 !important;
+		padding-left: $default-side-padding !important;
+		mat-panel-title{
+			color: $color1 !important;
+			font-weight: bold !important;
+			font-size: $fsize2 !important;
+		}
+		&:hover{
+			background-color: $color3 !important;
+		}
+	}
+}
+
+.view-container{
+	padding: 0 !important;
+	overflow: hidden !important;
+}
