@@ -136,7 +136,7 @@ export class FlowchartViewerComponent extends Viewer{
     let scaleFactor: number = 0.1;
     let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
     
-    if(value > 0.5 && value < 1.5){
+    if(value > 0.2 && value < 1.5){
       this.zoom = Number( (value).toPrecision(2) );
       this.updateEdges();
     }

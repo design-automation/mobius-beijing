@@ -1,22 +1,18 @@
 <div class="viewer">
 
-	<div class="container">
+	<div class="container" id="param-container-cesium"  #cesium_param_container>
 
 		<div class="default" *ngIf='_inputs == undefined || _inputs.length == 0'>
 			No Inputs
 		</div>
  
-		<div class='paramater-container' *ngFor="let inp of _inputs" >
-			
-			<div class="info">
-				<div class='param'>
-					<!--<span class='label'>Name</span>-->
-					<span class='content'>{{ inp.getName() }}</span>
-				</div>
+		<div class='paramater-container single-param-container' *ngFor="let inp of _inputs" >
+			<div class="param-name">
+				{{ inp.getName() }}
 			</div>
 
 			<!-- if input type == Input -->
-			<div class="value" *ngIf="inp.getType() == InputPortTypes.Input">
+			<div class="param-value" *ngIf="inp.getType() == InputPortTypes.Input">
 				<form  class='content'>
 					<mat-form-field>
 						<textarea matInput 
@@ -31,7 +27,7 @@
 			</div> 
 
 			<!-- if input type == Slider -->
-			<div class="value" 
+			<div class="param-value" 
 				*ngIf="inp.getType() == InputPortTypes.Slider">
 				<mat-form-field class="curr-value">
 					<textarea matInput 
@@ -42,7 +38,7 @@
             			value="{{ getValue(inp) }}">
             		</textarea>
 				</mat-form-field>
-				<div class="slider-container">
+				<div class="slider-container" *ngIf="el.nativeElement.offsetWidth > 200">
 					<span class='content'>{{inp.getOpts().min}}</span>
 					<mat-slider min="{{inp.getOpts().min}}" 
 								max="{{inp.getOpts().max}}" 
@@ -54,6 +50,28 @@
 								value="{{ getValue(inp) }}"></mat-slider>
 					<span class='content'>{{inp.getOpts().max}}</span>
 				</div>
+			</div>
+
+			<!-- if input type == FilePicker -->
+			<div class="param-value" 
+				*ngIf="inp.getType() == InputPortTypes.FilePicker">
+				<input type="file" id="file" (change)="handleFileInput($event.target.files, inp)">
+				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
+			</div>
+
+			<!-- if input type == URL -->
+			<div class="param-value" 
+				*ngIf="inp.getType() == InputPortTypes.URL">
+				http://<input type="text" [(ngModel)]="url">
+				<button (click)="handleURL($event, inp)">Get Data</button>
+				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
+			</div>
+
+			<!-- if input type == Checkbox -->
+			<div class="param-value" 
+				*ngIf="inp.getType() == InputPortTypes.Checkbox">
+				<mat-checkbox #val (change)="updateComputedValue($event, inp, val.checked)" 
+				[checked]="inp.getValue()"></mat-checkbox>
 			</div>
 
 		</div>

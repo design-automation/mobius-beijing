@@ -26,9 +26,11 @@ export class ParameterEditorComponent extends Viewer{
     // shift to iport
     inputPortOpts: InputPortTypes[] = [
         InputPortTypes.Input,
-        InputPortTypes.Slider 
+        InputPortTypes.Slider, 
         // InputPortTypes.ColorPicker, 
-        // InputPortTypes.FilePicker, 
+        InputPortTypes.FilePicker,
+        InputPortTypes.URL,
+        InputPortTypes.Checkbox
         // InputPortTypes.Dropdown
     ]; 
 
@@ -36,7 +38,8 @@ export class ParameterEditorComponent extends Viewer{
         OutputPortTypes.Three, 
         OutputPortTypes.Text, 
         OutputPortTypes.Code, 
-        OutputPortTypes.Console 
+        OutputPortTypes.Console, 
+        OutputPortTypes.Cesium
     ]; 
 
 	  constructor(injector: Injector, public dialog: MatDialog){  
@@ -122,6 +125,12 @@ export class ParameterEditorComponent extends Viewer{
       else if(type == InputPortTypes.Slider){
         return "Slider";
       }
+      else if(type == InputPortTypes.URL){
+        return "WebURL";
+      }
+      else if(type == InputPortTypes.Checkbox){
+        return "Checkbox";
+      }
       else{
         return "Not Identifiable"
       }
@@ -139,6 +148,9 @@ export class ParameterEditorComponent extends Viewer{
       }
       else if(type == OutputPortTypes.Console){
         return "Console";
+      }
+      else if(type == OutputPortTypes.Cesium){
+        return "Cesium";
       }
       else{
         return "Not Identifiable"
@@ -190,6 +202,7 @@ export class ParameterEditorComponent extends Viewer{
 
       }
     }
+
 }
 
 

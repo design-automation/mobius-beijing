@@ -15,9 +15,9 @@ export class LayoutService {
         size: {
           main: 70, 
           side: 30, 
-          top: 33, 
-          middle: 33, 
-          bottom: 33
+          top: 0, 
+          middle: 0, 
+          bottom: 100
         },
         content: {
           main: EViewer.Viewer, 
@@ -29,7 +29,7 @@ export class LayoutService {
         }
   	}
 
-    private viewContainerIndex: number = 5; 
+    private viewContainerIndex: number = 500; 
 
     _url: string = "index";
     _fnObj: {module: string, name: string};

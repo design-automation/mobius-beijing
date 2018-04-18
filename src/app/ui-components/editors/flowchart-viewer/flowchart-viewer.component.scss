@@ -279,6 +279,11 @@ split-area{
 							flex-direction: row;
 							margin: 5px 0px;
 
+
+							&.hidden{
+								display: none;
+							}
+
 							.port-grip{
 								width: $port-size; 
 								height: $port-size; 
@@ -301,6 +306,7 @@ split-area{
 								&:hover{
 									background-color: $color4;
 								}
+
 							}
 							.port-name{
 								font-size: $fsize2;

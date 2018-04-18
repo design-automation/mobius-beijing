@@ -7,16 +7,19 @@
 			<mat-button-toggle value="2" class="viewer-toggle-btn" matTooltip="Text Viewer">
 			  <mat-icon>description</mat-icon>
 			</mat-button-toggle>
+			<mat-button-toggle value="4" class="viewer-toggle-btn" matTooltip="Cesium Viewer">
+			  <mat-icon>build</mat-icon>
+			</mat-button-toggle>
 			<!-- <mat-button-toggle value="3" disabled class="viewer-toggle-btn" matTooltip="??">
 			  <mat-icon>text_format</mat-icon>
 			</mat-button-toggle> -->
 			<mat-button-toggle value="3" class="viewer-toggle-btn" matTooltip="Console">
 			  <mat-icon>info_outline</mat-icon>
 			</mat-button-toggle>
-			<mat-button-toggle value="4" class="viewer-toggle-btn" matTooltip="Function Help" >
+			<mat-button-toggle value="400" class="viewer-toggle-btn" matTooltip="Function Help" >
 			  <mat-icon>help_outline</mat-icon>
 			</mat-button-toggle>
-			<mat-button-toggle value="5" class="viewer-toggle-btn" matTooltip="About Mobius" >
+			<mat-button-toggle value="500" class="viewer-toggle-btn" matTooltip="About Mobius" >
 			  <mat-icon>info</mat-icon>
 			</mat-button-toggle>
 		</div>
@@ -37,6 +40,7 @@
 	<app-code-viewer *ngIf="group.value == 1"></app-code-viewer>
 	<app-text-viewer *ngIf="group.value == 2"></app-text-viewer>
 	<app-console *ngIf="group.value == 3"></app-console>
-	<app-help-viewer *ngIf="group.value == 4"></app-help-viewer>
-	<app-info-viewer *ngIf="group.value == 5"></app-info-viewer>
+	<app-help-viewer *ngIf="group.value == 400"></app-help-viewer>
+	<app-info-viewer *ngIf="group.value == 500"></app-info-viewer>
+	<app-cesium-viewer *ngIf="group.value == 4"></app-cesium-viewer>
 </div>

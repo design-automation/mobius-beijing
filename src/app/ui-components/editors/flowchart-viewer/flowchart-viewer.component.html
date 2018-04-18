@@ -135,7 +135,7 @@
 														[class.selected]="node_index == _selectedNodeIndex"
 														matTooltip="{{node.getName()}}">
 													    <input matInput
-													    style="margin: 2px; min-width: 50px; width: 50px;"
+													    style="margin: 2px; min-width: 50px; max-width: 80px;"
 													    placeholder="Value" value="{{ node.getName() }}"
 													    (change)="updateNodeName($event)"/>
 												</div>
@@ -145,19 +145,20 @@
 													
 													<div class="port input" 
 														*ngFor="let port of node.getInputs(); let pi=index"  
-														id="n{{node_index}}pi{{pi}}">
+														id="n{{node_index}}pi{{pi}}"
+														[class.hidden]="port.getType() != 'Input'">
 
 														<div class="port-grip" 
 															draggable=true
 															[class.connected]="port.isConnected()" 
-															[class.isFunction]="port.isFunction()" 
+															[class.isFunction]="port.isFunction()" 		
 															(dragstart)="portDragStart($event, port, [node_index, pi])" 
 															(drag)="portDragging($event, port)" 
 															(dragend)="portDragEnd($event, port)"
 															(drop)="portDrop($event, port, [node_index, pi])">
 														</div>
 
-														<span class="port-name">{{ port.getName() }}</span>
+														<span class="port-name">{{ port.getName() | shortname: 10 }}</span>
 													</div>
 
 												</div>
@@ -168,7 +169,7 @@
 														*ngFor="let port of node.getOutputs(); let po=index;"
 														id="n{{node_index}}po{{po}}">
 
-														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.getName()}}</span>
+														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.getName()  | shortname: 10  }}</span>
 
 														<div class="port-grip" 
 															draggable=true
