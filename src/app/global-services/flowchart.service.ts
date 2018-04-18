@@ -192,7 +192,7 @@ export class FlowchartService {
   loadFile(fileString: string): void{
 
       // check if filestring is url
-      if(fileString.startsWith("https://")){
+      if(fileString && fileString.startsWith("https://")){
         try{
           this.consoleService.addMessage("Loading file from: " + fileString);
           this.http.get(fileString).subscribe(res => { this.loadFile(CircularJSON.stringify(res)) } );

@@ -50,6 +50,14 @@ export class Flowchart implements IFlowchart{
 		return "This is a flowchart, with " + this._nodes.length + " nodes, written by " + this._author;
 	}
 
+	get global(): any{
+		return this._globals;
+	}
+
+	set globals(arr: any){
+		this._globals = arr;
+	}
+
 	//
 	//	Maintains the node order for execution
 	//
