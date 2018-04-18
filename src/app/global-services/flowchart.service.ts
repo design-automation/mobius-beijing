@@ -1,6 +1,7 @@
 import {Injectable, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Subject} from 'rxjs/Subject';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import {IFlowchart, Flowchart, FlowchartReader} from '../base-classes/flowchart/FlowchartModule';
 import {IGraphNode, GraphNode} from '../base-classes/node/NodeModule';
@@ -48,7 +49,7 @@ export class FlowchartService {
 
   constructor(private consoleService: ConsoleService, 
               private layoutService: LayoutService, 
-              public dialog: MatDialog,) { 
+              public dialog: MatDialog, private http: HttpClient) { 
       this.newFile();
       this.checkSavedNodes();
       //this.checkSavedFile();
@@ -190,35 +191,48 @@ export class FlowchartService {
 
   loadFile(fileString: string): void{
 
-      let _this = this;
-      let jsonData: {language: string, flowchart: JSON, modules: JSON};
-      try{
-
-        this.newFile();
-
-        let data = CircularJSON.parse(fileString);
-
-        // load the required modules
-         /* _this.modules.loadModules(data["module"]); */
-
-        // load the required code generator
-        if (_this.code_generator.getLanguage() != data["language"] && data["language"] !== undefined){
-          _this.code_generator = CodeFactory.getCodeGenerator(data["language"])
+      // check if filestring is url
+      if(fileString.startsWith("https://")){
+        try{
+          this.consoleService.addMessage("Loading file from: " + fileString);
+          this.http.get(fileString).subscribe(res => { this.loadFile(CircularJSON.stringify(res)) } );
         }
-
-        // read the flowchart
-        _this._flowchart = FlowchartReader.readFlowchartFromData(data["flowchart"]);
-        _this.update();
-
-        this.consoleService.addMessage("File loaded successfully");
-        this.layoutService.showConsole();
-        
+        catch(ex){
+          this.consoleService.addMessage("Error loading file from: " + fileString, EConsoleMessageType.Error);
+        }
       }
-      catch(err){
-        this.newFile();
-        this.consoleService.addMessage("Error loading file: " + err, EConsoleMessageType.Error);
-        this.layoutService.showConsole();
+      else{
+        let _this = this;
+        let jsonData: {language: string, flowchart: JSON, modules: JSON};
+        try{
+
+          this.newFile();
+
+          let data = CircularJSON.parse(fileString);
+
+          // load the required modules
+           /* _this.modules.loadModules(data["module"]); */
+
+          // load the required code generator
+          if (_this.code_generator.getLanguage() != data["language"] && data["language"] !== undefined){
+            _this.code_generator = CodeFactory.getCodeGenerator(data["language"])
+          }
+
+          // read the flowchart
+          _this._flowchart = FlowchartReader.readFlowchartFromData(data["flowchart"]);
+          _this.update();
+
+          this.consoleService.addMessage("File loaded successfully");
+          this.layoutService.showConsole();
+          
+        }
+        catch(err){
+          this.newFile();
+          this.consoleService.addMessage("Error loading file: " + err, EConsoleMessageType.Error);
+          this.layoutService.showConsole();
+        }
       }
+
 
   }
 

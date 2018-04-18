@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { LayoutService } from '../../../global-services/layout.service';
+import { FlowchartService } from '../../../global-services/flowchart.service';
 
 @Component({
   selector: 'app-mobius-editor',
@@ -8,14 +9,17 @@ import { LayoutService } from '../../../global-services/layout.service';
 })
 export class MobiusEditorComponent implements OnInit {
 
-	ngOnInit() {
-	}
+
+	// mode: 0 ==> Viewer
+	// mode: 1 ==> Editor
+	@Input() mode: string;
+	@Input() filepath: string;
 
 	layout;
 	toggle;
     supported: boolean = false;
 
-    constructor(private layoutService: LayoutService){ 
+    constructor(private layoutService: LayoutService, private flowchartService: FlowchartService){ 
 
     	let browser: string = this.checkBrowser();
     	if(browser == "Chrome"){
@@ -28,12 +32,31 @@ export class MobiusEditorComponent implements OnInit {
     		this.supported = false;
     	}
 
-    	window.onbeforeunload = function(e) {
-		  var dialogText = 'Dialog text here';
-		  e.returnValue = dialogText;
-		  return dialogText;
-		};
+    	
 
+    }
+
+    ngOnInit(){
+
+    	if(this.mode == "Editor" ){
+    		this.layoutService.setEditor();
+    	}
+    	else if(this.mode == "Viewer"){
+    		this.layoutService.setViewer();
+    	}
+
+    	if(this.layout.mode == 'Editor'){
+	    	window.onbeforeunload = function(e) {
+			  var dialogText = 'Dialog text here';
+			  e.returnValue = dialogText;
+			  return dialogText;
+			};
+    	}
+    	else{
+    		window.onbeforeunload = undefined;
+    	}
+
+    	this.flowchartService.loadFile(this.filepath);
     }
 
     checkBrowser(): string { 

@@ -2,12 +2,12 @@
 
   <div class="container">
 
-    <div 
+    <!-- <div 
         style="position: absolute; bottom: 50px; left: 50px;z-index: 200;"
         (click)="toggle()">
         Mode: {{layout.mode}}
     </div>
-
+ -->
     <div class="wrapper">
 
       <split  direction="horizontal" 
@@ -30,11 +30,11 @@
                         [gutterSize]="layout.gutter" 
                         [useTransition]="layout.useTransition">
 
-                    <split-area [size]="layout.size.top" order="1">
+                    <split-area [size]="layout.size.top" order="1" [visible]="layout.mode == 'Editor'">
                       <app-panel panel_id="top"></app-panel>
                     </split-area>
 
-                    <split-area [size]="layout.size.middle" order="2">
+                    <split-area [size]="layout.size.middle" order="2" [visible]="layout.mode == 'Editor'">
                       <app-panel panel_id="middle"></app-panel>
                     </split-area>
 

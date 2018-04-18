@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from "rxjs/Rx";
 
 @Component({
   selector: 'app-mobius-viewer',
@@ -8,17 +11,28 @@ import { Router } from '@angular/router';
 })
 export class MobiusViewerComponent implements OnInit {
 
-  router;
-  constructor(private _router: Router ) {
-  	this.router = _router;
-  }
+	router; sub;
+	filepath: string;
+	constructor(private _router: ActivatedRoute, private http: HttpClient) {
+		this.router = _router;
+	}
 
-  ngOnInit() {
+	ngOnInit() {
+		this.sub = this.router.params.subscribe(params => {
+		   this.filepath = this.getFlowchart(params.id);
+		});
+	}
 
-  	// load file 
-  	// https://raw.githubusercontent.com/akshatamohanty/mobius-cesium/workshop-features/src/assets/json-files/file1.txt
+	getFlowchart(filename: string){
+		let filepath: string = 
+			"https://raw.githubusercontent.com/akshatamohanty/mobius-cesium/\
+			workshop-features/src/assets/json-files/" + filename;
+		return filepath;
+		//return this.http.get(filepath).subscribe(val => console.log(val));
+		//return .map((res: Response) => { res.json(); console.log(res)} );
+	}
 
-  	console.log("hello world: ", this.router.url);
-  }
-
+	ngOnDestroy() {
+		this.sub.unsubscribe();
+	}
 }
