@@ -175,9 +175,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 const appRoutes = [
-    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_38__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */] },
-    { path: 'gallery', component: __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */] },
-    { path: 'viewer/:id', component: __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */] },
+    { path: '/editor', component: __WEBPACK_IMPORTED_MODULE_38__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */] },
+    { path: '/gallery', component: __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */] },
+    { path: '/viewer/:id', component: __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */] },
     { path: '**', component: __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_landing_landing_component__["a" /* LandingComponent */] }
 ];
 
