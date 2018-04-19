@@ -32,8 +32,6 @@ export class MobiusEditorComponent implements OnInit {
     		this.supported = false;
     	}
 
-    	
-
     }
 
     ngOnInit(){
