@@ -1,9 +1,9 @@
 {
-  "name": "mobius-modeller",
+  "name": "mobius-cesium-modeller",
   "version": "0.0.0",
   "license": "MIT",
   "config": {
-    "dev_url": "https://akshatamohanty.github.io/mobius-modeller/",
+    "dev_url": "https://akshatamohanty.github.io/mobius-cesium/",
     "prod_url": "https://phtj.github.io/mobius-modeller/"
   },
   "scripts": {
@@ -12,6 +12,7 @@
     "build": "ng build",
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-prod": "ng build --base-href=%npm_package_config_prod_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
+    "build-server": "ng build --base-href='./'",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -32,6 +33,7 @@
     "@types/three": "^0.84.27",
     "angular-split": "^1.0.0-rc.0",
     "angular-tree-component": "^6.0.0",
+    "cesium": "^1.43.0",
     "circular-json": "^0.4.0",
     "core-js": "^2.4.1",
     "gs-json": "^0.1.69",
@@ -43,6 +45,7 @@
     "rxjs": "^5.5.2",
     "three": "^0.88.0",
     "three-orbit-controls": "^82.1.0",
+    "turf-modelling": "^0.1.7",
     "typescript-compiler": "^1.4.1",
     "zone.js": "^0.8.14"
   },
@@ -52,7 +55,7 @@
     "@angular/language-service": "^5.0.0",
     "@types/jasmine": "^2.8.2",
     "@types/jasminewd2": "~2.0.2",
-    "@types/node": "^8.0.54",
+    "@types/node": "^8.10.7",
     "@types/three": "^0.84.28",
     "codelyzer": "^4.0.1",
     "jasmine-core": "^2.8.0",

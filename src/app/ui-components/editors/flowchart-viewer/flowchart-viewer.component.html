@@ -5,8 +5,8 @@
 
 <div class="viewer">
 
-	<div class="container">
-		
+	<div class="container" >
+
 		<!-- @Derek: Modify gutterSize/gutterColor/size -->
 		<!-- https://bertrandg.github.io/angular-split/#/documentation -->
 		<split  direction="horizontal" 
@@ -16,32 +16,28 @@
 				<split-area class="sidebar"
 					[size]="30"
 			        order="1">
-							
-						<section>
-							<div (click)="addNode($event, undefined)">New Empty Node</div>
-							<div class="disabled">New Subnet</div>
-						</section>
 
 						<section>
-							<div (click)="newfile()">New Flowchart</div>
-						</section>
-
-						<section>
-							<div (click)="loadFromMemory()">Revert</div>
-						</section>
-
-						<section>
-							<div (click)="save()">Download Flowchart</div>
-							<div (click)="openPicker()">Load Flowchart
+							<div (click)="newfile()">New File</div>
+							<div (click)="openPicker()">Open File
 								<input #fileInput style="display: none;"
 						  		type="file" (change)="loadFile()"/>
 							</div>
+							<!-- <div (click)="save()">Save File</div> -->
 						</section>
-						
-						<!--<section>
-							<div>Save Node</div>
-						</section>-->
 
+						<section>
+							<div (click)="publishSettings()">Configure & Save</div>
+						</section>
+
+						<section>
+							<div (click)="addNode($event, undefined)">New Empty Node</div>
+						</section>
+
+						<!-- <section>
+							<div (click)="loadFromMemory()">Revert</div>
+						</section> -->
+						
 						<section>
 							<app-node-library></app-node-library>
 						</section>
@@ -49,11 +45,11 @@
 				</split-area>
 				
 		
-				<split-area order="2" [size]="70"
+				<split-area order="2" [size]="70" 
 					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" (wheel)="scale($event)">
 				    <div class ="action-window">
 				    	
-				    	<div class="info-container" style="text-align: right; padding: 5px 15px; border-bottom: 1px solid #ddd;">
+				    	<!-- <div class="info-container" style="text-align: right; padding: 5px 15px; border-bottom: 1px solid #ddd;">
 				    		
 				    		<div class="info">
 				    			<span class="label">Last Saved </span>
@@ -68,9 +64,11 @@
 				    				[Revert] 
 				    			</span>
 				    		</div>
-				    	</div>
+				    	</div> -->
 				    	
-				    	<div class="content-wrapper" (wheel)="scale($event)" style="flex-grow: 1;">
+
+				    	<div class="content-wrapper" (wheel)="scale($event)" 
+				    		style="flex-grow: 1;">
 							<!-- div container for the flowchart -->
 							<div class="graph-container" [style.transform]="getZoomStyle()"
 							 	ondragover="return false" 
@@ -78,7 +76,7 @@
 								(mousedown)="pan($event)">
 
 								
-								<!-- all nodes -->
+								<!-- all nodes --> 
 								<div class="node-container content-wrapper">
 									<!-- one node -->
 									<div  class="node" 
@@ -135,7 +133,7 @@
 														[class.selected]="node_index == _selectedNodeIndex"
 														matTooltip="{{node.getName()}}">
 													    <input matInput
-													    style="margin: 2px; min-width: 50px; width: 50px;"
+													    style="margin: 2px; min-width: 50px; max-width: 80px;"
 													    placeholder="Value" value="{{ node.getName() }}"
 													    (change)="updateNodeName($event)"/>
 												</div>
@@ -145,19 +143,20 @@
 													
 													<div class="port input" 
 														*ngFor="let port of node.getInputs(); let pi=index"  
-														id="n{{node_index}}pi{{pi}}">
+														id="n{{node_index}}pi{{pi}}"
+														[class.hidden]="port.getType() != 'Input'">
 
 														<div class="port-grip" 
 															draggable=true
 															[class.connected]="port.isConnected()" 
-															[class.isFunction]="port.isFunction()" 
+															[class.isFunction]="port.isFunction()" 		
 															(dragstart)="portDragStart($event, port, [node_index, pi])" 
 															(drag)="portDragging($event, port)" 
 															(dragend)="portDragEnd($event, port)"
 															(drop)="portDrop($event, port, [node_index, pi])">
 														</div>
 
-														<span class="port-name">{{ port.getName() }}</span>
+														<span class="port-name">{{ port.getName() | shortname: 10 }}</span>
 													</div>
 
 												</div>
@@ -168,7 +167,7 @@
 														*ngFor="let port of node.getOutputs(); let po=index;"
 														id="n{{node_index}}po{{po}}">
 
-														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.getName()}}</span>
+														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.getName()  | shortname: 10  }}</span>
 
 														<div class="port-grip" 
 															draggable=true

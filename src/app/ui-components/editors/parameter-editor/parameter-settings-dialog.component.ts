@@ -18,9 +18,7 @@ export class ParameterSettingsDialogComponent {
 
   constructor(
     
-    public dialogRef: MatDialogRef<ParameterSettingsDialogComponent>,
-    
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    public dialogRef: MatDialogRef<ParameterSettingsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { 
   			this.type = data.input.getType();
   			this.input = data.input;
   			this.opts = this.input.getOpts();
@@ -28,7 +26,6 @@ export class ParameterSettingsDialogComponent {
 
   	updateDefaultValue($event): void{
 	  	let value: string = $event.srcElement.value;
-      console.log("update");
   		if(value.trim().length > 0){
 
   			if(this.type == InputPortTypes.Slider){
@@ -71,6 +68,38 @@ export class ParameterSettingsDialogComponent {
 
     onNoClick(): void {
       this.dialogRef.close();
+    }
+
+
+    handleFileInput(fileList, input){
+      let file: File = fileList[0];
+      var reader = new FileReader();
+      reader.onload = (function(reader)
+      {
+          return function()
+          {
+              var contents = reader.result;
+              /*var lines = contents.split('\n');
+              contents = lines.join("\\\n");*/
+              input.setDefaultValue(contents);
+          }
+      })(reader);
+
+      reader.readAsText(file);
+    }
+
+    
+    url = "";
+    handleURL($event, input){
+      fetch('https://' + this.url)
+      .then(response => response.json())
+      .then(json => 
+        input.setDefaultValue(JSON.stringify(json))
+      )
+    }
+
+    clear($event, input){
+      input.setDefaultValue(undefined);
     }
 
 }

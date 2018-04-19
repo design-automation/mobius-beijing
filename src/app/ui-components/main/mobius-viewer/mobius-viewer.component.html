@@ -1,0 +1,29 @@
+<div id="app-container" *ngIf="supported">
+
+  <div class="container">
+
+    <div class="wrapper">
+
+      <split  direction="horizontal" 
+              gutterColor="#8AA8C0"
+              [gutterSize]="layout.gutter" 
+              [useTransition]="layout.useTransition">
+
+            <!-- main pane -->
+            <split-area>
+              <app-panel panel_id="main"></app-panel>
+            </split-area>
+
+            <!-- secondary split pane -->
+            <split-area>
+               <app-panel panel_id="bottom"></app-panel>
+            </split-area>
+            
+      </split>
+
+    </div>
+
+  </div>
+
+</div>
+

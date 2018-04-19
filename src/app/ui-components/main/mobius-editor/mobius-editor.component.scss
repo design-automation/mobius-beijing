@@ -1,0 +1,63 @@
+@import '../../../../scss/globals';
+
+#app-container{
+
+	position: relative;
+	width: 100%; 
+	height: 100%;
+
+	margin: 0px;
+	padding: 0px;
+
+	display: flex; 
+	flex-direction: column;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none; /* Webkit */
+	-moz-user-select: none;    /* Firefox */
+	-ms-user-select: none;     /* IE 10  */
+
+	/* Currently not supported in Opera but will be soon */
+	-o-user-select: none;
+	user-select: none;  
+
+	#setting{
+		position: absolute;
+		left: 30px; 
+		bottom: 30px;
+	}
+
+
+	.container{
+		position: relative;
+		flex-grow: 1;
+
+		display: flex;
+		flex-direction: column; 
+
+		background-color: white;
+
+		.wrapper{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+	
+			.split{
+				height: 100%;
+				flex-grow: 1; 
+			}
+
+			.split-area{
+				overflow: hidden;
+
+				.view-wrapper{
+					position: absolute;
+					height: 100%;
+					width: 100%; 
+				}
+			}
+		}
+
+	}
+
+}

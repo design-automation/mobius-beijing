@@ -1,0 +1,52 @@
+@import '~scss/globals';
+
+
+.publish-settings{
+
+	display: flex;
+	flex-direction: column; 
+	justify-content: space-between;
+
+	.container{
+
+		border-top: 1px solid gray;
+
+		section{
+			display: flex;
+			flex-direction: row; 
+			margin: 5px 0px;
+
+			label{
+				width: 200px;
+			}
+
+			input, textarea{
+				flex-grow: 1;
+			}
+		}
+
+		.global-container{
+
+			.global{
+
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+
+				.name{
+					flex-grow: 1;
+					word-wrap: break-word;
+					padding: 5px;
+				}
+				
+				.type{
+
+				}
+
+				.controls{
+
+				}
+			}
+		}
+	}
+}
