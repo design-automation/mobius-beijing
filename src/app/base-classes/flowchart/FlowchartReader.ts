@@ -10,8 +10,13 @@ export abstract class FlowchartReader{
 
 	static readFlowchartFromData(data: IFlowchart): IFlowchart{
 
+		let extra_data; 
+		if(data["name"] && data["description"]){
+			extra_data = data;
+		}
+
 	    // recreate the flowchart from data
-	    let fc: IFlowchart = new Flowchart(data["author"]);
+	    let fc: IFlowchart = new Flowchart(data["author"], extra_data);
 	    fc.setSavedTime(data["_lastSaved"]);
 
 	    let nodes: IGraphNode[] = data["_nodes"];

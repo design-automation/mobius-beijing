@@ -1,0 +1,68 @@
+<div class="publish-settings">
+
+	<h2>File Settings</h2>
+
+	<div class="container">
+		
+		<section class="filename">
+			<label>Name of the file</label>
+			<input [(ngModel)]="_flowchart.name">
+		</section>
+
+		<section class="description">
+			<label>Description</label>
+			<textarea [(ngModel)]="_flowchart.description"  rows="4"></textarea>
+		</section>
+
+	</div>
+	
+	<div class="container">
+		<h3>
+			Global Variables <button (click)="addGlobal()">Add New </button>
+		</h3>
+		
+		<div class="global-container">
+			<div class='global' *ngFor="let inp of _globals; let i=index">
+
+				<span class='name' contenteditable="true" (blur)="updateGlobal($event, inp)" spellcheck="false">
+						{{ inp.getName() }}
+				</span>
+			
+				<select class='type' (change)="updateType($event.target.value, inp)">
+	         	    <option *ngFor="let x of inputPortOpts" [value]="x" [selected]="inp.getType() == x">{{getInputTypeName(x)}}</option>
+	            </select>
+
+				<div class="controls">
+					<button (click)='openSettingsDialog(inp)'>
+						<mat-icon>settings</mat-icon>
+					</button>
+			        <button (click)='deleteGlobal(i)'>
+			    		<mat-icon>delete</mat-icon>
+				    </button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="container" *ngIf="_nodes.length>0">
+		<h3>Visible Node</h3>
+		
+		<section>
+
+			<label>Node to Display</label>
+			<select class='type' (change)="_flowchart.selectedNode = $event.target.value;">
+         	    <option *ngFor="let x of _nodes" 
+         	    	[value]="x.getId()" [selected]="_flowchart.selectedNode == x.getId()">{{x.getName()}}
+         	    </option>
+	        </select>
+		
+		</section>
+
+	</div>
+
+	<div class="container" style="text-align: center">
+		<button mat-button (click)="save()">Save File</button>
+	</div>
+
+</div>

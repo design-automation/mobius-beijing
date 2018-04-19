@@ -4,7 +4,7 @@ import {MatMenuModule, MatExpansionModule,
 	MatButtonModule, MatCheckboxModule, MatTooltipModule, 
 	MatDialogModule, MatToolbarModule, MatIconModule, 
 	MatButtonToggleModule, MatTabsModule, MatInputModule, MatListModule,
-  MatSliderModule} from '@angular/material';
+  MatSliderModule, MatGridListModule, MatCardModule} from '@angular/material';
 
 
 /*
@@ -15,10 +15,10 @@ import {MatMenuModule, MatExpansionModule,
   imports: [BrowserAnimationsModule, MatExpansionModule, 
   			MatMenuModule, MatButtonModule, MatCheckboxModule, 
   			MatTooltipModule, MatDialogModule, MatToolbarModule, MatIconModule, 
-  			MatButtonToggleModule, MatTabsModule, MatInputModule, MatListModule, MatSliderModule],
+  			MatButtonToggleModule, MatTabsModule, MatInputModule, MatListModule, MatSliderModule, MatGridListModule, MatCardModule],
   exports: [BrowserAnimationsModule, MatExpansionModule,  
   			MatMenuModule, MatButtonModule, MatCheckboxModule, 
   			MatTooltipModule, MatDialogModule, MatToolbarModule, MatIconModule,
-  			MatButtonToggleModule, MatTabsModule, MatInputModule, MatListModule, MatSliderModule]
+  			MatButtonToggleModule, MatTabsModule, MatInputModule, MatListModule, MatSliderModule, MatGridListModule, MatCardModule]
 })
 export class CustomMaterialModule { }

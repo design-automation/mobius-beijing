@@ -8,10 +8,15 @@
 import {IFlowchart} from './IFlowchart';
 import {IGraphNode, IEdge} from '../node/NodeModule';
 import {ICodeGenerator, IModule} from '../code/CodeModule';
+import {InputPort} from '../port/PortModule';
 
 import * as gs from 'gs-json';
 
 export class Flowchart implements IFlowchart{
+
+	public name: string;
+	public description: string;
+	public selectedNode: string;
 
 	private _author: string; 
 
@@ -23,11 +28,29 @@ export class Flowchart implements IFlowchart{
 
 	private _lastSaved: Date;
 
+	private _globals = [];
+	private _visibleNode;
+
 	//
 	//	constructor needs 2 arguments  - username and icodegenerator
 	//
-	constructor(username: string){ 
+	constructor(username: string, data?: any){ 
 		this._author = username; 
+		this.name = String((new Date()).getTime()) + ".mob";
+		this.description = "Lorem ipsum proident nisi dolor ut minim in in non consectetur ut ut.";
+		this.selectedNode = undefined;
+		this._globals = [];
+
+		if(data){
+			this.name = data["name"];
+			this.description = data["description"];
+			this.selectedNode = data["selectedNode"];
+			this._globals = data["_globals"].map(function(in_data){
+				let inputPort = new InputPort(in_data["_name"]);
+				inputPort.update(in_data);
+				return inputPort;
+			});
+		}
 	};
 
 	setSavedTime(date: Date){
@@ -46,6 +69,22 @@ export class Flowchart implements IFlowchart{
 	//	Summary of flowchart
 	getSummary(): string{
 		return "This is a flowchart, with " + this._nodes.length + " nodes, written by " + this._author;
+	}
+
+	get globals(): any{
+		return this._globals;
+	}
+
+	set globals(arr: any){
+		this._globals = arr;
+	}
+
+	set visibleNode(id: number){
+		this._visibleNode = this._nodes[id];
+	}
+
+	get visibleNode(){
+		return this._visibleNode;
 	}
 
 	//

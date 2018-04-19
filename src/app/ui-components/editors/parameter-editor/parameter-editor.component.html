@@ -3,7 +3,9 @@
 	<div class="container">
 		
 		<!-- default -->
-		<div class="default" *ngIf="!isVisible">No node selected</div>
+		<div class="default" *ngIf="!isVisible">
+			No node selected
+		</div>
 
 		<!-- main -->
 		<div class="view-container" *ngIf="isVisible">
@@ -38,7 +40,6 @@
 									<select (change)="updateType($event.target.value, inp)">
 						         	    <option *ngFor="let x of inputPortOpts" [value]="x" [selected]="inp.getType() == x">{{getInputTypeName(x)}}</option>
 						            </select>
-	
 								</span>
 							</div>
 	

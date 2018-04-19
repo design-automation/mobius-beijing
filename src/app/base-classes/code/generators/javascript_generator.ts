@@ -96,7 +96,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 					}
 				}
 				else{
-					param_values.push(inputs[i].getValue());
+					let val = inputs[i].getValue();
+					param_values.push(val);
 				}
 			}
 
@@ -107,8 +108,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				else{
 					return p;
 				}
-			})
-			console.log(param_values);
+			});
 
 			// make function call and assign to variable of same name
 			fn_call = "let " + node.getName() +  "=" + node.getName() + node.getVersion() + "( " + param_values.join(", ") + " );" ;
