@@ -54,9 +54,9 @@ import { LandingComponent } from './ui-components/main/mobius-landing/landing.co
 import { MobiusGalleryComponent } from './ui-components/main/mobius-gallery/mobius-gallery.component';
 
 const appRoutes: Routes = [
-  { path: '/editor', component: MobiusEditorComponent },
-  { path: '/gallery', component: MobiusGalleryComponent },
-  { path: '/viewer/:id',      component: MobiusViewerComponent },
+  { path: 'editor', component: MobiusEditorComponent },
+  { path: 'gallery', component: MobiusGalleryComponent },
+  { path: 'viewer/:id',      component: MobiusViewerComponent },
   { path: '**', component: LandingComponent }
 ];
 
