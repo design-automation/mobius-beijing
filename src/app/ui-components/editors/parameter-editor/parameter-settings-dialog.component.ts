@@ -18,9 +18,7 @@ export class ParameterSettingsDialogComponent {
 
   constructor(
     
-    public dialogRef: MatDialogRef<ParameterSettingsDialogComponent>,
-    
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    public dialogRef: MatDialogRef<ParameterSettingsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { 
   			this.type = data.input.getType();
   			this.input = data.input;
   			this.opts = this.input.getOpts();

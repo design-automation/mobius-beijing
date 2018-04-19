@@ -15,9 +15,9 @@ export class LayoutService {
         size: {
           main: 70, 
           side: 30, 
-          top: 0, 
-          middle: 0, 
-          bottom: 100
+          top: 33, 
+          middle: 33, 
+          bottom: 33
         },
         content: {
           main: EViewer.Viewer, 

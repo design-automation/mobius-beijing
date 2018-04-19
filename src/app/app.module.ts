@@ -102,7 +102,8 @@ import { PublishSettingsComponent } from './ui-components/editors/publish-settin
   entryComponents: [
     ModuleboxComponent,
     ParameterSettingsDialogComponent,
-    FileLoadDialogComponent
+    FileLoadDialogComponent,
+    PublishSettingsComponent
   ],
   imports: [
     RouterModule.forRoot(

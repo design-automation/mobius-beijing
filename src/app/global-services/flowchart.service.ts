@@ -723,6 +723,7 @@ export class FlowchartService {
     if(local == true){
       // add file string to local storage
       file["flowchart"] = this._flowchart;
+
       fileString = CircularJSON.stringify(file);
 
       let myStorage = window.localStorage;
@@ -732,14 +733,21 @@ export class FlowchartService {
       this.consoleService.addMessage("Autosaved flowchart.");
     }
     else{
-
       let newFlowchart: IFlowchart = FlowchartReader.readFlowchartFromData(this._flowchart);
       file["flowchart"] = newFlowchart;
       fileString = CircularJSON.stringify(file);
 
+      let fname: string = 'Scene' + (new Date()).getTime() + ".mob";
+      if(this._flowchart.name){
+        fname = this._flowchart.name;
+        if(!fname.endsWith(".mob")){
+          fname = fname + ".mob";
+        }
+      }
+
       this.downloadContent({
           type: 'text/plain;charset=utf-8',
-          filename: 'Scene' + (new Date()).getTime() + ".mob",
+          filename: fname,
           content: fileString
       });
       

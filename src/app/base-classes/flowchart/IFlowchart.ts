@@ -15,6 +15,10 @@ import {IModule} from "../code/CodeModule";
 
 export interface IFlowchart{
 
+	name: string;
+	description: string;
+	selectedNode: string;
+
 	setSavedTime(date: Date): void;
 	getSavedTime(): Date;
 

@@ -16,27 +16,27 @@
 				<split-area class="sidebar"
 					[size]="30"
 			        order="1">
-							
-						<section>
-							<div (click)="addNode($event, undefined)">New Empty Node</div>
-							<div class="disabled">New Subnet</div>
-						</section>
 
 						<section>
-							<div (click)="newfile()">New Flowchart</div>
-						</section>
-
-						<section>
-							<div (click)="loadFromMemory()">Revert</div>
-						</section>
-
-						<section>
-							<div (click)="save()">Download Flowchart</div>
-							<div (click)="openPicker()">Load Flowchart
+							<div (click)="newfile()">New File</div>
+							<div (click)="openPicker()">Open File
 								<input #fileInput style="display: none;"
 						  		type="file" (change)="loadFile()"/>
 							</div>
+							<!-- <div (click)="save()">Save File</div> -->
 						</section>
+
+						<section>
+							<div (click)="publishSettings()">Configure & Save</div>
+						</section>
+
+						<section>
+							<div (click)="addNode($event, undefined)">New Empty Node</div>
+						</section>
+
+						<!-- <section>
+							<div (click)="loadFromMemory()">Revert</div>
+						</section> -->
 						
 						<section>
 							<app-node-library></app-node-library>
@@ -45,11 +45,11 @@
 				</split-area>
 				
 		
-				<split-area order="2" [size]="70" (click)="deselect($event)"
+				<split-area order="2" [size]="70" 
 					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" (wheel)="scale($event)">
 				    <div class ="action-window">
 				    	
-				    	<div class="info-container" style="text-align: right; padding: 5px 15px; border-bottom: 1px solid #ddd;">
+				    	<!-- <div class="info-container" style="text-align: right; padding: 5px 15px; border-bottom: 1px solid #ddd;">
 				    		
 				    		<div class="info">
 				    			<span class="label">Last Saved </span>
@@ -64,7 +64,7 @@
 				    				[Revert] 
 				    			</span>
 				    		</div>
-				    	</div>
+				    	</div> -->
 				    	
 
 				    	<div class="content-wrapper" (wheel)="scale($event)" 

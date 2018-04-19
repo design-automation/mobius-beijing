@@ -29,7 +29,7 @@ export class ParameterViewerComponent extends Viewer {
 
     reset(): void{
       this._node = undefined; 
-      this._inputs = this.flowchartService.getFlowchart().globals();//[];
+      this._inputs = [];
     }
 
   	// addInput(): void{
@@ -87,8 +87,7 @@ export class ParameterViewerComponent extends Viewer {
          this.isVisible = true;
       }
       else{
-        //this.isVisible = false;
-         this._inputs = this.flowchartService.getFlowchart().globals;
+        this.isVisible = false;
       }
   	}
     

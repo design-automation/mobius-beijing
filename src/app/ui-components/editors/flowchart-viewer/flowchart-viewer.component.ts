@@ -12,6 +12,9 @@ import { ConsoleService } from '../../../global-services/console.service';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMenuModule} from '@angular/material/menu';
 
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {PublishSettingsComponent} from '../publish-settings/publish-settings.component';
+
 @Component({
   selector: 'app-flowchart-viewer',
   templateUrl: './flowchart-viewer.component.html',
@@ -40,7 +43,8 @@ export class FlowchartViewerComponent extends Viewer{
 
   constructor(injector: Injector, 
     private layoutService: LayoutService, 
-    private consoleService: ConsoleService){  
+    private consoleService: ConsoleService, 
+    public dialog: MatDialog){  
     super(injector, "FlowchartViewer");  
 
     // bad bad bad!
@@ -76,6 +80,8 @@ export class FlowchartViewerComponent extends Viewer{
     }
 
   }
+
+
 
   editNode(): void{
     //this.layoutService.toggleEditor();
@@ -689,6 +695,19 @@ export class FlowchartViewerComponent extends Viewer{
     this.flowchartService.newFile();
   }
 
+  publishSettings(): void{
+    let dialogRef = this.dialog.open(PublishSettingsComponent, {
+            height: '800px',
+            width: '500px',          
+            data: { 
+                  }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+
+  }
 
 }
 
