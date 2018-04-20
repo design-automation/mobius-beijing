@@ -58,7 +58,7 @@ export interface IGraphNode{
 	rank(): number;*/
 
 
-	execute(code_generator: ICodeGenerator,  params:any, print: Function): void;
+	execute(code_generator: ICodeGenerator,  params:any, print: Function, globals?:any): void;
 	getResult(): Object;
 
 

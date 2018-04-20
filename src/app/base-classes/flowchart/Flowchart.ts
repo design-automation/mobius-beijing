@@ -543,6 +543,14 @@ export class Flowchart implements IFlowchart{
 		// future: cache results and set status based on changes
 		this.reset();
 
+		let gld = [];
+		for(let i=0; i < this._globals.length; i++){
+			let prop = this._globals[i].getName();
+			let value = this._globals[i].getValue();
+			gld.push({name: prop, value: value});
+		}
+
+
 		// sort nodes 
 		let all_nodes = this.getNodes();
 		let sortOrder: number[] = this.getNodeOrder();
@@ -560,7 +568,7 @@ export class Flowchart implements IFlowchart{
 				continue;
 			}
 
-			node.execute(code_generator, modules, print);
+			node.execute(code_generator, modules, print, gld);
 
 			this.updateDependentInputs(node, originalRank); 
 

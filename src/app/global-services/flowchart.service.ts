@@ -195,7 +195,9 @@ export class FlowchartService {
       if(fileString && fileString.startsWith("https://")){
         try{
           this.consoleService.addMessage("Loading file from: " + fileString);
-          this.http.get(fileString).subscribe(res => { this.loadFile(CircularJSON.stringify(res)) } );
+          this.http.get(fileString).subscribe(res => { 
+            this.loadFile(CircularJSON.stringify(res)) ;
+          });
         }
         catch(ex){
           this.consoleService.addMessage("Error loading file from: " + fileString, EConsoleMessageType.Error);
@@ -220,7 +222,20 @@ export class FlowchartService {
 
           // read the flowchart
           _this._flowchart = FlowchartReader.readFlowchartFromData(data["flowchart"]);
+
+
+          // select node according to publish settings
+          let nds = this._flowchart.getNodes();
+          for(let i=0; i < nds.length; i++){
+            if(nds[i].getId() == this._flowchart.selectedNode){
+              this.selectNode(i, 0);
+              break;
+            }
+          }
+
           _this.update();
+
+          console.log(this._flowchart.getEdges());
 
           this.consoleService.addMessage("File loaded successfully");
           this.layoutService.showConsole();
@@ -305,25 +320,6 @@ export class FlowchartService {
                         {_name: "Measure", _version: 0.1, _author: "Patrick"},
                         {_name: "Model", _version: 0.1, _author: "Patrick"},
                         {_name: "Properties", _version: 0.1, _author: "Patrick"}
-                         //{_name: "Attrib", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Calc", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Circle", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Group", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Intersect", _version: 0.1, _author: "Patrick"},
-                         // {_name: "List", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Math", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Model", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Obj", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Plane", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Pline", _version: 0.1, _author: "Patrick"},
-                         // {_name: "PMesh", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Point", _version: 0.1, _author: "Patrick"},
-                         //{_name: "Query", _version: 0.1, _author: "Patrick"},
-                         //{_name: "Ray", _version: 0.1, _author: "Patrick"},
-                         // {_name: "Split", _version: 0.1, _author: "Patrick"},
-                         // {_name: "String", _version: 0.1, _author: "Patrick"},
-                         //{_name: "Xform", _version: 0.1, _author: "Patrick"},
-                         //{_name: "Topo", _version: 0.1, _author: "Patrick"}
                       ]
                     );
 

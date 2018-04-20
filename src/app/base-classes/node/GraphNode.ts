@@ -365,7 +365,7 @@ export class GraphNode implements IGraphNode{
 	//
 	//
 	//
-	execute(code_generator: ICodeGenerator, modules: IModule[], print: Function): void{
+	execute(code_generator: ICodeGenerator, modules: IModule[], print: Function, globals?: any): void{
 
 		let params: any[] = [];
 		this.getInputs().map(function(i){ 
@@ -399,7 +399,7 @@ export class GraphNode implements IGraphNode{
 		})
 
 		// use code generator to execute code
-		let result: any  = code_generator.executeNode(this, params, modules, print);
+		let result: any  = code_generator.executeNode(this, params, modules, print, globals);
 
 		// add results to this node
 		for( let n=0;  n < this._outputs.length; n++ ){

@@ -379,19 +379,28 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 		executeNode(node: IGraphNode, params: any, 
 							__Mobius__Modules__: IModule[], 
-							print: Function): any{
+							print: Function, globals?: any): any{
 
 			let prodArr: number[] = [];
 
 			window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
 			window["__MOBIUS_PRINT__"] = print;
 
+			
 			//let gis = this._modules["gis"];
-			let str: string = "(function(){ \
-						" + this.getNodeCode(node, prodArr) + "\n" + 
-							this.getFunctionCall(node, [], true) + "\n" + 
-							"return " + node.getName() + ";" + "})(); \
-						";
+			let str: string = "(function(){";
+
+			if(globals){
+				for(let g=0; g < globals.length; g++){
+					str += "const " + globals[g].name  + "=" + globals[g].value + ";\n";
+				}
+			}
+
+			str +=	this.getNodeCode(node, prodArr) + "\n" + 
+					this.getFunctionCall(node, [], true) + "\n" + 
+					"return " + node.getName() + ";" + "})(); \
+					";
+
 			let result: any;
 
 			try{

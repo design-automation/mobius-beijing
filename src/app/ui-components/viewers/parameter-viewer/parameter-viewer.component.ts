@@ -1,4 +1,4 @@
-import { Component, Injector, ElementRef, ViewChild } from '@angular/core';
+import { Component, Injector, ElementRef, ViewChild, Input } from '@angular/core';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
@@ -10,6 +10,9 @@ import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule
   styleUrls: ['./parameter-viewer.component.scss']
 })
 export class ParameterViewerComponent extends Viewer {
+    
+    @Input() globals:boolean;
+
 
 	  _node: IGraphNode;
 	  _inputs: InputPort[]|any;
@@ -30,6 +33,10 @@ export class ParameterViewerComponent extends Viewer {
     reset(): void{
       this._node = undefined; 
       this._inputs = [];
+
+      if(this.globals){
+        this._inputs = this.flowchartService.getFlowchart().globals;
+      }
     }
 
   	// addInput(): void{
@@ -79,6 +86,12 @@ export class ParameterViewerComponent extends Viewer {
   	//  beware of updating flowchart here - it will go into an unending loop :/
   	//
   	update(): void{
+
+      if(this.globals){
+        this._inputs = this.flowchartService.getFlowchart().globals;
+        return;
+      }
+
   		this._node = this.flowchartService.getSelectedNode();
       if(this._node != undefined){
          this._inputs = this._node.getInputs().filter(function(inp: InputPort){
