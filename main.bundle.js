@@ -3062,6 +3062,7 @@ let FlowchartService = class FlowchartService {
         this.update();
         this.loadModules([
             { _name: "Math", _version: 0.1, _author: "Patrick" },
+            { _name: "Measure", _version: 0.1, _author: "Patrick" },
             { _name: "Model", _version: 0.1, _author: "Patrick" },
             { _name: "Properties", _version: 0.1, _author: "Patrick" }
             //{_name: "Attrib", _version: 0.1, _author: "Patrick"},
@@ -12229,6 +12230,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Model", function() { return Model; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Properties", function() { return Properties; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Measure", function() { return Measure; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("../../../../../src/app/base-classes/code/CodeModule.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("../../../../turf-modelling/docs_json/turf-modelling.json");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__);
@@ -12237,33 +12239,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //import * as GSS from "gs-modelling";
 
 
-let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* math */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Model = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Model", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* model */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-//// version for dev
-// let Attrib: IModule = ModuleUtils.createModule("Attrib", GSS["attrib"], "attrib", docs);
-// let Circle: IModule = ModuleUtils.createModule("Circle", GSS["circle"], "circle", docs);
-/*let Ellipse: IModule = ModuleUtils.createModule("Ellipse", GSS["ellipse"], "ellipse", docs);*/
-// let Intersect: IModule = ModuleUtils.createModule("Intersect", GSS["intersect"], "intersect", docs);
-// let Model: IModule = ModuleUtils.createModule("Model", GSS["model"], "model", docs);
-// let Obj: IModule = ModuleUtils.createModule("Obj", GSS["object"], "object", docs);
-// let Plane: IModule = ModuleUtils.createModule("Plane", GSS["plane"], "plane", docs);
-// let Pline: IModule = ModuleUtils.createModule("Pline", GSS["pline"], "pline", docs);
-// let PMesh: IModule = ModuleUtils.createModule("PMesh", GSS["pmesh"], "pmesh", docs);
-// let Point: IModule = ModuleUtils.createModule("Point", GSS["point"], "point", docs);
-// let Query: IModule = ModuleUtils.createModule("Query", GSS["query"], "query", docs);
-// let Ray: IModule = ModuleUtils.createModule("Ray", GSS["ray"], "ray", docs);
-// let Split: IModule = ModuleUtils.createModule("Split", GSS["split"], "split", docs);
-// let Topo: IModule = ModuleUtils.createModule("Topo", GSS["topo"], "topo", docs);
-// let List: IModule = ModuleUtils.createModule("List", GSS["list"], "list", docs);
-// let Math: IModule = ModuleUtils.createModule("Math", GSS["math"], "math", docs);
-// let String: IModule = ModuleUtils.createModule("String", GSS["string"], "string", docs);
-// let Calc: IModule = ModuleUtils.createModule("Calc", GSS["calc"], "calc", docs);
-// let Group: IModule = ModuleUtils.createModule("Group", GSS["group"], "group", docs);
-/*let Xform: IModule = ModuleUtils.createModule("Xform", GSS["xform"], "xform", docs);*/
-/// export {Calc,List, Math, String, Circle, Model, Attrib, Intersect, Obj, Plane, Pline, PMesh, Point, Query, Ray, Split, Topo, Group};
-//// version for dev
-///
+let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* math */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Model = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Model", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* feature_coll */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["d" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Measure", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* measure */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
 
 
 
