@@ -302,6 +302,7 @@ export class FlowchartService {
     this.loadModules(
                       [
                         {_name: "Math", _version: 0.1, _author: "Patrick"},
+                        {_name: "Measure", _version: 0.1, _author: "Patrick"},
                         {_name: "Model", _version: 0.1, _author: "Patrick"},
                         {_name: "Properties", _version: 0.1, _author: "Patrick"}
                          //{_name: "Attrib", _version: 0.1, _author: "Patrick"},
