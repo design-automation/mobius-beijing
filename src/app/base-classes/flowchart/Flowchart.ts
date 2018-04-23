@@ -550,13 +550,7 @@ export class Flowchart implements IFlowchart{
 			gld.push({name: prop, value: value});
 		}
 
-		/////
-		if(gld){
-			for(let g=0; g < gld.length; g++){
-				//str += "window[" + globals[g].name  + "] =" + globals[g].value + ";\n";
-				window[ gld[g].name ] = gld[g].value;
- 			}
-		}
+		
 
 		// sort nodes 
 		let all_nodes = this.getNodes();
@@ -583,12 +577,6 @@ export class Flowchart implements IFlowchart{
 		}
 
 
-		////// TODO: should execute after last node
-		// if(gld){
-		// 	for(let g=0; g < gld.length; g++){
-		// 		delete window[gld[g].name];
-		// 	}
-		// }
 
 		return true;
 	}
