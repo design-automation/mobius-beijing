@@ -386,14 +386,14 @@ export class CodeGeneratorJS extends CodeGenerator{
 			window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
 			window["__MOBIUS_PRINT__"] = print;
 
-			
+
 			//let gis = this._modules["gis"];
 			let str: string = "(function(){";
 
 			if(globals){
 				for(let g=0; g < globals.length; g++){
-					str += "const " + globals[g].name  + "=" + globals[g].value + ";\n";
-				}
+					str += "const " + globals[g].name  + " =" + globals[g].value + ";\n";
+	 			}
 			}
 
 			str +=	this.getNodeCode(node, prodArr) + "\n" + 
@@ -405,7 +405,6 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			try{
 				result = eval(str);
-				console.log(result);
 			}
 			catch(ex){
 				node.hasError();
@@ -456,10 +455,13 @@ export class CodeGeneratorJS extends CodeGenerator{
 				throw error;
 			}
 			
+
 			prodArr = null; 
 			print = null; 
-			delete window["__MOBIUS_MODULES__"]
-			delete window["__MOBIUS_PRINT__"]
+			delete window["__MOBIUS_MODULES__"];
+			delete window["__MOBIUS_PRINT__"];
+
+
 			return result;//result;// return result of the node
 		}
 

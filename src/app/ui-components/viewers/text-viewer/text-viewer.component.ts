@@ -17,7 +17,7 @@ export class TextViewerComponent extends Viewer implements OnInit {
 	_selectedPort: IPort;
 
 	constructor(injector: Injector){ 
-		super(injector, "Text Viewer", "Displayed geometry with each node;");  
+		super(injector, "Text Viewer", "Displayed geometry with each node.");  
 	}
 
 	ngOnInit() {
@@ -37,6 +37,9 @@ export class TextViewerComponent extends Viewer implements OnInit {
 		let value = this._selectedPort.getValue();
 		if(typeof(value) == "object"){
 			value = JSON.stringify(value);
+			if(value.length > 397){
+				value = value.substr(0,397) + "...";
+			}
 		}
 
 		return value;

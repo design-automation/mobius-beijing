@@ -64,7 +64,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.LoadData(this.data);
       }
       catch(ex){
-        console.log(ex);
+        console.log("Error loading data in Mobius-Cesium Viewer");
       }
     }
   }

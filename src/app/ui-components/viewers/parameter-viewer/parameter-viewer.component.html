@@ -6,14 +6,15 @@
 			No Inputs
 		</div>
  
+		<div class="param-in-viewer" *ngIf="globals" style="width: 100%; padding: 10px;">
+			<h3>Title: {{flowchartService.getFlowchart().name}}</h3>
+			<p>{{flowchartService.getFlowchart().description}}</p>
+
+			<h4>Parameters</h4>
+		</div>
+		
 		<div class='paramater-container single-param-container' *ngFor="let inp of _inputs" >
 			
-			<div class="param-in-viewer" *ngIf="globals" style="width: 100%; padding: 10px;">
-				<h3>Title: {{flowchartService.getFlowchart().name}}</h3>
-				<p>{{flowchartService.getFlowchart().description}}</p>
-
-				<h4>Parameters</h4>
-			</div>
 
 
 			<div class="param-name">

@@ -1,15 +1,12 @@
 <div id="app-container" *ngIf="supported">
 
   <div class="container">
-
-    <!-- main pane -->
-    <app-cesium-viewer></app-cesium-viewer>
-    <!-- <app-viewer-container></app-viewer-container>   -->
-
-    <div class="floating-div" style="z-index: 100; position: absolute; right: 0px; height: 100%; width: 300px;">
-      <app-parameter-viewer globals=true></app-parameter-viewer>
-    </div>
-      
+  		<div class="wrapper">
+    		<app-viewer-container></app-viewer-container>
+    	</div>
+    	<div class="floatingbox">
+    		<app-parameter-viewer globals=true></app-parameter-viewer>
+    	</div>
   </div>
 
 </div>
