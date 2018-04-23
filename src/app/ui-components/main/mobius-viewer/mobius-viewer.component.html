@@ -2,27 +2,14 @@
 
   <div class="container">
 
-    <div class="wrapper">
+    <!-- main pane -->
+    <app-cesium-viewer></app-cesium-viewer>
+    <!-- <app-viewer-container></app-viewer-container>   -->
 
-      <split  direction="horizontal" 
-              gutterColor="#8AA8C0"
-              [gutterSize]="layout.gutter" 
-              [useTransition]="layout.useTransition">
-
-            <!-- main pane -->
-            <split-area>
-              <app-viewer-container></app-viewer-container>  
-            </split-area>
-
-            <!-- secondary split pane -->
-            <split-area>
-                <app-parameter-viewer globals=true></app-parameter-viewer>
-            </split-area>
-            
-      </split>
-
+    <div class="floating-div" style="z-index: 100; position: absolute; right: 0px; height: 100%; width: 300px;">
+      <app-parameter-viewer globals=true></app-parameter-viewer>
     </div>
-
+      
   </div>
 
 </div>

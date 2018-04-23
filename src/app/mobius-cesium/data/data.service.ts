@@ -9,8 +9,18 @@ export class DataService {
   ColorValue:string;
   HeightValue:string;
   CheckHide:boolean;
+  CheckOpp:boolean;
   CheckCom:boolean;
   CheckOcc:boolean;
+  viewer:any;
+  SelectedEntity:any;
+  cesiumpromise:any;
+  propertyNames:Array<any>;
+  HeightKey:Array<any>;
+  selectEntity:object;
+  Colortexts:Array<any>;
+  MinColor:number;
+  MaxColor:number;
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
