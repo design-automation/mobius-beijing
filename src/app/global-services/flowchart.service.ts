@@ -196,7 +196,7 @@ export class FlowchartService {
         try{
           this.consoleService.addMessage("Loading file from: " + fileString);
           this.http.get(fileString).subscribe(res => { 
-            this.loadFile(CircularJSON.stringify(res)) ;
+            this.loadFile(JSON.stringify(res));
           });
         }
         catch(ex){
@@ -206,6 +206,7 @@ export class FlowchartService {
       else{
         let _this = this;
         let jsonData: {language: string, flowchart: JSON, modules: JSON};
+
         try{
 
           this.newFile();
@@ -229,13 +230,17 @@ export class FlowchartService {
           for(let i=0; i < nds.length; i++){
             if(nds[i].getId() == this._flowchart.selectedNode){
               this.selectNode(i, 0);
+              console.log("selecting node: " + i);
               break;
             }
           }
 
-          _this.update();
+          if(this.getSelectedNode() == undefined){
+            this.selectNode(this.getNodes().length - 1, 0);
+            console.log("selecting default");
+          }
 
-          console.log(this._flowchart.getEdges());
+          _this.update();
 
           this.consoleService.addMessage("File loaded successfully");
           this.layoutService.showConsole();

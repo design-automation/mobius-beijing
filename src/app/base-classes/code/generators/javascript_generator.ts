@@ -405,6 +405,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			try{
 				result = eval(str);
+				console.log(result);
 			}
 			catch(ex){
 				node.hasError();
