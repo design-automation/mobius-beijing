@@ -11682,7 +11682,7 @@ let MobiusGalleryComponent = MobiusGalleryComponent_1 = class MobiusGalleryCompo
         console.log(this.all_files);
     }
 };
-MobiusGalleryComponent.gallery_url = 'https://api.github.com/repos/akshatamohanty/mobius-cesium/contents/src/assets/json-files?ref=workshop-features';
+MobiusGalleryComponent.gallery_url = 'https://api.github.com/repos/akshatamohanty/mobius-cesium/contents/src/assets/json-files?ref=master';
 MobiusGalleryComponent = MobiusGalleryComponent_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'mobius-gallery',
