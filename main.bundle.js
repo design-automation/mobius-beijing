@@ -290,7 +290,7 @@ class CodeGenerator {
         throw Error("Not implemented");
     }
     ;
-    executeNode(node, params, Modules, print) {
+    executeNode(node, params, Modules, print, globals) {
         throw Error("Not implemented");
     }
     ;
@@ -764,19 +764,25 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
         }
         return prepend + port.getName() + " = " + port.getDefaultValue();
     }
-    executeNode(node, params, __Mobius__Modules__, print) {
+    executeNode(node, params, __Mobius__Modules__, print, globals) {
         let prodArr = [];
         window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
         window["__MOBIUS_PRINT__"] = print;
         //let gis = this._modules["gis"];
-        let str = "(function(){ \
-						" + this.getNodeCode(node, prodArr) + "\n" +
+        let str = "(function(){";
+        if (globals) {
+            for (let g = 0; g < globals.length; g++) {
+                str += "const " + globals[g].name + "=" + globals[g].value + ";\n";
+            }
+        }
+        str += this.getNodeCode(node, prodArr) + "\n" +
             this.getFunctionCall(node, [], true) + "\n" +
             "return " + node.getName() + ";" + "})(); \
-						";
+					";
         let result;
         try {
             result = eval(str);
+            console.log(result);
         }
         catch (ex) {
             node.hasError();
@@ -1247,6 +1253,12 @@ class Flowchart {
         // set all nodes to status not executed
         // future: cache results and set status based on changes
         this.reset();
+        let gld = [];
+        for (let i = 0; i < this._globals.length; i++) {
+            let prop = this._globals[i].getName();
+            let value = this._globals[i].getValue();
+            gld.push({ name: prop, value: value });
+        }
         // sort nodes 
         let all_nodes = this.getNodes();
         let sortOrder = this.getNodeOrder();
@@ -1260,7 +1272,7 @@ class Flowchart {
             if (node.isDisabled() || node.hasFnOutput()) {
                 continue;
             }
-            node.execute(code_generator, modules, print);
+            node.execute(code_generator, modules, print, gld);
             this.updateDependentInputs(node, originalRank);
             //todo: print time taken
         }
@@ -1386,44 +1398,12 @@ class FlowchartReader {
             let valid_input = (in_node >= 0 && in_node < nodes.length);
             let valid_output = (out_node >= 0 && out_node < nodes.length);
             if (valid_input && valid_output) {
+                console.log("Adding edge");
                 fc.addEdge(e_data.output_address, e_data.input_address);
             }
             else {
             }
         }
-        /*let allNodes = fc.getNodes();
-        for(let i=0; i < allNodes.length; i++){
-            let n = allNodes[i];
-
-            let p = n.getProcedure();
-
-            for(let pr=0; pr < p.length; pr++){
-                let prod = p[pr];
-
-                if(prod.getType() == ProcedureTypes.Function){
-                    let fn_prod: FunctionProcedure = prod as FunctionProcedure;
-                    let node_id = fn_prod.getNode().getId();
-                    let actual_node = nodeMap[node_id];
-                    fn_prod.setNode(actual_node);
-                }
-
-            }
-        }
-*/
-        // relink procedure lines
-        /*nodes.map(function(node){
-
-            let procedure_arr = node.getProcedure();
-
-            procedure_arr.map(function(prod){
-
-                if(prod.getType() == "Function"){
-                    console.log(prod);
-                }
-
-            })
-
-        })*/
         return fc;
     }
 }
@@ -1744,7 +1724,7 @@ class GraphNode {
     //
     //
     //
-    execute(code_generator, modules, print) {
+    execute(code_generator, modules, print, globals) {
         let params = [];
         this.getInputs().map(function (i) {
             if (i.isFunction()) {
@@ -1772,7 +1752,7 @@ class GraphNode {
             }
         });
         // use code generator to execute code
-        let result = code_generator.executeNode(this, params, modules, print);
+        let result = code_generator.executeNode(this, params, modules, print, globals);
         // add results to this node
         for (let n = 0; n < this._outputs.length; n++) {
             let output_port = this._outputs[n];
@@ -2976,7 +2956,9 @@ let FlowchartService = class FlowchartService {
         if (fileString && fileString.startsWith("https://")) {
             try {
                 this.consoleService.addMessage("Loading file from: " + fileString);
-                this.http.get(fileString).subscribe(res => { this.loadFile(__WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"](res)); });
+                this.http.get(fileString).subscribe(res => {
+                    this.loadFile(JSON.stringify(res));
+                });
             }
             catch (ex) {
                 this.consoleService.addMessage("Error loading file from: " + fileString, __WEBPACK_IMPORTED_MODULE_9__console_service__["b" /* EConsoleMessageType */].Error);
@@ -2996,6 +2978,19 @@ let FlowchartService = class FlowchartService {
                 }
                 // read the flowchart
                 _this._flowchart = __WEBPACK_IMPORTED_MODULE_4__base_classes_flowchart_FlowchartModule__["b" /* FlowchartReader */].readFlowchartFromData(data["flowchart"]);
+                // select node according to publish settings
+                let nds = this._flowchart.getNodes();
+                for (let i = 0; i < nds.length; i++) {
+                    if (nds[i].getId() == this._flowchart.selectedNode) {
+                        this.selectNode(i, 0);
+                        console.log("selecting node: " + i);
+                        break;
+                    }
+                }
+                if (this.getSelectedNode() == undefined) {
+                    this.selectNode(this.getNodes().length - 1, 0);
+                    console.log("selecting default");
+                }
                 _this.update();
                 this.consoleService.addMessage("File loaded successfully");
                 this.layoutService.showConsole();
@@ -3065,25 +3060,6 @@ let FlowchartService = class FlowchartService {
             { _name: "Measure", _version: 0.1, _author: "Patrick" },
             { _name: "Model", _version: 0.1, _author: "Patrick" },
             { _name: "Properties", _version: 0.1, _author: "Patrick" }
-            //{_name: "Attrib", _version: 0.1, _author: "Patrick"},
-            // {_name: "Calc", _version: 0.1, _author: "Patrick"},
-            // {_name: "Circle", _version: 0.1, _author: "Patrick"},
-            // {_name: "Group", _version: 0.1, _author: "Patrick"},
-            // {_name: "Intersect", _version: 0.1, _author: "Patrick"},
-            // {_name: "List", _version: 0.1, _author: "Patrick"},
-            // {_name: "Math", _version: 0.1, _author: "Patrick"},
-            // {_name: "Model", _version: 0.1, _author: "Patrick"},
-            // {_name: "Obj", _version: 0.1, _author: "Patrick"},
-            // {_name: "Plane", _version: 0.1, _author: "Patrick"},
-            // {_name: "Pline", _version: 0.1, _author: "Patrick"},
-            // {_name: "PMesh", _version: 0.1, _author: "Patrick"},
-            // {_name: "Point", _version: 0.1, _author: "Patrick"},
-            //{_name: "Query", _version: 0.1, _author: "Patrick"},
-            //{_name: "Ray", _version: 0.1, _author: "Patrick"},
-            // {_name: "Split", _version: 0.1, _author: "Patrick"},
-            // {_name: "String", _version: 0.1, _author: "Patrick"},
-            //{_name: "Xform", _version: 0.1, _author: "Patrick"},
-            //{_name: "Topo", _version: 0.1, _author: "Patrick"}
         ]);
         // print message to console
         this.consoleService.addMessage("New file created.");
@@ -7471,7 +7447,7 @@ DataService = __decorate([
 /***/ "../../../../../src/app/mobius-cesium/mobius-cesium.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n</div> -->\r\n<div id=\"mobiuscesium\">\r\n\t<cesium-viewer></cesium-viewer>\r\n</div>"
+module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<split direction=\"horizontal\" style=\"background-color: #8aa8c0;\">\r\n\t\t<split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow:hidden;\">\r\n\t\t    <app-toolwindow></app-toolwindow>\r\n\t\t</split-area>\r\n\t\t<split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t    <cesium-viewer></cesium-viewer>\r\n\t\t</split-area>\r\n\t</split>\r\n\t\r\n</div>\r\n"
 
 /***/ }),
 
@@ -7480,10 +7456,10 @@ module.exports = "<!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">
 
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
 // imports
-
+exports.push([module.i, "@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);", ""]);
 
 // module
-exports.push([module.i, "#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: \"FontAwesome\"; }\n\n.font-awesome-hand {\n  font-family: FontAwesome; }\n\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\n\n#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n\n/* split-area{\r\n  overflow-y: hidden !important;\r\n  height: 100% !important;\r\n}\r\n\r\nsplit-gutter{\r\n  border-right: 1px solid #8aa8c0 !important;\r\n  border-top: 1px solid #8aa8c0 !important;\r\n  background-color: #8aa8c0 !important;\r\n} */\n", ""]);
 
 // exports
 
@@ -7561,12 +7537,26 @@ MobiuscesiumComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__ = __webpack_require__("../../../../../src/app/mobius-cesium/mobius-cesium.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__ = __webpack_require__("../../../../../src/app/mobius-cesium/viewer/viewer.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__data_data_service__ = __webpack_require__("../../../../../src/app/mobius-cesium/data/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__ = __webpack_require__("../../../../../src/app/mobius-cesium/toolwindow/toolwindow.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular_split__ = __webpack_require__("../../../../angular-split/esm2015/angular-split.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/esm2015/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm2015/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__ = __webpack_require__("../../../material/esm2015/tabs.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__ = __webpack_require__("../../../material/esm2015/tooltip.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__ = __webpack_require__("../../../material/esm2015/slider.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
+
+
 
 
 
@@ -7584,16 +7574,674 @@ let MobiusCesium = MobiusCesium_1 = class MobiusCesium {
 };
 MobiusCesium = MobiusCesium_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["J" /* NgModule */])({
-        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */]
+        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
+            __WEBPACK_IMPORTED_MODULE_6_angular_split__["a" /* AngularSplitModule */],
+            __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__["a" /* MatTabsModule */],
+            __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["b" /* NoopAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__["a" /* MatTooltipModule */],
+            __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__["a" /* MatSliderModule */]
         ],
         exports: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */]],
         declarations: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */],
-            __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__["a" /* ViewerComponent */]],
+            __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__["a" /* ViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__["a" /* ToolwindowComponent */]],
         providers: [__WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */]],
     })
 ], MobiusCesium);
 
 var MobiusCesium_1;
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/mobius-cesium/toolwindow/toolwindow.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "#toolwindow{\r\n  position: relative;\r\n  background-color: #F1F1F1 !important;\r\n  height: 100%;\r\n  width: 100%;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#395d73;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n} \r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ccc;\r\n  padding: 0; \r\n  color:#395d73;\r\n  width: 100%;\r\n  background-color: #395d73;\r\n}", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/mobius-cesium/toolwindow/toolwindow.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n  \t  <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">ID</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n  \t  <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n  \t  <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n\t    </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/mobius-cesium/toolwindow/toolwindow.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToolwindowComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm2015/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("../../../../../src/app/mobius-cesium/data/DataSubscriber.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js__ = __webpack_require__("../../../../chroma-js/chroma.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chroma_js__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */] {
+    constructor(injector, myElement) {
+        super(injector);
+        this.ScaleValue = 1000;
+        this.CheckScale = true;
+        this.hideElementArr = [];
+        this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
+        this.HideNum = [];
+    }
+    ngOnInit() {
+        if (this.CheckOpp == undefined) {
+            this.CheckOpp = false;
+        }
+        else {
+            this.CheckOpp = this.dataService.CheckOpp;
+        }
+    }
+    notify(message) {
+        if (message == "model_update") {
+            this.data = this.dataService.getGsModel();
+            try {
+                this.LoadData(this.data);
+            }
+            catch (ex) {
+                console.log(ex);
+            }
+        }
+    }
+    LoadData(data) {
+        if (data["features"] !== undefined) {
+            this.PropertyNames = Object.getOwnPropertyNames(data["features"][0].properties);
+            this.PropertyNames.sort();
+            this.viewer = this.dataService.viewer;
+        }
+    }
+    ngDoCheck() {
+        if (this.viewer !== undefined && this.dataService.SelectedEntity !== undefined) {
+            if (this.ID !== this.dataService.SelectedEntity._id) {
+                this.ID = this.dataService.SelectedEntity._id;
+                this.Properties = [];
+                for (var i = 0; i < this.PropertyNames.length; i++) {
+                    var Properties = [];
+                    Properties.Name = this.PropertyNames[i];
+                    Properties.Value = this.dataService.SelectedEntity.properties[this.PropertyNames[i]]._value;
+                    this.Properties.push(Properties);
+                }
+            }
+        }
+        if (this.viewer !== undefined) {
+            if (this.ColorValue !== this.dataService.ColorValue) {
+                this.ColorValue = this.dataService.ColorValue;
+                this.ColorNames = this.dataService.propertyNames;
+                this.ColorNames.sort();
+                this.onChangeColor(this.ColorValue);
+            }
+            if (this.HeightValue !== this.dataService.HeightValue) {
+                this.HeightValue = this.dataService.HeightValue;
+                this.HeightKey = this.dataService.HeightKey;
+                this.HeightKey.sort();
+                this.onChangeHeight(this.HeightValue);
+            }
+        }
+    }
+    onChangeHeight(HeightValue) {
+        this.HeightValue = HeightValue;
+        var texts = [];
+        var promise = this.dataService.cesiumpromise;
+        for (var j = 0; j < this.HeightKey.length; j++) {
+            if (this.HeightValue === this.HeightKey[j]) {
+                var self = this;
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                if (texts.length === 0) {
+                                    texts[0] = entity.properties[self.HeightValue]._value;
+                                }
+                                else {
+                                    if (texts.indexOf(entity.properties[self.HeightValue]._value) === -1)
+                                        texts.push(entity.properties[self.HeightValue]._value);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        this.Max = Math.max.apply(Math, texts);
+        this.Min = Math.min.apply(Math, texts);
+        //if(this.CheckHide===true) this.Hide();
+        this.changescale(this.ScaleValue);
+        this.dataService.getHeightValue(this.HeightValue);
+    }
+    onChangeColor(ColorValue) {
+        this.ColorValue = ColorValue;
+        var texts = [];
+        this.ColorKey = [];
+        var promise = this.dataService.cesiumpromise;
+        for (var j = 0; j < this.ColorNames.length; j++) {
+            if (this.ColorValue === this.ColorNames[j]) {
+                this.Name = this.ColorNames[j];
+                var self = this;
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.Name] !== undefined) {
+                            if (entity.properties[self.Name]._value !== " ") {
+                                if (texts.length === 0) {
+                                    texts[0] = entity.properties[self.Name]._value;
+                                }
+                                else {
+                                    if (texts.indexOf(entity.properties[self.Name]._value) === -1)
+                                        texts.push(entity.properties[self.Name]._value);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        if (typeof (texts[0]) === "number") {
+            this.texts = texts;
+            var max = Math.max.apply(Math, texts);
+            var min = Math.min.apply(Math, texts);
+            var range = 12;
+            var Colortext = [];
+            Colortext.push(">=" + (min + ((range - 1) / range) * (max - min)).toFixed(2));
+            for (var i = range - 2; i > 0; i--) {
+                Colortext.push((min + (i / range) * (max - min)).toFixed(2) + " - " + (min + ((i + 1) / range) * (max - min)).toFixed(2));
+            }
+            Colortext.push("<=" + (min + (1 / range) * (max - min)).toFixed(2));
+            for (var j = 0; j < Colortext.length; j++) {
+                var ColorKey = [];
+                ColorKey.text = Colortext[j];
+                //ColorKey.color=this.ColorStore[j];
+                var Color = this.ChromaScale((j / Colortext.length).toFixed(2));
+                ColorKey.color = Color;
+                this.ColorKey.push(ColorKey);
+            }
+            this.dataService.Colortexts = this.ColorKey;
+            this.dataService.MaxColor = max;
+            this.dataService.MinColor = min;
+            this.colorByNum();
+        }
+        else {
+            this.texts = texts;
+            for (var j = 0; j < texts.length; j++) {
+                var ColorKey = [];
+                ColorKey.text = texts[j];
+                //ColorKey.color=this.ColorStore[j];
+                var Color = this.ChromaScale((j / texts.length).toFixed(2));
+                ColorKey.color = Color;
+                this.ColorKey.push(ColorKey);
+            }
+            this.dataService.Colortexts = this.ColorKey;
+            this.colorByCat();
+        }
+        this.Hide();
+        this.dataService.getColorValue(this.ColorValue);
+    }
+    colorByNum() {
+        var max = Math.max.apply(Math, this.texts);
+        var min = Math.min.apply(Math, this.texts);
+        var promise = this.dataService.cesiumpromise;
+        var ChromaScale = this.ChromaScale;
+        var ColorKey = this.ColorKey;
+        var range = ColorKey.length;
+        var self = this;
+        promise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                if (entity.properties[self.ColorValue] !== undefined) {
+                    for (var j = 1; j < range; j++) {
+                        if (entity.properties[self.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
+                            var rgb = ColorKey[range - j].color._rgb;
+                            entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        }
+                        else if (entity.properties[self.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
+                            var rgb = ColorKey[range - 1].color._rgb;
+                            entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    colorByCat() {
+        var Name = this.ColorValue;
+        var texts = [];
+        for (var i = 0; i < this.ColorKey.length; i++) {
+            texts.push(this.ColorKey[i].text);
+        }
+        var ChromaScale = this.ChromaScale;
+        var promise = this.dataService.cesiumpromise;
+        promise.then(function (dataSource) {
+            var self = this;
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                if (entity.properties[Name] !== undefined) {
+                    var initial = false;
+                    for (var j = 0; j < texts.length; j++) {
+                        if (entity.properties[Name]._value === texts[j]) {
+                            var rgb = ChromaScale((j / texts.length).toFixed(2));
+                            entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                            initial = true;
+                        }
+                    }
+                    if (initial === false) {
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    }
+                }
+            }
+        });
+    }
+    changescale(ScaleValue) {
+        this.ScaleValue = ScaleValue;
+        var scale = this.ScaleValue / this.Max;
+        if (this.CheckScale === true) {
+            var promise = this.dataService.cesiumpromise;
+            var self = this;
+            if (self.CheckOpp === false) {
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                            }
+                        }
+                    }
+                });
+            }
+            /*this.Hide();*/
+        }
+        else {
+            var promise = this.dataService.cesiumpromise;
+            var self = this;
+            if (self.CheckOpp === false) {
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        this.Hide();
+    }
+    checkscale() {
+        this.CheckScale = !this.CheckScale;
+    }
+    addHide() {
+        var lastnumber;
+        if (this.HideNum.length === 0) {
+            this.HideNum[0] = "0";
+            lastnumber = this.HideNum[0];
+        }
+        else {
+            for (var i = 0; i < this.HideNum.length + 1; i++) {
+                if (this.HideNum.indexOf(String(i)) === -1) {
+                    this.HideNum.push(String(i));
+                    lastnumber = String(i);
+                    break;
+                }
+            }
+        }
+        if (this.HideValue === undefined)
+            this.HideValue = this.ColorNames[0];
+        var texts = this.Initial(this.HideValue);
+        if (typeof (texts[0]) === "number") {
+            this.HideType = "number";
+        }
+        else {
+            this.HideType = "category";
+        }
+        this.hideElementArr.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber, HeightHide: this.HideValue, type: this.HideType, Category: texts, CategaryHide: texts[0], RelaHide: 0, textHide: Math.round(Math.min.apply(Math, texts) * 100) / 100,
+            HideMax: Math.ceil(Math.max.apply(Math, texts)), HideMin: Math.round(Math.min.apply(Math, texts) * 100) / 100 });
+        return;
+    }
+    deleteHide(event) {
+        var index = this.HideNum.indexOf(event);
+        var divid = String("addHide".concat(String(event)));
+        var addHide = document.getElementById(divid);
+        var hidecontainer = document.getElementsByClassName("hide-container")[0];
+        hidecontainer.removeChild(addHide);
+        if (this.hideElementArr[index].type === "number") {
+            if (this.hideElementArr[index].RelaHide === "0" || this.hideElementArr[index].RelaHide === 0)
+                this.hideElementArr[index].textHide = this.hideElementArr[index].HideMin;
+            if (this.hideElementArr[index].RelaHide === "1" || this.hideElementArr[index].RelaHide === 1)
+                this.hideElementArr[index].textHide = this.hideElementArr[index].HideMax;
+        }
+        else if (this.hideElementArr[index].type === "category") {
+            this.hideElementArr[index].RelaHide = 0;
+        }
+        this.Hide();
+        this.hideElementArr.splice(index, 1);
+        this.HideNum.splice(index, 1);
+    }
+    Initial(HideValue) {
+        var texts = [];
+        var promise = this.dataService.cesiumpromise;
+        var self = this;
+        promise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                if (entity.properties[HideValue] !== undefined) {
+                    if (entity.properties[HideValue]._value !== " ") {
+                        if (texts.length === 0) {
+                            texts[0] = entity.properties[HideValue]._value;
+                        }
+                        else {
+                            if (texts.indexOf(entity.properties[HideValue]._value) === -1)
+                                texts.push(entity.properties[HideValue]._value);
+                        }
+                    }
+                }
+            }
+        });
+        return texts;
+    }
+    ChangeHeight(HeightHide) {
+        this.HideValue = HeightHide;
+    }
+    Changerelation(RelaHide, id) {
+        var index = this.HideNum.indexOf(id);
+        var HeightHide = this.hideElementArr[index].HeightHide;
+        this.hideElementArr[index].RelaHide = RelaHide;
+        var texts = [];
+        var promise = this.dataService.cesiumpromise;
+        var self = this;
+        promise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                if (entity.properties[HeightHide] !== undefined) {
+                    if (entity.properties[HeightHide]._value !== " ") {
+                        if (texts.length === 0) {
+                            texts[0] = entity.properties[HeightHide]._value;
+                        }
+                        else {
+                            if (texts.indexOf(entity.properties[HeightHide]._value) === -1)
+                                texts.push(entity.properties[HeightHide]._value);
+                        }
+                    }
+                }
+            }
+        });
+        this.hideElementArr[index].HideMax = Math.ceil(Math.max.apply(Math, texts));
+        this.hideElementArr[index].HideMin = Math.round(Math.min.apply(Math, texts) * 100) / 100;
+        if (RelaHide === "0" || RelaHide === 0)
+            this.hideElementArr[index].textHide = this.hideElementArr[index].HideMin;
+        if (RelaHide === "1" || RelaHide === 1)
+            this.hideElementArr[index].textHide = this.hideElementArr[index].HideMax;
+        this.Hide();
+    }
+    ChangeCategory(categary, id, type) {
+        var scale = this.ScaleValue / this.Max;
+        var index = this.HideNum.indexOf(id);
+        var promise = this.dataService.cesiumpromise;
+        var self = this;
+        if (type === 1) {
+            self.hideElementArr[index].CategaryHide = categary;
+        }
+        if (type === 0) {
+            self.hideElementArr[index].RelaHide = Number(categary);
+        }
+        self.Hide();
+    }
+    Changetext(value, id) {
+        var index = this.HideNum.indexOf(id);
+        this.hideElementArr[index].textHide = value;
+        this.Hide();
+    }
+    _compare(value, slider, relation) {
+        switch (relation) {
+            case 0:
+                return value < slider;
+            case 1:
+                return value > slider;
+            case 2:
+                return value === slider;
+        }
+    }
+    _compareCat(value, Categary, relation) {
+        switch (relation) {
+            case 0:
+                return value === null;
+            case 1:
+                return value !== Categary;
+            case 2:
+                return value === Categary;
+        }
+    }
+    Hide() {
+        var promise = this.dataService.cesiumpromise;
+        var propertyname = [];
+        var relation = [];
+        var text = [];
+        var scale = this.ScaleValue / this.Max;
+        for (var j = 0; j < this.hideElementArr.length; j++) {
+            if (this.hideElementArr[j] !== undefined) {
+                propertyname.push(this.hideElementArr[j].HeightHide);
+                relation.push(Number(this.hideElementArr[j].RelaHide));
+                if (this.hideElementArr[j].type === "number") {
+                    text.push(Number(this.hideElementArr[j].textHide));
+                }
+                else if (this.hideElementArr[j].type === "category") {
+                    text.push(String(this.hideElementArr[j].CategaryHide));
+                }
+            }
+        }
+        var self = this;
+        promise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                for (let j = 0; j < propertyname.length; j++) {
+                    const value = entity.properties[propertyname[j]]._value;
+                    if (value !== undefined) {
+                        if (typeof (value) === "number") {
+                            if (self._compare(value, text[j], relation[j])) {
+                                entity.polygon.extrudedHeight = 0;
+                                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                                break;
+                            }
+                            else {
+                                self.ColorByNumCat(entity);
+                                if (self.CheckScale === true) {
+                                    if (self.CheckOpp === true) {
+                                        entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                    }
+                                    else {
+                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                    }
+                                }
+                                else {
+                                    if (self.CheckOpp === true) {
+                                        entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                                    }
+                                    else {
+                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                    }
+                                }
+                            }
+                        }
+                        else if (typeof (value) === "string") {
+                            if (self._compareCat(value, text[j], relation[j])) {
+                                entity.polygon.extrudedHeight = 0;
+                                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                                break;
+                            }
+                            else {
+                                self.ColorByNumCat(entity);
+                                if (self.CheckScale === true) {
+                                    if (self.CheckOpp === true) {
+                                        entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                    }
+                                    else {
+                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                    }
+                                }
+                                else {
+                                    if (self.CheckOpp === true) {
+                                        entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                                    }
+                                    else {
+                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    ColorByNumCat(entity) {
+        var ChromaScale = this.ChromaScale;
+        var ColorKey = this.ColorKey;
+        var range = ColorKey.length;
+        var self = this;
+        if (typeof (self.texts[0]) === "number") {
+            var max = Math.max.apply(Math, self.texts);
+            var min = Math.min.apply(Math, self.texts);
+            var ChromaScale = self.ChromaScale;
+            for (var j = 1; j < range; j++) {
+                if (entity.properties[self.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
+                    var rgb = ColorKey[range - j].color._rgb;
+                    entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                }
+                else if (entity.properties[self.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
+                    var rgb = ColorKey[range - 1].color._rgb;
+                    entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                }
+            }
+        }
+        else {
+            var Colortexts = self.dataService.Colortexts;
+            var initial = false;
+            for (var j = 0; j < Colortexts.length; j++) {
+                if (entity.properties[self.ColorValue]._value === Colortexts[j].text) {
+                    var rgb = ChromaScale((j / Colortexts.length).toFixed(2));
+                    entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                    initial = true;
+                }
+            }
+            if (initial === false) {
+                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+        }
+    }
+    changeopp() {
+        if (this.CheckOpp === true) {
+            var promise = this.dataService.cesiumpromise;
+            var self = this;
+            if (self.CheckScale === true) {
+                var scale = self.ScaleValue / self.Max;
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        if (entity.properties[self.HeightValue] !== undefined) {
+                            if (entity.properties[self.HeightValue]._value !== " ") {
+                                entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            this.changescale(this.ScaleValue);
+        }
+        this.Hide();
+    }
+    checkopp() {
+        this.CheckOpp = !this.CheckOpp;
+    }
+};
+ToolwindowComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'app-toolwindow',
+        template: __webpack_require__("../../../../../src/app/mobius-cesium/toolwindow/toolwindow.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/mobius-cesium/toolwindow/toolwindow.component.css")]
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
+], ToolwindowComponent);
+
 
 
 /***/ }),
@@ -7606,7 +8254,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n/*.cesium-viewer-bottom{\r\n  display: none !important;\r\n}\r\n.cesium-timeline-main{\r\n  display: none !important;\r\n\r\n}*/\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n/*.cesium-infoBox{\r\n  background-color: #395D73;\r\n}\r\n\r\n.cesium-infoBox-iframe{\r\n  font-family: sans-serif !important;\r\n}\r\n.cesium-infoBox-title{\r\n  font-family: sans-serif !important;\r\n  font-size: 14px !important;\r\n  background-color: #395D73;\r\n}\r\n.cesium-infoBox-defaultTable td{\r\n  font-family: sans-serif !important;\r\n  font-size: 10px !important;\r\n}\r\n.cesium-infoBox-description table{\r\n  color:white;\r\n}\r\n*/\r\n.cesium-infoBox-title{\r\n  height:14px\r\n}\r\n.cesium-viewer{\r\n  font-size: 14px !important;\r\n}\r\nbody{\r\n  font-size: 10px;\r\n}\r\n.cesium-infoBox-description table{\r\n  background-color: #F1F1F1;\r\n}\r\n.cesium-infoBox-iframe{\r\n  height:650px;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}\r\n\r\n/*.cesium-infoBox-description, body, html { color: #000000; background-color: #FFF; }\r\n.cesium-infoBox-description * { max-width:100%; word-wrap: break-word; word-break: break-word; }\r\n.cesium-infoBox-defaultTable-lighter tr, .cesium-infoBox-defaultTable-lighter td { max-width:100%; }*/\r\n", ""]);
+exports.push([module.i, "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n\r\n.cesium-infoBox-title{\r\n  height:14px;\r\n  background: #395D73;\r\n}\r\n.cesium-viewer{\r\n  font-size: 14px !important;\r\n}\r\nbody{\r\n  font-size: 10px;\r\n}\r\n\r\n.cesium-infoBox-description{\r\n  background-color: red !important;\r\n}\r\n\r\n.cesium-infoBox-description table{\r\n  background-color: #F1F1F1;\r\n}\r\n.cesium-infoBox-iframe{\r\n  max-height: 300px !important;\r\n  height:650px !important;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -7619,7 +8267,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select()\">\r\n\t<div id=\"ColorandHeight\">\r\n\t\t<div id=\"toolbar\">\r\n\t\t<div id=\"Hidediv\" style=\"width: 110px;height:83px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t\t<table><tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Seleted<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckHide\" (click)=\"changeHide();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Committed<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckCom\" (click)=\"changeCom();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Occupied<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckOcc\" (click)=\"changeOcc();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 68%;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;\">Color</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n          \t\t<th><div>\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t</div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div id=\"color\" style=\"width:88%;display:inline-block;position: relative;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table style=\"width: 100%\">\r\n\t\t\t\t<tr >\r\n          \t\t<td *ngFor=\"let Color of Colors\" style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Color}\" >&nbsp;&nbsp;&nbsp;</div></td>\r\n          \t\t</tr>\r\n          \t\t<tr >\r\n          \t\t<td class=\"colorkey\" *ngFor=\"let text of texts\" style=\"width: 40px;\"><div class=\"table_text\">{{text}}</div></td>\r\n          \t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div> \r\n\t\t</div>\r\n\t\t<div style=\"width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;position: relative;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;\">Height</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t<tr>\r\n\t          \t<th><div >\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t</div>\r\n\t\t\t\t</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 100px;display:inline-block;position: relative;color:white;height:80px\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 25px\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">Min</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width:100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">{{Minimum}}</div></th></tr>\t\r\n\t\t\t</table>\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 25px;\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">Max</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">{{Maximum}}</div></th></tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t</div>\r\n\t</div>\r\n</div>"
+module.exports = "<div id=\"cesiumContainer\" (click)=\"select()\">\r\n\t<!-- <div id=\"ColorandHeight\">\r\n\t\t<div id=\"toolbar\">\r\n\t\t<div id=\"Hidediv\" style=\"width: 110px;height:83px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t\t<table><tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Seleted<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckHide\" (click)=\"changeHide();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Committed<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckCom\" (click)=\"changeCom();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Occupied<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckOcc\" (click)=\"changeOcc();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: calc(100% - 345px);display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;\">Color</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n          \t\t<th><div>\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\"  *ngFor=\"let propertyName of propertyNames\" value={{propertyName}}>{{propertyName}}</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option> -->\r\n\t\t\t\t<!-- </select>\r\n\t\t\t\t</div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div id=\"color\" style=\"width:calc(100% - 90px);display:inline-block;position: relative;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table style=\"width: 100%\">\r\n\t\t\t\t<tr >\r\n          \t\t<td *ngFor=\"let Color of Colors\" style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Color}\" >&nbsp;&nbsp;&nbsp;</div></td>\r\n          \t\t</tr>\r\n          \t\t<tr >\r\n          \t\t<td class=\"colorkey\" *ngFor=\"let text of texts\" style=\"width: 40px;\"><div class=\"table_text\">{{text}}</div></td>\r\n          \t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div> \r\n\t\t</div>\r\n\t\t<div style=\"width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;position: relative;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;\">Height</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t<tr>\r\n\t          \t<th><div >\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\"  *ngFor=\"let propertyName of propertyNames\" value={{propertyName}}>{{propertyName}}</option> -->\r\n\t\t\t\t\t<!-- <option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option> -->\r\n\t\t<!-- \t\t</select>\r\n\t\t\t\t</div>\r\n\t\t\t\t</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 100px;display:inline-block;position: relative;color:white;height:80px\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 25px\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">Min</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width:100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">{{Minimum}}</div></th></tr>\t\r\n\t\t\t</table>\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 25px;\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">Max</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">{{Maximum}}</div></th></tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t</div>\r\n\t</div> -->\r\n</div>"
 
 /***/ }),
 
@@ -7649,38 +8297,6 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
         this.myElement = myElement;
     }
     ngOnInit() {
-        //this.ColorValue="Status_Cat";
-        //this.HeightValue="HB_LIMIT";
-        if (this.ColorValue == undefined) {
-            this.ColorValue = "Status_Cat";
-        }
-        else {
-            this.ColorValue = this.dataService.ColorValue;
-        }
-        if (this.HeightValue == undefined) {
-            this.HeightValue = "Status_Cat";
-        }
-        else {
-            this.HeightValue = this.dataService.HeightValue;
-        }
-        if (this.CheckHide == undefined) {
-            this.CheckHide = false;
-        }
-        else {
-            this.CheckHide = this.dataService.CheckHide;
-        }
-        if (this.CheckCom == undefined) {
-            this.CheckCom = false;
-        }
-        else {
-            this.CheckCom = this.dataService.CheckCom;
-        }
-        if (this.CheckOcc == undefined) {
-            this.CheckOcc = false;
-        }
-        else {
-            this.CheckOcc = this.dataService.CheckOcc;
-        }
     }
     notify(message) {
         if (message == "model_update") {
@@ -7707,669 +8323,97 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
         document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
         document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
         document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
-        document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth = "270px";
-        /* document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].height="650px";*/
-        /*console.log(document.getElementsByTagName('link'));*/
-        /*var frame = viewer.infoBox.frame;
-        frame.addEventListener('load', function () {
-            var cssLink = frame.contentDocument.createElement('link');
-            cssLink.href = "../src/styles.css";
-            cssLink.rel = 'stylesheet';
-            cssLink.type = 'text/css';
-            frame.contentDocument.head.appendChild(cssLink);
-        }, false);*/
+        document.getElementsByClassName('cesium-viewer-infoBoxContainer')[0].remove();
         this.viewer = viewer;
+        this.dataService.viewer = this.viewer;
         this.data = data;
         var promise = Cesium.GeoJsonDataSource.load(this.data);
+        ;
+        var self = this;
+        var HeightKey = [];
         promise.then(function (dataSource) {
             viewer.dataSources.add(dataSource);
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
                 entity.polygon.outline = false;
-                /*var description = '<table class="cesium-infoBox-defaultTable cesium-infoBox-defaultTable-lighter"><tbody>';
-                description += '<tr><th>' + "Latitude" + '</th><td>'+'</td></tr>';
-                description += '<tr><th>' + "Longitude" + '</th><td>'+'</td></tr>';
-                description += '</tbody></table>';
-                entity.description = description;*/
+            }
+            self.propertyNames = entities[0].properties.propertyNames;
+            for (var i = 0; i < self.propertyNames.length; i++) {
+                if (self.propertyNames[i].indexOf("ID") !== -1 || self.propertyNames[i].indexOf("id") !== -1) {
+                    self.propertyNames.splice(i, 1);
+                    i = i - 1;
+                }
+                else {
+                    if (typeof (entity.properties[self.propertyNames[i]]._value) === "number") {
+                        HeightKey.push(self.propertyNames[i]);
+                    }
+                }
             }
         });
+        this.dataService.cesiumpromise = promise;
+        this.dataService.propertyNames = this.propertyNames;
+        this.dataService.HeightKey = HeightKey;
+        this.ColorValue = this.propertyNames.sort()[0];
+        this.HeightValue = HeightKey.sort()[0];
+        this.dataService.ColorValue = this.ColorValue;
+        this.dataService.HeightValue = this.HeightValue;
         viewer.zoomTo(promise);
-        this.cesiumviewer = viewer;
-        this.cesiumpromise = promise;
-        this.onChangeColor(this.ColorValue);
-        this.onChangeHeight(this.HeightValue);
-    }
-    onChangeColor(ColorValue) {
-        this.ColorValue = ColorValue;
-        if (this.ColorValue === "Status_Cat" || undefined) {
-            this.colorByStatus_Cat(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.ColorValue === "DIST_EWL") {
-            this.colorByDIST_EWL(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.ColorValue === "DIST_TRUNK") {
-            this.colorByDIST_TRUNK(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.ColorValue === "AVAILABLE") {
-            this.colorByAVAILABLE(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.ColorValue === "AGG_POT") {
-            this.colorByAGG_POT(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.ColorValue === "GPR") {
-            this.colorByGPR(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.ColorValue === "HB_LIMIT") {
-            this.colorByHB_LIMIT(this.cesiumpromise, this.cesiumviewer);
-        }
-        if (this.CheckHide === true)
-            this.Hide();
-        if (this.CheckCom === true)
-            this.Commited();
-        if (this.CheckOcc === true)
-            this.Occupied();
-        this.dataService.getColorValue(this.ColorValue);
-    }
-    colorByStatus_Cat(promise, viewer) {
-        this.Colors = ["lightcoral", "red", "coral", "crimson", "ROYALBLUE", "lightslategray"];
-        this.texts = ["Available", "Prime", "Remnant", "Estate under active master / infra planning", "Others", "0 OR NULL"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.Status_Cat !== undefined) {
-                    if (entity.properties.Status_Cat._value === "Available")
-                        entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
-                    else if (entity.properties.Status_Cat._value === "Prime")
-                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                    else if (entity.properties.Status_Cat._value === "Remnant")
-                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                    else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
-                        entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                    else if (entity.properties.Status_Cat._value === "0" || null)
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    else {
-                        entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
-                    }
-                }
-            }
-        });
-    }
-    colorByDIST_TRUNK(promise, viewer) {
-        this.Colors = ["DARKCYAN", "MEDIUMTURQUOISE", "KHAKI", "GOLD", "CORAL", "LIGHTSLATEGRAY"];
-        this.texts = [">= 239", "238 - 151", "150 - 96", "95 - 61", "<= 60", "0 OR NULL"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.DIST_TRUNK !== undefined) {
-                    if (entity.properties.DIST_TRUNK >= 239)
-                        entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                    else if (entity.properties.DIST_TRUNK >= 151)
-                        entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                    else if (entity.properties.DIST_TRUNK >= 96)
-                        entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                    else if (entity.properties.DIST_TRUNK >= 61)
-                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                    else if (entity.properties.DIST_TRUNK === 0 || null)
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    else
-                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                }
-            }
-        });
-    }
-    colorByDIST_EWL(promise, viewer) {
-        this.Colors = ["DARKCYAN", "MEDIUMTURQUOISE", "KHAKI", "GOLD", "CORAL", "LIGHTSLATEGRAY"];
-        this.texts = [">= 715", "714 - 451", "450 - 286", "285 - 181", "<= 180", "0 OR NULL"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.DIST_EWL !== undefined) {
-                    if (entity.properties.DIST_EWL >= 715)
-                        entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                    else if (entity.properties.DIST_EWL >= 451)
-                        entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                    else if (entity.properties.DIST_EWL >= 286)
-                        entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                    else if (entity.properties.DIST_EWL >= 181)
-                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                    else if (entity.properties.DIST_EWL === 0 || null)
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    else
-                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                }
-            }
-        });
-    }
-    colorByAVAILABLE(promise, viewer) {
-        this.Colors = ["RED", "ROYALBLUE", "LIGHTSLATEGRAY"];
-        this.texts = ["AVAILABLE", "COMMITTED", "OCCUPIED"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.AVAILABLE !== undefined) {
-                    if (entity.properties.AVAILABLE._value === "AVAILABLE")
-                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                    else if (entity.properties.AVAILABLE._value === "COMMITTED")
-                        entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
-                    else if (entity.properties.AVAILABLE._value === "OCCUPIED")
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        });
-    }
-    colorByAGG_POT(promise, viewer) {
-        this.Colors = ["CORAL", "GOLD", "KHAKI", "MEDIUMTURQUOISE", "DARKCYAN", "LIGHTSLATEGRAY"];
-        this.texts = [">= 0.79", "0.789 - 0.67", "0.669 - 0.56", "0.559 - 0.38", "<= 0.379", "0 OR NULL"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.AGG_POT !== undefined) {
-                    if (entity.properties.AGG_POT >= 0.79)
-                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                    else if (entity.properties.AGG_POT >= 0.67)
-                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                    else if (entity.properties.AGG_POT >= 0.56)
-                        entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                    else if (entity.properties.AGG_POT >= 0.38)
-                        entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                    else if (entity.properties.AGG_POT === 0 || null)
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    else
-                        entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                }
-            }
-        });
-    }
-    colorByGPR(promise, viewer) {
-        this.Colors = ["YELLOW", "DARKORANGE", "RED", "LIGHTSLATEGRAY"];
-        this.texts = ["0.9 - 1.7", "2.0 - 2.8", "3.0 - 3.5", "0 OR NULL"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.GPR !== undefined) {
-                    if (entity.properties.GPR._value === "0.0" || entity.properties.GPR._value === 0.0 || entity.properties.GPR._value === 0 || entity.properties.GPR._value === null)
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    else if (entity.properties.GPR._value === "0.9" || entity.properties.GPR._value === 0.9 || entity.properties.GPR._value === "1.0" || entity.properties.GPR._value === "1" || entity.properties.GPR._value === 1.0 || entity.properties.GPR._value === 1
-                        || entity.properties.GPR._value === "1.4" || entity.properties.GPR._value === 1.4 || entity.properties.GPR._value === "1.7" || entity.properties.GPR._value === 1.7)
-                        entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
-                    else if (entity.properties.GPR._value === "2" || entity.properties.GPR._value === "2.0" || entity.properties.GPR._value === 2.0 || entity.properties.GPR._value === 2 || entity.properties.GPR._value === "2.1" || entity.properties.GPR._value === 2.1 ||
-                        entity.properties.GPR._value === "2.3" || entity.properties.GPR._value === 2.3 || entity.properties.GPR._value === "2.5" || entity.properties.GPR._value === 2.5 ||
-                        entity.properties.GPR._value === "2.8" || entity.properties.GPR._value === 2.8)
-                        entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
-                    else if (entity.properties.GPR._value === "3.0" || entity.properties.GPR._value === "3" || entity.properties.GPR._value === 3.0 || entity.properties.GPR._value === 3 || entity.properties.GPR._value === "3.2" || entity.properties.GPR._value === 3.2 ||
-                        entity.properties.GPR._value === "3.5" || entity.properties.GPR._value === 3.5)
-                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                    else {
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    }
-                }
-            }
-        });
-    }
-    colorByHB_LIMIT(promise, viewer) {
-        this.Colors = ["RED", "ORANGERED", "DARKORANGE", "YELLOW", "LIGHTSLATEGRAY"];
-        this.texts = [">= 93", "92 - 86", "85 - 77", "76 - 63", "<= 62"];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.HB_LIMIT !== undefined) {
-                    if (entity.properties.HB_LIMIT >= 93)
-                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                    else if (entity.properties.HB_LIMIT >= 86)
-                        entity.polygon.material = Cesium.Color.ORANGERED.withAlpha(1);
-                    else if (entity.properties.HB_LIMIT >= 77)
-                        entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
-                    else if (entity.properties.HB_LIMIT >= 63)
-                        entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
-                    else if (entity.properties.HB_LIMIT === 0 || null)
-                        entity.polygon.material = Cesium.Color.WHITE.withAlpha(1);
-                    else
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        });
-    }
-    onChangeHeight(HeightValue) {
-        this.HeightValue = HeightValue;
-        if (this.HeightValue === "Status_Cat") {
-            this.HeightByStatus_Cat(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.HeightValue === "DIST_EWL") {
-            this.HeightByDIST_EWL(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.HeightValue === "DIST_TRUNK") {
-            this.HeightByDIST_TRUNK(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.HeightValue === "AVAILABLE") {
-            this.HeightByAVAILABLE(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.HeightValue === "AGG_POT") {
-            this.HeightByAGG_POT(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.HeightValue === "GPR") {
-            this.HeightByGPR(this.cesiumpromise, this.cesiumviewer);
-        }
-        else if (this.HeightValue === "HB_LIMIT") {
-            this.HeightByHB_LIMIT(this.cesiumpromise, this.cesiumviewer);
-        }
-        if (this.CheckHide === true)
-            this.Hide();
-        if (this.CheckCom === true)
-            this.Commited();
-        if (this.CheckOcc === true)
-            this.Occupied();
-        this.dataService.getHeightValue(this.HeightValue);
-    }
-    HeightByStatus_Cat(promise, viewer) {
-        this.Maximum = 500;
-        this.Minimum = 25;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                //if(entity.properties.TRANSPAREN._value===1){
-                if (entity.properties.Status_Cat !== undefined) {
-                    if (entity.properties.Status_Cat._value === "Available")
-                        entity.polygon.extrudedHeight = 100 * 5;
-                    else if (entity.properties.Status_Cat._value === "Prime")
-                        entity.polygon.extrudedHeight = 100 * 5;
-                    else if (entity.properties.Status_Cat._value === "Remnant")
-                        entity.polygon.extrudedHeight = 100 * 5;
-                    else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
-                        entity.polygon.extrudedHeight = 100 * 5;
-                    else if (entity.properties.Status_Cat._value === "0" || null)
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else {
-                        entity.polygon.extrudedHeight = 50 * 5;
-                    }
-                    /*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-                    center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
-                    viewer.entities.add({
-                        name : 'Glowing blue line on the surface',
-                        polyline : {
-                            positions : Cesium.Cartesian3.fromDegreesArrayHeights([103.63626290332934,1.3333570541789537,0,
-                                                                            103.63660236586097,1.33303363743232,1000]),
-        
-                            width : 10,
-                            material : new Cesium.PolylineGlowMaterialProperty({
-                                glowPower : 0.2,
-                                color : Cesium.Color.BLUE
-                            })
-                        }
-                    });
-                    viewer.zoomTo(viewer.entities);*/
-                }
-            }
-        });
-    }
-    HeightByDIST_EWL(promise, viewer) {
-        this.Maximum = 1500;
-        this.Minimum = 25;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.DIST_EWL !== undefined) {
-                    if (entity.properties.DIST_EWL >= 715)
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else if (entity.properties.DIST_EWL >= 451)
-                        entity.polygon.extrudedHeight = 20 * 5;
-                    else if (entity.properties.DIST_EWL >= 286)
-                        entity.polygon.extrudedHeight = 50 * 5;
-                    else if (entity.properties.DIST_EWL >= 181)
-                        entity.polygon.extrudedHeight = 80 * 5;
-                    else if (entity.properties.DIST_EWL === 0 || null)
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else
-                        entity.polygon.extrudedHeight = 100 * 5;
-                }
-            }
-        });
-    }
-    HeightByDIST_TRUNK(promise, viewer) {
-        this.Maximum = 500;
-        this.Minimum = 25;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.DIST_TRUNK !== undefined) {
-                    if (entity.properties.DIST_TRUNK >= 239)
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else if (entity.properties.DIST_TRUNK >= 151)
-                        entity.polygon.extrudedHeight = 20 * 5;
-                    else if (entity.properties.DIST_TRUNK >= 96)
-                        entity.polygon.extrudedHeight = 50 * 5;
-                    else if (entity.properties.DIST_TRUNK >= 61)
-                        entity.polygon.extrudedHeight = 80 * 5;
-                    else if (entity.properties.DIST_TRUNK === 0 || null)
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else
-                        entity.polygon.extrudedHeight = 100 * 5;
-                }
-            }
-        });
-    }
-    HeightByAVAILABLE(promise, viewer) {
-        this.Maximum = 500;
-        this.Minimum = 25;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.AVAILABLE !== undefined) {
-                    if (entity.properties.AVAILABLE._value === "AVAILABLE")
-                        entity.polygon.extrudedHeight = 100 * 5;
-                    else if (entity.properties.AVAILABLE._value === "COMMITTED")
-                        entity.polygon.extrudedHeight = 50 * 5;
-                    else {
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    }
-                }
-            }
-        });
-    }
-    HeightByAGG_POT(promise, viewer) {
-        this.Maximum = 500;
-        this.Minimum = 25;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.AGG_POT !== undefined) {
-                    if (entity.properties.AGG_POT >= 0.79)
-                        entity.polygon.extrudedHeight = 100 * 5;
-                    else if (entity.properties.AGG_POT >= 0.67)
-                        entity.polygon.extrudedHeight = 80 * 5;
-                    else if (entity.properties.AGG_POT >= 0.56)
-                        entity.polygon.extrudedHeight = 50 * 5;
-                    else if (entity.properties.AGG_POT >= 0.38)
-                        entity.polygon.extrudedHeight = 20 * 5;
-                    else if (entity.properties.AGG_POT === 0 || null)
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else {
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    }
-                }
-            }
-        });
-    }
-    HeightByGPR(promise, viewer) {
-        this.Maximum = 600;
-        this.Minimum = 25;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.GPR !== undefined) {
-                    if (entity.properties.GPR._value === "0.0" || entity.properties.GPR._value === null || entity.properties.GPR._value === 0 || entity.properties.GPR._value === "0")
-                        entity.polygon.extrudedHeight = 5 * 5;
-                    else if (entity.properties.GPR._value === "0.9" || entity.properties.GPR._value === 0.9)
-                        entity.polygon.extrudedHeight = 9 * 5;
-                    else if (entity.properties.GPR._value === "1.0" || entity.properties.GPR._value === 1.0 || entity.properties.GPR._value === 1 || entity.properties.GPR._value === "1")
-                        entity.polygon.extrudedHeight = 10 * 5;
-                    else if (entity.properties.GPR._value === "1.4" || entity.properties.GPR._value === 1.4)
-                        entity.polygon.extrudedHeight = 15 * 5;
-                    else if (entity.properties.GPR._value === "1.7" || entity.properties.GPR._value === 1.7)
-                        entity.polygon.extrudedHeight = 30 * 5;
-                    else if (entity.properties.GPR._value === "2.0" || entity.properties.GPR._value === 2.0 || entity.properties.GPR._value === 2 || entity.properties.GPR._value === "2")
-                        entity.polygon.extrudedHeight = 60 * 5;
-                    else if (entity.properties.GPR._value === "2.1" || entity.properties.GPR._value === 2.1)
-                        entity.polygon.extrudedHeight = 70 * 5;
-                    else if (entity.properties.GPR._value === "2.3" || entity.properties.GPR._value === 2.3)
-                        entity.polygon.extrudedHeight = 85 * 5;
-                    else if (entity.properties.GPR._value === "2.5" || entity.properties.GPR._value === 2.5)
-                        entity.polygon.extrudedHeight = 90 * 5;
-                    else if (entity.properties.GPR._value === "2.8" || entity.properties.GPR._value === 2.8)
-                        entity.polygon.extrudedHeight = 95 * 5;
-                    else if (entity.properties.GPR._value === "3.0" || entity.properties.GPR._value === 3.0 || entity.properties.GPR._value === 3 || entity.properties.GPR._value === "3")
-                        entity.polygon.extrudedHeight = 105 * 5;
-                    else if (entity.properties.GPR._value === "3.2" || entity.properties.GPR._value === 3.2)
-                        entity.polygon.extrudedHeight = 110 * 5;
-                    else if (entity.properties.GPR._value === "3.5" || entity.properties.GPR._value === 3.5)
-                        entity.polygon.extrudedHeight = 120 * 5;
-                    else {
-                        entity.polygon.extrudedHeight = 30 * 5;
-                    }
-                }
-                else {
-                    entity.polygon.extrudedHeight = 5 * 5;
-                }
-            }
-        });
-    }
-    HeightByHB_LIMIT(promise, viewer) {
-        var height = [];
-        this.Maximum = 0;
-        this.Minimum = 0;
-        var max = 0;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.HB_LIMIT !== undefined) {
-                    entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
-                    height.push(Number(entity.properties.HB_LIMIT._value));
-                }
-                else {
-                    entity.polygon.extrudedHeight = 0;
-                }
-            }
-        });
-        this.Maximum = Math.max(...height);
-    }
-    checkHide() {
-        if (this.CheckHide === true) {
-            this.Hide();
-        }
-        else {
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
-        if (this.CheckCom === true) {
-            this.Commited();
-        }
-        else {
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
-        if (this.CheckOcc === true) {
-            this.Occupied();
-        }
-        else {
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
-        this.dataService.CheckHide = this.CheckHide;
-        this.dataService.CheckCom = this.CheckCom;
-        this.dataService.CheckOcc = this.CheckOcc;
-    }
-    changeHide() {
-        this.CheckHide = !this.CheckHide;
-        this.dataService.CheckHide = this.CheckHide;
-    }
-    changeCom() {
-        this.CheckCom = !this.CheckCom;
-        this.dataService.CheckCom = this.CheckCom;
-    }
-    changeOcc() {
-        this.CheckOcc = !this.CheckOcc;
-        this.dataService.CheckOcc = this.CheckOcc;
-    }
-    Hide() {
-        this.cesiumpromise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.HIDE._value !== undefined && entity.properties.HIDE._value === 1) {
-                    entity.polygon.extrudedHeight = 0;
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        });
-    }
-    Commited() {
-        this.cesiumpromise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.AVAILABLE._value === "COMMITTED") {
-                    entity.polygon.extrudedHeight = 0;
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        });
-    }
-    Occupied() {
-        this.cesiumpromise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-                var entity = entities[i];
-                if (entity.properties.AVAILABLE._value === "OCCUPIED") {
-                    entity.polygon.extrudedHeight = 0;
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        });
     }
     select() {
         var viewer = this.viewer;
-        if (this.selectEntity !== null) {
+        if (this.selectEntity !== undefined && this.selectEntity !== null) {
             this.ColorSelect(this.selectEntity);
         }
         if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
+            this.dataService.SelectedEntity = viewer.selectedEntity;
             const material = viewer.selectedEntity.polygon.material;
             viewer.selectedEntity.polygon.material = Cesium.Color.WHITE;
             this.selectEntity = viewer.selectedEntity;
             this.material = material;
         }
         else {
-            this.selectEntity = null;
-            this.material = null;
+            this.dataService.SelectedEntity = undefined;
+            this.selectEntity = undefined;
+            this.material = undefined;
         }
     }
     ColorSelect(entity) {
-        if (this.ColorValue === "Status_Cat") {
-            if (entity.properties.Status_Cat !== undefined) {
-                if (entity.properties.Status_Cat._value === "Available")
-                    entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
-                else if (entity.properties.Status_Cat._value === "Prime")
-                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                else if (entity.properties.Status_Cat._value === "Remnant")
-                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
-                    entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                else if (entity.properties.Status_Cat._value === "0" || null)
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                else {
-                    entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
+        this.ColorValue = this.dataService.ColorValue;
+        var ColorKey = this.dataService.Colortexts;
+        var range = ColorKey.length;
+        for (var i = 0; i < this.propertyNames.length; i++) {
+            if (this.ColorValue === this.propertyNames[i]) {
+                if (typeof (entity.properties[this.ColorValue]._value) === "number") {
+                    var max = this.dataService.MaxColor;
+                    var min = this.dataService.MinColor;
+                    var ChromaScale = this.ChromaScale;
+                    for (var j = 1; j < range; j++) {
+                        if (entity.properties[this.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
+                            var rgb = ColorKey[range - j].color._rgb;
+                            entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        }
+                        else if (entity.properties[this.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
+                            var rgb = ColorKey[range - 1].color._rgb;
+                            entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        }
+                    }
                 }
-            }
-        }
-        else if (this.ColorValue === "DIST_EWL") {
-            if (entity.properties.DIST_EWL !== undefined) {
-                if (entity.properties.DIST_EWL >= 715)
-                    entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                else if (entity.properties.DIST_EWL >= 451)
-                    entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                else if (entity.properties.DIST_EWL >= 286)
-                    entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                else if (entity.properties.DIST_EWL >= 181)
-                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                else if (entity.properties.DIST_EWL === 0 || null)
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                else
-                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-            }
-        }
-        else if (this.ColorValue === "DIST_TRUNK") {
-            if (entity.properties.DIST_TRUNK !== undefined) {
-                if (entity.properties.DIST_TRUNK >= 239)
-                    entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK >= 151)
-                    entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK >= 96)
-                    entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK >= 61)
-                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK === 0 || null)
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                else
-                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-            }
-        }
-        else if (this.ColorValue === "AVAILABLE") {
-            if (entity.properties.AVAILABLE !== undefined) {
-                if (entity.properties.AVAILABLE._value === "AVAILABLE")
-                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                else if (entity.properties.AVAILABLE._value === "COMMITTED")
-                    entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
-                else if (entity.properties.AVAILABLE._value === "OCCUPIED")
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-        }
-        else if (this.ColorValue === "AGG_POT") {
-            if (entity.properties.AGG_POT !== undefined) {
-                if (entity.properties.AGG_POT >= 0.79)
-                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                else if (entity.properties.AGG_POT >= 0.67)
-                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                else if (entity.properties.AGG_POT >= 0.56)
-                    entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                else if (entity.properties.AGG_POT >= 0.38)
-                    entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                else if (entity.properties.AGG_POT === 0 || null)
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                else
-                    entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-            }
-        }
-        else if (this.ColorValue === "GPR") {
-            if (entity.properties.GPR !== undefined) {
-                if (entity.properties.GPR._value === "0.0" || entity.properties.GPR._value === 0.0 || entity.properties.GPR._value === 0 || entity.properties.GPR._value === null)
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                else if (entity.properties.GPR._value === "0.9" || entity.properties.GPR._value === 0.9 || entity.properties.GPR._value === "1.0" || entity.properties.GPR._value === "1" || entity.properties.GPR._value === 1.0 || entity.properties.GPR._value === 1
-                    || entity.properties.GPR._value === "1.4" || entity.properties.GPR._value === 1.4 || entity.properties.GPR._value === "1.7" || entity.properties.GPR._value === 1.7)
-                    entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
-                else if (entity.properties.GPR._value === "2" || entity.properties.GPR._value === "2.0" || entity.properties.GPR._value === 2.0 || entity.properties.GPR._value === 2 || entity.properties.GPR._value === "2.1" || entity.properties.GPR._value === 2.1 ||
-                    entity.properties.GPR._value === "2.3" || entity.properties.GPR._value === 2.3 || entity.properties.GPR._value === "2.5" || entity.properties.GPR._value === 2.5 ||
-                    entity.properties.GPR._value === "2.8" || entity.properties.GPR._value === 2.8)
-                    entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
-                else if (entity.properties.GPR._value === "3.0" || entity.properties.GPR._value === "3" || entity.properties.GPR._value === 3.0 || entity.properties.GPR._value === 3 || entity.properties.GPR._value === "3.2" || entity.properties.GPR._value === 3.2 ||
-                    entity.properties.GPR._value === "3.5" || entity.properties.GPR._value === 3.5)
-                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
                 else {
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    var ChromaScale = this.ChromaScale;
+                    var Colortexts = this.dataService.Colortexts;
+                    var initial = false;
+                    for (var j = 0; j < Colortexts.length; j++) {
+                        if (entity.properties[this.ColorValue]._value === Colortexts[j].text) {
+                            var rgb = ChromaScale((j / Colortexts.length).toFixed(2));
+                            entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                            initial = true;
+                        }
+                    }
+                    if (initial === false) {
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    }
                 }
-            }
-        }
-        else if (this.ColorValue === "HB_LIMIT") {
-            if (entity.properties.HB_LIMIT !== undefined) {
-                if (entity.properties.HB_LIMIT >= 93)
-                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                else if (entity.properties.HB_LIMIT >= 86)
-                    entity.polygon.material = Cesium.Color.ORANGERED.withAlpha(1);
-                else if (entity.properties.HB_LIMIT >= 77)
-                    entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
-                else if (entity.properties.HB_LIMIT >= 63)
-                    entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
-                else if (entity.properties.HB_LIMIT === 0 || null)
-                    entity.polygon.material = Cesium.Color.WHITE.withAlpha(1);
-                else
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-        }
-        if (this.CheckHide === true) {
-            if (entity.properties.HIDE._value !== undefined && entity.properties.HIDE._value === 1) {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
             }
         }
     }
@@ -8383,6 +8427,555 @@ ViewerComponent = __decorate([
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]])
 ], ViewerComponent);
 
+/*onChangeColor(ColorValue){
+  this.ColorValue=ColorValue;*/
+/*if(this.ColorValue==="Status_Cat"||undefined){
+  this.colorByStatus_Cat(this.cesiumpromise,this.cesiumviewer);
+}else if(this.ColorValue==="DIST_EWL"){
+  this.colorByDIST_EWL(this.cesiumpromise,this.cesiumviewer);
+}else if(this.ColorValue==="DIST_TRUNK"){
+  this.colorByDIST_TRUNK(this.cesiumpromise,this.cesiumviewer);
+}else if(this.ColorValue==="AVAILABLE"){
+  this.colorByAVAILABLE(this.cesiumpromise,this.cesiumviewer);
+}else if(this.ColorValue==="AGG_POT"){
+  this.colorByAGG_POT(this.cesiumpromise,this.cesiumviewer);
+}else if(this.ColorValue==="GPR"){
+  this.colorByGPR(this.cesiumpromise,this.cesiumviewer);
+}else if(this.ColorValue==="HB_LIMIT"){
+  this.colorByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
+}*/
+/*var texts=[];
+this.texts=[];
+this.Colors=[];
+for(var j=0;j<this.propertyNames.length;j++){
+  if(this.ColorValue===this.propertyNames[j]){
+    this.Name=this.propertyNames[j];
+    var self= this;
+    this.cesiumpromise.then(function(dataSource) {
+      var entities = dataSource.entities.values;
+      for (var i = 0; i < entities.length; i++) {
+        var entity = entities[i];
+        if(entity.properties[self.Name]!==undefined){
+          if(entity.properties[self.Name]._value!==" "){
+            if(texts.length===0) {texts[0]=entity.properties[self.Name]._value;}
+            else{if(texts.indexOf(entity.properties[self.Name]._value)===-1) texts.push(entity.properties[self.Name]._value);}
+            }
+          }
+        }
+    });
+  }
+}
+for(var j=0;j<texts.length;j++){
+  this.Colors.push(this.ColorStore[j]);
+}
+this.texts=texts;
+if(typeof(texts[0])==="number") {
+  this.colorByNum();
+}else{this.colorByCat();}
+if(this.CheckHide===true) this.Hide();
+if(this.CheckCom===true) this.Commited();
+if(this.CheckOcc===true) this.Occupied();
+this.dataService.getColorValue(this.ColorValue);
+}
+colorByCat(){
+var Name=this.ColorValue;
+var texts=this.texts;
+this.cesiumpromise.then(function(dataSource) {
+  var self= this;
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+    if(entity.properties[Name]._value===texts[0]){ entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[1]){ entity.polygon.material=Cesium.Color.RED.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[2]){ entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[3]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[4]){ entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[5]){ entity.polygon.material=Cesium.Color.AQUA.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[6]){ entity.polygon.material=Cesium.Color.BROWN.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[7]){ entity.polygon.material=Cesium.Color.CADETBLUE.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[8]){ entity.polygon.material=Cesium.Color.CHARTREUSE.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[9]){ entity.polygon.material=Cesium.Color.DARKORCHID.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[10]){ entity.polygon.material=Cesium.Color.DARKTURQUOISE.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[11]){ entity.polygon.material=Cesium.Color.DEEPPINK.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[12]){ entity.polygon.material=Cesium.Color.FORESTGREEN.withAlpha(1);}
+    else if(entity.properties[Name]._value===texts[13]){ entity.polygon.material=Cesium.Color.GOLDENROD.withAlpha(1);}
+    else{entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+  }
+});
+}
+
+
+colorByNum(){
+var max = Math.max.apply(Math, this.texts);
+var min = Math.min.apply(Math, this.texts);
+console.log(max,min);
+
+}
+
+colorByStatus_Cat(promise,viewer) {
+this.Colors=["lightcoral","red","coral","crimson","ROYALBLUE","lightslategray"];
+this.texts=["Available","Prime","Remnant","Estate under active master / infra planning","Others","0 OR NULL"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+      if(entity.properties.Status_Cat!==undefined){
+        if(entity.properties.Status_Cat._value==="Available") entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
+        else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+        else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
+        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);
+        else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+        else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
+      }
+  }
+});
+
+
+}
+
+colorByDIST_TRUNK(promise,viewer) {
+this.Colors=["DARKCYAN","MEDIUMTURQUOISE","KHAKI","GOLD","CORAL","LIGHTSLATEGRAY"];
+this.texts=[">= 239","238 - 151","150 - 96","95 - 61","<= 60","0 OR NULL"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+      if(entity.properties.DIST_TRUNK!==undefined){
+        if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
+        else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+        else if(entity.properties.DIST_TRUNK>=96) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+        else if(entity.properties.DIST_TRUNK>=61) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+        else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+        else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
+      }
+  }
+});
+}
+
+colorByDIST_EWL(promise,viewer) {
+this.Colors=["DARKCYAN","MEDIUMTURQUOISE","KHAKI","GOLD","CORAL","LIGHTSLATEGRAY"];
+this.texts=[">= 715","714 - 451","450 - 286","285 - 181","<= 180","0 OR NULL"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+      if(entity.properties.DIST_EWL!==undefined){
+        if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
+        else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+        else if(entity.properties.DIST_EWL>=286) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+        else if(entity.properties.DIST_EWL>=181) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+        else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+        else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
+      }
+  }
+});
+}
+
+colorByAVAILABLE(promise,viewer) {
+this.Colors=["RED","ROYALBLUE","LIGHTSLATEGRAY"];
+this.texts=["AVAILABLE","COMMITTED","OCCUPIED"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+      if(entity.properties.AVAILABLE!==undefined){
+        if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+        else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);
+        else if(entity.properties.AVAILABLE._value==="OCCUPIED") entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      }
+  }
+});
+}
+
+colorByAGG_POT(promise,viewer) {
+this.Colors=["CORAL","GOLD","KHAKI","MEDIUMTURQUOISE","DARKCYAN","LIGHTSLATEGRAY"];
+this.texts=[">= 0.79","0.789 - 0.67","0.669 - 0.56","0.559 - 0.38","<= 0.379","0 OR NULL"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+      if(entity.properties.AGG_POT!==undefined){
+        if(entity.properties.AGG_POT>=0.79) entity.polygon.material=Cesium.Color.CORAL .withAlpha(1);
+        else if(entity.properties.AGG_POT>=0.67) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+        else if(entity.properties.AGG_POT>=0.56) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+        else if(entity.properties.AGG_POT>=0.38) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+        else if(entity.properties.AGG_POT===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+        else entity.polygon.material=Cesium.Color.DARKCYAN.withAlpha(1);
+      }
+  }
+});
+}
+
+colorByGPR(promise,viewer) {
+this.Colors=["YELLOW","DARKORANGE","RED","LIGHTSLATEGRAY"];
+this.texts=["0.9 - 1.7","2.0 - 2.8","3.0 - 3.5","0 OR NULL"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+    if(entity.properties.GPR!==undefined){
+      if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
+        ||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7)
+        entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
+      else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
+        entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
+        entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
+      else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
+        entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+      else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+    }
+  }
+});
+}
+
+colorByHB_LIMIT(promise,viewer) {
+this.Colors=["RED","ORANGERED","DARKORANGE","YELLOW","LIGHTSLATEGRAY"];
+this.texts=[">= 93","92 - 86","85 - 77","76 - 63","<= 62"];
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+      if(entity.properties.HB_LIMIT!==undefined){
+        if(entity.properties.HB_LIMIT>=93) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+        else if(entity.properties.HB_LIMIT>=86) entity.polygon.material=Cesium.Color.ORANGERED.withAlpha(1);
+        else if(entity.properties.HB_LIMIT>=77) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
+        else if(entity.properties.HB_LIMIT>=63) entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
+        else if(entity.properties.HB_LIMIT===0||null) entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
+        else entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      }
+  }
+});
+}
+
+onChangeHeight(HeightValue){
+this.HeightValue=HeightValue;
+if(this.HeightValue==="Status_Cat"){
+  this.HeightByStatus_Cat(this.cesiumpromise,this.cesiumviewer);
+}else if(this.HeightValue==="DIST_EWL"){
+  this.HeightByDIST_EWL(this.cesiumpromise,this.cesiumviewer);
+}else if(this.HeightValue==="DIST_TRUNK"){
+  this.HeightByDIST_TRUNK(this.cesiumpromise,this.cesiumviewer);
+}else if(this.HeightValue==="AVAILABLE"){
+  this.HeightByAVAILABLE(this.cesiumpromise,this.cesiumviewer);
+}else if(this.HeightValue==="AGG_POT"){
+  this.HeightByAGG_POT(this.cesiumpromise,this.cesiumviewer);
+}else if(this.HeightValue==="GPR"){
+  this.HeightByGPR(this.cesiumpromise,this.cesiumviewer);
+}else if(this.HeightValue==="HB_LIMIT"){
+  this.HeightByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
+}
+if(this.CheckHide===true) this.Hide();
+if(this.CheckCom===true) this.Commited();
+if(this.CheckOcc===true) this.Occupied();
+this.dataService.getHeightValue(this.HeightValue);
+}
+
+HeightByStatus_Cat(promise,viewer) {
+this.Maximum=500;
+this.Minimum=25;
+promise.then(function(dataSource) {
+  var entities = dataSource.entities.values;
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+    //if(entity.properties.TRANSPAREN._value===1){
+      if(entity.properties.Status_Cat!==undefined){
+        if(entity.properties.Status_Cat._value==="Available") entity.polygon.extrudedHeight = 100*5;
+        else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.extrudedHeight = 100*5;
+        else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.extrudedHeight = 100*5;
+        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.extrudedHeight = 100*5;
+        else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.extrudedHeight = 5*5;
+        else{entity.polygon.extrudedHeight = 50*5;}*/
+/*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
+viewer.entities.add({
+    name : 'Glowing blue line on the surface',
+    polyline : {
+        positions : Cesium.Cartesian3.fromDegreesArrayHeights([103.63626290332934,1.3333570541789537,0,
+                                                        103.63660236586097,1.33303363743232,1000]),
+
+        width : 10,
+        material : new Cesium.PolylineGlowMaterialProperty({
+            glowPower : 0.2,
+            color : Cesium.Color.BLUE
+        })
+    }
+});
+viewer.zoomTo(viewer.entities);*/
+/* }
+}
+});
+}*/
+/*HeightByDIST_EWL(promise,viewer) {
+  this.Maximum=1500;
+  this.Minimum=25;
+  promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+        if(entity.properties.DIST_EWL!==undefined){
+          if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5*5;
+          else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20*5;
+          else if(entity.properties.DIST_EWL>=286) entity.polygon.extrudedHeight = 50*5;
+          else if(entity.properties.DIST_EWL>=181) entity.polygon.extrudedHeight = 80*5;
+          else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5*5;
+          else entity.polygon.extrudedHeight = 100*5;
+        }
+    }
+  });
+}
+
+HeightByDIST_TRUNK(promise,viewer) {
+  this.Maximum=500;
+  this.Minimum=25;
+  promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+        if(entity.properties.DIST_TRUNK!==undefined){
+          if(entity.properties.DIST_TRUNK>=239) entity.polygon.extrudedHeight = 5*5;
+          else if(entity.properties.DIST_TRUNK>=151) entity.polygon.extrudedHeight = 20*5;
+          else if(entity.properties.DIST_TRUNK>=96) entity.polygon.extrudedHeight = 50*5;
+          else if(entity.properties.DIST_TRUNK>=61) entity.polygon.extrudedHeight = 80*5;
+          else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.extrudedHeight = 5*5;
+          else entity.polygon.extrudedHeight = 100*5;
+        }
+    }
+  });
+}
+
+HeightByAVAILABLE(promise,viewer) {
+  this.Maximum=500;
+  this.Minimum=25;
+  promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+        if(entity.properties.AVAILABLE!==undefined){
+          if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.extrudedHeight = 100*5;
+          else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.extrudedHeight = 50*5;
+          else{entity.polygon.extrudedHeight = 5*5;}
+        }
+    }
+  });
+}
+
+HeightByAGG_POT(promise,viewer) {
+  this.Maximum=500;
+  this.Minimum=25;
+  promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+        if(entity.properties.AGG_POT!==undefined){
+          if(entity.properties.AGG_POT>=0.79) entity.polygon.extrudedHeight = 100*5;
+          else if(entity.properties.AGG_POT>=0.67) entity.polygon.extrudedHeight = 80*5;
+          else if(entity.properties.AGG_POT>=0.56) entity.polygon.extrudedHeight = 50*5;
+          else if(entity.properties.AGG_POT>=0.38) entity.polygon.extrudedHeight = 20*5;
+          else if(entity.properties.AGG_POT===0||null) entity.polygon.extrudedHeight = 5*5;
+          else {entity.polygon.extrudedHeight = 5*5;}
+        }
+    }
+  });
+}
+
+HeightByGPR(promise,viewer) {
+  this.Maximum=600;
+  this.Minimum=25;
+  promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+      if(entity.properties.GPR!==undefined){
+        if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===null||entity.properties.GPR._value===0||entity.properties.GPR._value==="0")
+          entity.polygon.extrudedHeight = 5*5;
+        else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9*5;
+        else if(entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1||entity.properties.GPR._value==="1")
+          entity.polygon.extrudedHeight = 10*5;
+        else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15*5;
+        else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30*5;
+        else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2")
+          entity.polygon.extrudedHeight = 60*5;
+        else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70*5;
+        else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85*5;
+        else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90*5;
+        else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95*5;
+        else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3")
+          entity.polygon.extrudedHeight = 105*5;
+        else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110*5;
+        else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120*5;
+        else{entity.polygon.extrudedHeight = 30*5;}
+      }else{entity.polygon.extrudedHeight = 5*5;}
+    }
+  });
+}
+
+
+HeightByHB_LIMIT(promise,viewer) {
+  var height:Array<any>=[];
+  this.Maximum=0;
+  this.Minimum=0;
+  var max:number=0;
+  promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+        if(entity.properties.HB_LIMIT!==undefined){
+          entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
+          height.push(Number(entity.properties.HB_LIMIT._value));
+        }else{entity.polygon.extrudedHeight =0;}
+
+    }
+  });
+  this.Maximum=Math.max(...height);
+}
+
+checkHide(){
+  if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+  if(this.CheckCom===true) {this.Commited();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+  if(this.CheckOcc===true) {this.Occupied();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+  this.dataService.CheckHide=this.CheckHide;
+  this.dataService.CheckCom=this.CheckCom;
+  this.dataService.CheckOcc=this.CheckOcc;
+}
+changeHide(){
+  this.CheckHide=!this.CheckHide;
+  this.dataService.CheckHide=this.CheckHide;
+}
+changeCom(){
+  this.CheckCom=!this.CheckCom;
+  this.dataService.CheckCom=this.CheckCom;
+}
+changeOcc(){
+  this.CheckOcc=!this.CheckOcc;
+  this.dataService.CheckOcc=this.CheckOcc;
+}
+
+Hide(){
+  this.cesiumpromise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+      if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
+        entity.polygon.extrudedHeight = 0;
+        entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      }
+    }
+  });
+}
+Commited(){
+  this.cesiumpromise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+      if(entity.properties.AVAILABLE._value==="COMMITTED"){
+        entity.polygon.extrudedHeight = 0;
+        entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      }
+    }
+  });
+}
+Occupied(){
+  this.cesiumpromise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+      if(entity.properties.AVAILABLE._value==="OCCUPIED"){
+        entity.polygon.extrudedHeight = 0;
+        entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      }
+    }
+  });
+}
+select(){
+  var viewer=this.viewer;
+  if(this.selectEntity!==null) {this.ColorSelect(this.selectEntity);}
+  if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
+    this.dataService.SelectedEntity=viewer.selectedEntity;
+      const material=viewer.selectedEntity.polygon.material;
+      viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
+      this.selectEntity=viewer.selectedEntity;
+      this.material=material;
+  }else{
+      this.selectEntity=null;
+      this.material=null;
+  }
+  
+}
+
+ColorSelect(entity){
+  if(this.ColorValue==="Status_Cat"){
+    if(entity.properties.Status_Cat!==undefined){
+      if(entity.properties.Status_Cat._value==="Available") entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
+      else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+      else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
+      else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);
+      else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
+    }
+  }else if(this.ColorValue==="DIST_EWL"){
+    if(entity.properties.DIST_EWL!==undefined){
+      if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
+      else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+      else if(entity.properties.DIST_EWL>=286) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+      else if(entity.properties.DIST_EWL>=181) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+      else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
+    }
+  }else if(this.ColorValue==="DIST_TRUNK"){
+    if(entity.properties.DIST_TRUNK!==undefined){
+      if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
+      else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+      else if(entity.properties.DIST_TRUNK>=96) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+      else if(entity.properties.DIST_TRUNK>=61) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+      else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
+    }
+  }else if(this.ColorValue==="AVAILABLE"){
+    if(entity.properties.AVAILABLE!==undefined){
+      if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+      else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);
+      else if(entity.properties.AVAILABLE._value==="OCCUPIED") entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+    }
+  }else if(this.ColorValue==="AGG_POT"){
+    if(entity.properties.AGG_POT!==undefined){
+      if(entity.properties.AGG_POT>=0.79) entity.polygon.material=Cesium.Color.CORAL .withAlpha(1);
+      else if(entity.properties.AGG_POT>=0.67) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+      else if(entity.properties.AGG_POT>=0.56) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+      else if(entity.properties.AGG_POT>=0.38) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+      else if(entity.properties.AGG_POT===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      else entity.polygon.material=Cesium.Color.DARKCYAN.withAlpha(1);
+    }
+  }else if(this.ColorValue==="GPR"){
+    if(entity.properties.GPR!==undefined){
+        if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+        else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
+          ||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7)
+          entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
+        else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
+          entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
+          entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
+        else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
+          entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+        else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      }
+  }else if(this.ColorValue==="HB_LIMIT"){
+    if(entity.properties.HB_LIMIT!==undefined){
+      if(entity.properties.HB_LIMIT>=93) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+      else if(entity.properties.HB_LIMIT>=86) entity.polygon.material=Cesium.Color.ORANGERED.withAlpha(1);
+      else if(entity.properties.HB_LIMIT>=77) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
+      else if(entity.properties.HB_LIMIT>=63) entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
+      else if(entity.properties.HB_LIMIT===0||null) entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
+      else entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+    }
+  }
+  if(this.CheckHide===true){
+    if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
+      entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+    }
+  }
+
+}*/ 
 
 
 /***/ }),
@@ -11166,7 +11759,7 @@ LandingComponent = __decorate([
 /***/ "../../../../../src/app/ui-components/main/mobius-viewer/mobius-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n\r\n    <div class=\"wrapper\">\r\n\r\n      <split  direction=\"horizontal\" \r\n              gutterColor=\"#8AA8C0\"\r\n              [gutterSize]=\"layout.gutter\" \r\n              [useTransition]=\"layout.useTransition\">\r\n\r\n            <!-- main pane -->\r\n            <split-area>\r\n              <app-panel panel_id=\"main\"></app-panel>\r\n            </split-area>\r\n\r\n            <!-- secondary split pane -->\r\n            <split-area>\r\n               <app-panel panel_id=\"bottom\"></app-panel>\r\n            </split-area>\r\n            \r\n      </split>\r\n\r\n    </div>\r\n\r\n  </div>\r\n\r\n</div>\r\n\r\n"
+module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n\r\n    <!-- main pane -->\r\n    <app-cesium-viewer></app-cesium-viewer>\r\n    <!-- <app-viewer-container></app-viewer-container>   -->\r\n\r\n    <div class=\"floating-div\" style=\"z-index: 100; position: absolute; right: 0px; height: 100%; width: 300px;\">\r\n      <app-parameter-viewer globals=true></app-parameter-viewer>\r\n    </div>\r\n      \r\n  </div>\r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -11849,7 +12442,7 @@ NodeLibraryComponent = __decorate([
 /***/ "../../../../../src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" *ngIf='_inputs == undefined || _inputs.length == 0'>\r\n\t\t\tNo Inputs\r\n\t\t</div>\r\n \r\n\t\t<div class='paramater-container single-param-container' *ngFor=\"let inp of _inputs\" >\r\n\t\t\t<div class=\"param-name\">\r\n\t\t\t\t{{ inp.getName() }}\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == Input -->\r\n\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t</form>\r\n\t\t\t</div> \r\n\r\n\t\t\t<!-- if input type == Slider -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n            \t\t\tmatAutosizeMaxRows=\"5\" \r\n            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n            \t\t</textarea>\r\n\t\t\t\t</mat-form-field>\r\n\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == URL -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\thttp://<input type=\"text\" [(ngModel)]=\"url\">\r\n\t\t\t\t<button (click)=\"handleURL($event, inp)\">Get Data</button>\r\n\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t</div>\r\n\r\n\t\t</div>\r\n\r\n\t\t\t<!-- todo: disable if port is connected -->\r\n\t\t\t<!-- ui options based on type -->\r\n\t\t\t<!-- todo: -->\r\n\t</div>\r\n\t<button id=\"execute\" mat-raised-button color=\"accent\" (click)=\"executeFlowchart($event)\">Execute Flowchart</button>  \r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class=\"viewer\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" *ngIf='_inputs == undefined || _inputs.length == 0'>\r\n\t\t\tNo Inputs\r\n\t\t</div>\r\n \r\n\t\t<div class='paramater-container single-param-container' *ngFor=\"let inp of _inputs\" >\r\n\t\t\t\r\n\t\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\" style=\"width: 100%; padding: 10px;\">\r\n\t\t\t\t<h3>Title: {{flowchartService.getFlowchart().name}}</h3>\r\n\t\t\t\t<p>{{flowchartService.getFlowchart().description}}</p>\r\n\r\n\t\t\t\t<h4>Parameters</h4>\r\n\t\t\t</div>\r\n\r\n\r\n\t\t\t<div class=\"param-name\">\r\n\t\t\t\t{{ inp.getName() }}\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == Input -->\r\n\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t</form>\r\n\t\t\t</div> \r\n\r\n\t\t\t<!-- if input type == Slider -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n            \t\t\tmatAutosizeMaxRows=\"5\" \r\n            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n            \t\t</textarea>\r\n\t\t\t\t</mat-form-field>\r\n\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == URL -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\thttp://<input type=\"text\" [(ngModel)]=\"url\">\r\n\t\t\t\t<button (click)=\"handleURL($event, inp)\">Get Data</button>\r\n\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t</div>\r\n\r\n\t\t</div>\r\n\r\n\t\t\t<!-- todo: disable if port is connected -->\r\n\t\t\t<!-- ui options based on type -->\r\n\t\t\t<!-- todo: -->\r\n\t</div>\r\n\t<button id=\"execute\" mat-raised-button color=\"accent\" (click)=\"executeFlowchart($event)\">Execute Flowchart</button>  \r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -11904,6 +12497,9 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
     reset() {
         this._node = undefined;
         this._inputs = [];
+        if (this.globals) {
+            this._inputs = this.flowchartService.getFlowchart().globals;
+        }
     }
     // addInput(): void{
     //    	this._node.addInput();
@@ -11944,6 +12540,10 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
     //  beware of updating flowchart here - it will go into an unending loop :/
     //
     update() {
+        if (this.globals) {
+            this._inputs = this.flowchartService.getFlowchart().globals;
+            return;
+        }
         this._node = this.flowchartService.getSelectedNode();
         if (this._node != undefined) {
             this._inputs = this._node.getInputs().filter(function (inp) {
@@ -11983,6 +12583,10 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
             .then(json => input.setComputedValue(JSON.stringify(json)));
     }
 };
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])(),
+    __metadata("design:type", Boolean)
+], ParameterViewerComponent.prototype, "globals", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_10" /* ViewChild */])('cesium_param_container'),
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
