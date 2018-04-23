@@ -1258,13 +1258,6 @@ class Flowchart {
             let value = this._globals[i].getValue();
             gld.push({ name: prop, value: value });
         }
-        /////
-        if (gld) {
-            for (let g = 0; g < gld.length; g++) {
-                //str += "window[" + globals[g].name  + "] =" + globals[g].value + ";\n";
-                window[gld[g].name] = gld[g].value;
-            }
-        }
         // sort nodes 
         let all_nodes = this.getNodes();
         let sortOrder = this.getNodeOrder();
@@ -1282,12 +1275,6 @@ class Flowchart {
             this.updateDependentInputs(node, originalRank);
             //todo: print time taken
         }
-        ////// TODO: should execute after last node
-        // if(gld){
-        // 	for(let g=0; g < gld.length; g++){
-        // 		delete window[gld[g].name];
-        // 	}
-        // }
         return true;
     }
     /*executeNode(node: IGraphNode){
@@ -3070,7 +3057,7 @@ let FlowchartService = class FlowchartService {
         this.loadModules([
             { _name: "Math", _version: 0.1, _author: "Patrick" },
             { _name: "Measure", _version: 0.1, _author: "Patrick" },
-            { _name: "Model", _version: 0.1, _author: "Patrick" },
+            { _name: "Feature_Coll", _version: 0.1, _author: "Patrick" },
             { _name: "Properties", _version: 0.1, _author: "Patrick" }
         ]);
         // print message to console
@@ -12847,7 +12834,7 @@ ViewerContainerComponent = __decorate([
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Model", function() { return Model; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature_Coll", function() { return Feature_Coll; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Properties", function() { return Properties; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Measure", function() { return Measure; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("../../../../../src/app/base-classes/code/CodeModule.ts");
@@ -12859,7 +12846,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* math */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Model = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Model", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* feature_coll */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Feature_Coll = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Model", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* feature_coll */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
 let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["d" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
 let Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Measure", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* measure */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
 
