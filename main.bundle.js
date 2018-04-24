@@ -2682,6 +2682,22 @@ class Viewer {
 
 /***/ }),
 
+/***/ "../../../../../src/app/constants.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Constants {
+    static get GALLERY_URL() {
+        return "https://api.github.com/repos/phtj/mobius-cesium/contents/src/assets/json-files?ref=master";
+    }
+    ;
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Constants;
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/custom-angular-modules/CustomMaterialModule.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11632,7 +11648,7 @@ MobiusEditorComponent = __decorate([
 /***/ "../../../../../src/app/ui-components/main/mobius-gallery/mobius-gallery.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\r\n  gallery works!\r\n</p>\r\n\r\n\r\n<div *ngFor=\"let f of all_files\" style=\"width: 300px; height: 150px; border: 1px solid gray;\">\r\n\t\t<a href=\"./viewer/{{f.name}}\">{{f.name}}</a>\r\n</div>"
+module.exports = "<div class=\"container\">\r\n\t\r\n\t<h1>Mobius Gallery</h1>\r\n\r\n\t\r\n\t<div class=\"description\">\r\n\t\t<p>Lorem ipsum proident eu in in labore laborum amet pariatur ullamco aliquip qui ut sit ad anim eu minim aliquip dolor dolor esse exercitation ullamco laborum commodo in tempor labore excepteur sint velit cupidatat ut dolor dolore sint incididunt </p>\r\n\r\n\t\t<p>If you'd like to contribute to showcase your work on this gallery, please add your file <a href=\"https://github.com/phtj/mobius-cesium/tree/master/src/assets/json-files\" target=\"_blank\">here</a> and send us a pull request.</p>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"link-container\">\r\n\t\t<a *ngFor=\"let f of all_files\" href=\"./viewer/{{f.name}}\">{{f.name}}</a>\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -11644,7 +11660,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".container {\n  width: 400px;\n  margin: 0 auto;\n  padding-top: 100px; }\n  .container a {\n    font-size: 16px;\n    line-height: 20px; }\n  .container .description {\n    padding-top: 10px;\n    width: 400px;\n    margin: 0 auto;\n    font-size: 14px;\n    line-height: 24px;\n    text-align: justify; }\n  .container .link-container {\n    padding-top: 45px;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: start; }\n", ""]);
 
 // exports
 
@@ -11661,6 +11677,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MobiusGalleryComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm2015/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants__ = __webpack_require__("../../../../../src/app/constants.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11672,18 +11689,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-let MobiusGalleryComponent = MobiusGalleryComponent_1 = class MobiusGalleryComponent {
-    //https://api.github.com/repos/phtj/mobius-cesium/contents/src/assets/json-files?ref=workshop-features
+
+let MobiusGalleryComponent = class MobiusGalleryComponent {
     constructor(http) {
         this.http = http;
-        this.http.get(MobiusGalleryComponent_1.gallery_url).subscribe(data => this.all_files = data);
+        this.http.get(__WEBPACK_IMPORTED_MODULE_2__constants__["a" /* Constants */].GALLERY_URL).subscribe(data => this.all_files = data);
     }
     ngOnInit() {
-        console.log(this.all_files);
     }
 };
-MobiusGalleryComponent.gallery_url = 'https://api.github.com/repos/phtj/mobius-cesium/contents/src/assets/json-files?ref=master';
-MobiusGalleryComponent = MobiusGalleryComponent_1 = __decorate([
+MobiusGalleryComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'mobius-gallery',
         template: __webpack_require__("../../../../../src/app/ui-components/main/mobius-gallery/mobius-gallery.component.html"),
@@ -11692,7 +11707,6 @@ MobiusGalleryComponent = MobiusGalleryComponent_1 = __decorate([
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
 ], MobiusGalleryComponent);
 
-var MobiusGalleryComponent_1;
 
 
 /***/ }),
@@ -11700,7 +11714,7 @@ var MobiusGalleryComponent_1;
 /***/ "../../../../../src/app/ui-components/main/mobius-landing/landing.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller - Cesium </h1>\r\n</div>\r\n\r\n<a href=\"./editor\" target=\"_blank\">\r\n\t<button mat-button color=\"secondary\"> \r\n\t\tTry Mobius\r\n\t</button>\r\n</a>\r\n\r\n<a href=\"https://github.com/phtj/mobius-modeller\" target=\"_blank\">\r\n\t<button mat-button>\r\n\t\tContribute on Github\r\n\t</button>\r\n</a>\r\n\r\n<a href=\"./gallery\" target=\"_blank\">\r\n\t<button mat-button>\r\n\t\tView Gallery\r\n\t</button>\r\n</a>\r\n\r\n"
+module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller</h1>\r\n\t<p>Cesium Integration</p>\r\n\t\r\n\t<div class=\"description\">\r\n\t\t\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller is a web application that allows users to create automated procedures using visual programming. All procedures are executed in the browser on the client side, and as such no server side process is required.\r\n\t\t</p>\r\n\t\t\r\n\t\t<p>\t\t\r\n\t\t\tCurrently, Möbius Modeller has be developed to support Parametric Information Modelling (PIM) in the architectural and urban design domain, allowing procedures to be developed for generating and evaluating 3D models of buildings and urban neighbourhoods.\r\n\t\t</p>\r\n\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller can be customised to a wide different domains by developing specialized function libraries and specialized viewers. Contact us if you are interested in applying the Möbius Modeller in your domain.\r\n\t\t</p>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"link-container\">\r\n\r\n\t\t<a href=\"./editor\" target=\"_blank\">\r\n\t\t\tTry Mobius\r\n\t\t</a>\r\n\r\n\t\t<a href=\"./gallery\" target=\"_blank\">\r\n\t\t\tView Gallery\r\n\t\t</a>\r\n\r\n\t\t<a href=\"https://github.com/phtj/mobius-modeller\" target=\"_blank\">\r\n\t\t\tContribute on Github\r\n\t\t</a>\r\n\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -11712,7 +11726,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".container {\n  width: 60%;\n  margin: 0 auto;\n  padding-top: 100px;\n  text-align: center; }\n  .container a {\n    font-size: 16px;\n    line-height: 20px;\n    padding: 10px;\n    margin: 10px;\n    border: 1px solid gray;\n    border-radius: 10px;\n    color: black;\n    text-decoration: none; }\n    .container a:hover {\n      background: gray;\n      color: white; }\n  .container .description {\n    padding-top: 10px;\n    width: 400px;\n    margin: 0 auto;\n    font-size: 14px;\n    line-height: 24px;\n    text-align: justify; }\n  .container .link-container {\n    padding-top: 45px;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center; }\n", ""]);
 
 // exports
 
