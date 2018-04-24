@@ -26,10 +26,12 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 
 		this._layout_subscription = this.layoutService.getMessage().subscribe(message => { 
           	if(message.text.startsWith("Module: ")){
-  			    this.switchToHelp();
+          		if(!this.viewer_mode)
+  			    	this.switchToHelp();
           	}
           	else if(message.text == "console"){
-          		this.switchToConsole();
+          		if(!this.viewer_mode)
+          			this.switchToConsole();
           	}
   		});
 	}
@@ -49,7 +51,7 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 	}
 
 	switchToHelp(): void{
-		this.updateGroupValue(400);
+			this.updateGroupValue(400);
 	}
 
 	switchToConsole(): void{
@@ -67,19 +69,10 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 		else{
 			this.updateGroupValue( this.flowchartService.getSelectedPort().getType() );
 		}
-
-		if(this.viewer_mode){
-  			console.log(this.flowchartService.getSelectedNode());
-  			//this.updateGroupValue( this.flowchartService.getSelectedNode().getOutputByIndex(0).getType() );
-  		}
 	}
 
   	ngOnInit() {
   		this.updateGroupValue(this.layoutService.getViewContainer());
-  		if(this.viewer_mode){
-  			console.log(this.flowchartService.getSelectedNode());
-  			//this.updateGroupValue( this.flowchartService.getSelectedNode().getOutputByIndex(0).getType() );
-  		}
   	}
 
   	changed(): void{

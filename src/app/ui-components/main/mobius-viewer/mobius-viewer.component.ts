@@ -4,19 +4,34 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from "rxjs/Rx";
 
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
 import { LayoutService } from '../../../global-services/layout.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 
 @Component({
   selector: 'app-mobius-viewer',
   templateUrl: './mobius-viewer.component.html',
-  styleUrls: ['./mobius-viewer.component.scss']
+  styleUrls: ['./mobius-viewer.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)',
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('1500ms ease-in-out')),
+      transition('out => in', animate('1500ms ease-in-out'))
+    ]),
+  ]
 })
 export class MobiusViewerComponent implements OnInit {
 
 	layout;
 	toggle;
     supported: boolean = false;
+    sidebarState:string;
 
 	router; sub;
 	filepath: string;
@@ -41,6 +56,8 @@ export class MobiusViewerComponent implements OnInit {
 		   this.filepath = this.getFlowchart(params.id);
 		   this.flowchartService.loadFile(this.filepath);
 		});
+		
+		this.sidebarState = 'in';
 	}
 
 	getFlowchart(filename: string){
@@ -88,5 +105,9 @@ export class MobiusViewerComponent implements OnInit {
 	    }
 
 	    return brw;
+    }
+
+    toggleMenu(){
+    	this.sidebarState = this.sidebarState  == 'out' ? 'in' : 'out';
     }
 }

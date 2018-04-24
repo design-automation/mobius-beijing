@@ -1,70 +1,130 @@
 @import '../../../../scss/globals';
 
+
 #app-container{
 
-	position: relative;
 	width: 100%; 
 	height: 100%;
 
 	margin: 0px;
 	padding: 0px;
 
-	display: flex; 
-	flex-direction: column;
-
-	-webkit-touch-callout: none;
-	-webkit-user-select: none; /* Webkit */
-	-moz-user-select: none;    /* Firefox */
-	-ms-user-select: none;     /* IE 10  */
-
-	/* Currently not supported in Opera but will be soon */
-	-o-user-select: none;
-	user-select: none;  
-
-	#setting{
-		position: absolute;
-		left: 30px; 
-		bottom: 30px;
-	}
-
-
 	.container{
-		position: relative;
-		flex-grow: 1;
-
 		display: flex;
-		flex-direction: column; 
+		flex-direction: row;
 
-		.wrapper{
-			position: absolute;
-			width: 100%;
-			height: 100%;
+		height: 100%;
+		overflow: hidden;
 	
-			.split{
-				height: 100%;
-				flex-grow: 1; 
-			}
+		.main-viewport{
+			flex-grow: 1;
+			margin-right:  -300px;
+		}
 
-			.split-area{
-				overflow: hidden;
+		.side-bar-container{
+			z-index: 100;
 
-				.view-wrapper{
+			width: 300px;
+
+			display: flex; 
+			flex-direction: row;
+
+			.nav-toggle-btn{
+				position: relative;
+
+				width: 30px;
+				background-color: transparent;
+
+				.btn{
+					border: 1px solid gray;
+					border-radius: 4px;
+
+					width: 20px;
+					height: 70px;
+
 					position: absolute;
-					height: 100%;
-					width: 100%; 
+					top: 50%; 
+					right: 0px;
+					margin-top: -30px;
+
+					background-color: gray;
 				}
 			}
+
+			.side-bar{
+				border: 1px solid gray;
+			}
 		}
 
-		.floatingbox{
-			position: absolute;
-			bottom: 0px;
-			right: 0px;
-			width: 25%;
-			height: 80%; 
-			border: 2px solid gray;
-		}
 
 	}
-
 }
+
+// #app-container{
+
+// 	position: relative;
+// 	width: 100%; 
+// 	height: 100%;
+
+// 	margin: 0px;
+// 	padding: 0px;
+
+// 	display: flex; 
+// 	flex-direction: column;
+
+// 	-webkit-touch-callout: none;
+// 	-webkit-user-select: none; /* Webkit */
+// 	-moz-user-select: none;    /* Firefox */
+// 	-ms-user-select: none;     /* IE 10  */
+
+// 	/* Currently not supported in Opera but will be soon */
+// 	-o-user-select: none;
+// 	user-select: none;  
+
+// 	#setting{
+// 		position: absolute;
+// 		left: 30px; 
+// 		bottom: 30px;
+// 	}
+
+
+// 	.container{
+// 		position: relative;
+// 		flex-grow: 1;
+
+// 		display: flex;
+// 		flex-direction: column; 
+
+// 		.wrapper{
+// 			position: absolute;
+// 			width: 100%;
+// 			height: 100%;
+	
+// 			.split{
+// 				height: 100%;
+// 				flex-grow: 1; 
+// 			}
+
+// 			.split-area{
+// 				overflow: hidden;
+
+// 				.view-wrapper{
+// 					position: absolute;
+// 					height: 100%;
+// 					width: 100%; 
+// 				}
+// 			}
+// 		}
+
+// 		.floatingbox{
+// 			position: absolute;
+// 			bottom: 0px;
+// 			right: 0px;
+// 			width: 25%;
+// 			height: 80%; 
+// 			border: 2px solid gray;
+// 		}
+
+// 	}
+
+// }

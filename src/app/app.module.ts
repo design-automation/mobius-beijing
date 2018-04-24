@@ -64,6 +64,8 @@ const appRoutes: Routes = [
 import { ShortNamePipe } from './pipes/short-name.pipe';
 import { PublishSettingsComponent } from './ui-components/editors/publish-settings/publish-settings.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -111,6 +113,7 @@ import { PublishSettingsComponent } from './ui-components/editors/publish-settin
       { enableTracing: true } // <-- debugging purposes only
     ),
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule, 
     FormsModule,
     AceEditorModule,

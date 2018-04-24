@@ -1,4 +1,4 @@
-<div class="viewer">
+<div class="viewer" [class.globals-viewer]="globals">
 
 	<div class="container" id="param-container-cesium"  #cesium_param_container>
 
@@ -6,7 +6,7 @@
 			No Inputs
 		</div>
  
-		<div class="param-in-viewer" *ngIf="globals" style="width: 100%; padding: 10px;">
+		<div class="param-in-viewer" *ngIf="globals">
 			<h3>Title: {{flowchartService.getFlowchart().name}}</h3>
 			<p>{{flowchartService.getFlowchart().description}}</p>
 

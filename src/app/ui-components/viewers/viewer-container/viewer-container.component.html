@@ -1,4 +1,4 @@
-<div class="viewer-container">     
+<div class="viewer-container">  
 	
 	<mat-button-toggle-group class="viewer-toggle" 
 		*ngIf='!viewer_mode'
@@ -41,10 +41,10 @@
 	</button>
  -->
 	<app-geometry-viewer *ngIf="group.value == 0"></app-geometry-viewer>
-	<app-code-viewer *ngIf="group.value == 1"></app-code-viewer>
-	<app-text-viewer *ngIf="group.value == 2"></app-text-viewer>
-	<app-console *ngIf="group.value == 3"></app-console>
-	<app-help-viewer *ngIf="group.value == 400"></app-help-viewer>
-	<app-info-viewer *ngIf="group.value == 500"></app-info-viewer>
 	<app-cesium-viewer *ngIf="group.value == 4"></app-cesium-viewer>
+	<app-text-viewer *ngIf="group.value == 2"></app-text-viewer>
+	<app-code-viewer *ngIf="group.value == 1"></app-code-viewer>
+	<app-console *ngIf="group.value == 3 && !viewer_mode"></app-console>
+	<app-help-viewer *ngIf="group.value == 400 && !viewer_mode"></app-help-viewer>
+	<app-info-viewer *ngIf="group.value == 500 && !viewer_mode"></app-info-viewer>
 </div>

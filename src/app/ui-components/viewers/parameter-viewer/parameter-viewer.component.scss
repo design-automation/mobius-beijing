@@ -1,4 +1,6 @@
 @import '~scss/globals';
+@import './parameter-viewer-globals.component';
+
 $execute-height: 36px;
 
 div.mat-input-wrapper.mat-form-field-wrapper{
@@ -9,6 +11,17 @@ div.mat-input-wrapper.mat-form-field-wrapper{
 $text-height: 12px;
 $default-height: 2*$text-height;
 
+.param-in-viewer{
+	font-size: 14px;
+	line-height: 16px;
+	
+	padding: 0px;
+	margin: 0 auto;
+	text-align: justify;
+
+	padding: 10px;
+}
+
 .box-text-values{
 	font-size: $text-height;
 	height: $default-height;
@@ -18,7 +31,7 @@ $default-height: 2*$text-height;
 }
 
 .viewer{
-	font-family: 'Ubuntu Mono', monospace;
+	font-family: sans-serif;
 	display: flex; 
 	flex-direction: column;
 	flex-wrap: no-wrap;
@@ -30,6 +43,13 @@ $default-height: 2*$text-height;
 	height: 100%;
 	width: 100%;
 	padding-bottom: $header-height;
+
+	&.globals-viewer{
+		padding: 0px;
+		background-color: rgba(20, 20, 20, 0.5);
+		border-left: 1px solid gray;
+		color: #ddd;
+	}
 
 	.container{
 		display: flex; 
@@ -113,34 +133,6 @@ $default-height: 2*$text-height;
 			border-bottom: 1px dashed $color1;*/
 		}
 	}
-
-/* 	.input{
-	padding: 0px 15px;
-	border-bottom: 1px solid gray;
-
-	.row{
-		width: 100%; 
-
-		.label{
-			display: inline-block;
-			text-transform: uppercase;
-			font-size: 10px; 
-			color: gray; 
-			width: 10%; 
-			min-width: 50px;
-		}
-
-		.content{
-			width: 90%;
-			min-width: 50px;
-
-
-			&.undefined{
-				border-bottom: 1px dashed blue;
-			}
-		}
-	}
-} */
 	
 }
 
