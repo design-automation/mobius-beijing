@@ -58,12 +58,19 @@ export class TextViewerComponent extends Viewer implements OnInit {
 						return strRep.replace(/\n/g, '<br>');
 					}
 					else{
-						return CircularJSON.stringify(output.getValue());
+						let str = CircularJSON.stringify(output.getValue());
+						if(str.length > 1000){
+							return str.substr(0, 1000) + "... <br><br>File too long!";
+						}
 					}
 
 				}
 
-				return CircularJSON.stringify(output.getValue());
+				let result =  CircularJSON.stringify(output.getValue());
+				if(result.length > 1000){
+					result = result.substr(0, 1000) + "... <br><br>File too long!";
+				}
+				return result;
 			}
 			catch(ex){
 				console.log("Error in Text Viewer:", ex);

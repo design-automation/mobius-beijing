@@ -1,5 +1,9 @@
 <div class="viewer-container">     
-	<mat-button-toggle-group class="viewer-toggle" [(ngModel)]="group.value" (change)="changed()">
+	
+	<mat-button-toggle-group class="viewer-toggle" 
+		*ngIf='!viewer_mode'
+		[(ngModel)]="group.value" 
+		(change)="changed()">
 		<div class= "btn-grp1">
 			<mat-button-toggle value="0" class="viewer-toggle-btn" matTooltip="3D Viewer">
 			  <mat-icon>3d_rotation</mat-icon>

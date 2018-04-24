@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, Input } from '@angular/core';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
 
@@ -13,9 +13,13 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ViewerContainerComponent extends Viewer implements OnInit {
 
+	@Input() viewer_mode: boolean = false;
+
   	private _layout_subscription: Subscription;
   	group: {value: number} = {value: 500};
   	_lock:  boolean = false;
+
+
 
 	constructor(injector: Injector, private layoutService: LayoutService){ 
 		super(injector, "Viewer Container", "Contains all the viewers");  
@@ -40,7 +44,6 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 	}
 
 	updateGroupValue(value: number): void{
-		console.log(value);
 		this.group.value = value;
 		this.layoutService.setViewContainer(value); 
 	}
@@ -64,10 +67,19 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 		else{
 			this.updateGroupValue( this.flowchartService.getSelectedPort().getType() );
 		}
+
+		if(this.viewer_mode){
+  			console.log(this.flowchartService.getSelectedNode());
+  			//this.updateGroupValue( this.flowchartService.getSelectedNode().getOutputByIndex(0).getType() );
+  		}
 	}
 
   	ngOnInit() {
   		this.updateGroupValue(this.layoutService.getViewContainer());
+  		if(this.viewer_mode){
+  			console.log(this.flowchartService.getSelectedNode());
+  			//this.updateGroupValue( this.flowchartService.getSelectedNode().getOutputByIndex(0).getType() );
+  		}
   	}
 
   	changed(): void{

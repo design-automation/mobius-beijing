@@ -45,7 +45,7 @@ export class MobiusViewerComponent implements OnInit {
 
 	getFlowchart(filename: string){
 		let filepath: string = 
-			"https://raw.githubusercontent.com/akshatamohanty/mobius-cesium/\
+			"https://raw.githubusercontent.com/phtj/mobius-cesium/\
 			master/src/assets/json-files/" + filename;
 		return filepath;
 		//return this.http.get(filepath).subscribe(val => console.log(val));
