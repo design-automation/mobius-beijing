@@ -2706,14 +2706,14 @@ let CustomMaterialModule = class CustomMaterialModule {
 };
 CustomMaterialModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["J" /* NgModule */])({
-        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["i" /* MatExpansionModule */],
+        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["i" /* MatExpansionModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["o" /* MatSidenavModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_material__["n" /* MatMenuModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["b" /* MatButtonModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["e" /* MatCheckboxModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_material__["r" /* MatTooltipModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["g" /* MatDialogModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["q" /* MatToolbarModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["k" /* MatIconModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_material__["c" /* MatButtonToggleModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["p" /* MatTabsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["l" /* MatInputModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["m" /* MatListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["o" /* MatSliderModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["j" /* MatGridListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["d" /* MatCardModule */]],
-        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["i" /* MatExpansionModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_material__["s" /* MatTooltipModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["g" /* MatDialogModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["r" /* MatToolbarModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["k" /* MatIconModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_material__["c" /* MatButtonToggleModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["q" /* MatTabsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["l" /* MatInputModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["m" /* MatListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["p" /* MatSliderModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["j" /* MatGridListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["d" /* MatCardModule */]],
+        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["i" /* MatExpansionModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["o" /* MatSidenavModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_material__["n" /* MatMenuModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["b" /* MatButtonModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["e" /* MatCheckboxModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_material__["r" /* MatTooltipModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["g" /* MatDialogModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["q" /* MatToolbarModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["k" /* MatIconModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_material__["c" /* MatButtonToggleModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["p" /* MatTabsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["l" /* MatInputModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["m" /* MatListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["o" /* MatSliderModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["j" /* MatGridListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["d" /* MatCardModule */]]
+            __WEBPACK_IMPORTED_MODULE_2__angular_material__["s" /* MatTooltipModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["g" /* MatDialogModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["r" /* MatToolbarModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["k" /* MatIconModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_material__["c" /* MatButtonToggleModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["q" /* MatTabsModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["l" /* MatInputModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["m" /* MatListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["p" /* MatSliderModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["j" /* MatGridListModule */], __WEBPACK_IMPORTED_MODULE_2__angular_material__["d" /* MatCardModule */]]
     })
 ], CustomMaterialModule);
 
@@ -3055,10 +3055,11 @@ let FlowchartService = class FlowchartService {
         this._selectedProcedure = undefined;
         this.update();
         this.loadModules([
-            { _name: "Feature_Coll", _version: 0.1, _author: "Patrick" },
-            { _name: "Math", _version: 0.1, _author: "Patrick" },
-            { _name: "Measure", _version: 0.1, _author: "Patrick" },
-            { _name: "Properties", _version: 0.1, _author: "Patrick" }
+            // {_name: "Feature_Coll", _version: 0.1, _author: "Patrick"},
+            // {_name: "Math", _version: 0.1, _author: "Patrick"},
+            // {_name: "Measure", _version: 0.1, _author: "Patrick"},
+            // {_name: "Properties", _version: 0.1, _author: "Patrick"}
+            { _name: "Turf", _version: 0.1, _author: "Patrick" }
         ]);
         // print message to console
         this.consoleService.addMessage("New file created.");
@@ -11672,7 +11673,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 let MobiusGalleryComponent = MobiusGalleryComponent_1 = class MobiusGalleryComponent {
-    //https://api.github.com/repos/akshatamohanty/mobius-cesium/contents/src/assets/json-files?ref=workshop-features
+    //https://api.github.com/repos/phtj/mobius-cesium/contents/src/assets/json-files?ref=workshop-features
     constructor(http) {
         this.http = http;
         this.http.get(MobiusGalleryComponent_1.gallery_url).subscribe(data => this.all_files = data);
@@ -11681,7 +11682,7 @@ let MobiusGalleryComponent = MobiusGalleryComponent_1 = class MobiusGalleryCompo
         console.log(this.all_files);
     }
 };
-MobiusGalleryComponent.gallery_url = 'https://api.github.com/repos/akshatamohanty/mobius-cesium/contents/src/assets/json-files?ref=master';
+MobiusGalleryComponent.gallery_url = 'https://api.github.com/repos/phtj/mobius-cesium/contents/src/assets/json-files?ref=master';
 MobiusGalleryComponent = MobiusGalleryComponent_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'mobius-gallery',
@@ -11699,7 +11700,7 @@ var MobiusGalleryComponent_1;
 /***/ "../../../../../src/app/ui-components/main/mobius-landing/landing.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mat-toolbar>\r\n  <mat-toolbar-row>\r\n    <span></span>\r\n  </mat-toolbar-row>\r\n</mat-toolbar>\r\n\r\n<!-- hero -->\r\n<div class='container hero-div'>\r\n\r\n\t<div class=\"content\">\r\n\t\t<div class=\"heading\">\r\n\t\t\t<h1>Mobius Modeller</h1>\r\n\t\t\t<h2>Code for all.</h2>\r\n\t\t</div>\r\n\t\t\r\n\t  \t<p>Reprehenderit eiusmod magna veniam adipisicing culpa exercitation aliquip ullamco elit proident eiusmod laboris reprehenderit sint dolor sint veniam duis proident reprehenderit exercitation cupidatat aute laboris eiusmod eiusmod excepteur consectetur culpa quis enim in quis sed dolor sint fugiat cillum enim deserunt</p>\r\n\t\t\r\n\t\t<div class=\"btn-container\">\r\n\t  \t\t<button mat-button color=\"secondary\"> \r\n\t  \t\t\t<a href=\"./editor\" target=\"_blank\">Try Mobius</a>\r\n\t  \t\t</button>\r\n\t  \t\t<button mat-button>\r\n\t  \t\t\t<a href=\"https://github.com/phtj/mobius-modeller\" target=\"_blank\">\r\n\t  \t\t\tContribute on Github\r\n\t  \t\t\t</a>\r\n\t  \t\t</button>\r\n\t  \t\t<button mat-button>\r\n\t  \t\t\t<a href=\"./gallery\" target=\"_blank\">\r\n\t  \t\t\tView Gallery\r\n\t  \t\t\t</a>\r\n\t  \t\t</button>\r\n\t  \t</div>\r\n\t</div>\r\n\r\n\t<div class=\"video\">\r\n\t\t<div class=\"hero-image\"></div>\r\n\t</div>\r\n\r\n\r\n</div>\r\n\r\n\r\n<!-- features -->\r\n<div class=\"container feature-wrapper\">\r\n\t\r\n\t<div class=\"heading\">\r\n\t\t<h2>Features</h2>\r\n\t\t<h3>Proident adipisicing tempor do consectetur elit in consequat reprehenderit ad ea nostrud fugiat dolore ad.</h3>\r\n\t</div>\r\n\r\n\r\n\t<div class=\"feature-container\">\r\n\t\t<div class=\"feature\">\r\n\t\t\t<mat-icon>3d_rotation</mat-icon>\r\n\t\t\t<div class=\"feature-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"feature\">\r\n\t\t\t<mat-icon>3d_rotation</mat-icon>\r\n\t\t\t<div class=\"feature-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"feature\">\r\n\t\t\t<mat-icon>3d_rotation</mat-icon>\r\n\t\t\t<div class=\"feature-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"feature\">\r\n\t\t\t<mat-icon>3d_rotation</mat-icon>\r\n\t\t\t<div class=\"feature-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n</div>\r\n\r\n\r\n<!-- features -->\r\n<div class=\"container showcase-wrapper\">\r\n\r\n\t<div class=\"heading\">\r\n\t\t<h2>Gallery</h2>\r\n\t\t<h3>Proident adipisicing tempor do consectetur elit in consequat reprehenderit ad ea nostrud fugiat dolore ad.</h3>\r\n\t</div>\r\n\r\n\t<div class=\"showcase-container\">\r\n\t\t<div class=\"showcase\">\r\n\t\t\t<img class=\"showcase-image\">\r\n\t\t\t<div class=\"showcase-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"showcase\">\r\n\t\t\t<img class=\"showcase-image\">\r\n\t\t\t<div class=\"showcase-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"showcase\">\r\n\t\t\t<img class=\"showcase-image\">\r\n\t\t\t<div class=\"showcase-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"showcase\">\r\n\t\t\t<img class=\"showcase-image\">\r\n\t\t\t<div class=\"showcase-description\">Et culpa veniam incididunt ea enim cillum excepteur magna esse dolor ut in sed sed sit in quis laborum.</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\r\n</div>\r\n\r\n\r\n\r\n<!-- footer -->\r\n<div class=\"container contact\">\r\n\r\n\t<h2 class=\"heading\">Contact Us</h2>\r\n\t<p>\r\n\tCupidatat deserunt minim sit ut nostrud irure aliqua proident in ut aute cupidatat elit incididunt ullamco ad ut irure mollit mollit ullamco quis.\r\n\t</p>\r\n\r\n</div>"
+module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller - Cesium </h1>\r\n</div>\r\n\r\n<a href=\"./editor\" target=\"_blank\">\r\n\t<button mat-button color=\"secondary\"> \r\n\t\tTry Mobius\r\n\t</button>\r\n</a>\r\n\r\n<a href=\"https://github.com/phtj/mobius-modeller\" target=\"_blank\">\r\n\t<button mat-button>\r\n\t\tContribute on Github\r\n\t</button>\r\n</a>\r\n\r\n<a href=\"./gallery\" target=\"_blank\">\r\n\t<button mat-button>\r\n\t\tView Gallery\r\n\t</button>\r\n</a>\r\n\r\n"
 
 /***/ }),
 
@@ -11711,7 +11712,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".container {\n  position: relative;\n  padding: 45px 10% 75px 10%;\n  min-height: 450px;\n  color: #4A606A; }\n  .container .heading {\n    line-height: 150%;\n    width: 100%;\n    text-align: left; }\n\nh1 {\n  font-size: 48px;\n  text-align: left; }\n\nh2 {\n  font-size: 32px; }\n\nh2 {\n  font-size: 28px; }\n\np {\n  font-size: 16px; }\n\n.hero-div {\n  position: relative;\n  background-color: #4A606A;\n  color: #F2EFE4;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-pack: space-evenly;\n      -ms-flex-pack: space-evenly;\n          justify-content: space-evenly; }\n  .hero-div .content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    max-width: 450px; }\n    .hero-div .content .btn-container {\n      margin: 30px 0px 30px 0px; }\n      .hero-div .content .btn-container button {\n        background-color: #F2EFE4;\n        color: #F2EFE4 !important; }\n        .hero-div .content .btn-container button a::visited {\n          color: #F2EFE4; }\n        .hero-div .content .btn-container button a {\n          color: #4A606A;\n          text-decoration: none;\n          text-transform: uppercase; }\n  .hero-div .video .hero-image {\n    height: 450px;\n    width: 450px;\n    border: 1px solid black; }\n\n.feature-wrapper {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: space-evenly;\n      -ms-flex-pack: space-evenly;\n          justify-content: space-evenly;\n  text-align: center; }\n  .feature-wrapper .feature-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    width: 100%; }\n    .feature-wrapper .feature-container .feature {\n      width: 150px;\n      text-align: center; }\n      .feature-wrapper .feature-container .feature mat-icon {\n        margin-left: -37.5px;\n        margin-bottom: 15px;\n        font-size: 75px;\n        color: #4A606A; }\n\n.showcase-wrapper {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-pack: space-evenly;\n      -ms-flex-pack: space-evenly;\n          justify-content: space-evenly; }\n  .showcase-wrapper .showcase-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    width: 100%; }\n    .showcase-wrapper .showcase-container .showcase {\n      padding-top: 30px;\n      width: 150px; }\n      .showcase-wrapper .showcase-container .showcase img {\n        min-height: 150px;\n        min-width: 150px;\n        border: 1px solid black; }\n\n.contact {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  text-align: center;\n  background-color: #4A606A;\n  height: 150px;\n  min-height: 50px; }\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -11758,7 +11759,7 @@ LandingComponent = __decorate([
 /***/ "../../../../../src/app/ui-components/main/mobius-viewer/mobius-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n  \t\t<div class=\"wrapper\">\r\n    \t\t<app-viewer-container></app-viewer-container>\r\n    \t</div>\r\n    \t<div class=\"floatingbox\">\r\n    \t\t<app-parameter-viewer globals=true></app-parameter-viewer>\r\n    \t</div>\r\n  </div>\r\n\r\n</div>\r\n\r\n"
+module.exports = "<!-- <div id=\"app-container\" *ngIf=\"supported\">\r\n  <app-parameter-viewer globals=true></app-parameter-viewer>\r\n  <app-viewer-container viewer_mode=true></app-viewer-container>\r\n</div>\r\n\r\n -->\r\n\r\n <div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n  \t\t<div class=\"wrapper\">\r\n    \t\t<app-viewer-container></app-viewer-container>\r\n    \t</div>\r\n    \t<div class=\"floatingbox\">\r\n    \t\t<app-parameter-viewer globals=true></app-parameter-viewer>\r\n    \t</div>\r\n  </div>\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -11830,7 +11831,7 @@ let MobiusViewerComponent = class MobiusViewerComponent {
         });
     }
     getFlowchart(filename) {
-        let filepath = "https://raw.githubusercontent.com/akshatamohanty/mobius-cesium/\
+        let filepath = "https://raw.githubusercontent.com/phtj/mobius-cesium/\
 			master/src/assets/json-files/" + filename;
         return filepath;
         //return this.http.get(filepath).subscribe(val => console.log(val));
@@ -12728,7 +12729,7 @@ TextViewerComponent = __decorate([
 /***/ "../../../../../src/app/ui-components/viewers/viewer-container/viewer-container.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer-container\">     \r\n\t<mat-button-toggle-group class=\"viewer-toggle\" [(ngModel)]=\"group.value\" (change)=\"changed()\">\r\n\t\t<div class= \"btn-grp1\">\r\n\t\t\t<mat-button-toggle value=\"0\" class=\"viewer-toggle-btn\" matTooltip=\"3D Viewer\">\r\n\t\t\t  <mat-icon>3d_rotation</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"4\" class=\"viewer-toggle-btn\" matTooltip=\"Cesium Viewer\">\r\n\t\t\t  <mat-icon>public</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"2\" class=\"viewer-toggle-btn\" matTooltip=\"Text Viewer\">\r\n\t\t\t  <mat-icon>description</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<!-- <mat-button-toggle value=\"3\" disabled class=\"viewer-toggle-btn\" matTooltip=\"??\">\r\n\t\t\t  <mat-icon>text_format</mat-icon>\r\n\t\t\t</mat-button-toggle> -->\r\n\t\t\t<mat-button-toggle value=\"3\" class=\"viewer-toggle-btn\" matTooltip=\"Console\">\r\n\t\t\t  <mat-icon>info_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"400\" class=\"viewer-toggle-btn\" matTooltip=\"Function Help\" >\r\n\t\t\t  <mat-icon>help_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"500\" class=\"viewer-toggle-btn\" matTooltip=\"About Mobius\" >\r\n\t\t\t  <mat-icon>info</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t<div class = \"btn-grp2\">\r\n\t\t\t<mat-button-toggle value=\"1\" id=\"codeViewer\" class=\"viewer-toggle-btn\" matTooltip=\"Code Viewer\">\r\n\t\t\t  <mat-icon>code</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t</mat-button-toggle-group>\r\n\r\n\t<!-- <button class=\"viewer-toggle-btn\" \r\n\t\tmatTooltip=\"Locked: {{this._lock}}\" (click)=\"lock()\" \r\n\t\tstyle=\"position: absolute;right: 0px; top:0px;\">\r\n\t\t<mat-icon>lock</mat-icon>\r\n\t</button>\r\n -->\r\n\t<app-geometry-viewer *ngIf=\"group.value == 0\"></app-geometry-viewer>\r\n\t<app-code-viewer *ngIf=\"group.value == 1\"></app-code-viewer>\r\n\t<app-text-viewer *ngIf=\"group.value == 2\"></app-text-viewer>\r\n\t<app-console *ngIf=\"group.value == 3\"></app-console>\r\n\t<app-help-viewer *ngIf=\"group.value == 400\"></app-help-viewer>\r\n\t<app-info-viewer *ngIf=\"group.value == 500\"></app-info-viewer>\r\n\t<app-cesium-viewer *ngIf=\"group.value == 4\"></app-cesium-viewer>\r\n</div>"
+module.exports = "<div class=\"viewer-container\">     \r\n\t\r\n\t<mat-button-toggle-group class=\"viewer-toggle\" \r\n\t\t*ngIf='!viewer_mode'\r\n\t\t[(ngModel)]=\"group.value\" \r\n\t\t(change)=\"changed()\">\r\n\t\t<div class= \"btn-grp1\">\r\n\t\t\t<mat-button-toggle value=\"0\" class=\"viewer-toggle-btn\" matTooltip=\"3D Viewer\">\r\n\t\t\t  <mat-icon>3d_rotation</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"4\" class=\"viewer-toggle-btn\" matTooltip=\"Cesium Viewer\">\r\n\t\t\t  <mat-icon>public</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"2\" class=\"viewer-toggle-btn\" matTooltip=\"Text Viewer\">\r\n\t\t\t  <mat-icon>description</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<!-- <mat-button-toggle value=\"3\" disabled class=\"viewer-toggle-btn\" matTooltip=\"??\">\r\n\t\t\t  <mat-icon>text_format</mat-icon>\r\n\t\t\t</mat-button-toggle> -->\r\n\t\t\t<mat-button-toggle value=\"3\" class=\"viewer-toggle-btn\" matTooltip=\"Console\">\r\n\t\t\t  <mat-icon>info_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"400\" class=\"viewer-toggle-btn\" matTooltip=\"Function Help\" >\r\n\t\t\t  <mat-icon>help_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"500\" class=\"viewer-toggle-btn\" matTooltip=\"About Mobius\" >\r\n\t\t\t  <mat-icon>info</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t<div class = \"btn-grp2\">\r\n\t\t\t<mat-button-toggle value=\"1\" id=\"codeViewer\" class=\"viewer-toggle-btn\" matTooltip=\"Code Viewer\">\r\n\t\t\t  <mat-icon>code</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t</mat-button-toggle-group>\r\n\r\n\t<!-- <button class=\"viewer-toggle-btn\" \r\n\t\tmatTooltip=\"Locked: {{this._lock}}\" (click)=\"lock()\" \r\n\t\tstyle=\"position: absolute;right: 0px; top:0px;\">\r\n\t\t<mat-icon>lock</mat-icon>\r\n\t</button>\r\n -->\r\n\t<app-geometry-viewer *ngIf=\"group.value == 0\"></app-geometry-viewer>\r\n\t<app-code-viewer *ngIf=\"group.value == 1\"></app-code-viewer>\r\n\t<app-text-viewer *ngIf=\"group.value == 2\"></app-text-viewer>\r\n\t<app-console *ngIf=\"group.value == 3\"></app-console>\r\n\t<app-help-viewer *ngIf=\"group.value == 400\"></app-help-viewer>\r\n\t<app-info-viewer *ngIf=\"group.value == 500\"></app-info-viewer>\r\n\t<app-cesium-viewer *ngIf=\"group.value == 4\"></app-cesium-viewer>\r\n</div>"
 
 /***/ }),
 
@@ -12774,6 +12775,7 @@ let ViewerContainerComponent = class ViewerContainerComponent extends __WEBPACK_
     constructor(injector, layoutService) {
         super(injector, "Viewer Container", "Contains all the viewers");
         this.layoutService = layoutService;
+        this.viewer_mode = false;
         this.group = { value: 500 };
         this._lock = false;
         this._layout_subscription = this.layoutService.getMessage().subscribe(message => {
@@ -12793,7 +12795,6 @@ let ViewerContainerComponent = class ViewerContainerComponent extends __WEBPACK_
     reset() {
     }
     updateGroupValue(value) {
-        console.log(value);
         this.group.value = value;
         this.layoutService.setViewContainer(value);
     }
@@ -12814,14 +12815,26 @@ let ViewerContainerComponent = class ViewerContainerComponent extends __WEBPACK_
         else {
             this.updateGroupValue(this.flowchartService.getSelectedPort().getType());
         }
+        if (this.viewer_mode) {
+            console.log(this.flowchartService.getSelectedNode());
+            //this.updateGroupValue( this.flowchartService.getSelectedNode().getOutputByIndex(0).getType() );
+        }
     }
     ngOnInit() {
         this.updateGroupValue(this.layoutService.getViewContainer());
+        if (this.viewer_mode) {
+            console.log(this.flowchartService.getSelectedNode());
+            //this.updateGroupValue( this.flowchartService.getSelectedNode().getOutputByIndex(0).getType() );
+        }
     }
     changed() {
         this.layoutService.setViewContainer(this.group.value);
     }
 };
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])(),
+    __metadata("design:type", Boolean)
+], ViewerContainerComponent.prototype, "viewer_mode", void 0);
 ViewerContainerComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'app-viewer-container',
@@ -12840,22 +12853,22 @@ ViewerContainerComponent = __decorate([
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature_Coll", function() { return Feature_Coll; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Properties", function() { return Properties; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Measure", function() { return Measure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Turf", function() { return Turf; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("../../../../../src/app/base-classes/code/CodeModule.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("../../../../turf-modelling/docs_json/turf-modelling.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling__ = __webpack_require__("../../../../turf-modelling/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf__ = __webpack_require__("../../../../turf/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_turf__);
 
 //import * as GSS from "gs-modelling";
+// import docs from "turf-modelling/docs_json/turf-modelling.json";
+// import * as Turf from "turf-modelling";
+// let Math: IModule = ModuleUtils.createModule("Math", Turf["math"], "attrib", docs);
+// let Feature_Coll: IModule = ModuleUtils.createModule("Feature_Coll", Turf["feature_coll"], "attrib", docs);
+// let Properties: IModule = ModuleUtils.createModule("Properties", Turf["properties"], "attrib", docs);
+// let Measure: IModule = ModuleUtils.createModule("Measure", Turf["measure"], "attrib", docs);
+// 
+// export {Math, Feature_Coll, Properties, Measure};
 
-
-let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* math */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Feature_Coll = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Feature_Coll", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* feature_coll */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["d" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Measure", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* measure */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Turf = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Turf", __WEBPACK_IMPORTED_MODULE_1_turf__, "attrib", undefined);
 
 
 
