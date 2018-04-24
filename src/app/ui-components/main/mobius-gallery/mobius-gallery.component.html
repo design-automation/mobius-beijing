@@ -1,8 +1,20 @@
-<p>
-  gallery works!
-</p>
+<div class="container">
+	
+	<h1>Mobius Gallery</h1>
+
+	
+	<div class="description">
+		<p>Lorem ipsum proident eu in in labore laborum amet pariatur ullamco aliquip qui ut sit ad anim eu minim aliquip dolor dolor esse exercitation ullamco laborum commodo in tempor labore excepteur sint velit cupidatat ut dolor dolore sint incididunt </p>
+
+		<p>If you'd like to contribute to showcase your work on this gallery, please add your file <a href="https://github.com/phtj/mobius-cesium/tree/master/src/assets/json-files" target="_blank">here</a> and send us a pull request.</p>
+	</div>
 
 
-<div *ngFor="let f of all_files" style="width: 300px; height: 150px; border: 1px solid gray;">
-		<a href="./viewer/{{f.name}}">{{f.name}}</a>
+	<div class="link-container">
+		<a *ngFor="let f of all_files" href="./viewer/{{f.name}}">{{f.name}}</a>
+	</div>
+
 </div>
+
+
+

@@ -37,5 +37,9 @@
 
 	.link-container{
 		padding-top: 45px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 }
