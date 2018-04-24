@@ -1,0 +1,41 @@
+.container{
+	width: 60%; 
+	margin: 0 auto;
+
+	padding-top: 100px;
+	text-align: center;
+
+	a{
+		
+		font-size: 16px;
+		line-height: 20px;
+		padding: 10px;
+		margin: 10px;
+
+		border: 1px solid gray;
+		border-radius: 10px;
+
+		color: black;
+		text-decoration: none;
+
+		&:hover{
+			background: gray;
+			color: white;
+		}
+	}
+
+	.description{
+		padding-top: 10px;
+		width: 400px;
+		margin: 0 auto;
+
+		font-size: 14px;
+		line-height: 24px;
+	
+		text-align: justify;
+	}
+
+	.link-container{
+		padding-top: 45px;
+	}
+}
