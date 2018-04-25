@@ -325,7 +325,10 @@ export class FlowchartService {
                         {_name: "Math", _version: 0.1, _author: "Patrick"},
                         //{_name: "Measure", _version: 0.1, _author: "Patrick"},
                         {_name: "Properties", _version: 0.1, _author: "Patrick"},
-                        {_name: "Turf", _version: 0.1, _author: "Patrick"}
+                        {_name: "Turf", _version: 0.1, _author: "Patrick"},
+                        {_name: "Papaparse", _version: 0.1, _author: "Patrick"},
+                        //{_name: "Togeojson", _version: 0.1, _author: "Patrick"},
+                        {_name: "Shapefile", _version: 0.1, _author: "Patrick"}
                       ]
                     );
 

@@ -131,13 +131,17 @@ export class ModuleUtils{
 			let func = mod[function_name];
 
 			if( mod.hasOwnProperty( function_name )){
-				let obj = { name: function_name, 
-							module: module_name,
-							params: this.getParams( func ),
-							def: func
-						  }
 
-				fn.push(obj);
+				if(typeof(func) == "function"){
+					let obj = { name: function_name, 
+								module: module_name,
+								params: this.getParams( func ),
+								def: func
+							  }
+
+					fn.push(obj);
+				}
+
 			}
 			else{
 				continue;
