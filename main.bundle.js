@@ -457,12 +457,14 @@ class ModuleUtils {
             // todo: why!?
             let func = mod[function_name];
             if (mod.hasOwnProperty(function_name)) {
-                let obj = { name: function_name,
-                    module: module_name,
-                    params: this.getParams(func),
-                    def: func
-                };
-                fn.push(obj);
+                if (typeof (func) == "function") {
+                    let obj = { name: function_name,
+                        module: module_name,
+                        params: this.getParams(func),
+                        def: func
+                    };
+                    fn.push(obj);
+                }
             }
             else {
                 continue;
@@ -3078,7 +3080,10 @@ let FlowchartService = class FlowchartService {
             { _name: "Math", _version: 0.1, _author: "Patrick" },
             //{_name: "Measure", _version: 0.1, _author: "Patrick"},
             { _name: "Properties", _version: 0.1, _author: "Patrick" },
-            { _name: "Turf", _version: 0.1, _author: "Patrick" }
+            { _name: "Turf", _version: 0.1, _author: "Patrick" },
+            { _name: "Papaparse", _version: 0.1, _author: "Patrick" },
+            //{_name: "Togeojson", _version: 0.1, _author: "Patrick"},
+            { _name: "Shapefile", _version: 0.1, _author: "Patrick" }
         ]);
         // print message to console
         this.consoleService.addMessage("New file created.");
@@ -12882,16 +12887,22 @@ ViewerContainerComponent = __decorate([
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature_Coll", function() { return Feature_Coll; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Properties", function() { return Properties; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Turf", function() { return Turf; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Papaparse", function() { return Papaparse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Shapefile", function() { return Shapefile; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("../../../../../src/app/base-classes/code/CodeModule.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("../../../../turf-modelling/docs_json/turf-modelling.json");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling__ = __webpack_require__("../../../../turf-modelling/dist/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_turf__ = __webpack_require__("../../../../turf/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_turf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_turf__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse__ = __webpack_require__("../../../../papaparse/papaparse.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_papaparse__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs__ = __webpack_require__("../../../../shpjs/lib/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_shpjs__);
 
 //import * as GSS from "gs-modelling";
 
@@ -12899,10 +12910,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // 
 
 
+
+
+//import * as math from "mathjs";
+var mathjs = __webpack_require__("../../../../mathjs/index.js");
+//var tj = require('togeojson');
 let Feature_Coll = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Feature_Coll", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* feature_coll */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* math */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", mathjs /*TurfModelling["math"]*/, "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+//let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
+let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
 let Turf = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Turf", __WEBPACK_IMPORTED_MODULE_3_turf__, "attrib", undefined);
+let Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
+let Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
 // export {Turf};
 
 
@@ -12935,6 +12954,13 @@ Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* pl
 
 module.exports = __webpack_require__("../../../../../src/main.ts");
 
+
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 
