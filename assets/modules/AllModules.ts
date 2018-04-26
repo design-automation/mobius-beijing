@@ -6,10 +6,8 @@ import docs from "turf-modelling/docs_json/turf-modelling.json";
 // let Measure: IModule = ModuleUtils.createModule("Measure", Turf["measure"], "attrib", docs);
 // 
 
-
-
 import * as TurfModelling from "turf-modelling";
-import * as trf from "turf";
+import * as trf from "@turf/turf";
 import * as papaparse from "papaparse";
 import * as shapefile from "shpjs";
 //import * as math from "mathjs";
