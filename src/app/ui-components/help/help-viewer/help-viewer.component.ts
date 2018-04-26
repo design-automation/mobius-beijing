@@ -15,6 +15,7 @@ export class HelpViewerComponent implements OnInit {
 
   _url;
   private _subscription: Subscription;
+  private helpAvailable: boolean = false;
 
   _loadedModules: any;
   _activeMod: string;
@@ -30,24 +31,31 @@ export class HelpViewerComponent implements OnInit {
           }
   		});
 
-      let mods = this.flowchartService.getModules().map(function(m){
-          return m["_name"].toLowerCase();
-      });
+      try{
+        let mods = this.flowchartService.getModules().map(function(m){
+            return m["_name"].toLowerCase();
+        });
 
-      this._loadedModules = this.flowchartService.getModules();
+        this._loadedModules = this.flowchartService.getModules();
 
-      for(let i=0; i < this._loadedModules.length; i++){
-        let mod = this._loadedModules[i];
-    
-        let originalName: string = mod._name; 
-        if(mod._helpObj[0]){
-          let n: string = mod._helpObj[0].name;
-          n = n.substr(1, n.length-2);
-          originalName = n;
+        for(let i=0; i < this._loadedModules.length; i++){
+          let mod = this._loadedModules[i];
+      
+          let originalName: string = mod._name; 
+          if(mod._helpObj[0]){
+            let n: string = mod._helpObj[0].name;
+            n = n.substr(1, n.length-2);
+            originalName = n;
+          }
+          mod["_url"] = "_" + originalName + "_.html";
         }
-        mod["_url"] = "_" + originalName + "_.html";
-      }
 
+        this.helpAvailable = true;
+
+      }
+      catch(ex){
+        this.helpAvailable = false;
+      }
 
   }
 

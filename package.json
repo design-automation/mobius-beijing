@@ -51,7 +51,7 @@
     "shpjs": "^3.4.2",
     "three": "^0.88.0",
     "three-orbit-controls": "^82.1.0",
-    "turf-modelling": "^0.1.7",
+    "turf-modelling": "^0.1.9",
     "typescript-compiler": "^1.4.1",
     "zone.js": "^0.8.26"
   },

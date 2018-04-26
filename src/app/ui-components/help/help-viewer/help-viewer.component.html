@@ -2,91 +2,99 @@
 	
 	<h1>Möbius Functions</h1>
 
-	<mat-accordion *ngIf='!fnObj'>
+	<!-- <div class='!helpAvailable'>
+		<p>Sorry! The help documentation seems to be missing</p>
+	</div> -->
 
-		<mat-expansion-panel 
-	 		*ngFor="let mod of _loadedModules"
-	 		[expanded]="mod._name ==_activeMod">
-	 		    	<mat-expansion-panel-header>
-	 		    		<mat-panel-title>
-	 				      {{ mod._name }} 
-	 				    </mat-panel-title>
-	 		    	</mat-expansion-panel-header>
-	 	
-	 				<mat-list id="mod._name" 
-	 					style="max-height: 500px; overflow: auto;">
-	 	
-	 					<h3 mat-subheader *ngIf="mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText" [innerHTML]="mod._helpObj[0].comment.shortText"></h3>
-	 	
-	 				 	<mat-list-item *ngFor="let fn of mod._helpObj[0].children">
-	 				 		<div class="content">
+	<div class="helpAvailable">
 
-	 					 		<h4 mat-line>{{fn.name}}</h4>
-	 		    				<p class="head-descr" mat-line>{{fn.signatures[0].comment.shortText}}</p>
-	 						
-	 							<div  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
-	 								<div *ngFor="let pa of fn.signatures[0].parameters">
-	 									<span class="topic">{{pa.name}}: </span>
-	 									<!-- <span *ngIf="pa.type">Type: {{pa.type.type}}</span> -->
-	 									<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
-	 								</div>
-	 							</div>
-	 	
-	 							<div class="return-block">
-	 			    				<span class="topic">Returns: </span>
-	 			    				<span class="descr" [innerHTML]="fn.signatures[0].comment.returns"></span>
-	 			    			</div>
-	 	
-	 		    				<p mat-line>	
-	 		    					<a href="https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}" target="_blank">More</a>
-	 		    				</p>
-	 	
-	 	    				</div>
-	 				 	</mat-list-item>
+		<mat-accordion *ngIf='!fnObj'>
 
-	 				 	<mat-divider></mat-divider>
-	 				
-	 				</mat-list>
-	 	
-	 	</mat-expansion-panel>
-	 	
-	</mat-accordion>
+			<mat-expansion-panel 
+		 		*ngFor="let mod of _loadedModules"
+		 		[expanded]="mod._name ==_activeMod">
+		 		    	<mat-expansion-panel-header>
+		 		    		<mat-panel-title>
+		 				      {{ mod._name }} 
+		 				    </mat-panel-title>
+		 		    	</mat-expansion-panel-header>
+		 	
+		 				<mat-list id="mod._name" 
+		 					style="max-height: 500px; overflow: auto;">
+		 	
+		 					<h3 mat-subheader *ngIf="mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText" [innerHTML]="mod._helpObj[0].comment.shortText"></h3>
+		 	
+		 				 	<mat-list-item *ngFor="let fn of mod._helpObj[0].children">
+		 				 		<div class="content">
 
-	<!-- specific function -->
-	<div *ngIf='fnObj && fnObj.name'>
+		 					 		<h4 mat-line>{{fn.name}}</h4>
+		 		    				<p class="head-descr" mat-line>{{fn.signatures[0].comment.shortText}}</p>
+		 						
+		 							<div  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
+		 								<div *ngFor="let pa of fn.signatures[0].parameters">
+		 									<span class="topic">{{pa.name}}: </span>
+		 									<!-- <span *ngIf="pa.type">Type: {{pa.type.type}}</span> -->
+		 									<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
+		 								</div>
+		 							</div>
+		 	
+		 							<div class="return-block">
+		 			    				<span class="topic">Returns: </span>
+		 			    				<span class="descr" [innerHTML]="fn.signatures[0].comment.returns"></span>
+		 			    			</div>
+		 	
+		 		    				<p mat-line>	
+		 		    					<a href="https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}" target="_blank">More</a>
+		 		    				</p>
+		 	
+		 	    				</div>
+		 				 	</mat-list-item>
 
-		<h4 mat-line>Module: {{fnObj.module}}</h4>
-		<h4 mat-line>{{fnObj.name}}</h4>
-		
-		<div *ngIf='fnObj.content'>
-			<div class="content">
+		 				 	<mat-divider></mat-divider>
+		 				
+		 				</mat-list>
+		 	
+		 	</mat-expansion-panel>
+		 	
+		</mat-accordion>
 
-				<p class="head-descr" mat-line>{{fnObj.content.signatures[0].comment.shortText}}</p>
+		<!-- specific function -->
+		<div *ngIf='fnObj && fnObj.name'>
+
+			<h4 mat-line>Module: {{fnObj.module}}</h4>
+			<h4 mat-line>{{fnObj.name}}</h4>
 			
-				<div  class="parameters" mat-line *ngIf='fnObj.content.signatures[0].parameters'>
-					<div *ngFor="let pa of fnObj.content.signatures[0].parameters">
-						<span class="topic">{{pa.name}}: </span>
-						<!-- <span *ngIf="pa.type">Type: {{pa.type.type}}</span> -->
-						<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
+			<div *ngIf='fnObj.content'>
+				<div class="content">
+
+					<p class="head-descr" mat-line>{{fnObj.content.signatures[0].comment.shortText}}</p>
+				
+					<div  class="parameters" mat-line *ngIf='fnObj.content.signatures[0].parameters'>
+						<div *ngFor="let pa of fnObj.content.signatures[0].parameters">
+							<span class="topic">{{pa.name}}: </span>
+							<!-- <span *ngIf="pa.type">Type: {{pa.type.type}}</span> -->
+							<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
+						</div>
 					</div>
-				</div>
 
-				<div class="return-block">
-    				<span class="topic">Returns: </span>
-    				<span class="descr" [innerHTML]="fnObj.content.signatures[0].comment.returns"></span>
-    			</div>
+					<div class="return-block">
+	    				<span class="topic">Returns: </span>
+	    				<span class="descr" [innerHTML]="fnObj.content.signatures[0].comment.returns"></span>
+	    			</div>
 
-				<p mat-line>	
-					<a href="https://phtj.github.io/gs-modelling/docs/modules/{{fnObj._url}}#{{fnObj.name}}" target="_blank">More</a>
-				</p>
+					<p mat-line>	
+						<a href="https://phtj.github.io/gs-modelling/docs/modules/{{fnObj._url}}#{{fnObj.name}}" target="_blank">More</a>
+					</p>
 
-			</div>	
-		</div>
-	
-		<hr>
+				</div>	
+			</div>
 		
-		<div (click)="showAll()" style="cursor: pointer;">[Show All]</div>
-	
+			<hr>
+			
+			<div (click)="showAll()" style="cursor: pointer;">[Show All]</div>
+		
+		</div>
+
 	</div>
 
 </div>

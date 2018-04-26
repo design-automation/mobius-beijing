@@ -317,16 +317,7 @@ export class FlowchartService {
     this._selectedProcedure = undefined;
     this.update();
 
-    let modulearr = [
-                        {_name: "Feature_Coll", _version: 0.1, _author: "Patrick"},
-                        {_name: "Math", _version: 0.1, _author: "Patrick"},
-                        //{_name: "Measure", _version: 0.1, _author: "Patrick"},
-                        {_name: "Properties", _version: 0.1, _author: "Patrick"},
-                        {_name: "Turf", _version: 0.1, _author: "Patrick"},
-                        {_name: "Papaparse", _version: 0.1, _author: "Patrick"},
-                        //{_name: "Togeojson", _version: 0.1, _author: "Patrick"},
-                        {_name: "Shapefile", _version: 0.1, _author: "Patrick"}
-                      ];
+    let modulearr = Object.keys(ModuleSet).map(function(module_name){ return {_name: module_name, _version: 0.1, _author: "Patrick"}}); 
 
     let sortFn = function(a, b){
       return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
