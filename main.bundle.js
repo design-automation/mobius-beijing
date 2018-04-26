@@ -446,6 +446,9 @@ class ModuleUtils {
             // todo: why!?
             let func = mod[function_name];
             if (mod.hasOwnProperty(function_name)) {
+                if (module_name == "TurfOriginal") {
+                    console.log(function_name, func);
+                }
                 if (typeof (func) == "function") {
                     let obj = { name: function_name,
                         module: module_name,
@@ -12271,7 +12274,7 @@ ParameterViewerComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/text-viewer/text-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"default\" *ngIf=\"_selectedNode === undefined\">\r\n\tNo Node Selected\r\n</div>\r\n\r\n<div class=\"container\" *ngIf=\"_selectedNode != undefined\">\r\n\t<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>\r\n\t<hr> -->\r\n\t<mat-accordion multi=\"true\" [displayMode]=\"flat\">\r\n\t\t\t<!-- inputs -->\r\n\t\t\t<mat-expansion-panel [expanded]=\"true\" *ngFor=\"let output of _selectedNode.getOutputs()\">\r\n\t\t\t\t\r\n\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t  {{ output.getName() }}\r\n\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t<p [innerHTML]=\"getType(output)\"></p>\r\n\r\n\t\t\t</mat-expansion-panel>\r\n\t\t\t\r\n\t</mat-accordion>\r\n</div>"
+module.exports = "<div class=\"default\" *ngIf=\"_selectedNode === undefined\">\r\n\tNo Node Selected\r\n</div>\r\n\r\n<div class=\"container\" *ngIf=\"_selectedNode != undefined\">\r\n\t<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>\r\n\t<hr> -->\r\n\t<mat-accordion multi=\"true\" [displayMode]=\"flat\">\r\n\t\t\t<!-- inputs -->\r\n\t\t\t<mat-expansion-panel [expanded]=\"true\" *ngFor=\"let output of _selectedNode.getOutputs()\">\r\n\t\t\t\t\r\n\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t  {{ output.getName() }}\r\n\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t<p [innerHTML]=\"getType(output)\"></p>\r\n\t\t\t\t\r\n\t\t\t\t\t<div class=\"ace-editor\" ace-editor [(text)]=\"codeStr\"></div>\r\n\r\n\t\t\t</mat-expansion-panel>\r\n\t\t\t\r\n\t</mat-accordion>\r\n</div>"
 
 /***/ }),
 
@@ -12291,6 +12294,8 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_circular_json__ = __webpack_require__("./node_modules/circular-json/build/circular-json.node.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_circular_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_circular_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_beautify__ = __webpack_require__("./node_modules/js-beautify/js/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_beautify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_js_beautify__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12300,6 +12305,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -12329,11 +12335,27 @@ let TextViewerComponent = class TextViewerComponent extends __WEBPACK_IMPORTED_M
     getType(output) {
         let val = output.getValue();
         if (val) {
+            let result = val;
             try {
                 if (typeof (val) == "object") {
                     let strRep = val.toString();
                     if (strRep !== "[object Object]") {
                         return strRep.replace(/\n/g, '<br>');
+                    }
+                    else if (val["type"] == "FeatureCollection") {
+                        let str = "<b>GeoJSON file</b><br>";
+                        str += "Number of features: " + val["features"].length + "<br>";
+                        str += "First few features:<br>";
+                        let sliced = val["features"].slice(0, Math.min(3, val["features"].length));
+                        let features = "";
+                        sliced = sliced.map(function (feature) {
+                            let f = "";
+                            f += "<small><b>Geometry Type:" + feature["geometry"]["type"] + "</b><br>";
+                            f += "<code>" + __WEBPACK_IMPORTED_MODULE_3_js_beautify__["js_beautify"](JSON.stringify(feature)) + "</code></small>";
+                            return f;
+                        });
+                        str += sliced.join("<br><br>");
+                        return str;
                     }
                     else {
                         let str = __WEBPACK_IMPORTED_MODULE_2_circular_json___default.a.stringify(output.getValue());
@@ -12539,7 +12561,6 @@ var mathjs = __webpack_require__("./node_modules/mathjs/index.js");
 let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", mathjs /*TurfModelling["math"]*/, "attrib", undefined);
 //let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
 //let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
-//let Turf: IModule = ModuleUtils.createModule("Turf", trf, "attrib", undefined);
 let Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
 let Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
 let List = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("List", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["a" /* list */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);

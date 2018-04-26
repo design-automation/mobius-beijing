@@ -17,7 +17,7 @@ var mathjs = require('mathjs');
 let Math: IModule = ModuleUtils.createModule("Math", mathjs/*TurfModelling["math"]*/, "attrib", undefined);
 //let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
 //let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
-//let Turf: IModule = ModuleUtils.createModule("Turf", trf, "attrib", undefined);
+
 let Papaparse: IModule = ModuleUtils.createModule("Papaparse", papaparse, "attrib", undefined);
 let Shapefile: IModule = ModuleUtils.createModule("Shapefile", shapefile, "attrib", undefined);
 
@@ -42,9 +42,10 @@ let Random: IModule = ModuleUtils.createModule("Random", TurfModelling["random"]
 let Units: IModule = ModuleUtils.createModule("Units", TurfModelling["units"], "attrib", docs);
 let Xform: IModule = ModuleUtils.createModule("Xform", TurfModelling["xform"], "attrib", docs);
 
-
 // export {Turf};
-export {Math,  Papaparse, Shapefile, 
+export {Math,  
+		Papaparse, 
+		Shapefile, 
 	    List, 
 		Aggregate, Assert, Bool, Classify, Convert, Coords, Create, Data, Grids, Ipolate, Joins, Measure, Meta, Misc, Random, Units, Xform};
 
