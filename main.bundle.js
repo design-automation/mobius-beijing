@@ -3066,16 +3066,7 @@ let FlowchartService = class FlowchartService {
         this._selectedPort = undefined;
         this._selectedProcedure = undefined;
         this.update();
-        let modulearr = [
-            { _name: "Feature_Coll", _version: 0.1, _author: "Patrick" },
-            { _name: "Math", _version: 0.1, _author: "Patrick" },
-            //{_name: "Measure", _version: 0.1, _author: "Patrick"},
-            { _name: "Properties", _version: 0.1, _author: "Patrick" },
-            { _name: "Turf", _version: 0.1, _author: "Patrick" },
-            { _name: "Papaparse", _version: 0.1, _author: "Patrick" },
-            //{_name: "Togeojson", _version: 0.1, _author: "Patrick"},
-            { _name: "Shapefile", _version: 0.1, _author: "Patrick" }
-        ];
+        let modulearr = Object.keys(__WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__).map(function (module_name) { return { _name: module_name, _version: 0.1, _author: "Patrick" }; });
         let sortFn = function (a, b) {
             return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
         };
@@ -10900,7 +10891,7 @@ GraphEdgeComponent = __decorate([
 /***/ "./src/app/ui-components/help/help-viewer/help-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\">\r\n\t\r\n\t<h1>Möbius Functions</h1>\r\n\r\n\t<mat-accordion *ngIf='!fnObj'>\r\n\r\n\t\t<mat-expansion-panel \r\n\t \t\t*ngFor=\"let mod of _loadedModules\"\r\n\t \t\t[expanded]=\"mod._name ==_activeMod\">\r\n\t \t\t    \t<mat-expansion-panel-header>\r\n\t \t\t    \t\t<mat-panel-title>\r\n\t \t\t\t\t      {{ mod._name }} \r\n\t \t\t\t\t    </mat-panel-title>\r\n\t \t\t    \t</mat-expansion-panel-header>\r\n\t \t\r\n\t \t\t\t\t<mat-list id=\"mod._name\" \r\n\t \t\t\t\t\tstyle=\"max-height: 500px; overflow: auto;\">\r\n\t \t\r\n\t \t\t\t\t\t<h3 mat-subheader *ngIf=\"mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText\" [innerHTML]=\"mod._helpObj[0].comment.shortText\"></h3>\r\n\t \t\r\n\t \t\t\t\t \t<mat-list-item *ngFor=\"let fn of mod._helpObj[0].children\">\r\n\t \t\t\t\t \t\t<div class=\"content\">\r\n\r\n\t \t\t\t\t\t \t\t<h4 mat-line>{{fn.name}}</h4>\r\n\t \t\t    \t\t\t\t<p class=\"head-descr\" mat-line>{{fn.signatures[0].comment.shortText}}</p>\r\n\t \t\t\t\t\t\t\r\n\t \t\t\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fn.signatures[0].parameters'>\r\n\t \t\t\t\t\t\t\t\t<div *ngFor=\"let pa of fn.signatures[0].parameters\">\r\n\t \t\t\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t \t\t\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t \t\t\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t \t\t\t\t\t\t\t\t</div>\r\n\t \t\t\t\t\t\t\t</div>\r\n\t \t\r\n\t \t\t\t\t\t\t\t<div class=\"return-block\">\r\n\t \t\t\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t \t\t\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fn.signatures[0].comment.returns\"></span>\r\n\t \t\t\t    \t\t\t</div>\r\n\t \t\r\n\t \t\t    \t\t\t\t<p mat-line>\t\r\n\t \t\t    \t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}\" target=\"_blank\">More</a>\r\n\t \t\t    \t\t\t\t</p>\r\n\t \t\r\n\t \t    \t\t\t\t</div>\r\n\t \t\t\t\t \t</mat-list-item>\r\n\r\n\t \t\t\t\t \t<mat-divider></mat-divider>\r\n\t \t\t\t\t\r\n\t \t\t\t\t</mat-list>\r\n\t \t\r\n\t \t</mat-expansion-panel>\r\n\t \t\r\n\t</mat-accordion>\r\n\r\n\t<!-- specific function -->\r\n\t<div *ngIf='fnObj && fnObj.name'>\r\n\r\n\t\t<h4 mat-line>Module: {{fnObj.module}}</h4>\r\n\t\t<h4 mat-line>{{fnObj.name}}</h4>\r\n\t\t\r\n\t\t<div *ngIf='fnObj.content'>\r\n\t\t\t<div class=\"content\">\r\n\r\n\t\t\t\t<p class=\"head-descr\" mat-line>{{fnObj.content.signatures[0].comment.shortText}}</p>\r\n\t\t\t\r\n\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fnObj.content.signatures[0].parameters'>\r\n\t\t\t\t\t<div *ngFor=\"let pa of fnObj.content.signatures[0].parameters\">\r\n\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<div class=\"return-block\">\r\n    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fnObj.content.signatures[0].comment.returns\"></span>\r\n    \t\t\t</div>\r\n\r\n\t\t\t\t<p mat-line>\t\r\n\t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{fnObj._url}}#{{fnObj.name}}\" target=\"_blank\">More</a>\r\n\t\t\t\t</p>\r\n\r\n\t\t\t</div>\t\r\n\t\t</div>\r\n\t\r\n\t\t<hr>\r\n\t\t\r\n\t\t<div (click)=\"showAll()\" style=\"cursor: pointer;\">[Show All]</div>\r\n\t\r\n\t</div>\r\n\r\n</div>"
+module.exports = "<div class=\"viewer\">\r\n\t\r\n\t<h1>Möbius Functions</h1>\r\n\r\n\t<!-- <div class='!helpAvailable'>\r\n\t\t<p>Sorry! The help documentation seems to be missing</p>\r\n\t</div> -->\r\n\r\n\t<div class=\"helpAvailable\">\r\n\r\n\t\t<mat-accordion *ngIf='!fnObj'>\r\n\r\n\t\t\t<mat-expansion-panel \r\n\t\t \t\t*ngFor=\"let mod of _loadedModules\"\r\n\t\t \t\t[expanded]=\"mod._name ==_activeMod\">\r\n\t\t \t\t    \t<mat-expansion-panel-header>\r\n\t\t \t\t    \t\t<mat-panel-title>\r\n\t\t \t\t\t\t      {{ mod._name }} \r\n\t\t \t\t\t\t    </mat-panel-title>\r\n\t\t \t\t    \t</mat-expansion-panel-header>\r\n\t\t \t\r\n\t\t \t\t\t\t<mat-list id=\"mod._name\" \r\n\t\t \t\t\t\t\tstyle=\"max-height: 500px; overflow: auto;\">\r\n\t\t \t\r\n\t\t \t\t\t\t\t<h3 mat-subheader *ngIf=\"mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText\" [innerHTML]=\"mod._helpObj[0].comment.shortText\"></h3>\r\n\t\t \t\r\n\t\t \t\t\t\t \t<mat-list-item *ngFor=\"let fn of mod._helpObj[0].children\">\r\n\t\t \t\t\t\t \t\t<div class=\"content\">\r\n\r\n\t\t \t\t\t\t\t \t\t<h4 mat-line>{{fn.name}}</h4>\r\n\t\t \t\t    \t\t\t\t<p class=\"head-descr\" mat-line>{{fn.signatures[0].comment.shortText}}</p>\r\n\t\t \t\t\t\t\t\t\r\n\t\t \t\t\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fn.signatures[0].parameters'>\r\n\t\t \t\t\t\t\t\t\t\t<div *ngFor=\"let pa of fn.signatures[0].parameters\">\r\n\t\t \t\t\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t \t\t\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t \t\t\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t \t\t\t\t\t\t\t\t</div>\r\n\t\t \t\t\t\t\t\t\t</div>\r\n\t\t \t\r\n\t\t \t\t\t\t\t\t\t<div class=\"return-block\">\r\n\t\t \t\t\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t\t \t\t\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fn.signatures[0].comment.returns\"></span>\r\n\t\t \t\t\t    \t\t\t</div>\r\n\t\t \t\r\n\t\t \t\t    \t\t\t\t<p mat-line>\t\r\n\t\t \t\t    \t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}\" target=\"_blank\">More</a>\r\n\t\t \t\t    \t\t\t\t</p>\r\n\t\t \t\r\n\t\t \t    \t\t\t\t</div>\r\n\t\t \t\t\t\t \t</mat-list-item>\r\n\r\n\t\t \t\t\t\t \t<mat-divider></mat-divider>\r\n\t\t \t\t\t\t\r\n\t\t \t\t\t\t</mat-list>\r\n\t\t \t\r\n\t\t \t</mat-expansion-panel>\r\n\t\t \t\r\n\t\t</mat-accordion>\r\n\r\n\t\t<!-- specific function -->\r\n\t\t<div *ngIf='fnObj && fnObj.name'>\r\n\r\n\t\t\t<h4 mat-line>Module: {{fnObj.module}}</h4>\r\n\t\t\t<h4 mat-line>{{fnObj.name}}</h4>\r\n\t\t\t\r\n\t\t\t<div *ngIf='fnObj.content'>\r\n\t\t\t\t<div class=\"content\">\r\n\r\n\t\t\t\t\t<p class=\"head-descr\" mat-line>{{fnObj.content.signatures[0].comment.shortText}}</p>\r\n\t\t\t\t\r\n\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fnObj.content.signatures[0].parameters'>\r\n\t\t\t\t\t\t<div *ngFor=\"let pa of fnObj.content.signatures[0].parameters\">\r\n\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t<div class=\"return-block\">\r\n\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fnObj.content.signatures[0].comment.returns\"></span>\r\n\t    \t\t\t</div>\r\n\r\n\t\t\t\t\t<p mat-line>\t\r\n\t\t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{fnObj._url}}#{{fnObj.name}}\" target=\"_blank\">More</a>\r\n\t\t\t\t\t</p>\r\n\r\n\t\t\t\t</div>\t\r\n\t\t\t</div>\r\n\t\t\r\n\t\t\t<hr>\r\n\t\t\t\r\n\t\t\t<div (click)=\"showAll()\" style=\"cursor: pointer;\">[Show All]</div>\r\n\t\t\r\n\t\t</div>\r\n\r\n\t</div>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -10939,25 +10930,32 @@ let HelpViewerComponent = class HelpViewerComponent {
         this.layoutService = layoutService;
         this.sanitizer = sanitizer;
         this.flowchartService = flowchartService;
+        this.helpAvailable = false;
         this.sanitizer = sanitizer;
         this._subscription = this.layoutService.getMessage().subscribe(message => {
             if (message.text.startsWith("Module: ")) {
                 this.notify();
             }
         });
-        let mods = this.flowchartService.getModules().map(function (m) {
-            return m["_name"].toLowerCase();
-        });
-        this._loadedModules = this.flowchartService.getModules();
-        for (let i = 0; i < this._loadedModules.length; i++) {
-            let mod = this._loadedModules[i];
-            let originalName = mod._name;
-            if (mod._helpObj[0]) {
-                let n = mod._helpObj[0].name;
-                n = n.substr(1, n.length - 2);
-                originalName = n;
+        try {
+            let mods = this.flowchartService.getModules().map(function (m) {
+                return m["_name"].toLowerCase();
+            });
+            this._loadedModules = this.flowchartService.getModules();
+            for (let i = 0; i < this._loadedModules.length; i++) {
+                let mod = this._loadedModules[i];
+                let originalName = mod._name;
+                if (mod._helpObj[0]) {
+                    let n = mod._helpObj[0].name;
+                    n = n.substr(1, n.length - 2);
+                    originalName = n;
+                }
+                mod["_url"] = "_" + originalName + "_.html";
             }
-            mod["_url"] = "_" + originalName + "_.html";
+            this.helpAvailable = true;
+        }
+        catch (ex) {
+            this.helpAvailable = false;
         }
     }
     notify() {
@@ -12441,8 +12439,13 @@ let ViewerContainerComponent = class ViewerContainerComponent extends __WEBPACK_
     reset() {
     }
     updateGroupValue(value) {
-        this.group.value = value;
-        this.layoutService.setViewContainer(value);
+        try {
+            this.group.value = value;
+            this.layoutService.setViewContainer(value);
+        }
+        catch (ex) {
+            //do something
+        }
     }
     switchToHelp() {
         this.updateGroupValue(400);
@@ -12491,22 +12494,34 @@ ViewerContainerComponent = __decorate([
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature_Coll", function() { return Feature_Coll; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Properties", function() { return Properties; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Turf", function() { return Turf; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Papaparse", function() { return Papaparse; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Shapefile", function() { return Shapefile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Aggregate", function() { return Aggregate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Assert", function() { return Assert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Bool", function() { return Bool; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Classify", function() { return Classify; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Convert", function() { return Convert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Coords", function() { return Coords; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Create", function() { return Create; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Data", function() { return Data; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Grids", function() { return Grids; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Ipolate", function() { return Ipolate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Joins", function() { return Joins; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Measure", function() { return Measure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Meta", function() { return Meta; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Misc", function() { return Misc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Random", function() { return Random; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Units", function() { return Units; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Xform", function() { return Xform; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("./src/app/base-classes/code/CodeModule.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("./node_modules/turf-modelling/docs_json/turf-modelling.json");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling__ = __webpack_require__("./node_modules/turf-modelling/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__turf_turf__ = __webpack_require__("./node_modules/@turf/turf/turf.min.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__turf_turf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__turf_turf__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse__ = __webpack_require__("./node_modules/papaparse/papaparse.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_papaparse__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs__ = __webpack_require__("./node_modules/shpjs/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_shpjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_papaparse__ = __webpack_require__("./node_modules/papaparse/papaparse.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_papaparse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_papaparse__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_shpjs__ = __webpack_require__("./node_modules/shpjs/lib/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_shpjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_shpjs__);
 
 //import * as GSS from "gs-modelling";
 
@@ -12515,17 +12530,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
 //import * as math from "mathjs";
 var mathjs = __webpack_require__("./node_modules/mathjs/index.js");
 //var tj = require('togeojson');
-let Feature_Coll = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Feature_Coll", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* feature_coll */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", mathjs /*TurfModelling["math"]*/, "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+//let Feature_Coll: IModule = ModuleUtils.createModule("Feature_Coll", TurfModelling["feature_coll"], "attrib", docs);
+let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Math", mathjs /*TurfModelling["math"]*/, "attrib", undefined);
 //let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
-let Properties = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Properties", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* properties */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Turf = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Turf", __WEBPACK_IMPORTED_MODULE_3__turf_turf__, "attrib", undefined);
-let Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
-let Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
+//let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
+//let Turf: IModule = ModuleUtils.createModule("Turf", trf, "attrib", undefined);
+let Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Papaparse", __WEBPACK_IMPORTED_MODULE_3_papaparse__, "attrib", undefined);
+let Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Shapefile", __WEBPACK_IMPORTED_MODULE_4_shpjs__, "attrib", undefined);
+let Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Aggregate", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* aggregate */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Assert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Assert", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* assert */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Bool = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Bool", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* bool */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Classify = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Classify", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["d" /* classify */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Convert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Convert", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["e" /* convert */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Coords = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Coords", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["f" /* coords */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Create = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Create", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["g" /* create */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Data = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Data", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["h" /* data */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Grids = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Grids", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["i" /* grids */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Ipolate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Ipolate", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["j" /* ipolate */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Joins = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Joins", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["k" /* joins */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Measure", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["l" /* measure */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Meta = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Meta", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["m" /* meta */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Misc = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Misc", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["n" /* misc */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Random = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Random", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["o" /* random */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Units = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Units", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["p" /* units */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Xform = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Xform", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["q" /* xform */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
 // export {Turf};
 
 
