@@ -456,11 +456,13 @@ class ModuleUtils {
                 }
             }
             else {
-                console.log("Discarded: ", func);
                 continue;
             }
         }
-        console.log(fn);
+        let sortFn = function (a, b) {
+            return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        };
+        fn.sort(sortFn);
         return fn;
     }
     ;
@@ -3064,7 +3066,7 @@ let FlowchartService = class FlowchartService {
         this._selectedPort = undefined;
         this._selectedProcedure = undefined;
         this.update();
-        this.loadModules([
+        let modulearr = [
             { _name: "Feature_Coll", _version: 0.1, _author: "Patrick" },
             { _name: "Math", _version: 0.1, _author: "Patrick" },
             //{_name: "Measure", _version: 0.1, _author: "Patrick"},
@@ -3073,7 +3075,11 @@ let FlowchartService = class FlowchartService {
             { _name: "Papaparse", _version: 0.1, _author: "Patrick" },
             //{_name: "Togeojson", _version: 0.1, _author: "Patrick"},
             { _name: "Shapefile", _version: 0.1, _author: "Patrick" }
-        ]);
+        ];
+        let sortFn = function (a, b) {
+            return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
+        };
+        this.loadModules(modulearr.sort(sortFn));
         // print message to console
         this.consoleService.addMessage("New file created.");
         this.update();
