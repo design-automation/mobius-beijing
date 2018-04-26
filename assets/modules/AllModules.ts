@@ -1,6 +1,6 @@
 import {ModuleUtils, IModule} from "../../app/base-classes/code/CodeModule";
 
-//import * as GSS from "gs-modelling";
+import * as GSS from "gs-modelling";
 import docs from "turf-modelling/docs_json/turf-modelling.json";
 
 // let Measure: IModule = ModuleUtils.createModule("Measure", Turf["measure"], "attrib", docs);
@@ -21,6 +21,8 @@ let Math: IModule = ModuleUtils.createModule("Math", mathjs/*TurfModelling["math
 let Papaparse: IModule = ModuleUtils.createModule("Papaparse", papaparse, "attrib", undefined);
 let Shapefile: IModule = ModuleUtils.createModule("Shapefile", shapefile, "attrib", undefined);
 
+
+let List: IModule = ModuleUtils.createModule("List", GSS["list"], "attrib", docs);
 
 let Aggregate: IModule = ModuleUtils.createModule("Aggregate", TurfModelling["aggregate"], "attrib", docs);
 let Assert: IModule = ModuleUtils.createModule("Assert", TurfModelling["assert"], "attrib", docs);
@@ -43,5 +45,6 @@ let Xform: IModule = ModuleUtils.createModule("Xform", TurfModelling["xform"], "
 
 // export {Turf};
 export {Math,  Papaparse, Shapefile, 
+	    List, 
 		Aggregate, Assert, Bool, Classify, Convert, Coords, Create, Data, Grids, Ipolate, Joins, Measure, Meta, Misc, Random, Units, Xform};
 

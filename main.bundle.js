@@ -12497,6 +12497,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Math", function() { return Math; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Papaparse", function() { return Papaparse; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Shapefile", function() { return Shapefile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "List", function() { return List; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Aggregate", function() { return Aggregate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Assert", function() { return Assert; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Bool", function() { return Bool; });
@@ -12515,15 +12516,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Units", function() { return Units; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Xform", function() { return Xform; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("./src/app/base-classes/code/CodeModule.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("./node_modules/turf-modelling/docs_json/turf-modelling.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling__ = __webpack_require__("./node_modules/turf-modelling/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_papaparse__ = __webpack_require__("./node_modules/papaparse/papaparse.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_papaparse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_papaparse__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_shpjs__ = __webpack_require__("./node_modules/shpjs/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_shpjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_shpjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_gs_modelling__ = __webpack_require__("./node_modules/gs-modelling/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("./node_modules/turf-modelling/docs_json/turf-modelling.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_turf_modelling__ = __webpack_require__("./node_modules/turf-modelling/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse__ = __webpack_require__("./node_modules/papaparse/papaparse.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_papaparse__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs__ = __webpack_require__("./node_modules/shpjs/lib/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_shpjs__);
 
-//import * as GSS from "gs-modelling";
+
 
 // let Measure: IModule = ModuleUtils.createModule("Measure", Turf["measure"], "attrib", docs);
 // 
@@ -12538,25 +12540,26 @@ let Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /
 //let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
 //let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
 //let Turf: IModule = ModuleUtils.createModule("Turf", trf, "attrib", undefined);
-let Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Papaparse", __WEBPACK_IMPORTED_MODULE_3_papaparse__, "attrib", undefined);
-let Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Shapefile", __WEBPACK_IMPORTED_MODULE_4_shpjs__, "attrib", undefined);
-let Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Aggregate", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["a" /* aggregate */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Assert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Assert", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["b" /* assert */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Bool = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Bool", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["c" /* bool */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Classify = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Classify", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["d" /* classify */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Convert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Convert", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["e" /* convert */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Coords = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Coords", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["f" /* coords */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Create = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Create", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["g" /* create */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Data = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Data", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["h" /* data */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Grids = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Grids", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["i" /* grids */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Ipolate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Ipolate", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["j" /* ipolate */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Joins = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Joins", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["k" /* joins */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Measure", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["l" /* measure */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Meta = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Meta", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["m" /* meta */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Misc = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Misc", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["n" /* misc */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Random = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Random", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["o" /* random */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Units = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Units", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["p" /* units */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
-let Xform = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Xform", __WEBPACK_IMPORTED_MODULE_2_turf_modelling__["q" /* xform */], "attrib", __WEBPACK_IMPORTED_MODULE_1_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
+let Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
+let List = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("List", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["a" /* list */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Aggregate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["a" /* aggregate */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Assert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Assert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["b" /* assert */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Bool = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Bool", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["c" /* bool */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Classify = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Classify", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["d" /* classify */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Convert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Convert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["e" /* convert */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Coords = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Coords", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["f" /* coords */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Create = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Create", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["g" /* create */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Data = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Data", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["h" /* data */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Grids = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Grids", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["i" /* grids */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Ipolate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Ipolate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["j" /* ipolate */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Joins = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Joins", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["k" /* joins */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Measure", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["l" /* measure */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Meta = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Meta", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["m" /* meta */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Misc = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Misc", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["n" /* misc */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Random = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Random", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["o" /* random */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Units = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Units", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["p" /* units */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let Xform = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("Xform", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["q" /* xform */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
 // export {Turf};
 
 
