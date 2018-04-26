@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from "rxjs/Rx";
 
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 import { LayoutService } from '../../../global-services/layout.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
@@ -14,27 +14,31 @@ import { FlowchartService } from '../../../global-services/flowchart.service';
   templateUrl: './mobius-viewer.component.html',
   styleUrls: ['./mobius-viewer.component.scss'],
   animations: [
-    trigger('slideInOut', [
-      state('in', style({
-        transform: 'translate3d(0, 0, 0)',
+    trigger('slide_in_out', [
+      state('slide_in', style({
+        //background: 'red',
+         opacity: 1
       })),
-      state('out', style({
-        transform: 'translate3d(100%, 0, 0)'
+      state('slide_out', style({
+        //background: 'blue',
+         opacity: 0
       })),
-      transition('in => out', animate('1500ms ease-in-out')),
-      transition('out => in', animate('1500ms ease-in-out'))
+      //transition('slide_in <=> slide_out', animate('300ms')),
+      transition("slide_in <=> slide_out", animate("3s")),
     ]),
   ]
 })
-export class MobiusViewerComponent implements OnInit {
+export class MobiusViewerComponent implements OnInit, AfterViewInit {
 
+	visible: boolean = false; 
 	layout;
 	toggle;
     supported: boolean = false;
-    sidebarState:string;
+    slider_state:string;
 
 	router; sub;
 	filepath: string;
+
 	constructor(private _router: ActivatedRoute, private http: HttpClient,
 		private layoutService: LayoutService, private flowchartService: FlowchartService) {
 		this.router = _router;
@@ -57,7 +61,11 @@ export class MobiusViewerComponent implements OnInit {
 		   this.flowchartService.loadFile(this.filepath);
 		});
 		
-		this.sidebarState = 'in';
+		this.slider_state = 'slide_in';
+	}
+
+	ngAfterViewInit(){
+		this.visible = true;
 	}
 
 	getFlowchart(filename: string){
@@ -65,8 +73,6 @@ export class MobiusViewerComponent implements OnInit {
 			"https://raw.githubusercontent.com/phtj/mobius-cesium/\
 			master/src/assets/json-files/" + filename;
 		return filepath;
-		//return this.http.get(filepath).subscribe(val => console.log(val));
-		//return .map((res: Response) => { res.json(); console.log(res)} );
 	}
 
 	ngOnDestroy() {
@@ -108,6 +114,6 @@ export class MobiusViewerComponent implements OnInit {
     }
 
     toggleMenu(){
-    	this.sidebarState = this.sidebarState  == 'out' ? 'in' : 'out';
+    	this.slider_state = this.slider_state == 'slide_in' ? 'slide_out' : 'slide_in';
     }
 }

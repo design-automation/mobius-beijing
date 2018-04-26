@@ -36,7 +36,8 @@ export class ViewerComponent extends DataSubscriber {
       	this.LoadData(this.data);
       }
       catch(ex){
-      	console.log(ex);
+      	console.log("error loading data");
+        //console.log(ex);
       }
     }
   }

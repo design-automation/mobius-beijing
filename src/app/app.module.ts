@@ -108,12 +108,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PublishSettingsComponent
   ],
   imports: [
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
-    ),
     BrowserModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: false } // <-- debugging purposes only
+    ),
     HttpClientModule, 
     FormsModule,
     AceEditorModule,

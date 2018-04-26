@@ -224,13 +224,11 @@ export class FlowchartService {
           // read the flowchart
           _this._flowchart = FlowchartReader.readFlowchartFromData(data["flowchart"]);
 
-
           // select node according to publish settings
           let nds = this._flowchart.getNodes();
           for(let i=0; i < nds.length; i++){
             if(nds[i].getId() == this._flowchart.selectedNode){
               this.selectNode(i, 0);
-              console.log("selecting node: " + i);
               break;
             }
           }

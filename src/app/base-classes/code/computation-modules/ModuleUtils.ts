@@ -144,9 +144,12 @@ export class ModuleUtils{
 
 			}
 			else{
+				console.log("Discarded: ", func);
 				continue;
 			}
 		}
+
+		console.log(fn);
 
 		return fn;
 	};

@@ -78,7 +78,6 @@ export abstract class FlowchartReader{
 	    	let valid_input: boolean = (in_node  >= 0 && in_node < nodes.length);
 	    	let valid_output: boolean = (out_node  >= 0 && out_node < nodes.length);
 	    	if( valid_input && valid_output ){
-	    		console.log("Adding edge");
 	    		fc.addEdge(e_data.output_address, e_data.input_address);
 	    	}
 	    	else{

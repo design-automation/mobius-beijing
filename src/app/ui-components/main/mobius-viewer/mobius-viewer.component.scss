@@ -1,5 +1,8 @@
 @import '../../../../scss/globals';
 
+$sidebar-width: 350px;
+$btn-height: 100px;
+$btn-width: 30px;
 
 #app-container{
 
@@ -9,55 +12,49 @@
 	margin: 0px;
 	padding: 0px;
 
+	overflow: hidden;
+
 	.container{
-		display: flex;
-		flex-direction: row;
+		position: relative;
 
-		height: 100%;
+		height: 100vh !important;
 		overflow: hidden;
-	
-		.main-viewport{
-			flex-grow: 1;
-			margin-right:  -300px;
-		}
+	}
 
-		.side-bar-container{
-			z-index: 100;
+	.side-bar-container{
 
-			width: 300px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
 
-			display: flex; 
-			flex-direction: row;
+		z-index: 100;
 
-			.nav-toggle-btn{
-				position: relative;
+		width: $sidebar-width;
+		height: 100vh; 
 
-				width: 30px;
-				background-color: transparent;
-
-				.btn{
-					border: 1px solid gray;
-					border-radius: 4px;
-
-					width: 20px;
-					height: 70px;
-
-					position: absolute;
-					top: 50%; 
-					right: 5px;
-					margin-top: -30px;
-
-					background-color: gray;
-				}
-			}
-
-			.side-bar{
-				border: 1px solid gray;
-			}
-		}
+		overflow: hidden;
 
 
 	}
+
+	.nav-toggle-btn{
+		z-index: 200;
+
+		position: absolute;
+		
+		top: 50%;
+		right: $sidebar-width;
+
+		margin-top: -$btn-height/2;
+		width: $btn-width;
+		height: $btn-height;
+		
+		border: 1px solid gray;
+		border-radius: 4px;
+
+		background-color: gray;
+	}
+
 }
 
 // #app-container{

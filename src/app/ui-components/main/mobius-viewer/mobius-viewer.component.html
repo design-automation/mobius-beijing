@@ -5,22 +5,20 @@
 
  -->
 
- <div id="app-container" *ngIf="supported">
+<div id="app-container" *ngIf="supported && visible">
 
-  <div class="container">
-  		
-      <div class="main-viewport">
-    		<app-viewer-container viewer_mode=true></app-viewer-container>
-    	</div>
-    	
-      <div class="side-bar-container" [@slideInOut]="sidebarState">
-        <div class="nav-toggle-btn">
-            <div class="btn" (click)="toggleMenu()">
-            </div>
-        </div>
-    		  <app-parameter-viewer globals=true></app-parameter-viewer>
-    	</div>
+    <div class="container">
+        <app-viewer-container viewer_mode=true></app-viewer-container>
+    </div>
 
-  </div>
+
+    <div class="side-bar-container" [@slide_in_out]="slider_state">
+        <app-parameter-viewer globals=true></app-parameter-viewer>
+    </div>
+
+    <div class="nav-toggle-btn" (click)="toggleMenu()"></div>
 
 </div>
+
+
+
