@@ -132,6 +132,10 @@ export class ModuleUtils{
 
 			if( mod.hasOwnProperty( function_name )){
 
+				if(module_name == "TurfOriginal"){
+					console.log(function_name, func);
+				}
+
 				if(typeof(func) == "function"){
 					let obj = { name: function_name, 
 								module: module_name,
