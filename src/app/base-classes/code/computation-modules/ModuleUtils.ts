@@ -144,12 +144,15 @@ export class ModuleUtils{
 
 			}
 			else{
-				console.log("Discarded: ", func);
 				continue;
 			}
 		}
 
-		console.log(fn);
+		let sortFn = function(a, b){
+			return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+		}
+
+		fn.sort( sortFn );
 
 		return fn;
 	};
