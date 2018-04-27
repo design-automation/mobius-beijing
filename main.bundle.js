@@ -11044,7 +11044,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.8.2-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.0-cesium</p>\r\n"
 
 /***/ }),
 
@@ -12530,29 +12530,29 @@ ViewerContainerComponent = __decorate([
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UT_Math", function() { return UT_Math; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FL_Papaparse", function() { return FL_Papaparse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FL_Shapefile", function() { return FL_Shapefile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MA_Math", function() { return MA_Math; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IO_Papaparse", function() { return IO_Papaparse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Shapefile", function() { return GJ_Shapefile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UT_List", function() { return UT_List; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MJ_Collection", function() { return MJ_Collection; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MJ_Feature", function() { return MJ_Feature; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Aggregate", function() { return TF_Aggregate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Assert", function() { return TF_Assert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Bool", function() { return TF_Bool; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Classify", function() { return TF_Classify; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Convert", function() { return TF_Convert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Coords", function() { return TF_Coords; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Create", function() { return TF_Create; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Data", function() { return TF_Data; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Grids", function() { return TF_Grids; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Ipolate", function() { return TF_Ipolate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Joins", function() { return TF_Joins; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Measure", function() { return TF_Measure; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Meta", function() { return TF_Meta; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Misc", function() { return TF_Misc; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Random", function() { return TF_Random; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Units", function() { return TF_Units; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TF_Xform", function() { return TF_Xform; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Collection", function() { return GJ_Collection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Feature", function() { return GJ_Feature; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Aggregate", function() { return GJ_Aggregate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Assert", function() { return GJ_Assert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Bool", function() { return GJ_Bool; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Classify", function() { return GJ_Classify; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Convert", function() { return GJ_Convert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Coords", function() { return GJ_Coords; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Create", function() { return GJ_Create; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Data", function() { return GJ_Data; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Grids", function() { return GJ_Grids; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Ipolate", function() { return GJ_Ipolate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Joins", function() { return GJ_Joins; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Measure", function() { return GJ_Measure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Meta", function() { return GJ_Meta; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Misc", function() { return GJ_Misc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Random", function() { return GJ_Random; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Units", function() { return GJ_Units; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GJ_Xform", function() { return GJ_Xform; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("./src/app/base-classes/code/CodeModule.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_gs_modelling__ = __webpack_require__("./node_modules/gs-modelling/dist/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("./node_modules/turf-modelling/docs_json/turf-modelling.json");
@@ -12576,31 +12576,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 let mathjs = __webpack_require__("./node_modules/mathjs/index.js");
 //var tj = require('togeojson');
 //let Feature_Coll: IModule = ModuleUtils.createModule("Feature_Coll", TurfModelling["feature_coll"], "attrib", docs);
-let UT_Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("UT_Math", mathjs /*TurfModelling["math"]*/, "attrib", undefined);
+let MA_Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("UT_Math", mathjs /*TurfModelling["math"]*/, "attrib", undefined);
 //let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
 //let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
-let FL_Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("FL_Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
-let FL_Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("FL_Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
+let IO_Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("IO_Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
+let GJ_Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
 let UT_List = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("UT_List", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["a" /* list */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
-let TF_Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Aggregate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["a" /* aggregate */], "attrib", undefined);
-let TF_Assert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Assert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["b" /* assert */], "attrib", undefined);
-let TF_Bool = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Bool", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["c" /* bool */], "attrib", undefined);
-let TF_Classify = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Classify", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["d" /* classify */], "attrib", undefined);
-let TF_Convert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Convert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["e" /* convert */], "attrib", undefined);
-let TF_Coords = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Coords", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["f" /* coords */], "attrib", undefined);
-let TF_Create = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Create", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["g" /* create */], "attrib", undefined);
-let TF_Data = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Data", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["h" /* data */], "attrib", undefined);
-let TF_Grids = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Grids", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["i" /* grids */], "attrib", undefined);
-let TF_Ipolate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Ipolate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["j" /* ipolate */], "attrib", undefined);
-let TF_Joins = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Joins", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["k" /* joins */], "attrib", undefined);
-let TF_Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Measure", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["l" /* measure */], "attrib", undefined);
-let TF_Meta = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Meta", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["m" /* meta */], "attrib", undefined);
-let TF_Misc = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Misc", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["n" /* misc */], "attrib", undefined);
-let TF_Random = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Random", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["o" /* random */], "attrib", undefined);
-let TF_Units = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Units", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["p" /* units */], "attrib", undefined);
-let TF_Xform = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("TF_Xform", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["q" /* xform */], "attrib", undefined);
-let MJ_Collection = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("MJ_Collection", __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__["a" /* collection */], "attrib", undefined);
-let MJ_Feature = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("MJ_Feature", __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__["b" /* feature */], "attrib", undefined);
+let UT_String = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("UT_String", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["b" /* string */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
+let GJ_Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Aggregate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["a" /* aggregate */], "attrib", undefined);
+let GJ_Assert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Assert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["b" /* assert */], "attrib", undefined);
+let GJ_Bool = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Bool", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["c" /* bool */], "attrib", undefined);
+let GJ_Classify = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Classify", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["d" /* classify */], "attrib", undefined);
+let GJ_Convert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Convert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["e" /* convert */], "attrib", undefined);
+let GJ_Coords = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Coords", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["f" /* coords */], "attrib", undefined);
+let GJ_Create = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Create", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["g" /* create */], "attrib", undefined);
+let GJ_Data = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Data", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["h" /* data */], "attrib", undefined);
+let GJ_Grids = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Grids", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["i" /* grids */], "attrib", undefined);
+let GJ_Ipolate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Ipolate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["j" /* ipolate */], "attrib", undefined);
+let GJ_Joins = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Joins", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["k" /* joins */], "attrib", undefined);
+let GJ_Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Measure", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["l" /* measure */], "attrib", undefined);
+let GJ_Meta = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Meta", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["m" /* meta */], "attrib", undefined);
+let GJ_Misc = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Misc", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["n" /* misc */], "attrib", undefined);
+let GJ_Random = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Random", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["o" /* random */], "attrib", undefined);
+let GJ_Units = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Units", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["p" /* units */], "attrib", undefined);
+let GJ_Xform = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Xform", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["q" /* xform */], "attrib", undefined);
+let GJ_Collection = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Collection", __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__["a" /* collection */], "attrib", undefined);
+let GJ_Feature = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("GJ_Feature", __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__["b" /* feature */], "attrib", undefined);
 // export {Turf};
 
 
