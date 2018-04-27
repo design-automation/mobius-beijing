@@ -1,8 +1,11 @@
 import { Component, Injector, ElementRef, ViewChild, Input } from '@angular/core';
+import { HttpClient  } from '@angular/common/http';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule';
+
+import 'rxjs/add/operator/map'
 
 @Component({
   selector: 'app-parameter-viewer',
@@ -22,7 +25,7 @@ export class ParameterViewerComponent extends Viewer {
 
     @ViewChild('cesium_param_container') el:ElementRef;
 
-  	constructor(injector: Injector){  
+  	constructor(injector: Injector, private http: HttpClient){  
         super(injector, "parameter-viewer"); 
      }
 
@@ -135,11 +138,15 @@ export class ParameterViewerComponent extends Viewer {
 
     url = "";
     handleURL($event, input){
-      fetch('https://' + this.url)
-      .then(response => response.json())
-      .then(json => 
-        input.setComputedValue(JSON.stringify(json))
-      )
+
+      let urlString: any = 'https://' + this.url;
+
+      this.http.get(urlString)
+        .subscribe(data => {
+             input.setComputedValue(JSON.stringify(data))
+        }
+      );
+
     }
 
 }
