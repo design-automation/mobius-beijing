@@ -26,6 +26,7 @@ export abstract class Port implements IPort{
 	constructor(name: string){ 
 		this._id =  IdGenerator.getId();
 		this._name = name;
+		this.opts = {};
 	}
 
 	isFunction(): boolean{

@@ -136,10 +136,13 @@ export class ParameterViewerComponent extends Viewer {
     
     }
 
-    url = "";
-    handleURL($event, input){
 
-      let urlString: any = 'https://' + this.url;
+    //
+    // Web URL
+    // 
+    getDataFromURL($event, input){
+
+      let urlString: any = 'https://' + input.getOpts().url;
 
       this.http.get(urlString)
         .subscribe(data => {

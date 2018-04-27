@@ -72,11 +72,11 @@
 			<!-- if input type == URL -->
 			<div class="param-value" 
 				*ngIf="inp.getType() == InputPortTypes.URL">
-				http://<input type="text" [(ngModel)]="url">
-				<button (click)="handleURL($event, inp)">Get Data</button>
-				<span *ngIf='inp.getDefaultValue()'>(has default)</span>
+				<small>http://<input type="text" value="{{inp.getOpts().url}}" #url disabled></small>
+				<button (click)="getDataFromURL($event, inp)">Get Data</button>
+				<span *ngIf='inp.getValue()'>(has data)</span>
 			</div>
-
+ 
 			<!-- if input type == Checkbox -->
 			<div class="param-value" 
 				*ngIf="inp.getType() == InputPortTypes.Checkbox">

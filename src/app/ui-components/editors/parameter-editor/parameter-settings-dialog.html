@@ -69,7 +69,7 @@
 
 <div *ngIf='type == inputPortTypes.URL'>
 	<!-- if input type == FilePicker -->
-	<div class="value">
+	<!-- <div class="value">
 		http://<input type="text" [(ngModel)]="url">
 		<button (click)="handleURL($event, input)">Get Data</button>
 		<button *ngIf="input.getDefaultValue()" (click)="clear($event, input)">Clear</button>
@@ -78,9 +78,10 @@
 			<h3>Default File:</h3>
 
 			<p>Loaded file!</p>
-			<!-- <div style="max-height: 150px; overflow-y: auto">{{input.getDefaultValue()}}</div> -->
 		</div>
-	</div>
+	</div> -->
+	URL:
+	<small>http://<input type="text" value="{{input.getOpts().url}}" (change)="updateURL($event, input)" #url></small>
 
 </div>
 

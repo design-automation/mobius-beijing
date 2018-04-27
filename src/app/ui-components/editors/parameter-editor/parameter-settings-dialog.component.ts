@@ -69,6 +69,17 @@ export class ParameterSettingsDialogComponent {
     onNoClick(): void {
       this.dialogRef.close();
     }
+    
+    updateURL($event, input){
+      let value;
+      if($event.srcElement){
+        value = $event.srcElement.value;
+        value = value.trim();
+        if(value.length != 0){
+          input.setOpts({url: value});
+        }
+      }
+    }
 
 
     handleFileInput(fileList, input){
@@ -86,16 +97,6 @@ export class ParameterSettingsDialogComponent {
       })(reader);
 
       reader.readAsText(file);
-    }
-
-    
-    url = "";
-    handleURL($event, input){
-      fetch('https://' + this.url)
-      .then(response => response.json())
-      .then(json => 
-        input.setDefaultValue(JSON.stringify(json))
-      )
     }
 
     clear($event, input){
