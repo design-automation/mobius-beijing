@@ -67,7 +67,7 @@
 
 														<span class="equal">=</span>
 
-														<span class="module">{{prod.data.getFunctionName()}}</span>
+														<span class="module">{{ prod.data.getFunctionName()}}</span>
 														
 														(<span *ngIf="prod.data.getRightComponent().params.length > 0">
 															<div class="param-container" *ngFor="let p of prod.data.updateParams();let i=index;">
@@ -139,7 +139,7 @@
 
 														<span class="equal">=</span>
 
-														<span class="module">{{prod.data.getRightComponent().module}}</span>
+														<span class="module">{{prod.data.getRightComponent().module.replace("_",  ".")}}</span>
 														.
 
 														  <span class="function">{{prod.data.getRightComponent().fn_name}}</span> 

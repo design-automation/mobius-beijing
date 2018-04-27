@@ -19,7 +19,7 @@
 					
 					<mat-expansion-panel-header>
 						<mat-panel-title>
-						  {{ cat }} 
+						  {{ cat.replace("_", ".") }} 
 						  <mat-icon style="font-size: 14px; margin-left: 5px;" (click)="openModuleHelp($event, cat)">help_outline</mat-icon>
 						</mat-panel-title>
 						<mat-panel-description>
@@ -29,7 +29,7 @@
 
 					<mat-list condensed>
 					 	<mat-list-item class="fn_name" *ngFor="let fn of _moduleList[cat]" (click)="addActionProcedure(fn);"> 
-					 		<span class="module">{{ fn.module }}</span>.<span class="function">{{ fn.name }}</span>
+					 		<span class="module">{{ fn.module.replace("_", ".") }}</span>.<span class="function">{{ fn.name }}</span>
 					 	</mat-list-item>
 					</mat-list>
 
