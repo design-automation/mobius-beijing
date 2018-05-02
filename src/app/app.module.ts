@@ -82,10 +82,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ModuleboxComponent,
     EditorComponent,
     ViewerContainerComponent,
-    TextViewerComponent,
     NodeLibraryComponent,
     PanelComponent,
-    ConsoleComponent,
     ParameterSettingsDialogComponent,
     HelpViewerComponent,
     InfoViewerComponent,
@@ -99,13 +97,28 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LandingComponent,
     MobiusGalleryComponent,
     ShortNamePipe,
-    PublishSettingsComponent
+    PublishSettingsComponent,
+    TextViewerComponent,
+    ConsoleComponent
   ],
   entryComponents: [
     ModuleboxComponent,
     ParameterSettingsDialogComponent,
     FileLoadDialogComponent,
-    PublishSettingsComponent
+    PublishSettingsComponent,
+    ParameterViewerComponent,
+    //
+    ViewerContainerComponent,
+    FlowchartViewerComponent,
+    EditorComponent,
+    //
+    GeometryViewerComponent,
+    CesiumViewerComponent,
+    TextViewerComponent,
+    CodeViewerComponent,
+    ConsoleComponent, 
+    HelpViewerComponent,
+    InfoViewerComponent
   ],
   imports: [
     BrowserModule,

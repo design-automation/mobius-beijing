@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LayoutService } from '../../../global-services/layout.service'; 
 import { FlowchartService } from '../../../global-services/flowchart.service'; 
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer} from '@angular/platform-browser';
@@ -23,13 +22,13 @@ export class HelpViewerComponent implements OnInit {
   fnObj: {module: string, name: string};
 
   //modules/_group_.html
-  constructor(private layoutService: LayoutService, private sanitizer: DomSanitizer, private flowchartService: FlowchartService) { 
+  constructor(private sanitizer: DomSanitizer, private flowchartService: FlowchartService) { 
   		this.sanitizer = sanitizer;
-  		this._subscription = this.layoutService.getMessage().subscribe(message => { 
-          if(message.text.startsWith("Module: ")){
-  			    this.notify();
-          }
-  		});
+  		// this._subscription = this.layoutService.getMessage().subscribe(message => { 
+    //       if(message.text.startsWith("Module: ")){
+  		// 	    this.notify();
+    //       }
+  		// });
 
       try{
         let mods = this.flowchartService.getModules().map(function(m){
@@ -60,38 +59,38 @@ export class HelpViewerComponent implements OnInit {
   }
 
   notify(): void{
-  		let url_segment: string = this.layoutService.getUrl();
-      let url: string = 'https://phtj.github.io/gs-modelling/docs/' + url_segment;
-      this._url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  		// let url_segment: string = this.layoutService.getUrl();
+    //   let url: string = 'https://phtj.github.io/gs-modelling/docs/' + url_segment;
+    //   this._url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       
-      let fnObj = this.layoutService.getObj();
-      if(fnObj && fnObj.name){
-        this.fnObj = fnObj;
+    //   let fnObj = this.layoutService.getObj();
+    //   if(fnObj && fnObj.name){
+    //     this.fnObj = fnObj;
 
-        for(let m=0; m < this._loadedModules.length; m++){
+    //     for(let m=0; m < this._loadedModules.length; m++){
 
-            if(this._loadedModules[m]._name.toLowerCase() == fnObj.module.toLowerCase()){
-              let mo = this._loadedModules[m]._helpObj[0];
-              for(let f=0; f < mo.children.length; f++){
-                  let child = mo.children[f];
-                  if(fnObj.name.toLowerCase() == child.name.toLowerCase()){
-                      fnObj["content"] = child;
-                      fnObj["_url"] = this._loadedModules[m]["_url"];
-                  }
-              }
-            }
+    //         if(this._loadedModules[m]._name.toLowerCase() == fnObj.module.toLowerCase()){
+    //           let mo = this._loadedModules[m]._helpObj[0];
+    //           for(let f=0; f < mo.children.length; f++){
+    //               let child = mo.children[f];
+    //               if(fnObj.name.toLowerCase() == child.name.toLowerCase()){
+    //                   fnObj["content"] = child;
+    //                   fnObj["_url"] = this._loadedModules[m]["_url"];
+    //               }
+    //           }
+    //         }
 
-        }
-      }
-      else if(fnObj && fnObj.module && !fnObj.name){
-          this._activeMod = fnObj.module.toUpperCase();
-          this.fnObj = undefined;
-      }
+    //     }
+    //   }
+    //   else if(fnObj && fnObj.module && !fnObj.name){
+    //       this._activeMod = fnObj.module.toUpperCase();
+    //       this.fnObj = undefined;
+    //   }
   }
 
   showAll(): void{
-      this.fnObj = undefined;
-      this.layoutService.setObj();
+      //this.fnObj = undefined;
+      //this.layoutService.setObj();
   }  
 
   ngOnInit() { 

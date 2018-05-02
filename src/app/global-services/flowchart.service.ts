@@ -14,7 +14,7 @@ import * as CircularJSON from 'circular-json';
 import * as ModuleSet from "../../assets/modules/AllModules";
 
 import {ConsoleService, EConsoleMessageType} from "./console.service";
-import {LayoutService} from "./layout.service";
+//import {LayoutService} from "./layout.service";
 
 import {MOBIUS} from './mobius.constants';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
@@ -48,7 +48,7 @@ export class FlowchartService {
   }
 
   constructor(private consoleService: ConsoleService, 
-              private layoutService: LayoutService, 
+              //private layoutService: LayoutService, 
               public dialog: MatDialog, private http: HttpClient) { 
       this.newFile();
       this.checkSavedNodes();
@@ -116,7 +116,7 @@ export class FlowchartService {
     }
     else{
       this.consoleService.addMessage("Error loading file from memory", EConsoleMessageType.Error);
-      this.layoutService.showConsole();
+     // // this.layoutService.showConsole();
       this.newFile();
     }
 
@@ -241,13 +241,13 @@ export class FlowchartService {
           _this.update();
 
           this.consoleService.addMessage("File loaded successfully");
-          this.layoutService.showConsole();
+          // this.layoutService.showConsole();
           
         }
         catch(err){
           this.newFile();
           this.consoleService.addMessage("Error loading file: " + err, EConsoleMessageType.Error);
-          this.layoutService.showConsole();
+          // this.layoutService.showConsole();
         }
       }
 
@@ -385,7 +385,7 @@ export class FlowchartService {
             message = "Node with this name already exists in the library. Either delete existing\
             node from the library or rename your node and try again.";
             this.consoleService.addMessage(message);
-            this.layoutService.showConsole();
+            // this.layoutService.showConsole();
             return;
           }
       }
@@ -398,7 +398,7 @@ export class FlowchartService {
         node.saved();
 
         this.consoleService.addMessage(message);
-        this.layoutService.showConsole();
+        // this.layoutService.showConsole();
         this.checkSavedNodes();
         this.update();
       }
@@ -406,7 +406,7 @@ export class FlowchartService {
         this.consoleService.addMessage("Oops. Something went wrong while saving this node.\
                                         Post the error message to the dev team on our Slack channel.", EConsoleMessageType.Error);
         this.consoleService.addMessage(ex, EConsoleMessageType.Error);
-        this.layoutService.showConsole();
+        // this.layoutService.showConsole();
       }
 
     }
@@ -696,7 +696,7 @@ export class FlowchartService {
           let errorMessage: string = "<div class='error'>" + ex + "</div>";
           this.consoleService.addMessage( errorMessage, EConsoleMessageType.Error );
 
-          this.layoutService.showConsole();
+          // this.layoutService.showConsole();
       }
 
       this.update();

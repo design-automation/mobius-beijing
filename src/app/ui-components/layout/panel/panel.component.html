@@ -1,28 +1,19 @@
 <div class="header">
-	<div class="title">{{heading}}{{_selectedNodeName}}</div>
-	<div class="data"></div>
+	<div class="title">
+			{{active_viewer}} 
+			<span *ngIf="_selectedNodeName">::</span> 
+			{{_selectedNodeName}}
+	</div>
+	
 	<div class="btn-group">
 		<div (click)="maximize()">
 			<span matTooltip="Expand">
 				<mat-icon [class.disabled]="panel_id == 'main'">aspect_ratio</mat-icon>
 			</span>
 		</div>
-		<!-- <div (click)="minimize()">
-			<span matTooltip="Minimize">
-				<mat-icon  [class.disabled]="true" >remove</mat-icon>
-			</span>
-		</div>
-		<div (click)="restore()">
-			<span matTooltip="Restore">
-				<mat-icon  [class.disabled]="true">open_in_new</mat-icon>
-			</span>
-		</div> -->
 	</div>
 </div>
 
 
-<app-viewer-container *ngIf='heading === EV.Viewer'></app-viewer-container>        
-<app-flowchart-viewer *ngIf='heading === EV.Flowchart'></app-flowchart-viewer>
-<app-editor  *ngIf='heading === EV.Editor'></app-editor>
-<app-parameter-viewer  *ngIf='heading === EV.Parameter'></app-parameter-viewer>
+<ng-container #container></ng-container>
 

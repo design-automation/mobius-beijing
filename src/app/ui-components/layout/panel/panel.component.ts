@@ -1,10 +1,13 @@
-import { Component, Input, OnInit, Injector } from '@angular/core';
+import { Component, Input, OnInit, Injector,
+         ViewChild, ViewContainerRef, 
+         ComponentFactoryResolver} from '@angular/core';
+         
 import { LayoutService } from '../../../global-services/layout.service';
 import { Subscription } from 'rxjs/Subscription';
-import {EViewer} from '../../viewers/EViewer';
+import { EViewer } from '../../viewers/EViewer';
 
+import { Viewer } from '../../../base-classes/viz/Viewer';
 
-import {Viewer} from '../../../base-classes/viz/Viewer';
 
 @Component({
   selector: 'app-panel',
@@ -13,52 +16,59 @@ import {Viewer} from '../../../base-classes/viz/Viewer';
 })
 export class PanelComponent extends Viewer implements OnInit{
 
-  layout;
-  _lsubscription: Subscription;
-  heading: string;
-
-  _selectedNodeName: string;
-
-  EV = EViewer;
-
+  @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
   @Input() panel_id: string;
 
-  constructor(injector: Injector, private layoutService: LayoutService) { 
+  _lsubscription: Subscription;
+  _selectedNodeName: string;
+  active_viewer: string;
 
-    super(injector);
 
-	  this._lsubscription = this.layoutService.getMessage().subscribe(message => { 
-			this.refresh();
-	  });
-
-	  this.refresh();
-
+  constructor(injector: Injector, 
+              private layoutService: LayoutService, 
+              private r: ComponentFactoryResolver) { 
+    super(injector, "Panel Component");
+    this._lsubscription = this.layoutService.getMessage().subscribe(message => { 
+        this.updateView();
+    });
   }
 
-  update(): void{
-    this._selectedNodeName = ":" + " " + this.flowchartService.getSelectedNode().getName();
+  ngOnInit(){
+    this.updateView();
+  }
+
+  ngOnDestroy(){
+    this._lsubscription.unsubscribe();
   }
 
   reset(): void{
     this._selectedNodeName = "";
   }
 
-  refresh(){ 
-  	this.layout = this.layoutService.getAssets(); 
-  	this.refreshContent()
+  update(): void{
+    this._selectedNodeName = this.flowchartService.getSelectedNode().getName();
   }
 
-  refreshContent(){
-  	if(this.panel_id == "main"){
-  		this.heading = this.layout.content.main; 
-  	}
-  	else{
-  		this.heading = this.layout.content.side[this.panel_id];
-  	}
-  }
+  updateView(){ 
 
-  ngOnInit(){
-  	this.refreshContent();
+  	let layout = this.layoutService.getView(this.panel_id); 
+    let pos = this.container.indexOf(layout.view);
+
+    if(this.active_viewer === layout.name){
+
+    }
+    else{
+
+      this.active_viewer = layout.name;
+      
+      if(pos === -1){
+        this.container.insert(layout.view);
+      }
+       
+      this.container.move(layout.view, 0)
+
+    }
+
   }
 
   // shifts component to main panel

@@ -2,28 +2,28 @@
 	
 	<mat-button-toggle-group class="viewer-toggle" 
 		*ngIf='!viewer_mode'
-		[(ngModel)]="group.value" 
-		(change)="changed()">
+		[(ngModel)]="active_viewer" 
+		(change)="updateView()">
 		<div class= "btn-grp1">
-			<mat-button-toggle value="0" class="viewer-toggle-btn" matTooltip="3D Viewer">
+			<mat-button-toggle value="three-viewer" class="viewer-toggle-btn" matTooltip="3D Viewer">
 			  <mat-icon>3d_rotation</mat-icon>
 			</mat-button-toggle>
-			<mat-button-toggle value="4" class="viewer-toggle-btn" matTooltip="Cesium Viewer">
+			<mat-button-toggle value="cesium-viewer" class="viewer-toggle-btn" matTooltip="Cesium Viewer">
 			  <mat-icon>public</mat-icon>
 			</mat-button-toggle>
-			<mat-button-toggle value="2" class="viewer-toggle-btn" matTooltip="Text Viewer">
+			<mat-button-toggle value="text-viewer" class="viewer-toggle-btn" matTooltip="Text Viewer">
 			  <mat-icon>description</mat-icon>
 			</mat-button-toggle>
 			<!-- <mat-button-toggle value="3" disabled class="viewer-toggle-btn" matTooltip="??">
 			  <mat-icon>text_format</mat-icon>
 			</mat-button-toggle> -->
-			<mat-button-toggle value="3" class="viewer-toggle-btn" matTooltip="Console">
+			<mat-button-toggle value="console-viewer" class="viewer-toggle-btn" matTooltip="Console">
 			  <mat-icon>info_outline</mat-icon>
 			</mat-button-toggle>
-			<mat-button-toggle value="400" class="viewer-toggle-btn" matTooltip="Function Help" >
+			<mat-button-toggle value="help-viewer" class="viewer-toggle-btn" matTooltip="Function Help" >
 			  <mat-icon>help_outline</mat-icon>
 			</mat-button-toggle>
-			<mat-button-toggle value="500" class="viewer-toggle-btn" matTooltip="About Mobius" >
+			<mat-button-toggle value="info-viewer" class="viewer-toggle-btn" matTooltip="About Mobius" >
 			  <mat-icon>info</mat-icon>
 			</mat-button-toggle>
 		</div>
@@ -32,6 +32,7 @@
 			  <mat-icon>code</mat-icon>
 			</mat-button-toggle>
 		</div>
+		
 	</mat-button-toggle-group>
 
 	<!-- <button class="viewer-toggle-btn" 
@@ -40,11 +41,13 @@
 		<mat-icon>lock</mat-icon>
 	</button>
  -->
-	<app-geometry-viewer *ngIf="group.value == 0"></app-geometry-viewer>
+	<!-- <app-geometry-viewer *ngIf="group.value == 0"></app-geometry-viewer>
 	<app-cesium-viewer *ngIf="group.value == 4"></app-cesium-viewer>
 	<app-text-viewer *ngIf="group.value == 2"></app-text-viewer>
 	<app-code-viewer *ngIf="group.value == 1"></app-code-viewer>
 	<app-console *ngIf="group.value == 3 && !viewer_mode"></app-console>
 	<app-help-viewer *ngIf="group.value == 400 && !viewer_mode"></app-help-viewer>
-	<app-info-viewer *ngIf="group.value == 500 && !viewer_mode"></app-info-viewer>
+	<app-info-viewer *ngIf="group.value == 500 && !viewer_mode"></app-info-viewer> -->
+
+	<ng-container #vc></ng-container>
 </div>

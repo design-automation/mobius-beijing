@@ -30,6 +30,8 @@ export abstract class Viewer implements OnInit, OnDestroy, IViewer{
 			this._message = message; 
 			this.notify(message.text);
 		});
+
+		console.log(this._name + " was created");
   	}
 
   	ngDoCheck(){
@@ -56,11 +58,14 @@ export abstract class Viewer implements OnInit, OnDestroy, IViewer{
   		return this.flowchartService;
   	}
 
-	ngOnInit() { this.notify(); }
+	ngOnInit() { 
+		this.notify(); 
+	}
 
 	ngOnDestroy() {
 	    // unsubscribe to ensure no memory leaks
 	    this._subscription.unsubscribe();
+	    console.log(this._name + " was destroyed");
 	}
 
 	reset(){

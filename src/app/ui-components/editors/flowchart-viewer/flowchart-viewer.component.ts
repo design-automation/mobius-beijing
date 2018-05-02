@@ -6,7 +6,6 @@ import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { FlowchartService } from '../../../global-services/flowchart.service';
-import { LayoutService } from '../../../global-services/layout.service';
 import { ConsoleService } from '../../../global-services/console.service';
 
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -42,7 +41,6 @@ export class FlowchartViewerComponent extends Viewer{
   showDialog: {status: boolean, position: number[]} = {status: false, position: [0,0]};
 
   constructor(injector: Injector, 
-    private layoutService: LayoutService, 
     private consoleService: ConsoleService, 
     public dialog: MatDialog){  
     super(injector, "FlowchartViewer");  
@@ -60,7 +58,6 @@ export class FlowchartViewerComponent extends Viewer{
   }
 
   ngOnDestroy(){
-    this.layoutService = null;
     this.consoleService = null;
     this._nodes = null; 
     this._edges = null;
@@ -81,15 +78,13 @@ export class FlowchartViewerComponent extends Viewer{
 
   }
 
-
-
   editNode(): void{
-    //this.layoutService.toggleEditor();
+    ////this.layoutService.toggleEditor();
   }
 
   deleteNode(node_index: number): void{
     this._selectedNode = undefined; 
-    //this.layoutService.hideEditor();
+    ////this.layoutService.hideEditor();
     this.flowchartService.deleteNode(node_index);
   }
 
@@ -634,7 +629,6 @@ export class FlowchartViewerComponent extends Viewer{
     for(let i=0; i < this._nodes.length; i++){
         if(this._nodes[i].getName() == name){
           this.consoleService.addMessage("Node with this name already exists in the flowchart!");
-          this.layoutService.showConsole();
           flag = true;
           break;
         }
@@ -688,7 +682,7 @@ export class FlowchartViewerComponent extends Viewer{
 
   save(value: boolean): void{
     this.flowchartService.saveFile(value);
-    this.layoutService.showConsole();
+    //this.layoutService.showConsole();
   }
 
   newfile(): void{
