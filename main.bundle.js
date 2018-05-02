@@ -192,10 +192,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_24__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
             __WEBPACK_IMPORTED_MODULE_25__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
             __WEBPACK_IMPORTED_MODULE_26__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
             __WEBPACK_IMPORTED_MODULE_28__ui_components_viewers_node_library_node_library_component__["a" /* NodeLibraryComponent */],
             __WEBPACK_IMPORTED_MODULE_29__ui_components_layout_panel_panel_component__["a" /* PanelComponent */],
-            __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__["a" /* ConsoleComponent */],
             __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_32__ui_components_help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
             __WEBPACK_IMPORTED_MODULE_31__ui_components_help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */],
@@ -209,13 +207,28 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_landing_landing_component__["a" /* LandingComponent */],
             __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */],
             __WEBPACK_IMPORTED_MODULE_42__pipes_short_name_pipe__["a" /* ShortNamePipe */],
-            __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */]
+            __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__["a" /* ConsoleComponent */]
         ],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_24__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
             __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_36__ui_components_dialogs_file_load_dialog_component__["a" /* FileLoadDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */]
+            __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
+            //
+            __WEBPACK_IMPORTED_MODULE_26__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_flowchart_viewer_flowchart_viewer_component__["a" /* FlowchartViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
+            //
+            __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_geometry_viewer_geometry_viewer_component__["a" /* GeometryViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_cesium_viewer_cesium_viewer_component__["a" /* CesiumViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__ui_components_viewers_code_viewer_code_viewer_component__["a" /* CodeViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__["a" /* ConsoleComponent */],
+            __WEBPACK_IMPORTED_MODULE_32__ui_components_help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__ui_components_help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -2641,6 +2654,7 @@ class Viewer {
             this._message = message;
             this.notify(message.text);
         });
+        console.log(this._name + " was created");
     }
     ngDoCheck() {
     }
@@ -2662,10 +2676,13 @@ class Viewer {
     getService() {
         return this.flowchartService;
     }
-    ngOnInit() { this.notify(); }
+    ngOnInit() {
+        this.notify();
+    }
     ngOnDestroy() {
         // unsubscribe to ensure no memory leaks
         this._subscription.unsubscribe();
+        console.log(this._name + " was destroyed");
     }
     reset() {
         console.log(this._name + " has not implemented the reset function!");
@@ -2823,9 +2840,8 @@ ConsoleService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_circular_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_circular_json__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__ = __webpack_require__("./src/assets/modules/AllModules.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__console_service__ = __webpack_require__("./src/app/global-services/console.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mobius_constants__ = __webpack_require__("./src/app/global-services/mobius.constants.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm2015/material.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mobius_constants__ = __webpack_require__("./src/app/global-services/mobius.constants.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm2015/material.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2845,13 +2861,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
+//import {LayoutService} from "./layout.service";
 
 
 let FlowchartService = class FlowchartService {
-    constructor(consoleService, layoutService, dialog, http) {
+    constructor(consoleService, 
+        //private layoutService: LayoutService, 
+        dialog, http) {
         this.consoleService = consoleService;
-        this.layoutService = layoutService;
         this.dialog = dialog;
         this.http = http;
         /*private _ffactory = new FlowchartFactory();
@@ -2887,7 +2904,7 @@ let FlowchartService = class FlowchartService {
         }
         else {
             let myStorage = window.localStorage;
-            let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
+            let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
             let storageString = myStorage.getItem(property);
             if (storageString) {
                 let fc = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](storageString)["flowchart"]["_lastSaved"];
@@ -2901,7 +2918,7 @@ let FlowchartService = class FlowchartService {
     }
     openFileLoadDialog() {
         let myStorage = window.localStorage;
-        let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
+        let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
         let storageString = myStorage.getItem(property);
         let message;
         if (storageString) {
@@ -2919,7 +2936,7 @@ let FlowchartService = class FlowchartService {
         }
         else {
             this.consoleService.addMessage("Error loading file from memory", __WEBPACK_IMPORTED_MODULE_9__console_service__["b" /* EConsoleMessageType */].Error);
-            this.layoutService.showConsole();
+            // // this.layoutService.showConsole();
             this.newFile();
         }
         //let dialogRef = this.dialog.open(FileLoadDialogComponent, {
@@ -2941,7 +2958,7 @@ let FlowchartService = class FlowchartService {
     checkSavedNodes() {
         this._savedNodes = [];
         let myStorage = window.localStorage;
-        let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
+        let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
         let storageString = myStorage.getItem(property);
         let nodesStorage = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](storageString == null ? __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"]({ n: [] }) : storageString);
         let nodeData = nodesStorage.n;
@@ -3008,12 +3025,12 @@ let FlowchartService = class FlowchartService {
                 }
                 _this.update();
                 this.consoleService.addMessage("File loaded successfully");
-                this.layoutService.showConsole();
+                // this.layoutService.showConsole();
             }
             catch (err) {
                 this.newFile();
                 this.consoleService.addMessage("Error loading file: " + err, __WEBPACK_IMPORTED_MODULE_9__console_service__["b" /* EConsoleMessageType */].Error);
-                this.layoutService.showConsole();
+                // this.layoutService.showConsole();
             }
         }
     }
@@ -3108,7 +3125,7 @@ let FlowchartService = class FlowchartService {
             let message;
             let nav = navigator;
             let myStorage = window.localStorage;
-            let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
+            let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
             let storageString = myStorage.getItem(property);
             // initialize node storage by reading from localStorage or reading an empty array
             let nodesStorage = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](storageString == null ? __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"]({ n: [] }) : storageString);
@@ -3121,7 +3138,7 @@ let FlowchartService = class FlowchartService {
                     message = "Node with this name already exists in the library. Either delete existing\
             node from the library or rename your node and try again.";
                     this.consoleService.addMessage(message);
-                    this.layoutService.showConsole();
+                    // this.layoutService.showConsole();
                     return;
                 }
             }
@@ -3132,7 +3149,7 @@ let FlowchartService = class FlowchartService {
                 message = "Bravo! Node saved. Now you have " + (nodes.length) + " node(s) in the library!";
                 node.saved();
                 this.consoleService.addMessage(message);
-                this.layoutService.showConsole();
+                // this.layoutService.showConsole();
                 this.checkSavedNodes();
                 this.update();
             }
@@ -3140,7 +3157,7 @@ let FlowchartService = class FlowchartService {
                 this.consoleService.addMessage("Oops. Something went wrong while saving this node.\
                                         Post the error message to the dev team on our Slack channel.", __WEBPACK_IMPORTED_MODULE_9__console_service__["b" /* EConsoleMessageType */].Error);
                 this.consoleService.addMessage(ex, __WEBPACK_IMPORTED_MODULE_9__console_service__["b" /* EConsoleMessageType */].Error);
-                this.layoutService.showConsole();
+                // this.layoutService.showConsole();
             }
         }
     }
@@ -3358,7 +3375,7 @@ let FlowchartService = class FlowchartService {
             printFunction = null;
             let errorMessage = "<div class='error'>" + ex + "</div>";
             this.consoleService.addMessage(errorMessage, __WEBPACK_IMPORTED_MODULE_9__console_service__["b" /* EConsoleMessageType */].Error);
-            this.layoutService.showConsole();
+            // this.layoutService.showConsole();
         }
         this.update();
     }
@@ -3380,7 +3397,7 @@ let FlowchartService = class FlowchartService {
             file["flowchart"] = this._flowchart;
             fileString = __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"](file);
             let myStorage = window.localStorage;
-            let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
+            let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
             myStorage.setItem(property, fileString);
             this.consoleService.addMessage("Autosaved flowchart.");
         }
@@ -3430,8 +3447,7 @@ let FlowchartService = class FlowchartService {
 FlowchartService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_9__console_service__["a" /* ConsoleService */],
-        __WEBPACK_IMPORTED_MODULE_10__layout_service__["a" /* LayoutService */],
-        __WEBPACK_IMPORTED_MODULE_12__angular_material__["f" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */]])
+        __WEBPACK_IMPORTED_MODULE_11__angular_material__["f" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */]])
 ], FlowchartService);
 
 
@@ -3446,6 +3462,10 @@ FlowchartService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm2015/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__ = __webpack_require__("./src/app/ui-components/viewers/EViewer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ui_components_viewers_viewer_container_viewer_container_component__ = __webpack_require__("./src/app/ui-components/viewers/viewer-container/viewer-container.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ui_components_editors_flowchart_viewer_flowchart_viewer_component__ = __webpack_require__("./src/app/ui-components/editors/flowchart-viewer/flowchart-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ui_components_editors_editor_editor_component__ = __webpack_require__("./src/app/ui-components/editors/editor/editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ui_components_viewers_parameter_viewer_parameter_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3457,10 +3477,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 //import {OutputPortTypes} from '../../../base-classes/Port/PortModule';
 
-let LayoutService = class LayoutService {
-    constructor() {
+
+
+
+
+let LayoutService = LayoutService_1 = class LayoutService {
+    constructor(injector, r) {
+        this.r = r;
         this.layout = {
             useTransition: true,
             mode: 'Editor',
@@ -3479,13 +3505,91 @@ let LayoutService = class LayoutService {
                     middle: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Editor,
                     bottom: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Parameter
                 }
-            }
+            },
+            views: []
         };
         this.viewContainerIndex = 500;
         this._url = "index";
         // handing subscriptions
         this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        function createView(component_name) {
+            let component = LayoutService_1.ComponentMap[component_name];
+            let factory = r.resolveComponentFactory(component);
+            let componentRef = factory.create(injector);
+            let view = componentRef.hostView;
+            return view;
+        }
+        this.layout.views[__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Editor] = createView(__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Editor);
+        this.layout.views[__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Viewer] = createView(__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Viewer);
+        this.layout.views[__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Flowchart] = createView(__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Flowchart);
+        this.layout.views[__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Parameter] = createView(__WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Parameter);
     }
+    sendMessage(message) {
+        this.subject.next({ text: message });
+    }
+    clearMessage() {
+        this.subject.next();
+    }
+    getMessage() {
+        return this.subject.asObservable();
+    }
+    // general 
+    getView(panel_id) {
+        let viewer_name = panel_id == "main" ? this.layout.content.main :
+            this.layout.content.side[panel_id];
+        return { name: viewer_name, view: this.layout.views[viewer_name] };
+    }
+    getAssets() {
+        return this.layout;
+    }
+    //panels related
+    maximize(panel_id) {
+        if (panel_id == "main") {
+            return;
+        }
+        // get the panel_id passed and the corresponding component
+        // interchange values
+        let max_item = this.layout.content.side[panel_id];
+        if (max_item) {
+            let current_main = this.layout.content.main;
+            this.layout.content.main = max_item;
+            this.layout.content.side[panel_id] = current_main;
+        }
+        this.sendMessage("Layout Changed");
+    }
+    minimize(panel_id) {
+        alert("To be implemented");
+    }
+    restore(panel_id) {
+        alert("To be implemented");
+    }
+    // functions
+    showHelp(fn) {
+        this._url = "modules/" + "_" + fn.module.toLowerCase() + "_";
+        this._fnObj = fn;
+        this.sendMessage("Module: " + fn.module);
+    }
+    showConsole() {
+        this.sendMessage("console");
+    }
+    getViewContainer() {
+        return this.viewContainerIndex;
+    }
+    //
+    setViewContainer(index) {
+        this.viewContainerIndex = index;
+    }
+    // help
+    getUrl() {
+        return this._url;
+    }
+    getObj() {
+        return this._fnObj;
+    }
+    setObj() {
+        this._url = undefined;
+    }
+    // modes - mobius editor or mobius viewer
     toggleMode() {
         if (this.layout.mode == 'Editor') {
             this.layout.mode = 'Viewer';
@@ -3512,68 +3616,19 @@ let LayoutService = class LayoutService {
         this.layout.size.middle = 0;
         this.layout.size.bottom = 33;
     }
-    sendMessage(message) {
-        this.subject.next({ text: message });
-    }
-    clearMessage() {
-        this.subject.next();
-    }
-    getMessage() {
-        return this.subject.asObservable();
-    }
-    showHelp(fn) {
-        this._url = "modules/" + "_" + fn.module.toLowerCase() + "_";
-        this._fnObj = fn;
-        this.sendMessage("Module: " + fn.module);
-    }
-    showConsole() {
-        this.sendMessage("console");
-    }
-    getViewContainer() {
-        return this.viewContainerIndex;
-    }
-    setViewContainer(index) {
-        this.viewContainerIndex = index;
-    }
-    getUrl() {
-        return this._url;
-    }
-    getObj() {
-        return this._fnObj;
-    }
-    setObj() {
-        this._url = undefined;
-    }
-    // other functionality
-    getAssets() {
-        return this.layout;
-    }
-    maximize(panel_id) {
-        if (panel_id == "main") {
-            return;
-        }
-        // get the panel_id passed and the corresponding component
-        // interchange values
-        let max_item = this.layout.content.side[panel_id];
-        if (max_item) {
-            let current_main = this.layout.content.main;
-            this.layout.content.main = max_item;
-            this.layout.content.side[panel_id] = current_main;
-        }
-        this.sendMessage("Layout Changed");
-    }
-    minimize(panel_id) {
-        alert("To be implemented");
-    }
-    restore(panel_id) {
-        alert("To be implemented");
-    }
 };
-LayoutService = __decorate([
+LayoutService.ComponentMap = {
+    "Output": __WEBPACK_IMPORTED_MODULE_3__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
+    "Flowchart": __WEBPACK_IMPORTED_MODULE_4__ui_components_editors_flowchart_viewer_flowchart_viewer_component__["a" /* FlowchartViewerComponent */],
+    "Procedure": __WEBPACK_IMPORTED_MODULE_5__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
+    "Parameters": __WEBPACK_IMPORTED_MODULE_6__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
+};
+LayoutService = LayoutService_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["p" /* ComponentFactoryResolver */]])
 ], LayoutService);
 
+var LayoutService_1;
 
 
 /***/ }),
@@ -9490,10 +9545,9 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_classes_port_PortModule__ = __webpack_require__("./src/app/base-classes/port/PortModule.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__global_services_console_service__ = __webpack_require__("./src/app/global-services/console.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm2015/material.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__publish_settings_publish_settings_component__ = __webpack_require__("./src/app/ui-components/editors/publish-settings/publish-settings.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__global_services_console_service__ = __webpack_require__("./src/app/global-services/console.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm2015/material.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__publish_settings_publish_settings_component__ = __webpack_require__("./src/app/ui-components/editors/publish-settings/publish-settings.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9509,11 +9563,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 let FlowchartViewerComponent = class FlowchartViewerComponent extends __WEBPACK_IMPORTED_MODULE_2__base_classes_viz_Viewer__["a" /* Viewer */] {
-    constructor(injector, layoutService, consoleService, dialog) {
+    constructor(injector, consoleService, dialog) {
         super(injector, "FlowchartViewer");
-        this.layoutService = layoutService;
         this.consoleService = consoleService;
         this.dialog = dialog;
         this.pan_mode = false;
@@ -9563,7 +9615,6 @@ let FlowchartViewerComponent = class FlowchartViewerComponent extends __WEBPACK_
         }, false);*/
     }
     ngOnDestroy() {
-        this.layoutService = null;
         this.consoleService = null;
         this._nodes = null;
         this._edges = null;
@@ -9581,11 +9632,11 @@ let FlowchartViewerComponent = class FlowchartViewerComponent extends __WEBPACK_
         }
     }
     editNode() {
-        //this.layoutService.toggleEditor();
+        ////this.layoutService.toggleEditor();
     }
     deleteNode(node_index) {
         this._selectedNode = undefined;
-        //this.layoutService.hideEditor();
+        ////this.layoutService.hideEditor();
         this.flowchartService.deleteNode(node_index);
     }
     toggleNode(node, node_index) {
@@ -9970,7 +10021,6 @@ let FlowchartViewerComponent = class FlowchartViewerComponent extends __WEBPACK_
         for (let i = 0; i < this._nodes.length; i++) {
             if (this._nodes[i].getName() == name) {
                 this.consoleService.addMessage("Node with this name already exists in the flowchart!");
-                this.layoutService.showConsole();
                 flag = true;
                 break;
             }
@@ -10011,13 +10061,13 @@ let FlowchartViewerComponent = class FlowchartViewerComponent extends __WEBPACK_
     }
     save(value) {
         this.flowchartService.saveFile(value);
-        this.layoutService.showConsole();
+        //this.layoutService.showConsole();
     }
     newfile() {
         this.flowchartService.newFile();
     }
     publishSettings() {
-        let dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_6__publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */], {
+        let dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_5__publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */], {
             height: '800px',
             width: '500px',
             data: {}
@@ -10038,9 +10088,8 @@ FlowchartViewerComponent = __decorate([
         styles: [__webpack_require__("./src/app/ui-components/editors/flowchart-viewer/flowchart-viewer.component.scss")]
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */],
-        __WEBPACK_IMPORTED_MODULE_3__global_services_layout_service__["a" /* LayoutService */],
-        __WEBPACK_IMPORTED_MODULE_4__global_services_console_service__["a" /* ConsoleService */],
-        __WEBPACK_IMPORTED_MODULE_5__angular_material__["f" /* MatDialog */]])
+        __WEBPACK_IMPORTED_MODULE_3__global_services_console_service__["a" /* ConsoleService */],
+        __WEBPACK_IMPORTED_MODULE_4__angular_material__["f" /* MatDialog */]])
 ], FlowchartViewerComponent);
 
 
@@ -10916,9 +10965,8 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HelpViewerComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_services_flowchart_service__ = __webpack_require__("./src/app/global-services/flowchart.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm2015/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global_services_flowchart_service__ = __webpack_require__("./src/app/global-services/flowchart.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm2015/platform-browser.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10931,20 +10979,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 let HelpViewerComponent = class HelpViewerComponent {
     //modules/_group_.html
-    constructor(layoutService, sanitizer, flowchartService) {
-        this.layoutService = layoutService;
+    constructor(sanitizer, flowchartService) {
         this.sanitizer = sanitizer;
         this.flowchartService = flowchartService;
         this.helpAvailable = false;
         this.sanitizer = sanitizer;
-        this._subscription = this.layoutService.getMessage().subscribe(message => {
-            if (message.text.startsWith("Module: ")) {
-                this.notify();
-            }
-        });
+        // this._subscription = this.layoutService.getMessage().subscribe(message => { 
+        //       if(message.text.startsWith("Module: ")){
+        // 	    this.notify();
+        //       }
+        // });
         try {
             let mods = this.flowchartService.getModules().map(function (m) {
                 return m["_name"].toLowerCase();
@@ -10967,33 +11013,33 @@ let HelpViewerComponent = class HelpViewerComponent {
         }
     }
     notify() {
-        let url_segment = this.layoutService.getUrl();
-        let url = 'https://phtj.github.io/gs-modelling/docs/' + url_segment;
-        this._url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-        let fnObj = this.layoutService.getObj();
-        if (fnObj && fnObj.name) {
-            this.fnObj = fnObj;
-            for (let m = 0; m < this._loadedModules.length; m++) {
-                if (this._loadedModules[m]._name.toLowerCase() == fnObj.module.toLowerCase()) {
-                    let mo = this._loadedModules[m]._helpObj[0];
-                    for (let f = 0; f < mo.children.length; f++) {
-                        let child = mo.children[f];
-                        if (fnObj.name.toLowerCase() == child.name.toLowerCase()) {
-                            fnObj["content"] = child;
-                            fnObj["_url"] = this._loadedModules[m]["_url"];
-                        }
-                    }
-                }
-            }
-        }
-        else if (fnObj && fnObj.module && !fnObj.name) {
-            this._activeMod = fnObj.module.toUpperCase();
-            this.fnObj = undefined;
-        }
+        // let url_segment: string = this.layoutService.getUrl();
+        //   let url: string = 'https://phtj.github.io/gs-modelling/docs/' + url_segment;
+        //   this._url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        //   let fnObj = this.layoutService.getObj();
+        //   if(fnObj && fnObj.name){
+        //     this.fnObj = fnObj;
+        //     for(let m=0; m < this._loadedModules.length; m++){
+        //         if(this._loadedModules[m]._name.toLowerCase() == fnObj.module.toLowerCase()){
+        //           let mo = this._loadedModules[m]._helpObj[0];
+        //           for(let f=0; f < mo.children.length; f++){
+        //               let child = mo.children[f];
+        //               if(fnObj.name.toLowerCase() == child.name.toLowerCase()){
+        //                   fnObj["content"] = child;
+        //                   fnObj["_url"] = this._loadedModules[m]["_url"];
+        //               }
+        //           }
+        //         }
+        //     }
+        //   }
+        //   else if(fnObj && fnObj.module && !fnObj.name){
+        //       this._activeMod = fnObj.module.toUpperCase();
+        //       this.fnObj = undefined;
+        //   }
     }
     showAll() {
-        this.fnObj = undefined;
-        this.layoutService.setObj();
+        //this.fnObj = undefined;
+        //this.layoutService.setObj();
     }
     ngOnInit() {
         this.notify();
@@ -11006,7 +11052,7 @@ HelpViewerComponent = __decorate([
         template: __webpack_require__("./src/app/ui-components/help/help-viewer/help-viewer.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/help/help-viewer/help-viewer.component.scss")]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__["a" /* LayoutService */], __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_2__global_services_flowchart_service__["a" /* FlowchartService */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_1__global_services_flowchart_service__["a" /* FlowchartService */]])
 ], HelpViewerComponent);
 
 
@@ -11170,7 +11216,7 @@ InfoViewerComponent = __decorate([
 /***/ "./src/app/ui-components/layout/panel/panel.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"header\">\r\n\t<div class=\"title\">{{heading}}{{_selectedNodeName}}</div>\r\n\t<div class=\"data\"></div>\r\n\t<div class=\"btn-group\">\r\n\t\t<div (click)=\"maximize()\">\r\n\t\t\t<span matTooltip=\"Expand\">\r\n\t\t\t\t<mat-icon [class.disabled]=\"panel_id == 'main'\">aspect_ratio</mat-icon>\r\n\t\t\t</span>\r\n\t\t</div>\r\n\t\t<!-- <div (click)=\"minimize()\">\r\n\t\t\t<span matTooltip=\"Minimize\">\r\n\t\t\t\t<mat-icon  [class.disabled]=\"true\" >remove</mat-icon>\r\n\t\t\t</span>\r\n\t\t</div>\r\n\t\t<div (click)=\"restore()\">\r\n\t\t\t<span matTooltip=\"Restore\">\r\n\t\t\t\t<mat-icon  [class.disabled]=\"true\">open_in_new</mat-icon>\r\n\t\t\t</span>\r\n\t\t</div> -->\r\n\t</div>\r\n</div>\r\n\r\n\r\n<app-viewer-container *ngIf='heading === EV.Viewer'></app-viewer-container>        \r\n<app-flowchart-viewer *ngIf='heading === EV.Flowchart'></app-flowchart-viewer>\r\n<app-editor  *ngIf='heading === EV.Editor'></app-editor>\r\n<app-parameter-viewer  *ngIf='heading === EV.Parameter'></app-parameter-viewer>\r\n\r\n"
+module.exports = "<div class=\"header\">\r\n\t<div class=\"title\">\r\n\t\t\t{{active_viewer}} \r\n\t\t\t<span *ngIf=\"_selectedNodeName\">::</span> \r\n\t\t\t{{_selectedNodeName}}\r\n\t</div>\r\n\t\r\n\t<div class=\"btn-group\">\r\n\t\t<div (click)=\"maximize()\">\r\n\t\t\t<span matTooltip=\"Expand\">\r\n\t\t\t\t<mat-icon [class.disabled]=\"panel_id == 'main'\">aspect_ratio</mat-icon>\r\n\t\t\t</span>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n\r\n\r\n<ng-container #container></ng-container>\r\n\r\n"
 
 /***/ }),
 
@@ -11188,8 +11234,7 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PanelComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__viewers_EViewer__ = __webpack_require__("./src/app/ui-components/viewers/EViewer.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11202,37 +11247,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
-let PanelComponent = class PanelComponent extends __WEBPACK_IMPORTED_MODULE_3__base_classes_viz_Viewer__["a" /* Viewer */] {
-    constructor(injector, layoutService) {
-        super(injector);
+let PanelComponent = class PanelComponent extends __WEBPACK_IMPORTED_MODULE_2__base_classes_viz_Viewer__["a" /* Viewer */] {
+    constructor(injector, layoutService, r) {
+        super(injector, "Panel Component");
         this.layoutService = layoutService;
-        this.EV = __WEBPACK_IMPORTED_MODULE_2__viewers_EViewer__["a" /* EViewer */];
+        this.r = r;
         this._lsubscription = this.layoutService.getMessage().subscribe(message => {
-            this.refresh();
+            this.updateView();
         });
-        this.refresh();
     }
-    update() {
-        this._selectedNodeName = ":" + " " + this.flowchartService.getSelectedNode().getName();
+    ngOnInit() {
+        this.updateView();
+    }
+    ngOnDestroy() {
+        this._lsubscription.unsubscribe();
     }
     reset() {
         this._selectedNodeName = "";
     }
-    refresh() {
-        this.layout = this.layoutService.getAssets();
-        this.refreshContent();
+    update() {
+        this._selectedNodeName = this.flowchartService.getSelectedNode().getName();
     }
-    refreshContent() {
-        if (this.panel_id == "main") {
-            this.heading = this.layout.content.main;
+    updateView() {
+        let layout = this.layoutService.getView(this.panel_id);
+        let pos = this.container.indexOf(layout.view);
+        if (this.active_viewer === layout.name) {
         }
         else {
-            this.heading = this.layout.content.side[this.panel_id];
+            this.active_viewer = layout.name;
+            if (pos === -1) {
+                this.container.insert(layout.view);
+            }
+            this.container.move(layout.view, 0);
         }
-    }
-    ngOnInit() {
-        this.refreshContent();
     }
     // shifts component to main panel
     maximize() {
@@ -11248,6 +11295,10 @@ let PanelComponent = class PanelComponent extends __WEBPACK_IMPORTED_MODULE_3__b
     }
 };
 __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_10" /* ViewChild */])('container', { read: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* ViewContainerRef */] }),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* ViewContainerRef */])
+], PanelComponent.prototype, "container", void 0);
+__decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])(),
     __metadata("design:type", String)
 ], PanelComponent.prototype, "panel_id", void 0);
@@ -11257,7 +11308,9 @@ PanelComponent = __decorate([
         template: __webpack_require__("./src/app/ui-components/layout/panel/panel.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/layout/panel/panel.component.scss")]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__["a" /* LayoutService */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */],
+        __WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__["a" /* LayoutService */],
+        __WEBPACK_IMPORTED_MODULE_0__angular_core__["p" /* ComponentFactoryResolver */]])
 ], PanelComponent);
 
 
@@ -11267,7 +11320,7 @@ PanelComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-editor/mobius-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n\r\n    <!-- <div \r\n        style=\"position: absolute; bottom: 50px; left: 50px;z-index: 200;\"\r\n        (click)=\"toggle()\">\r\n        Mode: {{layout.mode}}\r\n    </div> -->\r\n\r\n    <div class=\"wrapper\">\r\n\r\n      <split  direction=\"horizontal\" \r\n              gutterColor=\"#8AA8C0\"\r\n              [gutterSize]=\"layout.gutter\" \r\n              [useTransition]=\"layout.useTransition\">\r\n\r\n            <!-- main pane -->\r\n            <split-area \r\n              [size]=\"layout.size.main\" order=\"1\">\r\n              <app-panel panel_id=\"main\"></app-panel>\r\n            </split-area>\r\n\r\n            <!-- secondary split pane -->\r\n            <split-area \r\n              [size]=\"layout.size.side\"  order=\"2\">\r\n\r\n                <split  direction=\"vertical\"\r\n                        gutterColor=\"#8AA8C0\"\r\n                        [gutterSize]=\"layout.gutter\" \r\n                        [useTransition]=\"layout.useTransition\">\r\n\r\n                    <split-area [size]=\"layout.size.top\" order=\"1\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"top\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <split-area [size]=\"layout.size.middle\" order=\"2\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"middle\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <!-- fixed -->\r\n                    <split-area [size]=\"layout.size.bottom\" order=\"3\">\r\n                      <app-panel panel_id=\"bottom\"></app-panel>\r\n                    </split-area>\r\n\r\n                </split>\r\n\r\n            </split-area>\r\n            \r\n      </split>\r\n\r\n    </div>\r\n\r\n  </div>\r\n\r\n</div>\r\n"
+module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n\r\n    <!-- <div \r\n        style=\"position: absolute; bottom: 50px; left: 50px;z-index: 200;\"\r\n        (click)=\"toggle()\">\r\n        Mode: {{layout.mode}}\r\n    </div> -->\r\n\r\n    <div class=\"wrapper\">\r\n\r\n      <split  direction=\"horizontal\" \r\n              gutterColor=\"#8AA8C0\"\r\n              [gutterSize]=\"layout.gutter\" \r\n              [useTransition]=\"layout.useTransition\">\r\n\r\n            <!-- main pane -->\r\n            <split-area [size]=\"layout.size.main\" order=\"1\">\r\n              <app-panel panel_id=\"main\"></app-panel>\r\n            </split-area>\r\n\r\n            <!-- secondary split pane -->\r\n            <split-area \r\n              [size]=\"layout.size.side\"  order=\"2\">\r\n\r\n                <split  direction=\"vertical\"\r\n                        gutterColor=\"#8AA8C0\"\r\n                        [gutterSize]=\"layout.gutter\" \r\n                        [useTransition]=\"layout.useTransition\">\r\n\r\n                    <split-area [size]=\"layout.size.top\" order=\"1\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"top\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <split-area [size]=\"layout.size.middle\" order=\"2\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"middle\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <!-- fixed -->\r\n                    <split-area [size]=\"layout.size.bottom\" order=\"3\">\r\n                      <app-panel panel_id=\"bottom\"></app-panel>\r\n                    </split-area>\r\n\r\n                </split>\r\n\r\n            </split-area>\r\n            \r\n      </split>\r\n\r\n    </div>\r\n\r\n  </div>\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -12418,7 +12471,7 @@ TextViewerComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/viewer-container/viewer-container.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer-container\">  \r\n\t\r\n\t<mat-button-toggle-group class=\"viewer-toggle\" \r\n\t\t*ngIf='!viewer_mode'\r\n\t\t[(ngModel)]=\"group.value\" \r\n\t\t(change)=\"changed()\">\r\n\t\t<div class= \"btn-grp1\">\r\n\t\t\t<mat-button-toggle value=\"0\" class=\"viewer-toggle-btn\" matTooltip=\"3D Viewer\">\r\n\t\t\t  <mat-icon>3d_rotation</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"4\" class=\"viewer-toggle-btn\" matTooltip=\"Cesium Viewer\">\r\n\t\t\t  <mat-icon>public</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"2\" class=\"viewer-toggle-btn\" matTooltip=\"Text Viewer\">\r\n\t\t\t  <mat-icon>description</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<!-- <mat-button-toggle value=\"3\" disabled class=\"viewer-toggle-btn\" matTooltip=\"??\">\r\n\t\t\t  <mat-icon>text_format</mat-icon>\r\n\t\t\t</mat-button-toggle> -->\r\n\t\t\t<mat-button-toggle value=\"3\" class=\"viewer-toggle-btn\" matTooltip=\"Console\">\r\n\t\t\t  <mat-icon>info_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"400\" class=\"viewer-toggle-btn\" matTooltip=\"Function Help\" >\r\n\t\t\t  <mat-icon>help_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"500\" class=\"viewer-toggle-btn\" matTooltip=\"About Mobius\" >\r\n\t\t\t  <mat-icon>info</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t<div class = \"btn-grp2\">\r\n\t\t\t<mat-button-toggle value=\"1\" id=\"codeViewer\" class=\"viewer-toggle-btn\" matTooltip=\"Code Viewer\">\r\n\t\t\t  <mat-icon>code</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t</mat-button-toggle-group>\r\n\r\n\t<!-- <button class=\"viewer-toggle-btn\" \r\n\t\tmatTooltip=\"Locked: {{this._lock}}\" (click)=\"lock()\" \r\n\t\tstyle=\"position: absolute;right: 0px; top:0px;\">\r\n\t\t<mat-icon>lock</mat-icon>\r\n\t</button>\r\n -->\r\n\t<app-geometry-viewer *ngIf=\"group.value == 0\"></app-geometry-viewer>\r\n\t<app-cesium-viewer *ngIf=\"group.value == 4\"></app-cesium-viewer>\r\n\t<app-text-viewer *ngIf=\"group.value == 2\"></app-text-viewer>\r\n\t<app-code-viewer *ngIf=\"group.value == 1\"></app-code-viewer>\r\n\t<app-console *ngIf=\"group.value == 3 && !viewer_mode\"></app-console>\r\n\t<app-help-viewer *ngIf=\"group.value == 400 && !viewer_mode\"></app-help-viewer>\r\n\t<app-info-viewer *ngIf=\"group.value == 500 && !viewer_mode\"></app-info-viewer>\r\n</div>"
+module.exports = "<div class=\"viewer-container\">  \r\n\t\r\n\t<mat-button-toggle-group class=\"viewer-toggle\" \r\n\t\t*ngIf='!viewer_mode'\r\n\t\t[(ngModel)]=\"active_viewer\" \r\n\t\t(change)=\"updateView()\">\r\n\t\t<div class= \"btn-grp1\">\r\n\t\t\t<mat-button-toggle value=\"three-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"3D Viewer\">\r\n\t\t\t  <mat-icon>3d_rotation</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"cesium-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Cesium Viewer\">\r\n\t\t\t  <mat-icon>public</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"text-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Text Viewer\">\r\n\t\t\t  <mat-icon>description</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<!-- <mat-button-toggle value=\"3\" disabled class=\"viewer-toggle-btn\" matTooltip=\"??\">\r\n\t\t\t  <mat-icon>text_format</mat-icon>\r\n\t\t\t</mat-button-toggle> -->\r\n\t\t\t<mat-button-toggle value=\"console-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Console\">\r\n\t\t\t  <mat-icon>info_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"help-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Function Help\" >\r\n\t\t\t  <mat-icon>help_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"info-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"About Mobius\" >\r\n\t\t\t  <mat-icon>info</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t<div class = \"btn-grp2\">\r\n\t\t\t<mat-button-toggle value=\"1\" id=\"codeViewer\" class=\"viewer-toggle-btn\" matTooltip=\"Code Viewer\">\r\n\t\t\t  <mat-icon>code</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t\r\n\t</mat-button-toggle-group>\r\n\r\n\t<!-- <button class=\"viewer-toggle-btn\" \r\n\t\tmatTooltip=\"Locked: {{this._lock}}\" (click)=\"lock()\" \r\n\t\tstyle=\"position: absolute;right: 0px; top:0px;\">\r\n\t\t<mat-icon>lock</mat-icon>\r\n\t</button>\r\n -->\r\n\t<!-- <app-geometry-viewer *ngIf=\"group.value == 0\"></app-geometry-viewer>\r\n\t<app-cesium-viewer *ngIf=\"group.value == 4\"></app-cesium-viewer>\r\n\t<app-text-viewer *ngIf=\"group.value == 2\"></app-text-viewer>\r\n\t<app-code-viewer *ngIf=\"group.value == 1\"></app-code-viewer>\r\n\t<app-console *ngIf=\"group.value == 3 && !viewer_mode\"></app-console>\r\n\t<app-help-viewer *ngIf=\"group.value == 400 && !viewer_mode\"></app-help-viewer>\r\n\t<app-info-viewer *ngIf=\"group.value == 500 && !viewer_mode\"></app-info-viewer> -->\r\n\r\n\t<ng-container #vc></ng-container>\r\n</div>"
 
 /***/ }),
 
@@ -12436,7 +12489,13 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewerContainerComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__geometry_viewer_geometry_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/geometry-viewer/geometry-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__cesium_viewer_cesium_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/cesium-viewer/cesium-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__text_viewer_text_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/text-viewer/text-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__code_viewer_code_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/code-viewer/code-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__console_console_component__ = __webpack_require__("./src/app/ui-components/console/console.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__help_help_viewer_help_viewer_component__ = __webpack_require__("./src/app/ui-components/help/help-viewer/help-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__help_info_viewer_info_viewer_component__ = __webpack_require__("./src/app/ui-components/help/info-viewer/info-viewer.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12449,78 +12508,106 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-let ViewerContainerComponent = class ViewerContainerComponent extends __WEBPACK_IMPORTED_MODULE_1__base_classes_viz_Viewer__["a" /* Viewer */] {
-    constructor(injector, layoutService) {
+
+
+
+
+
+
+let ViewerContainerComponent = ViewerContainerComponent_1 = class ViewerContainerComponent extends __WEBPACK_IMPORTED_MODULE_1__base_classes_viz_Viewer__["a" /* Viewer */] {
+    constructor(injector, r) {
         super(injector, "Viewer Container", "Contains all the viewers");
-        this.layoutService = layoutService;
+        this.r = r;
         this.viewer_mode = false;
-        this.group = { value: 500 };
-        this._lock = false;
-        this._layout_subscription = this.layoutService.getMessage().subscribe(message => {
-            if (message.text.startsWith("Module: ")) {
-                if (!this.viewer_mode)
-                    this.switchToHelp();
-            }
-            else if (message.text == "console") {
-                if (!this.viewer_mode)
-                    this.switchToConsole();
-            }
-        });
+        this.views = [];
+        this.active_viewer = "console-viewer";
+        this.injector = injector;
     }
-    ngOnDestroy() {
-        this._layout_subscription.unsubscribe();
-        this.group = null;
-        this._lock = null;
+    createView(component_name) {
+        let component = ViewerContainerComponent_1.ComponentMap[component_name];
+        let factory = this.r.resolveComponentFactory(component);
+        let componentRef = factory.create(this.injector);
+        let view = componentRef.hostView;
+        return view;
     }
+    ngOnInit() { }
+    ngAfterViewInit() {
+        this.showConsole();
+    }
+    ngOnDestroy() { }
     reset() {
-    }
-    updateGroupValue(value) {
-        try {
-            this.group.value = value;
-            this.layoutService.setViewContainer(value);
-        }
-        catch (ex) {
-            //do something
-        }
-    }
-    switchToHelp() {
-        this.updateGroupValue(400);
-    }
-    switchToConsole() {
-        let self = this;
-        setTimeout(function () {
-            self.updateGroupValue(3);
-        }, 100);
+        this.active_viewer = "console-viewer";
+        this.updateView();
     }
     update() {
-        let port = this.flowchartService.getSelectedPort();
-        if (port == undefined) {
-            this.updateGroupValue(this.layoutService.getViewContainer());
+        let selectedNode = this.flowchartService.getSelectedNode();
+        let selectedPort = this.flowchartService.getSelectedPort();
+        let portType = parseInt(selectedPort.getType());
+        // todo: refactor 
+        switch (portType) {
+            case 0:
+                this.active_viewer = "three-viewer";
+                break;
+            case 1:
+                this.active_viewer = "code-viewer";
+                break;
+            case 2:
+                this.active_viewer = "text-viewer";
+                break;
+            case 3:
+                this.active_viewer = "console-viewer";
+                break;
+            case 4:
+                this.active_viewer = "cesium-viewer";
+                break;
+            default:
+                this.reset();
         }
-        else {
-            this.updateGroupValue(this.flowchartService.getSelectedPort().getType());
+        this.updateView();
+    }
+    updateView() {
+        if (!this.views[this.active_viewer]) {
+            this.views[this.active_viewer] = this.createView(this.active_viewer);
         }
+        this.vc.detach();
+        this.vc.insert(this.views[this.active_viewer]);
     }
-    ngOnInit() {
-        this.updateGroupValue(this.layoutService.getViewContainer());
+    showConsole() {
+        this.active_viewer = "console-viewer";
+        this.updateView();
     }
-    changed() {
-        this.layoutService.setViewContainer(this.group.value);
+    showHelp() {
+        this.active_viewer = "help-viewer";
+        this.updateView();
     }
 };
+ViewerContainerComponent.ComponentMap = {
+    "three-viewer": __WEBPACK_IMPORTED_MODULE_2__geometry_viewer_geometry_viewer_component__["a" /* GeometryViewerComponent */],
+    "cesium-viewer": __WEBPACK_IMPORTED_MODULE_3__cesium_viewer_cesium_viewer_component__["a" /* CesiumViewerComponent */],
+    "text-viewer": __WEBPACK_IMPORTED_MODULE_4__text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
+    "code-viewer": __WEBPACK_IMPORTED_MODULE_5__code_viewer_code_viewer_component__["a" /* CodeViewerComponent */],
+    "console-viewer": __WEBPACK_IMPORTED_MODULE_6__console_console_component__["a" /* ConsoleComponent */],
+    "help-viewer": __WEBPACK_IMPORTED_MODULE_7__help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
+    "info-viewer": __WEBPACK_IMPORTED_MODULE_8__help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */]
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_10" /* ViewChild */])('vc', { read: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* ViewContainerRef */] }),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* ViewContainerRef */])
+], ViewerContainerComponent.prototype, "vc", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])(),
     __metadata("design:type", Boolean)
 ], ViewerContainerComponent.prototype, "viewer_mode", void 0);
-ViewerContainerComponent = __decorate([
+ViewerContainerComponent = ViewerContainerComponent_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'app-viewer-container',
         template: __webpack_require__("./src/app/ui-components/viewers/viewer-container/viewer-container.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/viewers/viewer-container/viewer-container.component.scss")]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_2__global_services_layout_service__["a" /* LayoutService */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["p" /* ComponentFactoryResolver */]])
 ], ViewerContainerComponent);
 
+var ViewerContainerComponent_1;
 
 
 /***/ }),
@@ -12532,7 +12619,7 @@ ViewerContainerComponent = __decorate([
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ma_Math", function() { return ma_Math; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "io_Papaparse", function() { return io_Papaparse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "io_Shapefile", function() { return io_Shapefile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Shapefile", function() { return gj_Shapefile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ut_List", function() { return ut_List; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Collection", function() { return gj_Collection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Feature", function() { return gj_Feature; });
@@ -12580,7 +12667,7 @@ let ma_Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b
 //let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
 //let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
 let io_Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("io_Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
-let io_Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("io_Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
+let gj_Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
 let ut_List = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("ut_List", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["a" /* list */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
 let ut_String = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("ut_String", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["b" /* string */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
 let gj_Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Aggregate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["a" /* aggregate */], "attrib", undefined);

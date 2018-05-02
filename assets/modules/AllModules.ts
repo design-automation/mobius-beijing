@@ -21,7 +21,7 @@ let ma_Math: IModule = ModuleUtils.createModule("ma_Math", mathjs/*TurfModelling
 //let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
 
 let io_Papaparse: IModule = ModuleUtils.createModule("io_Papaparse", papaparse, "attrib", undefined);
-let io_Shapefile: IModule = ModuleUtils.createModule("io_Shapefile", shapefile, "attrib", undefined);
+let gj_Shapefile: IModule = ModuleUtils.createModule("gj_Shapefile", shapefile, "attrib", undefined);
 
 
 let ut_List: IModule = ModuleUtils.createModule("ut_List", GSS["list"], "attrib", docs);
@@ -52,7 +52,7 @@ let gj_Feature: IModule = ModuleUtils.createModule("gj_Feature", mobiusgeojson["
 // export {Turf};
 export {ma_Math,  
 		io_Papaparse, 
-		io_Shapefile, 
+		gj_Shapefile, 
 	    ut_List, 
 	    gj_Collection, gj_Feature,
 		gj_Aggregate, gj_Assert, gj_Bool, gj_Classify, gj_Convert, gj_Coords, gj_Create, gj_Data, gj_Grids, gj_Ipolate, gj_Joins, gj_Measure, gj_Meta, gj_Misc, gj_Random, gj_Units, gj_Xform};
