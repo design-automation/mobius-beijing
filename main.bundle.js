@@ -2706,7 +2706,7 @@ class Viewer {
 "use strict";
 class Constants {
     static get GALLERY_URL() {
-        return "https://api.github.com/repos/phtj/mobius-cesium/contents/src/assets/json-files?ref=master";
+        return "https://api.github.com/repos/design-automation/mobius-cesium/contents/src/assets/json-files?ref=master";
     }
     ;
 }
