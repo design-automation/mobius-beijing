@@ -2709,6 +2709,10 @@ class Constants {
         return "https://api.github.com/repos/design-automation/mobius-cesium/contents/src/assets/json-files?ref=master";
     }
     ;
+    static get FILE_URL() {
+        return "https://raw.githubusercontent.com/design-automation/mobius-cesium/master/src/assets/json-files/";
+    }
+    ;
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Constants;
 
@@ -11561,6 +11565,7 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_animations__ = __webpack_require__("./node_modules/@angular/animations/esm2015/animations.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__global_services_flowchart_service__ = __webpack_require__("./src/app/global-services/flowchart.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__constants__ = __webpack_require__("./src/app/constants.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11570,6 +11575,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -11607,8 +11613,7 @@ let MobiusViewerComponent = class MobiusViewerComponent {
         this.visible = true;
     }
     getFlowchart(filename) {
-        let filepath = "https://raw.githubusercontent.com/phtj/mobius-cesium/\
-			master/src/assets/json-files/" + filename;
+        let filepath = __WEBPACK_IMPORTED_MODULE_6__constants__["a" /* Constants */].FILE_URL + filename;
         return filepath;
     }
     ngOnDestroy() {
