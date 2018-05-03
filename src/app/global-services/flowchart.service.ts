@@ -278,37 +278,6 @@ export class FlowchartService {
         }
     })
 
-    // Object.keys(moduleMap).map(function(key){
-    //     moduleSet.push(moduleMap[key])
-    // })
-
-
-    /*let mod: IModule = { name: "gs-modeling", version: "0.1", author: "AKM"};
-    for(let prop in ModuleSet){
-      mod[prop] = ModuleSet[prop];
-    }
-
-    moduleSet.push(mod);
-    moduleMap["gs-modeling"] = mod;
-
-    */
-    // modules.map(function(mod){
-
-    //     let name: string = ModuleUtils.getName(mod);
-    //     let version: string = ModuleUtils.getVersion(mod);
-    //     let author: string = ModuleUtils.getAuthor(mod);
-
-    //     // select the required module from the global module set - that has all the functions
-    //     let modClass = ModuleSet[name]; //ModuleUtils.getModuleFromSet(ModuleSet, name);
-    //       if( ModuleUtils.isCompatible(mod, modClass) ){
-    //           moduleSet.push(modClass);
-    //           moduleMap[name] = modClass;
-    //       }
-    //       else{
-    //           console.warn(name + " module not compatible. Please check version / author");
-    //       }
-    // })
-
   }
 
   getModules(): IModule[]{
