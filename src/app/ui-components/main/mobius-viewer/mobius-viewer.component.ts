@@ -9,6 +9,10 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
 import { LayoutService } from '../../../global-services/layout.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 
+
+import { Constants } from "../../../constants";
+
+
 @Component({
   selector: 'app-mobius-viewer',
   templateUrl: './mobius-viewer.component.html',
@@ -69,9 +73,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 	}
 
 	getFlowchart(filename: string){
-		let filepath: string = 
-			"https://raw.githubusercontent.com/phtj/mobius-cesium/\
-			master/src/assets/json-files/" + filename;
+		let filepath: string = Constants.FILE_URL + filename;
 		return filepath;
 	}
 
