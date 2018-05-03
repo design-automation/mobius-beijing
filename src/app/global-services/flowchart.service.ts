@@ -11,7 +11,7 @@ import {IProcedure} from "../base-classes/procedure/IProcedure";
 
 import * as CircularJSON from 'circular-json';
 
-import * as ModuleSet from "../../assets/modules/AllModules";
+import {AllModules as ModuleSet} from "../../assets/modules/AllModules";
 
 import {ConsoleService, EConsoleMessageType} from "./console.service";
 //import {LayoutService} from "./layout.service";
@@ -261,6 +261,14 @@ export class FlowchartService {
     let moduleSet = this._moduleSet;
     let moduleMap = this._moduleMap;
 
+    this._moduleSet = ModuleSet;
+    ModuleSet.map(function(mod){
+        let name: string = ModuleUtils.getName(mod);
+        moduleSet.push(mod);
+        moduleMap[name] = mod;
+    })
+
+
     /*let mod: IModule = { name: "gs-modeling", version: "0.1", author: "AKM"};
     for(let prop in ModuleSet){
       mod[prop] = ModuleSet[prop];
@@ -270,22 +278,22 @@ export class FlowchartService {
     moduleMap["gs-modeling"] = mod;
 
     */
-    modules.map(function(mod){
+    // modules.map(function(mod){
 
-        let name: string = ModuleUtils.getName(mod);
-        let version: string = ModuleUtils.getVersion(mod);
-        let author: string = ModuleUtils.getAuthor(mod);
+    //     let name: string = ModuleUtils.getName(mod);
+    //     let version: string = ModuleUtils.getVersion(mod);
+    //     let author: string = ModuleUtils.getAuthor(mod);
 
-        // select the required module from the global module set - that has all the functions
-        let modClass = ModuleSet[name]; //ModuleUtils.getModuleFromSet(ModuleSet, name);
-          if( ModuleUtils.isCompatible(mod, modClass) ){
-              moduleSet.push(modClass);
-              moduleMap[name] = modClass;
-          }
-          else{
-              console.warn(name + " module not compatible. Please check version / author");
-          }
-    })
+    //     // select the required module from the global module set - that has all the functions
+    //     let modClass = ModuleSet[name]; //ModuleUtils.getModuleFromSet(ModuleSet, name);
+    //       if( ModuleUtils.isCompatible(mod, modClass) ){
+    //           moduleSet.push(modClass);
+    //           moduleMap[name] = modClass;
+    //       }
+    //       else{
+    //           console.warn(name + " module not compatible. Please check version / author");
+    //       }
+    // })
 
   }
 
