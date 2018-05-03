@@ -3043,6 +3043,12 @@ let FlowchartService = class FlowchartService {
         this._moduleMap = [];
         let moduleSet = this._moduleSet;
         let moduleMap = this._moduleMap;
+        this._moduleSet = __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__["a" /* AllModules */];
+        __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__["a" /* AllModules */].map(function (mod) {
+            let name = __WEBPACK_IMPORTED_MODULE_6__base_classes_code_CodeModule__["b" /* ModuleUtils */].getName(mod);
+            moduleSet.push(mod);
+            moduleMap[name] = mod;
+        });
         /*let mod: IModule = { name: "gs-modeling", version: "0.1", author: "AKM"};
         for(let prop in ModuleSet){
           mod[prop] = ModuleSet[prop];
@@ -3052,20 +3058,20 @@ let FlowchartService = class FlowchartService {
         moduleMap["gs-modeling"] = mod;
     
         */
-        modules.map(function (mod) {
-            let name = __WEBPACK_IMPORTED_MODULE_6__base_classes_code_CodeModule__["b" /* ModuleUtils */].getName(mod);
-            let version = __WEBPACK_IMPORTED_MODULE_6__base_classes_code_CodeModule__["b" /* ModuleUtils */].getVersion(mod);
-            let author = __WEBPACK_IMPORTED_MODULE_6__base_classes_code_CodeModule__["b" /* ModuleUtils */].getAuthor(mod);
-            // select the required module from the global module set - that has all the functions
-            let modClass = __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__[name]; //ModuleUtils.getModuleFromSet(ModuleSet, name);
-            if (__WEBPACK_IMPORTED_MODULE_6__base_classes_code_CodeModule__["b" /* ModuleUtils */].isCompatible(mod, modClass)) {
-                moduleSet.push(modClass);
-                moduleMap[name] = modClass;
-            }
-            else {
-                console.warn(name + " module not compatible. Please check version / author");
-            }
-        });
+        // modules.map(function(mod){
+        //     let name: string = ModuleUtils.getName(mod);
+        //     let version: string = ModuleUtils.getVersion(mod);
+        //     let author: string = ModuleUtils.getAuthor(mod);
+        //     // select the required module from the global module set - that has all the functions
+        //     let modClass = ModuleSet[name]; //ModuleUtils.getModuleFromSet(ModuleSet, name);
+        //       if( ModuleUtils.isCompatible(mod, modClass) ){
+        //           moduleSet.push(modClass);
+        //           moduleMap[name] = modClass;
+        //       }
+        //       else{
+        //           console.warn(name + " module not compatible. Please check version / author");
+        //       }
+        // })
     }
     getModules() {
         return this._moduleSet;
@@ -3091,7 +3097,7 @@ let FlowchartService = class FlowchartService {
         this._selectedPort = undefined;
         this._selectedProcedure = undefined;
         this.update();
-        let modulearr = Object.keys(__WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__).map(function (module_name) { return { _name: module_name, _version: 0.1, _author: "Patrick" }; });
+        let modulearr = Object.keys(__WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__["a" /* AllModules */]).map(function (module_name) { return { _name: module_name, _version: 0.1, _author: "Patrick" }; });
         let sortFn = function (a, b) {
             return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
         };
@@ -11495,7 +11501,7 @@ MobiusGalleryComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-landing/landing.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller</h1>\r\n\t<p>Cesium Integration</p>\r\n\t\r\n\t<div class=\"description\">\r\n\t\t\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller is a web application that allows users to create automated procedures using visual programming. All procedures are executed in the browser on the client side, and as such no server side process is required.\r\n\t\t</p>\r\n\t\t\r\n\t\t<p>\t\t\r\n\t\t\tCurrently, Möbius Modeller has be developed to support Parametric Information Modelling (PIM) in the architectural and urban design domain, allowing procedures to be developed for generating and evaluating 3D models of buildings and urban neighbourhoods.\r\n\t\t</p>\r\n\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller can be customised to a wide different domains by developing specialized function libraries and specialized viewers. Contact us if you are interested in applying the Möbius Modeller in your domain.\r\n\t\t</p>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"link-container\">\r\n\r\n\t\t<a href=\"./editor\" target=\"_blank\">\r\n\t\t\tTry Mobius\r\n\t\t</a>\r\n\r\n\t\t<a href=\"./gallery\" target=\"_blank\">\r\n\t\t\tView Gallery\r\n\t\t</a>\r\n\r\n\t\t<a href=\"https://github.com/phtj/mobius-modeller\" target=\"_blank\">\r\n\t\t\tContribute on Github\r\n\t\t</a>\r\n\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n"
+module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller</h1>\r\n\t<p>Cesium Integration</p>\r\n\t\r\n\t<div class=\"description\">\r\n\t\t\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller is a web application that allows users to create automated procedures using visual programming. All procedures are executed in the browser on the client side, and as such no server side process is required.\r\n\t\t</p>\r\n\t\t\r\n\t\t<p>\t\t\r\n\t\t\tCurrently, Möbius Modeller has be developed to support Parametric Information Modelling (PIM) in the architectural and urban design domain, allowing procedures to be developed for generating and evaluating 3D models of buildings and urban neighbourhoods.\r\n\t\t</p>\r\n\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller can be customised to a wide different domains by developing specialized function libraries and specialized viewers. Contact us if you are interested in applying the Möbius Modeller in your domain.\r\n\t\t</p>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"link-container\">\r\n\r\n\t\t<a href=\"./editor\" target=\"_blank\">\r\n\t\t\tTry Mobius\r\n\t\t</a>\r\n\r\n\t\t<a href=\"./gallery\" target=\"_blank\">\r\n\t\t\tView Gallery\r\n\t\t</a>\r\n\r\n\t\t<a href=\"https://github.com/design-automation\" target=\"_blank\">\r\n\t\t\tContribute on Github\r\n\t\t</a>\r\n\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -12621,80 +12627,54 @@ var ViewerContainerComponent_1;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ma_Math", function() { return ma_Math; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "io_Papaparse", function() { return io_Papaparse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Shapefile", function() { return gj_Shapefile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ut_List", function() { return ut_List; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Collection", function() { return gj_Collection; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Feature", function() { return gj_Feature; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Aggregate", function() { return gj_Aggregate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Assert", function() { return gj_Assert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Bool", function() { return gj_Bool; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Classify", function() { return gj_Classify; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Convert", function() { return gj_Convert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Coords", function() { return gj_Coords; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Create", function() { return gj_Create; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Data", function() { return gj_Data; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Grids", function() { return gj_Grids; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Ipolate", function() { return gj_Ipolate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Joins", function() { return gj_Joins; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Measure", function() { return gj_Measure; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Meta", function() { return gj_Meta; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Misc", function() { return gj_Misc; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Random", function() { return gj_Random; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Units", function() { return gj_Units; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gj_Xform", function() { return gj_Xform; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AllModules; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__ = __webpack_require__("./src/app/base-classes/code/CodeModule.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_gs_modelling__ = __webpack_require__("./node_modules/gs-modelling/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json__ = __webpack_require__("./node_modules/turf-modelling/docs_json/turf-modelling.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_turf_modelling__ = __webpack_require__("./node_modules/turf-modelling/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse__ = __webpack_require__("./node_modules/papaparse/papaparse.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_papaparse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_papaparse__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs__ = __webpack_require__("./node_modules/shpjs/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_shpjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_shpjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__ = __webpack_require__("./node_modules/mobius-geojson/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mobius_math__ = __webpack_require__("./node_modules/mobius-math/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mobius_array__ = __webpack_require__("./node_modules/mobius-array/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mobius_turf__ = __webpack_require__("./node_modules/mobius-turf/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mobius_string__ = __webpack_require__("./node_modules/mobius-string/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mobius_geojson__ = __webpack_require__("./node_modules/mobius-geojson/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mobius_csv__ = __webpack_require__("./node_modules/mobius-csv/dist/index.js");
 
 
 
-// let Measure: IModule = ModuleUtils.createModule("Measure", Turf["measure"], "attrib", docs);
+
+
+
+
+// let arr_Analyse: IModule = ModuleUtils.createModule("arr_Analyse", MArray["Analyse"], "attrib", undefined);
 // 
-
-
-
-//import * as math from "mathjs";
-
-let mathjs = __webpack_require__("./node_modules/mathjs/index.js");
-//var tj = require('togeojson');
-//let Feature_Coll: IModule = ModuleUtils.createModule("Feature_Coll", TurfModelling["feature_coll"], "attrib", docs);
-let ma_Math = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("ma_Math", mathjs /*TurfModelling["math"]*/, "attrib", undefined);
-//let Togeojson: IModule = ModuleUtils.createModule("Togeojson", tj/*TurfModelling["math"]*/, "attrib", docs);
-//let Properties: IModule = ModuleUtils.createModule("Properties", TurfModelling["properties"], "attrib", docs);
-let io_Papaparse = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("io_Papaparse", __WEBPACK_IMPORTED_MODULE_4_papaparse__, "attrib", undefined);
-let gj_Shapefile = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Shapefile", __WEBPACK_IMPORTED_MODULE_5_shpjs__, "attrib", undefined);
-let ut_List = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("ut_List", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["a" /* list */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
-let ut_String = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("ut_String", __WEBPACK_IMPORTED_MODULE_1_gs_modelling__["b" /* string */], "attrib", __WEBPACK_IMPORTED_MODULE_2_turf_modelling_docs_json_turf_modelling_json___default.a);
-let gj_Aggregate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Aggregate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["a" /* aggregate */], "attrib", undefined);
-let gj_Assert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Assert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["b" /* assert */], "attrib", undefined);
-let gj_Bool = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Bool", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["c" /* bool */], "attrib", undefined);
-let gj_Classify = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Classify", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["d" /* classify */], "attrib", undefined);
-let gj_Convert = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Convert", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["e" /* convert */], "attrib", undefined);
-let gj_Coords = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Coords", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["f" /* coords */], "attrib", undefined);
-let gj_Create = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Create", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["g" /* create */], "attrib", undefined);
-let gj_Data = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Data", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["h" /* data */], "attrib", undefined);
-let gj_Grids = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Grids", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["i" /* grids */], "attrib", undefined);
-let gj_Ipolate = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Ipolate", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["j" /* ipolate */], "attrib", undefined);
-let gj_Joins = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Joins", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["k" /* joins */], "attrib", undefined);
-let gj_Measure = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Measure", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["l" /* measure */], "attrib", undefined);
-let gj_Meta = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Meta", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["m" /* meta */], "attrib", undefined);
-let gj_Misc = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Misc", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["n" /* misc */], "attrib", undefined);
-let gj_Random = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Random", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["o" /* random */], "attrib", undefined);
-let gj_Units = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Units", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["p" /* units */], "attrib", undefined);
-let gj_Xform = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Xform", __WEBPACK_IMPORTED_MODULE_3_turf_modelling__["q" /* xform */], "attrib", undefined);
-let gj_Collection = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Collection", __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__["a" /* collection */], "attrib", undefined);
-let gj_Feature = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule("gj_Feature", __WEBPACK_IMPORTED_MODULE_6_mobius_geojson__["b" /* feature */], "attrib", undefined);
-// export {Turf};
+let AllModules = [];
+Object.keys(__WEBPACK_IMPORTED_MODULE_2_mobius_array__).map(function (key) {
+    let pre = "arr_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_2_mobius_array__[key], "attrib", undefined);
+    AllModules.push(module);
+});
+Object.keys(__WEBPACK_IMPORTED_MODULE_1_mobius_math__).map(function (key) {
+    let pre = "math_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_1_mobius_math__[key], "attrib", undefined);
+    AllModules.push(module);
+});
+Object.keys(__WEBPACK_IMPORTED_MODULE_3_mobius_turf__).map(function (key) {
+    let pre = "geo_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_3_mobius_turf__[key], "attrib", undefined);
+    AllModules.push(module);
+});
+Object.keys(__WEBPACK_IMPORTED_MODULE_4_mobius_string__).map(function (key) {
+    let pre = "str_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_4_mobius_string__[key], "attrib", undefined);
+    AllModules.push(module);
+});
+Object.keys(__WEBPACK_IMPORTED_MODULE_5_mobius_geojson__).map(function (key) {
+    let pre = "geo_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_5_mobius_geojson__[key], "attrib", undefined);
+    AllModules.push(module);
+});
+Object.keys(__WEBPACK_IMPORTED_MODULE_6_mobius_csv__).map(function (key) {
+    let pre = "csv_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_6_mobius_csv__[key], "attrib", undefined);
+    AllModules.push(module);
+});
 
 
 
@@ -12726,13 +12706,6 @@ Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* pl
 
 module.exports = __webpack_require__("./src/main.ts");
 
-
-/***/ }),
-
-/***/ 1:
-/***/ (function(module, exports) {
-
-/* (ignored) */
 
 /***/ })
 
