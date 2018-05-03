@@ -123,7 +123,6 @@ export class ModuleUtils{
 					return [ "length", "prototype", "name", "_name", "_author", "_version", "_helpObj", "_url"].indexOf(prop) == -1;
 				});
 
-		console.log(mod);
 		for(let f=0; f < fns.length; f++){
 			let function_name = fns[f];
 			

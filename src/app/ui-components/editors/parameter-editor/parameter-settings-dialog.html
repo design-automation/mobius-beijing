@@ -81,8 +81,8 @@
 		</div>
 	</div> -->
 	URL:
-	<small>http://<input type="text" value="{{input.getOpts().url}}" (change)="updateURL($event, input)" #url></small>
-
+	<small><input type="text" value="{{input.getOpts().url}}" (change)="updateURL($event, input)" #url></small>
+	<button (click)="getDataFromURL($event, input)">Get Data</button>
 </div>
 
 

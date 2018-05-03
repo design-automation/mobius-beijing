@@ -1,6 +1,7 @@
 import { Component, Injector, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule';
+import { HttpClient  } from '@angular/common/http';
 
 //
 // Component for Parameter Settings
@@ -18,7 +19,8 @@ export class ParameterSettingsDialogComponent {
 
   constructor(
     
-    public dialogRef: MatDialogRef<ParameterSettingsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { 
+    public dialogRef: MatDialogRef<ParameterSettingsDialogComponent>, 
+        @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient) { 
   			this.type = data.input.getType();
   			this.input = data.input;
   			this.opts = this.input.getOpts();
@@ -101,6 +103,23 @@ export class ParameterSettingsDialogComponent {
 
     clear($event, input){
       input.setDefaultValue(undefined);
+    }
+
+
+    //
+    // Web URL
+    // 
+    getDataFromURL($event, input){
+
+      let urlString: any = input.getOpts().url;
+
+      this.http.get(urlString)
+        .subscribe(data => {
+             console.log(data);
+             input.setDefaultValue(JSON.stringify(data))
+        }
+      );
+
     }
 
 }
