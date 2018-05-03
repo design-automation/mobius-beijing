@@ -123,7 +123,7 @@ export class ModuleUtils{
 					return [ "length", "prototype", "name", "_name", "_author", "_version", "_helpObj", "_url"].indexOf(prop) == -1;
 				});
 
-
+		console.log(mod);
 		for(let f=0; f < fns.length; f++){
 			let function_name = fns[f];
 			
@@ -131,11 +131,7 @@ export class ModuleUtils{
 			let func = mod[function_name];
 
 			if( mod.hasOwnProperty( function_name )){
-
-				if(module_name == "TurfOriginal"){
-					console.log(function_name, func);
-				}
-
+ 
 				if(typeof(func) == "function"){
 					let obj = { name: function_name, 
 								module: module_name,

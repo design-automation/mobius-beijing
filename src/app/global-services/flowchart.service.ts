@@ -261,12 +261,26 @@ export class FlowchartService {
     let moduleSet = this._moduleSet;
     let moduleMap = this._moduleMap;
 
-    this._moduleSet = ModuleSet;
     ModuleSet.map(function(mod){
         let name: string = ModuleUtils.getName(mod);
-        moduleSet.push(mod);
-        moduleMap[name] = mod;
+        
+        if(moduleMap[name] !== undefined){
+          let fns = ModuleUtils.getFunctions(mod);
+          let original_mod = moduleMap[name];
+          for(let i=0; i < fns.length; i++){
+            let f = fns[i];
+            original_mod[f.name] = f.def;
+          }
+        }
+        else{
+          moduleMap[name] = mod;
+          moduleSet.push(mod)
+        }
     })
+
+    // Object.keys(moduleMap).map(function(key){
+    //     moduleSet.push(moduleMap[key])
+    // })
 
 
     /*let mod: IModule = { name: "gs-modeling", version: "0.1", author: "AKM"};
