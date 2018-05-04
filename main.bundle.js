@@ -10434,14 +10434,14 @@ module.exports = "<h2>Input Name: {{input.getName()}}</h2>\r\n<h3>Input Type: {{
 /***/ "./src/app/ui-components/editors/procedure-editor/procedure-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\">\r\n\t<mat-accordion>\r\n\t\t<mat-expansion-panel [expanded]=\"true\">\r\n\t\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t\t  Procedure ({{_procedureArr.length}})\r\n\t\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t\t\r\n\t\t\t\t\t<!-- <button (click)=\"showProd=!showProd\">Procedure</button>\r\n\t\t\t\t\t<div *ngIf='showProd'> -->\r\n\t\t\t\t\t<div class=\"tree\">\r\n\t\t\t\t\t\t<datalist id=\"variable-suggestions\" >\r\n\t\t\t\t\t\t    <option *ngFor='let v of _variableList' value=\"{{v}}\"></option>\r\n\t\t\t\t\t\t</datalist>\r\n\r\n\t\t\t\t\t\t<tree-root #tree \t\r\n\t\t\t\t\t\t\t\t\t[nodes]='_procedureArr' \r\n\t\t\t\t\t\t\t\t\t[options]='_tree_options'  \r\n\t\t\t\t\t\t\t\t\t(moveNode)=\"onMoveNode($event)\">\r\n\t\t\t\t\t\t\t\t  <ng-template #treeNodeTemplate \r\n\t\t\t\t\t\t\t\t  \t\tlet-prod \r\n\t\t\t\t\t\t\t\t  \t\tlet-index=\"index\" \r\n\t\t\t\t\t\t\t\t  \t\tclass=\"tree-node-wrapper\">\r\n\t\t\t\t\t\t\t\t  \t\t<div class = \"full-container\" (click)=\"focus($event, prod)\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t<!--<div class = \"seg3\" *ngIf=\"prod.data.getType() != 'Else' && prod.data.getType() != 'If'\">\r\n\t\t\t\t\t    \t\t\t\t\t   \t<button mat-button \r\n\t\t\t\t\t\t\t\t\t\t\t\t    *ngIf=\"prod.data.getType() =='Action'\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t(click)=\"openHelp($event, prod)\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<mat-icon>help_outline</mat-icon>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</button>\r\n\r\n\t\t\t\t\t\t    \t\t\t\t</div>-->\r\n\t\t\t\t\t\t\t\t  \t\t\t<div class = \"seg1\" \r\n\t\t\t\t\t\t\t\t  \t\t\t\t[class.print]=\"prod.data.printToConsole()\"\r\n\t\t\t\t\t\t\t\t  \t\t\t\t[class.error]=\"prod.data.getError()\" \r\n\t\t\t\t\t\t\t\t  \t\t\t\t[class.disabled]=\"prod.data.isDisabled()\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<!-- template for data -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Data'\"> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" [style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\" list=\"variable-suggestions\" >\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"equal\">=</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" [style.width.ch]=\"prod.data.getRightComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getRightComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'right')\" spellcheck=\"false\" list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<!-- template for a function call -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Function'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" [style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\" list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"equal\">=</span>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"module\">{{ prod.data.getFunctionName()}}</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(<span *ngIf=\"prod.data.getRightComponent().params.length > 0\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"param-container\" *ngFor=\"let p of prod.data.updateParams();let i=index;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [(ngModel)]=\"prod.data.getRightComponent().params[i]\" #ctrl=\"ngModel\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [style.width.ch]=\"prod.data.getRightComponent().params[i] ? (prod.data.getRightComponent().params[i].length + 5) : 10\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t (change)=\"updateProcedure($event, prod, 'right')\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t <span *ngIf=\"i < prod.data.updateParams().length - 1\"> , </span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</span>)\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t:::&nbsp;&nbsp;&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select (change)=\"updateProcedure($event, prod, 'right')\" [(ngModel)]=\"prod.data.getRightComponent().category\" #ctrl=\"ngModel\">\r\n\t\t\t\t\t\t\t\t\t\t\t         \t    <option *ngFor=\"let otp of prod.data.getOutputs()\" [value]=\"otp\">{{otp}}</option>\r\n\t\t\t\t\t\t\t\t\t\t\t            </select> \r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'IfElse'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span>if-else</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'If'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t <span>if</span> ( <input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t[style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\"  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\"> )\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Else'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t <span>else</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'For Loop'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t <span>for (</span> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  <input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required (change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  <span style=\"margin: 0px 10px;\">in</span>  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  <input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[style.width.ch]=\"prod.data.getRightComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \t\t\t[(ngModel)]=\"prod.data.getRightComponent().expression\" #ctrl=\"ngModel\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \t\t\trequired (change)=\"updateProcedure($event, prod, 'right')\" spellcheck=\"false\" list=\"variable-suggestions\"> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  )\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Action'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\" list=\"variable-suggestions\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"equal\">=</span>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"module\">{{prod.data.getRightComponent().module.replace(\"_\",  \".\")}}</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t.\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t  <span class=\"function\">{{prod.data.getRightComponent().fn_name}}</span> \r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t( <span *ngIf=\"prod.data.getRightComponent().params.length>0\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"param-container\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t*ngFor=\"let p of prod.data.getRightComponent().params; let i=index\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [style.width.ch]=\"prod.data.getRightComponent().params[i].value.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [(ngModel)]=\"prod.data.getRightComponent().params[i].value\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t #ctrl=\"ngModel\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t (change)=\"updateProcedure($event, prod, 'right')\" spellcheck=\"false\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span *ngIf='i<prod.data.getRightComponent().params.length-1'>,</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\t)\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t<div class = \"seg2\" *ngIf=\"prod.data.getType() != 'Else' && prod.data.getType() != 'If'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t<button mat-button \r\n\t\t\t\t\t\t\t\t\t\t\t\t    *ngIf=\"prod.data.getType() =='Action'\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t(click)=\"openHelp($event, prod)\" tabindex=\"-1\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<mat-icon>help_outline</mat-icon>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t\t\t\t\t\t   <button mat-button\r\n\t\t\t\t\t\t\t\t\t\t\t   \t\t(click)=\"togglePrint(prod.data)\" \r\n\t\t\t\t\t\t\t\t\t\t\t   \t\tmatTooltip=\"Print value to console\"\r\n\t\t\t\t\t\t\t\t\t\t\t   \t\t*ngIf=\"prod.data.getType() =='Action' || prod.data.getType() =='Data'\" tabindex=\"-1\">\r\n\t\t\t\t    \t\t\t\t\t    \t\t<mat-icon>print</mat-icon>\r\n\t\t\t\t\t    \t\t\t\t\t    </button>\r\n\t\t\t\t\t\t\t\t\t\t\t\t <button mat-button (click)=\"toggle(prod.data)\" matTooltip=\"Enable/Disable Line\" tabindex=\"-1\">\r\n\t\t\t\t    \t\t\t\t\t    \t\t<mat-icon>check_circle</mat-icon>\r\n\t\t\t\t\t    \t\t\t\t\t    </button>\r\n\t\t\t\t\t\t\t\t\t\t        <button mat-button (click)=\"deleteProcedure(prod)\" matTooltip=\"Delete Line\" tabindex=\"-1\">\r\n\t\t\t\t    \t\t\t\t\t    \t\t<mat-icon>delete</mat-icon>\r\n\t\t\t\t\t    \t\t\t\t\t    </button>\r\n\t\t\t\t\t    \t\t\t\t\t    <!-- <button (click)=\"disableProcedure(prod, $event)\">Disable</button>\r\n\t\t\t\t\t    \t\t\t\t\t    <button (click)=\"go($event)\">Copy</button> -->\r\n\t\t\t\t\t\t    \t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t    \t\t\t</div>\r\n\t\t\t\t\t\t\t\t  </ng-template>\r\n\t\t\t\t\t\t</tree-root> \r\n\t\t\t\t\t</div>\t\r\n\t\t\t\t\t<!-- </div>\t -->\t\t\t\t\t\r\n\r\n\t\t\t\t\t\r\n\t\t</mat-expansion-panel>\r\n\t</mat-accordion>\r\n</div>"
+module.exports = "<div class=\"viewer\">\r\n\t<mat-accordion>\r\n\t\t<mat-expansion-panel [expanded]=\"true\">\r\n\t\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t\t  Procedure ({{_procedureArr.length}})\r\n\t\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t\t\r\n\t\t\t\t\t<!-- <button (click)=\"showProd=!showProd\">Procedure</button>\r\n\t\t\t\t\t<div *ngIf='showProd'> -->\r\n\t\t\t\t\t<div class=\"tree\">\r\n\t\t\t\t\t\t<datalist id=\"variable-suggestions\" >\r\n\t\t\t\t\t\t    <option *ngFor='let v of _variableList' value=\"{{v}}\"></option>\r\n\t\t\t\t\t\t</datalist>\r\n\r\n\t\t\t\t\t\t<tree-root #tree \t\r\n\t\t\t\t\t\t\t\t\t[nodes]='_procedureArr' \r\n\t\t\t\t\t\t\t\t\t[options]='_tree_options'  \r\n\t\t\t\t\t\t\t\t\t(moveNode)=\"onMoveNode($event)\">\r\n\t\t\t\t\t\t\t\t  <ng-template #treeNodeTemplate \r\n\t\t\t\t\t\t\t\t  \t\tlet-prod \r\n\t\t\t\t\t\t\t\t  \t\tlet-index=\"index\" \r\n\t\t\t\t\t\t\t\t  \t\tclass=\"tree-node-wrapper\">\r\n\t\t\t\t\t\t\t\t  \t\t<div class = \"full-container\" (click)=\"focus($event, prod)\">\r\n\r\n\t\t\t\t\t\t\t\t  \t\t\t<div class = \"seg1\" \r\n\t\t\t\t\t\t\t\t  \t\t\t\t[class.print]=\"prod.data.printToConsole()\"\r\n\t\t\t\t\t\t\t\t  \t\t\t\t[class.error]=\"prod.data.getError()\" \r\n\t\t\t\t\t\t\t\t  \t\t\t\t[class.disabled]=\"prod.data.isDisabled()\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<!-- template for data -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Data'\"> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" [style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\" list=\"variable-suggestions\" >\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"equal\">=</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" [style.width.ch]=\"prod.data.getRightComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getRightComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'right')\" spellcheck=\"false\" list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<!-- template for a function call -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Function'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" [style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\" list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"equal\">=</span>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"module\">{{ prod.data.getFunctionName()}}</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(<span *ngIf=\"prod.data.getRightComponent().params.length > 0\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"param-container\" *ngFor=\"let p of prod.data.updateParams();let i=index;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [(ngModel)]=\"prod.data.getRightComponent().params[i]\" #ctrl=\"ngModel\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [style.width.ch]=\"prod.data.getRightComponent().params[i] ? (prod.data.getRightComponent().params[i].length + 5) : 10\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t (change)=\"updateProcedure($event, prod, 'right')\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t <span *ngIf=\"i < prod.data.updateParams().length - 1\"> , </span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</span>)\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t:::&nbsp;&nbsp;&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select (change)=\"updateProcedure($event, prod, 'right')\" [(ngModel)]=\"prod.data.getRightComponent().category\" #ctrl=\"ngModel\">\r\n\t\t\t\t\t\t\t\t\t\t\t         \t    <option *ngFor=\"let otp of prod.data.getOutputs()\" [value]=\"otp\">{{otp}}</option>\r\n\t\t\t\t\t\t\t\t\t\t\t            </select> \r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'IfElse'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span>if-else</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'If'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t <span>if</span> ( <input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t[style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\"  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\"> )\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Else'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t <span>else</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'For Loop'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t <span>for (</span> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  <input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required (change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  <span style=\"margin: 0px 10px;\">in</span>  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  <input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[style.width.ch]=\"prod.data.getRightComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \t\t\t[(ngModel)]=\"prod.data.getRightComponent().expression\" #ctrl=\"ngModel\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  \t\t\trequired (change)=\"updateProcedure($event, prod, 'right')\" spellcheck=\"false\" list=\"variable-suggestions\"> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t  )\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() == 'Action'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class='procedure-item'>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[style.width.ch]=\"prod.data.getLeftComponent().expression.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[(ngModel)]=\"prod.data.getLeftComponent().expression\" #ctrl=\"ngModel\" required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(change)=\"updateProcedure($event, prod, 'left')\" spellcheck=\"false\" list=\"variable-suggestions\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"equal\">=</span>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"module\">{{prod.data.getRightComponent().module.replace(\"_\",  \".\")}}</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t.\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t  <span class=\"function\">{{prod.data.getRightComponent().fn_name}}</span> \r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t( <span *ngIf=\"prod.data.getRightComponent().params.length>0\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"param-container\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t*ngFor=\"let p of prod.data.getRightComponent().params; let i=index\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input matInput class=\"tree-input\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [style.width.ch]=\"prod.data.getRightComponent().params[i].value.length + 4\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t [(ngModel)]=\"prod.data.getRightComponent().params[i].value\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t #ctrl=\"ngModel\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t required\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t (change)=\"updateProcedure($event, prod, 'right')\" spellcheck=\"false\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t list=\"variable-suggestions\">\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span *ngIf='i<prod.data.getRightComponent().params.length-1'>,</span>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div> \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\t)\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"seg2 copy_paste_actions\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t<div class = \"seg2\" >\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!-- cut copy paste -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button mat-button \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t*ngIf=\"prod.data.getType() != 'Else' && prod.data.getType() != 'If'\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(click)=\"copyProcedure($event, prod, false)\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tmatTooltip=\"Cut Procedure Line\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<mat-icon>content_cut</mat-icon>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button mat-button \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t*ngIf=\"prod.data.getType() != 'Else' && prod.data.getType() != 'If'\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(click)=\"copyProcedure($event, prod, true)\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tmatTooltip=\"Copy Procedure Line\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<mat-icon>content_copy</mat-icon>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button mat-button \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t \t*ngIf=\"copiedProd && prod.data.getType() != 'IfElse'\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(click)=\"pasteProcedure($event, prod)\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tmatTooltip=\"Paste Procedure\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<mat-icon>content_paste</mat-icon>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div *ngIf=\"prod.data.getType() != 'Else' && prod.data.getType() != 'If'\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!-- other actions -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button mat-button \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t    *ngIf=\"prod.data.getType() =='Action'\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t(click)=\"openHelp($event, prod)\" tabindex=\"-1\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<mat-icon>help_outline</mat-icon>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t   \t<button mat-button\r\n\t\t\t\t\t\t\t\t\t\t\t\t   \t\t(click)=\"togglePrint(prod.data)\" \r\n\t\t\t\t\t\t\t\t\t\t\t\t   \t\tmatTooltip=\"Print value to console\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t   \t\t*ngIf=\"prod.data.getType() =='Action' || prod.data.getType() =='Data'\" tabindex=\"-1\">\r\n\t\t\t\t\t    \t\t\t\t\t    \t\t<mat-icon>print</mat-icon>\r\n\t\t\t\t\t\t    \t\t\t\t\t    </button>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<button mat-button (click)=\"toggle(prod.data)\" matTooltip=\"Enable/Disable Line\" tabindex=\"-1\">\r\n\t\t\t\t\t    \t\t\t\t\t    \t\t<mat-icon>check_circle</mat-icon>\r\n\t\t\t\t\t\t    \t\t\t\t\t    </button>\r\n\t\t\t\t\t\t\t\t\t\t\t        \r\n\t\t\t\t\t\t\t\t\t\t\t        <button mat-button (click)=\"deleteProcedure(prod)\" matTooltip=\"Delete Line\" tabindex=\"-1\">\r\n\t\t\t\t\t    \t\t\t\t\t    \t\t<mat-icon>delete</mat-icon>\r\n\t\t\t\t\t\t    \t\t\t\t\t    </button>\r\n\t\t\t\t\t\t    \t\t\t\t\t    <!-- <button (click)=\"disableProcedure(prod, $event)\">Disable</button>\r\n\t\t\t\t\t\t    \t\t\t\t\t    <button (click)=\"go($event)\">Copy</button> -->\r\n\t\t\t\t\t    \t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t    \t\t\t\t</div>\r\n\r\n\t\t\t\t\t\t    \t\t\t</div>\r\n\t\t\t\t\t\t\t\t  </ng-template>\r\n\t\t\t\t\t\t</tree-root> \r\n\t\t\t\t\t</div>\t\r\n\t\t\t\t\t<!-- </div>\t -->\t\t\t\t\t\r\n\r\n\t\t\t\t\t\r\n\t\t</mat-expansion-panel>\r\n\t</mat-accordion>\r\n</div>"
 
 /***/ }),
 
 /***/ "./src/app/ui-components/editors/procedure-editor/procedure-editor.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.procedure-item {\n  font-family: 'Ubuntu Mono', monospace; }\n\n.procedure-item span.module {\n    color: #F3A32A !important;\n    font-weight: bold; }\n\n.procedure-item span.function {\n    color: #7B52AB !important;\n    font-weight: bold; }\n\n.procedure-item span.equal {\n    text-align: center;\n    width: 15px; }\n\n.seg1.disabled {\n  opacity: 0.4; }\n\n.seg1.print {\n  background-color: #A5F3A5; }\n\n.seg1.error {\n  background-color: red; }\n\nmat-expansion-panel-header {\n  background-color: #F1F1F1 !important;\n  border-top: 1px solid #8AA8C0 !important;\n  border-bottom: 1px solid #8AA8C0 !important;\n  padding-left: 15px !important; }\n\nmat-expansion-panel-header mat-panel-title {\n    color: #395D73 !important;\n    font-weight: bold !important;\n    font-size: 12px !important; }\n\nmat-expansion-panel-header:hover {\n    background-color: #F1F1F1 !important; }\n\n/*\r\n.viewer{\r\n\t@extend .viewer;\r\n\t.container{\r\n\t\tposition: relative;\r\n\r\n\t\tpadding: 15px; \r\n\r\n\t\tdisplay: flex; \r\n\t\tflex-direction: column;\r\n\r\n\t\t.tree{\r\n\t\t\tmargin-top: 20px; \r\n\t\t\tmin-height: 150px;\r\n\t\t\theight: 100%;\r\n\t\t\twidth: 100%; \r\n\t\t}\r\n\r\n\t\t.tree-node-wrapper{\r\n\t\t\tinput.tree-input{\r\n\t\t\t\twidth: auto;\r\n\t\t\t\tdisplay: inline-block;\r\n\t\t\t\ttext-align: center;\r\n\t\t\t}\r\n\r\n\t\t\t/*.param-container{\r\n\t\t\t\tdisplay: inline-block;\r\n\t\t\t\tbackground-color: $color3;\r\n\t\t\t}*/\n\n/*\r\n\t\t\t.procedure-item{\r\n\t\t\t\tmargin: 3px; \r\n\t\t\t\tpadding: 3px;\r\n\r\n\t\t\t\tfont-size: 12px; \r\n\t\t\t\tline-height: 14px;\r\n\t\t\t\t\r\n\t\t\t\twidth: 100%;\r\n\t\t\t\tborder: 1px solid $color2;\r\n\t\t\t\tbackground-color: $color2;\r\n\t\t\t\tcursor: move;\r\n\r\n\t\t\t\t.btn-group{\r\n\t\t\t\t\tdisplay: none;\r\n\t\t\t\t\tmargin: 5px 0px;\r\n\t\t\t\t\tdisplay: flex; \r\n\t\t\t\t\tflex-direction: row; \r\n\t\t\t\t\tjustify-content: space-between;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}*/\n\n/*.toolbox{\r\n\t\t\tmax-height: 600px;\r\n\t\t\tbackground-color:$color1;\r\n\t\t\t.fn_name{\r\n\t\t\t\tfont-size: 12px;\r\n\t\t\t}\r\n\t\t}\r\n\t}*/\n\n/* \t.container{\r\n\tposition: relative;\r\n\r\n\t.procedure{\r\n\r\n\t\tpadding: 4px; \r\n\t\twidth: 100%;\r\n\r\n\t\t[contenteditable=\"true\"]:active,\r\n\t\t[contenteditable=\"true\"]:focus{\r\n\t\tborder:none;\r\n\t\toutline:none;\r\n\t\t}\r\n\r\n\t\t[contenteditable=\"true\"]{\r\n\t\t\tcolor: blue;\r\n\t\t\tborder-bottom: 1px dashed blue;\r\n\t\t}\r\n\r\n\r\n\t\t&.disabled{\r\n\t\t\tbackground-color: red;\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t.btn-container{\r\n\t\tposition: absolute;\r\n\t\tbottom: 0px; \r\n\t\tleft: 30%;\r\n\r\n\t\tbutton{\r\n\t\t\theight: 30px; \r\n\t\t\twidth: 30px;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\ninput.tree-input{\r\n\tbackground-color: transparent;\r\n\twidth: auto;\r\n\tborder: 0px; \r\n\theight: 18px; \r\n\tfont-size: 14px;\r\n\tpadding: 5px; \r\n\tdisplay: inline;\r\n\tfont-family: sans-serif;\r\n\tline-height: 18px;\r\n\ttext-align: center;\r\n\tvertical-align: middle;\r\n\tborder-bottom: 1px dashed blue;\r\n} \t\r\n\r\n}\r\n\r\n\r\n/* .dialog{\r\n\tposition: absolute;\r\n\ttop: 100px;\r\n\tleft: 0px;\r\n\tborder: 1px solid black;\r\n\tpadding: 10px;\r\n\tbackground-color: white;\r\n\tz-index: 14;\r\n\tfont-size: 12px;\r\n\r\n\t.close{\r\n\t\tcursor: pointer;\r\n\t}\r\n\r\n\t.toolbox{\r\n\t\t.fn_container{\r\n\t\t\t.fn_name{\r\n\t\t\t\t\r\n\t\t\t\tcursor: pointer;\r\n\t\t\t\t\r\n\t\t\t\t&:hover{\r\n\t\t\t\t\tbackground-color: gray;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n */\n"
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.procedure-item {\n  font-family: 'Ubuntu Mono', monospace; }\n\n.procedure-item span.module {\n    color: #F3A32A !important;\n    font-weight: bold; }\n\n.procedure-item span.function {\n    color: #7B52AB !important;\n    font-weight: bold; }\n\n.procedure-item span.equal {\n    text-align: center;\n    width: 15px; }\n\n.seg1.disabled {\n  opacity: 0.4; }\n\n.seg1.print {\n  background-color: #A5F3A5; }\n\n.seg1.error {\n  background-color: red; }\n\nmat-expansion-panel-header {\n  background-color: #F1F1F1 !important;\n  border-top: 1px solid #8AA8C0 !important;\n  border-bottom: 1px solid #8AA8C0 !important;\n  padding-left: 15px !important; }\n\nmat-expansion-panel-header mat-panel-title {\n    color: #395D73 !important;\n    font-weight: bold !important;\n    font-size: 12px !important; }\n\nmat-expansion-panel-header:hover {\n    background-color: #F1F1F1 !important; }\n"
 
 /***/ }),
 
@@ -10489,10 +10489,27 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
             }
         };
     }
+    ngOnInit() {
+        this.setProperties();
+        this.tree.treeModel.update();
+    }
+    ngAfterViewInit() {
+        this.tree.treeModel.expandAll();
+    }
     reset() {
         this._procedureArr = [];
         this._node = undefined;
         this._variableList = [];
+    }
+    update(message) {
+        if (message == "procedure") {
+            this.tree.treeModel.update();
+            this._variableList = this._node.getVariableList();
+            this._focusedProd = this.flowchartService.getSelectedProcedure();
+        }
+        else {
+            this.setProperties();
+        }
     }
     setProperties() {
         this._node = this.flowchartService.getSelectedNode();
@@ -10519,25 +10536,15 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
             }
         }
     }
-    update(message) {
-        if (message == "procedure") {
-            this.tree.treeModel.update();
-            this._variableList = this._node.getVariableList();
-            this._focusedProd = this.flowchartService.getSelectedProcedure();
-        }
-        else {
-            this.setProperties();
-        }
-    }
-    ngOnInit() {
-        this.setProperties();
-        this.tree.treeModel.update();
-    }
-    ngAfterViewInit() {
-        this.tree.treeModel.expandAll();
-    }
     getString(type) {
         return type.toString();
+    }
+    //
+    // Procedure Functions 
+    //
+    focus($event, prod) {
+        this._focusedProd = prod;
+        this.flowchartService.selectProcedure(prod.data);
     }
     openHelp($event, prod) {
         $event.stopPropagation();
@@ -10545,14 +10552,6 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
             let fn = prod.data.getRightComponent().expression.split(".");
             fn = { module: fn[0], name: fn[1] };
             this.layoutService.showHelp(fn);
-        }
-    }
-    toggle(prod) {
-        if (prod.isDisabled()) {
-            prod.enable();
-        }
-        else {
-            prod.disable();
         }
     }
     togglePrint(prod) {
@@ -10563,39 +10562,13 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
             prod.enablePrint();
         }
     }
-    focus($event, prod) {
-        this._focusedProd = prod;
-        this.flowchartService.selectProcedure(prod.data);
-    }
-    //
-    //
-    //
-    onMoveNode($event) {
-        // get previous parent
-        let moved_procedure = $event.node;
-        let to_procedure = $event.to.parent;
-        let moved_position = $event.to.index;
-        moved_procedure.setParent(to_procedure);
-    }
-    updateFunctionProd(prod) {
-        let rightC = prod.getRightComponent();
-        let reqParams = prod.updateParams().length;
-        if (rightC.params.length > reqParams) {
-            rightC.params = rightC.params.slice(0, reqParams);
+    toggle(prod) {
+        if (prod.isDisabled()) {
+            prod.enable();
         }
-        let paramStr = rightC.params.join(",");
-        let expr = prod.getFunctionName() + "(" + paramStr + ")" + "." + rightC.category;
-        rightC.expression = expr;
-    }
-    updateProcedure($event, prod, property) {
-        // todo: change this string attachment!
-        if (property == 'left' && prod.data._type !== "If") {
-            prod.data.getLeftComponent().expression = prod.data.getLeftComponent().expression.replace(/[^\w\[\]]/gi, '');
+        else {
+            prod.disable();
         }
-        if (property == 'right' && prod.data._type == "Function") {
-            this.updateFunctionProd(prod.data);
-        }
-        this._variableList = this._node.getVariableList();
     }
     deleteProcedure(node) {
         let parent = node.parent;
@@ -10608,6 +10581,73 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
             this.tree.treeModel.update();
         }
         this.flowchartService.selectProcedure(undefined);
+    }
+    copyProcedure($event, node, copy) {
+        let prod = node.data;
+        this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(prod, undefined);
+        if (copy) {
+            // do nothing
+        }
+        else {
+            this.deleteProcedure(node);
+        }
+    }
+    pasteProcedure($event, node, pos) {
+        let parent = node.data;
+        if (parent.hasChildren) {
+            this.copiedProd.setParent(parent);
+            parent.addChildAtPosition(this.copiedProd, 0);
+        }
+        else {
+            let pos = node.index;
+            let grandparent = node.parent;
+            // in the top level
+            if (grandparent.data.virtual) {
+                this._node.addProcedureAtPosition(this.copiedProd, pos + 1);
+            }
+            else {
+                grandparent.data.addChildAtPosition(this.copiedProd, pos + 1);
+            }
+            //grandparent.addChildAtPosition(this.copiedProd, pos)
+        }
+        this._procedureArr = this._node.getProcedure();
+        this.tree.treeModel.update();
+        this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(this.copiedProd, undefined);
+        ;
+    }
+    //
+    //
+    //
+    onMoveNode($event) {
+        // get previous parent
+        let moved_procedure = $event.node;
+        let to_procedure = $event.to.parent;
+        let moved_position = $event.to.index;
+        moved_procedure.setParent(to_procedure);
+    }
+    //
+    //	procedure update
+    //
+    updateProcedure($event, prod, property) {
+        // todo: change this string attachment!
+        if (property == 'left' && prod.data._type !== "If") {
+            prod.data.getLeftComponent().expression = prod.data.getLeftComponent().expression.replace(/[^\w\[\]]/gi, '');
+        }
+        if (property == 'right' && prod.data._type == "Function") {
+            this.updateFunctionProd(prod.data);
+        }
+        this._variableList = this._node.getVariableList();
+    }
+    // helper function
+    updateFunctionProd(prod) {
+        let rightC = prod.getRightComponent();
+        let reqParams = prod.updateParams().length;
+        if (rightC.params.length > reqParams) {
+            rightC.params = rightC.params.slice(0, reqParams);
+        }
+        let paramStr = rightC.params.join(",");
+        let expr = prod.getFunctionName() + "(" + paramStr + ")" + "." + rightC.category;
+        rightC.expression = expr;
     }
 };
 __decorate([
