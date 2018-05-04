@@ -3055,32 +3055,6 @@ let FlowchartService = class FlowchartService {
                 moduleSet.push(mod);
             }
         });
-        // Object.keys(moduleMap).map(function(key){
-        //     moduleSet.push(moduleMap[key])
-        // })
-        /*let mod: IModule = { name: "gs-modeling", version: "0.1", author: "AKM"};
-        for(let prop in ModuleSet){
-          mod[prop] = ModuleSet[prop];
-        }
-    
-        moduleSet.push(mod);
-        moduleMap["gs-modeling"] = mod;
-    
-        */
-        // modules.map(function(mod){
-        //     let name: string = ModuleUtils.getName(mod);
-        //     let version: string = ModuleUtils.getVersion(mod);
-        //     let author: string = ModuleUtils.getAuthor(mod);
-        //     // select the required module from the global module set - that has all the functions
-        //     let modClass = ModuleSet[name]; //ModuleUtils.getModuleFromSet(ModuleSet, name);
-        //       if( ModuleUtils.isCompatible(mod, modClass) ){
-        //           moduleSet.push(modClass);
-        //           moduleMap[name] = modClass;
-        //       }
-        //       else{
-        //           console.warn(name + " module not compatible. Please check version / author");
-        //       }
-        // })
     }
     getModules() {
         return this._moduleSet;
@@ -12674,9 +12648,9 @@ Object.keys(__WEBPACK_IMPORTED_MODULE_2_mobius_array__).map(function (key) {
     let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_2_mobius_array__[key], "attrib", undefined);
     AllModules.push(module);
 });
-Object.keys(__WEBPACK_IMPORTED_MODULE_1_mobius_math__).map(function (key) {
-    let pre = "math_";
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_1_mobius_math__[key], "attrib", undefined);
+Object.keys(__WEBPACK_IMPORTED_MODULE_6_mobius_csv__).map(function (key) {
+    let pre = "csv_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_6_mobius_csv__[key], "attrib", undefined);
     AllModules.push(module);
 });
 Object.keys(__WEBPACK_IMPORTED_MODULE_3_mobius_turf__).map(function (key) {
@@ -12684,19 +12658,19 @@ Object.keys(__WEBPACK_IMPORTED_MODULE_3_mobius_turf__).map(function (key) {
     let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_3_mobius_turf__[key], "attrib", undefined);
     AllModules.push(module);
 });
-Object.keys(__WEBPACK_IMPORTED_MODULE_4_mobius_string__).map(function (key) {
-    let pre = "str_";
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_4_mobius_string__[key], "attrib", undefined);
-    AllModules.push(module);
-});
 Object.keys(__WEBPACK_IMPORTED_MODULE_5_mobius_geojson__).map(function (key) {
     let pre = "geo_";
     let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_5_mobius_geojson__[key], "attrib", undefined);
     AllModules.push(module);
 });
-Object.keys(__WEBPACK_IMPORTED_MODULE_6_mobius_csv__).map(function (key) {
-    let pre = "csv_";
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_6_mobius_csv__[key], "attrib", undefined);
+Object.keys(__WEBPACK_IMPORTED_MODULE_1_mobius_math__).map(function (key) {
+    let pre = "math_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_1_mobius_math__[key], "attrib", undefined);
+    AllModules.push(module);
+});
+Object.keys(__WEBPACK_IMPORTED_MODULE_4_mobius_string__).map(function (key) {
+    let pre = "str_";
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_4_mobius_string__[key], "attrib", undefined);
     AllModules.push(module);
 });
 

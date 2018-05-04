@@ -18,21 +18,16 @@ Object.keys(MArray).map(function(key){
 	AllModules.push(module);
 });
 
-Object.keys(MMath).map(function(key){
-	let pre = "math_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MMath[key], "attrib", undefined);
+Object.keys(MCsv).map(function(key){
+	let pre = "csv_";
+	let module: IModule = ModuleUtils.createModule( pre + key, MCsv[key], "attrib", undefined);
 	AllModules.push(module);
 });
+
 
 Object.keys(MTurf).map(function(key){
 	let pre = "geo_";
 	let module: IModule = ModuleUtils.createModule( pre + key, MTurf[key], "attrib", undefined);
-	AllModules.push(module);
-});
-
-Object.keys(MString).map(function(key){
-	let pre = "str_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MString[key], "attrib", undefined);
 	AllModules.push(module);
 });
 
@@ -42,11 +37,20 @@ Object.keys(MGeojson).map(function(key){
 	AllModules.push(module);
 });
 
-Object.keys(MCsv).map(function(key){
-	let pre = "csv_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MCsv[key], "attrib", undefined);
+
+Object.keys(MMath).map(function(key){
+	let pre = "math_";
+	let module: IModule = ModuleUtils.createModule( pre + key, MMath[key], "attrib", undefined);
 	AllModules.push(module);
 });
+
+
+Object.keys(MString).map(function(key){
+	let pre = "str_";
+	let module: IModule = ModuleUtils.createModule( pre + key, MString[key], "attrib", undefined);
+	AllModules.push(module);
+});
+
 
 export {AllModules};
 
