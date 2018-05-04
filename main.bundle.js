@@ -10500,6 +10500,8 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
         var key = event.keyCode;
         var ctrlDown = event.ctrlKey || event.metaKey; // Makey support
         if (ctrlDown && (event.srcElement.className.indexOf("input") > -1)) {
+            event.stopPropagation();
+            console.log("Resturn");
             return;
         }
         ;
@@ -10625,6 +10627,9 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
         }
     }
     pasteProcedure($event, node, pos) {
+        if (!this.copiedProd) {
+            return;
+        }
         let parent = node.data;
         if (parent.getType() == "IfElse") {
             return;
@@ -11178,7 +11183,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.10-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.11-cesium</p>\r\n"
 
 /***/ }),
 
