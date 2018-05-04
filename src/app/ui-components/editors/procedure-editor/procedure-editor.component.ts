@@ -1,4 +1,4 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
+import {Component, Injector, OnInit, ViewChild, HostListener} from '@angular/core';
 import {NgModel} from '@angular/forms';
 
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
@@ -10,6 +10,13 @@ import {LayoutService} from '../../../global-services/layout.service';
 
 
 import {ModuleUtils} from "../../../base-classes/code/CodeModule";
+
+
+export enum KEY_CODE {
+  CUT = 88,
+  COPY = 67, 
+  PASTE = 86 
+}
 
 @Component({
   selector: 'app-procedure-editor',
@@ -49,6 +56,31 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 		super(injector, "procedure-editor"); 
 	}
 
+	@HostListener('window:keyup', ['$event'])
+		keyEvent(event: KeyboardEvent) {
+
+			var key = event.keyCode
+			var ctrlDown = event.ctrlKey || event.metaKey // Makey support
+
+			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	return;	};
+
+			if (ctrlDown && key == KEY_CODE.CUT) {
+				this.copyProcedure(event, this.nodeInFocus, false);
+			}
+			else if(ctrlDown && key == KEY_CODE.COPY) {
+				this.copyProcedure(event, this.nodeInFocus, true);
+			}
+			else if(ctrlDown && key == KEY_CODE.PASTE){
+				this.pasteProcedure(event, this.nodeInFocus);
+			}
+		}
+
+
+	nodeInFocus;
+	hover($event, node): void{
+		//console.log("hovering", $event, node)
+		this.nodeInFocus = node;
+	}
 
 	ngOnInit(){
 		this.setProperties();
