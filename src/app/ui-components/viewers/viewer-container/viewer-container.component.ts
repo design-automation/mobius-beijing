@@ -76,6 +76,7 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 				break;
 			case 1: 
 				this.active_viewer = "code-viewer"
+				alert("code active")
 				break;
 			case 2: 
 				this.active_viewer = "text-viewer"
