@@ -200,55 +200,67 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 
 	copiedProd: IProcedure;
 	copyProcedure($event, node, copy: boolean): void{
-		let prod: IProcedure = node.data;
+		try{
+			let prod: IProcedure = node.data;
 
-		// check for "If" or "Else" type
-		if(prod.getType() == "If" || prod.getType() == "Else"){
-			return;
+			// check for "If" or "Else" type
+			if(prod.getType() == "If" || prod.getType() == "Else"){
+				return;
+			}
+
+			this.copiedProd = ProcedureFactory.getProcedureFromData(prod, undefined);
+
+			if(copy){
+				// do nothing
+			}else{
+				this.deleteProcedure(node)
+			}
 		}
-
-		this.copiedProd = ProcedureFactory.getProcedureFromData(prod, undefined);
-
-		if(copy){
-			// do nothing
-		}else{
-			this.deleteProcedure(node)
+		catch(ex){
+			console.error("Error copying procedure");
+			this.copiedProd = undefined;
 		}
 	}
 
 	pasteProcedure($event, node, pos?: number): void{
+		try{
+			if(!this.copiedProd){
+				return;
+			}
 
-		if(!this.copiedProd){
-			return;
-		}
+			let parent: IProcedure = node.data;
 
-		let parent: IProcedure = node.data;
+			if(parent.getType() == "IfElse"){
+				return;
+			}
 
-		if(parent.getType() == "IfElse"){
-			return;
-		}
-
-		if(parent.hasChildren){
-			this.copiedProd.setParent(parent);
-			parent.addChildAtPosition(this.copiedProd, 0);
-		}
-		else{
-			let pos = node.index;
-			let grandparent = node.parent;
-			// in the top level
-			if(grandparent.data.virtual){
-				this._node.addProcedureAtPosition(this.copiedProd, pos+1);
+			if(parent.hasChildren){
+				this.copiedProd.setParent(parent);
+				parent.addChildAtPosition(this.copiedProd, 0);
 			}
 			else{
-				grandparent.data.addChildAtPosition(this.copiedProd, pos+1);
+				let pos = node.index;
+				let grandparent = node.parent;
+				// in the top level
+				if(grandparent.data.virtual){
+					this._node.addProcedureAtPosition(this.copiedProd, pos+1);
+				}
+				else{
+					grandparent.data.addChildAtPosition(this.copiedProd, pos+1);
+				}
+
+				//grandparent.addChildAtPosition(this.copiedProd, pos)
 			}
 
-			//grandparent.addChildAtPosition(this.copiedProd, pos)
-		}
+			this._procedureArr = this._node.getProcedure();
+			this.tree.treeModel.update();
+			this.copiedProd = ProcedureFactory.getProcedureFromData(this.copiedProd, undefined);
 
-		this._procedureArr = this._node.getProcedure();
-		this.tree.treeModel.update();
-		this.copiedProd = ProcedureFactory.getProcedureFromData(this.copiedProd, undefined);;
+		}
+		catch(ex){
+			console.error("Error pasting procedure");
+			this.copiedProd = undefined;
+		}
 	}
 
 	//
