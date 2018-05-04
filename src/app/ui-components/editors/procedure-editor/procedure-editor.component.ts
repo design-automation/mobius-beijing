@@ -62,7 +62,7 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 			var key = event.keyCode
 			var ctrlDown = event.ctrlKey || event.metaKey // Makey support
 
-			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	return;	};
+			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); console.log("Resturn"); return;	};
 
 			if (ctrlDown && key == KEY_CODE.CUT) {
 				this.copyProcedure(event, this.nodeInFocus, false);
@@ -207,7 +207,6 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 			return;
 		}
 
-
 		this.copiedProd = ProcedureFactory.getProcedureFromData(prod, undefined);
 
 		if(copy){
@@ -218,6 +217,10 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	}
 
 	pasteProcedure($event, node, pos?: number): void{
+
+		if(!this.copiedProd){
+			return;
+		}
 
 		let parent: IProcedure = node.data;
 
