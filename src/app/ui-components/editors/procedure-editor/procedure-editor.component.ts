@@ -201,6 +201,13 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	copiedProd: IProcedure;
 	copyProcedure($event, node, copy: boolean): void{
 		let prod: IProcedure = node.data;
+
+		// check for "If" or "Else" type
+		if(prod.getType() == "If" || prod.getType() == "Else"){
+			return;
+		}
+
+
 		this.copiedProd = ProcedureFactory.getProcedureFromData(prod, undefined);
 
 		if(copy){
@@ -213,6 +220,10 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	pasteProcedure($event, node, pos?: number): void{
 
 		let parent: IProcedure = node.data;
+
+		if(parent.getType() == "IfElse"){
+			return;
+		}
 
 		if(parent.hasChildren){
 			this.copiedProd.setParent(parent);
