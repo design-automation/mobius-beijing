@@ -28,14 +28,6 @@
 								  		class="tree-node-wrapper">
 								  		<div class = "full-container" (click)="focus($event, prod)">
 
-											<!--<div class = "seg3" *ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'">
-					    					   	<button mat-button 
-												    *ngIf="prod.data.getType() =='Action'"
-													(click)="openHelp($event, prod)">
-													<mat-icon>help_outline</mat-icon>
-												</button>
-
-						    				</div>-->
 								  			<div class = "seg1" 
 								  				[class.print]="prod.data.printToConsole()"
 								  				[class.error]="prod.data.getError()" 
@@ -165,26 +157,59 @@
 
 											</div>
 
-											<div class = "seg2" *ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'">
-												<button mat-button 
-												    *ngIf="prod.data.getType() =='Action'"
-													(click)="openHelp($event, prod)" tabindex="-1">
-													<mat-icon>help_outline</mat-icon>
-												</button>
-											   <button mat-button
-											   		(click)="togglePrint(prod.data)" 
-											   		matTooltip="Print value to console"
-											   		*ngIf="prod.data.getType() =='Action' || prod.data.getType() =='Data'" tabindex="-1">
-				    					    		<mat-icon>print</mat-icon>
-					    					    </button>
-												 <button mat-button (click)="toggle(prod.data)" matTooltip="Enable/Disable Line" tabindex="-1">
-				    					    		<mat-icon>check_circle</mat-icon>
-					    					    </button>
-										        <button mat-button (click)="deleteProcedure(prod)" matTooltip="Delete Line" tabindex="-1">
-				    					    		<mat-icon>delete</mat-icon>
-					    					    </button>
-					    					    <!-- <button (click)="disableProcedure(prod, $event)">Disable</button>
-					    					    <button (click)="go($event)">Copy</button> -->
+											<div class="seg2 copy_paste_actions">
+												
+											</div>
+
+											<div class = "seg2" >
+
+												<div>
+													<!-- cut copy paste -->
+													<button mat-button 
+														*ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'"
+														(click)="copyProcedure($event, prod, false)"
+														matTooltip="Cut Procedure Line">
+														<mat-icon>content_cut</mat-icon>
+													</button>
+													<button mat-button 
+														*ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'"
+														(click)="copyProcedure($event, prod, true)"
+														matTooltip="Copy Procedure Line">
+														<mat-icon>content_copy</mat-icon>
+													</button>
+													<button mat-button 
+													 	*ngIf="copiedProd && prod.data.getType() != 'IfElse'" 
+														(click)="pasteProcedure($event, prod)"
+														matTooltip="Paste Procedure">
+														<mat-icon>content_paste</mat-icon>
+													</button>
+												</div>
+												
+												<div *ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'">
+													<!-- other actions -->
+													<button mat-button 
+													    *ngIf="prod.data.getType() =='Action'"
+														(click)="openHelp($event, prod)" tabindex="-1">
+														<mat-icon>help_outline</mat-icon>
+													</button>
+
+												   	<button mat-button
+												   		(click)="togglePrint(prod.data)" 
+												   		matTooltip="Print value to console"
+												   		*ngIf="prod.data.getType() =='Action' || prod.data.getType() =='Data'" tabindex="-1">
+					    					    		<mat-icon>print</mat-icon>
+						    					    </button>
+													
+													<button mat-button (click)="toggle(prod.data)" matTooltip="Enable/Disable Line" tabindex="-1">
+					    					    		<mat-icon>check_circle</mat-icon>
+						    					    </button>
+											        
+											        <button mat-button (click)="deleteProcedure(prod)" matTooltip="Delete Line" tabindex="-1">
+					    					    		<mat-icon>delete</mat-icon>
+						    					    </button>
+						    					    <!-- <button (click)="disableProcedure(prod, $event)">Disable</button>
+						    					    <button (click)="go($event)">Copy</button> -->
+					    						</div>
 						    				</div>
 
 						    			</div>
