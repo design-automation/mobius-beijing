@@ -10612,6 +10612,10 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
     }
     copyProcedure($event, node, copy) {
         let prod = node.data;
+        // check for "If" or "Else" type
+        if (prod.getType() == "If" || prod.getType() == "Else") {
+            return;
+        }
         this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(prod, undefined);
         if (copy) {
             // do nothing
@@ -10622,6 +10626,9 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
     }
     pasteProcedure($event, node, pos) {
         let parent = node.data;
+        if (parent.getType() == "IfElse") {
+            return;
+        }
         if (parent.hasChildren) {
             this.copiedProd.setParent(parent);
             parent.addChildAtPosition(this.copiedProd, 0);
@@ -11171,7 +11178,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.0-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.10-cesium</p>\r\n"
 
 /***/ }),
 
@@ -12554,7 +12561,7 @@ TextViewerComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/viewer-container/viewer-container.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer-container\">  \r\n\t\r\n\t<mat-button-toggle-group class=\"viewer-toggle\" \r\n\t\t*ngIf='!viewer_mode'\r\n\t\t[(ngModel)]=\"active_viewer\" \r\n\t\t(change)=\"updateView()\">\r\n\t\t<div class= \"btn-grp1\">\r\n\t\t\t<mat-button-toggle value=\"three-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"3D Viewer\">\r\n\t\t\t  <mat-icon>3d_rotation</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"cesium-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Cesium Viewer\">\r\n\t\t\t  <mat-icon>public</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"text-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Text Viewer\">\r\n\t\t\t  <mat-icon>description</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<!-- <mat-button-toggle value=\"3\" disabled class=\"viewer-toggle-btn\" matTooltip=\"??\">\r\n\t\t\t  <mat-icon>text_format</mat-icon>\r\n\t\t\t</mat-button-toggle> -->\r\n\t\t\t<mat-button-toggle value=\"console-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Console\">\r\n\t\t\t  <mat-icon>info_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"help-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Function Help\" >\r\n\t\t\t  <mat-icon>help_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"info-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"About Mobius\" >\r\n\t\t\t  <mat-icon>info</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t<div class = \"btn-grp2\">\r\n\t\t\t<mat-button-toggle value=\"1\" id=\"codeViewer\" class=\"viewer-toggle-btn\" matTooltip=\"Code Viewer\">\r\n\t\t\t  <mat-icon>code</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t\r\n\t</mat-button-toggle-group>\r\n\r\n\t<!-- <button class=\"viewer-toggle-btn\" \r\n\t\tmatTooltip=\"Locked: {{this._lock}}\" (click)=\"lock()\" \r\n\t\tstyle=\"position: absolute;right: 0px; top:0px;\">\r\n\t\t<mat-icon>lock</mat-icon>\r\n\t</button>\r\n -->\r\n\t<!-- <app-geometry-viewer *ngIf=\"group.value == 0\"></app-geometry-viewer>\r\n\t<app-cesium-viewer *ngIf=\"group.value == 4\"></app-cesium-viewer>\r\n\t<app-text-viewer *ngIf=\"group.value == 2\"></app-text-viewer>\r\n\t<app-code-viewer *ngIf=\"group.value == 1\"></app-code-viewer>\r\n\t<app-console *ngIf=\"group.value == 3 && !viewer_mode\"></app-console>\r\n\t<app-help-viewer *ngIf=\"group.value == 400 && !viewer_mode\"></app-help-viewer>\r\n\t<app-info-viewer *ngIf=\"group.value == 500 && !viewer_mode\"></app-info-viewer> -->\r\n\r\n\t<ng-container #vc></ng-container>\r\n</div>"
+module.exports = "<div class=\"viewer-container\">  \r\n\t\r\n\t<mat-button-toggle-group class=\"viewer-toggle\" \r\n\t\t*ngIf='!viewer_mode'\r\n\t\t[(ngModel)]=\"active_viewer\" \r\n\t\t(change)=\"updateView()\">\r\n\t\t<div class= \"btn-grp1\">\r\n\t\t\t<mat-button-toggle value=\"three-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"3D Viewer\">\r\n\t\t\t  <mat-icon>3d_rotation</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"cesium-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Cesium Viewer\">\r\n\t\t\t  <mat-icon>public</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"text-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Text Viewer\">\r\n\t\t\t  <mat-icon>description</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<!-- <mat-button-toggle value=\"3\" disabled class=\"viewer-toggle-btn\" matTooltip=\"??\">\r\n\t\t\t  <mat-icon>text_format</mat-icon>\r\n\t\t\t</mat-button-toggle> -->\r\n\t\t\t<mat-button-toggle value=\"console-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Console\">\r\n\t\t\t  <mat-icon>info_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"help-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"Function Help\" >\r\n\t\t\t  <mat-icon>help_outline</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t\t<mat-button-toggle value=\"info-viewer\" class=\"viewer-toggle-btn\" matTooltip=\"About Mobius\" >\r\n\t\t\t  <mat-icon>info</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t<div class = \"btn-grp2\">\r\n\t\t\t<mat-button-toggle value=\"code-viewer\" id=\"codeViewer\" class=\"viewer-toggle-btn\" matTooltip=\"Code Viewer\">\r\n\t\t\t  <mat-icon>code</mat-icon>\r\n\t\t\t</mat-button-toggle>\r\n\t\t</div>\r\n\t\t\r\n\t</mat-button-toggle-group>\r\n\r\n\t<!-- <button class=\"viewer-toggle-btn\" \r\n\t\tmatTooltip=\"Locked: {{this._lock}}\" (click)=\"lock()\" \r\n\t\tstyle=\"position: absolute;right: 0px; top:0px;\">\r\n\t\t<mat-icon>lock</mat-icon>\r\n\t</button>\r\n -->\r\n\t<!-- <app-geometry-viewer *ngIf=\"group.value == 0\"></app-geometry-viewer>\r\n\t<app-cesium-viewer *ngIf=\"group.value == 4\"></app-cesium-viewer>\r\n\t<app-text-viewer *ngIf=\"group.value == 2\"></app-text-viewer>\r\n\t<app-code-viewer *ngIf=\"group.value == 1\"></app-code-viewer>\r\n\t<app-console *ngIf=\"group.value == 3 && !viewer_mode\"></app-console>\r\n\t<app-help-viewer *ngIf=\"group.value == 400 && !viewer_mode\"></app-help-viewer>\r\n\t<app-info-viewer *ngIf=\"group.value == 500 && !viewer_mode\"></app-info-viewer> -->\r\n\r\n\t<ng-container #vc></ng-container>\r\n</div>"
 
 /***/ }),
 
@@ -12633,6 +12640,7 @@ let ViewerContainerComponent = ViewerContainerComponent_1 = class ViewerContaine
                 break;
             case 1:
                 this.active_viewer = "code-viewer";
+                alert("code active");
                 break;
             case 2:
                 this.active_viewer = "text-viewer";
