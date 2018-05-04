@@ -10613,47 +10613,58 @@ let ProcedureEditorComponent = class ProcedureEditorComponent extends __WEBPACK_
         this.flowchartService.selectProcedure(undefined);
     }
     copyProcedure($event, node, copy) {
-        let prod = node.data;
-        // check for "If" or "Else" type
-        if (prod.getType() == "If" || prod.getType() == "Else") {
-            return;
+        try {
+            let prod = node.data;
+            // check for "If" or "Else" type
+            if (prod.getType() == "If" || prod.getType() == "Else") {
+                return;
+            }
+            this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(prod, undefined);
+            if (copy) {
+                // do nothing
+            }
+            else {
+                this.deleteProcedure(node);
+            }
         }
-        this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(prod, undefined);
-        if (copy) {
-            // do nothing
-        }
-        else {
-            this.deleteProcedure(node);
+        catch (ex) {
+            console.error("Error copying procedure");
+            this.copiedProd = undefined;
         }
     }
     pasteProcedure($event, node, pos) {
-        if (!this.copiedProd) {
-            return;
-        }
-        let parent = node.data;
-        if (parent.getType() == "IfElse") {
-            return;
-        }
-        if (parent.hasChildren) {
-            this.copiedProd.setParent(parent);
-            parent.addChildAtPosition(this.copiedProd, 0);
-        }
-        else {
-            let pos = node.index;
-            let grandparent = node.parent;
-            // in the top level
-            if (grandparent.data.virtual) {
-                this._node.addProcedureAtPosition(this.copiedProd, pos + 1);
+        try {
+            if (!this.copiedProd) {
+                return;
+            }
+            let parent = node.data;
+            if (parent.getType() == "IfElse") {
+                return;
+            }
+            if (parent.hasChildren) {
+                this.copiedProd.setParent(parent);
+                parent.addChildAtPosition(this.copiedProd, 0);
             }
             else {
-                grandparent.data.addChildAtPosition(this.copiedProd, pos + 1);
+                let pos = node.index;
+                let grandparent = node.parent;
+                // in the top level
+                if (grandparent.data.virtual) {
+                    this._node.addProcedureAtPosition(this.copiedProd, pos + 1);
+                }
+                else {
+                    grandparent.data.addChildAtPosition(this.copiedProd, pos + 1);
+                }
+                //grandparent.addChildAtPosition(this.copiedProd, pos)
             }
-            //grandparent.addChildAtPosition(this.copiedProd, pos)
+            this._procedureArr = this._node.getProcedure();
+            this.tree.treeModel.update();
+            this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(this.copiedProd, undefined);
         }
-        this._procedureArr = this._node.getProcedure();
-        this.tree.treeModel.update();
-        this.copiedProd = __WEBPACK_IMPORTED_MODULE_1__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedureFromData(this.copiedProd, undefined);
-        ;
+        catch (ex) {
+            console.error("Error pasting procedure");
+            this.copiedProd = undefined;
+        }
     }
     //
     //
@@ -11183,7 +11194,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.11-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.12-cesium</p>\r\n"
 
 /***/ }),
 
