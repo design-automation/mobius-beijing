@@ -53,6 +53,8 @@ import { MobiusViewerComponent } from './ui-components/main/mobius-viewer/mobius
 import { LandingComponent } from './ui-components/main/mobius-landing/landing.component';
 import { MobiusGalleryComponent } from './ui-components/main/mobius-gallery/mobius-gallery.component';
 
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+
 const appRoutes: Routes = [
   { path: 'editor', component: MobiusEditorComponent },
   { path: 'gallery', component: MobiusGalleryComponent },
@@ -134,7 +136,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TreeModule,
     CustomMaterialModule,
     GSViewer, 
-    MobiusCesium
+    MobiusCesium,
+    NgxJsonViewerModule,
   ],
   providers: [FlowchartService, LayoutService, ConsoleService],
   bootstrap: [AppComponent]

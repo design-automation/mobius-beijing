@@ -18,9 +18,9 @@
 					</mat-panel-description>
 				</mat-expansion-panel-header>
 
-				<p [innerHTML]="getType(output)"></p>
+				<p *ngIf="!isJSON(output)" [innerHTML]="getText(output)"></p>
 				
-					<div class="ace-editor" ace-editor [(text)]="codeStr"></div>
+				<ngx-json-viewer *ngIf="isJSON(output)" [json]="output.getValue()" [expanded]="false"></ngx-json-viewer>
 
 			</mat-expansion-panel>
 			
