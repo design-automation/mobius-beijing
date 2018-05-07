@@ -2030,6 +2030,7 @@ class Port {
         this._connected = false;
     }
     setDefaultValue(value) {
+        console.log("setting default:", value);
         this._default = value;
     }
     setComputedValue(value) {
@@ -3405,35 +3406,35 @@ let FlowchartService = class FlowchartService {
                     fname = fname + ".mob";
                 }
             }
-            this.downloadContent({
-                type: 'text/plain;charset=utf-8',
-                filename: fname,
-                content: fileString
-            });
+            // this.downloadContent({
+            //     type: 'text/plain;charset=utf-8',
+            //     filename: fname,
+            //     content: fileString
+            // });
+            var blob = new Blob([fileString], { type: 'application/json' });
+            this.downloadContent(blob, fname);
             this.consoleService.addMessage("File saved successfully");
         }
     }
-    downloadContent(options) {
-        if (!options || !options.content) {
-            throw 'You have at least to provide content to download';
-        }
-        options.filename = options.filename || 'scene.mob';
-        options.type = options.type || 'text/plain;charset=utf-8';
-        options.bom = options.bom || decodeURIComponent('%ef%bb%bf');
-        if (window.navigator.msSaveBlob) {
-            var blob = new Blob([options.bom + options.content], { type: options.type });
-            window.navigator.msSaveBlob(blob, options.filename);
+    // downloadContent(filename, filestring){
+    //   var blob = new Blob([filestring], {type: 'application/json'});
+    //   var url = URL.createObjectURL(blob);
+    // }
+    downloadContent(blob, filename) {
+        if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
         }
         else {
-            var link = document.createElement('a');
-            var content = options.bom + options.content;
-            var uriScheme = ['data:', options.type, ','].join('');
-            link.href = uriScheme + content;
-            link.download = options.filename;
-            //FF requires the link in actual DOM
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const a = document.createElement('a');
+            document.body.appendChild(a);
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = filename;
+            a.click();
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 0);
         }
     }
 };
