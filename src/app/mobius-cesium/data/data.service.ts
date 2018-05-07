@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Subject} from 'rxjs/Subject';
+import * as chroma from "chroma-js";
 
 @Injectable()
 export class DataService {
@@ -9,7 +10,7 @@ export class DataService {
   ColorValue:string;
   HeightValue:string;
   CheckHide:boolean;
-  CheckOpp:boolean;
+  CheckOpp:boolean=false;
   CheckCom:boolean;
   CheckOcc:boolean;
   viewer:any;
@@ -21,6 +22,19 @@ export class DataService {
   Colortexts:Array<any>;
   MinColor:number;
   MaxColor:number;
+  MinHeight:number;
+  MaxHeight:number;
+  ScaleValue:number=1;
+  CheckScale:boolean=true;
+  CheckExtrude:boolean=false;
+  hideElementArr:Array<any>;
+  HideNum:Array<any>;
+  poly_center:Array<any>;
+  ChromaScale:any;
+  ceisumData:Array<any>;
+  InitialTool:boolean;
+  InitialPub:boolean;
+
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -35,7 +49,7 @@ export class DataService {
   }
 
   constructor() {
-
+    this.ChromaScale=chroma.scale("SPECTRAL");
   }
 
   getGsModel(): any{

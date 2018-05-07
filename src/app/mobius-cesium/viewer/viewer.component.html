@@ -1,85 +1,29 @@
-<div id="cesiumContainer" (click)="select()">
-	<!-- <div id="ColorandHeight">
-		<div id="toolbar">
-		<div id="Hidediv" style="width: 110px;height:83px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
-			<table><tr>
-					<th class="colorkey" style="width: 100%"><div class="Hide" style="width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;">Seleted<input type="checkbox" id="CheckHide" [checked]="CheckHide" (click)="changeHide();checkHide()"></div></th>
-				</tr>
-				<tr>
-					<th class="colorkey" style="width: 100%"><div class="Hide" style="width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;">Committed<input type="checkbox" id="CheckHide" [checked]="CheckCom" (click)="changeCom();checkHide()"></div></th>
-				</tr>
-				<tr>
-					<th class="colorkey" style="width: 100%"><div class="Hide" style="width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;">Occupied<input type="checkbox" id="CheckHide" [checked]="CheckOcc" (click)="changeOcc();checkHide()"></div></th>
-				</tr>
-			</table>
-		</div>
-		<div style="width: calc(100% - 345px);display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
-		<div style="width: 80px;display:inline-block;height:80px;word-wrap:break-word;">
-			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-				<tr >
-          		<td ><div class="Hide" style="text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;">Color</div></td>
-          		</tr>
-				<tr>
-          		<th><div>
-				<select class="cesium-button" (change)="onChangeColor($event.target.value)">
-					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option>
-					<option class="cesium-option" value="Status_Cat">Status_Cat</option>
-					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
-					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
-					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
-					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
-					<option class="cesium-option" value="GPR">GPR</option>
-					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option> -->
-				<!-- </select>
-				</div></th>
-				</tr>
-			</table>
-		</div>
-		<div id="color" style="width:calc(100% - 90px);display:inline-block;position: relative;height:80px;word-wrap:break-word;">
-			<table style="width: 100%">
-				<tr >
-          		<td *ngFor="let Color of Colors" style="width: 40px;"><div [ngStyle]="{ 'background-color': Color}" >&nbsp;&nbsp;&nbsp;</div></td>
-          		</tr>
-          		<tr >
-          		<td class="colorkey" *ngFor="let text of texts" style="width: 40px;"><div class="table_text">{{text}}</div></td>
-          		</tr>
-			</table>
-		</div> 
-		</div>
-		<div style="width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
-		<div style="width: 80px;display:inline-block;position: relative;height:80px;word-wrap:break-word;">
-			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-				<tr >
-          		<td ><div class="Hide" style="text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;">Height</div></td>
-          		</tr>
-				<tr>
-				<tr>
-	          	<th><div >
-				<select class="cesium-button" (change)="onChangeHeight($event.target.value)">
-					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option> -->
-					<!-- <option class="cesium-option" value="Status_Cat">Status_Cat</option>
-					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
-					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
-					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
-					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
-					<option class="cesium-option" value="GPR">GPR</option>
-					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option> -->
-		<!-- 		</select>
-				</div>
-				</th>
-				</tr>
-			</table>
-		</div>
-		<div style="width: 100px;display:inline-block;position: relative;color:white;height:80px">
-			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 25px">
-			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">Min</div></th>
-			<th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">{{Minimum}}</div></th></tr>	
-			</table>
-			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 25px;">
-			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">Max</div></th>
-			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">{{Maximum}}</div></th></tr>
-			</table>
-		</div>
-	</div>
-	</div> -->
+<div id="cesiumContainer" (click)="select();showAttribs($event);">
+  <div id="ColorBar" *ngIf="texts!==undefined">
+  	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 88%;margin-left: 9%">
+       <tr >
+          <th *ngFor="let text of texts;" style="text-align:right;width: 7%"><div  style="width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{text}}</div></th><!-- writing-mode:vertical-lr; -->
+        </tr>
+    </table>
+	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
+       <tr>
+          <th  *ngFor="let color of Colorbar;let indx=index" style="width: 0.5px;" ><div [ngStyle]="{ 'background-color': color}" ><div *ngIf="indx%8===0" style="border-left: #FFFFFF 1px solid;border-color: black">&nbsp;</div><div *ngIf="indx%8!==0">&nbsp;</div></div></th>
+        </tr>
+    </table>
+  </div>
+  <div id="ColorBar" *ngIf="Cattexts!==undefined" style="width: 100%;text-align: center">
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" *ngFor="let cattext of Cattexts" style="display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; ">
+          <tr >
+            <th  style="width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; "><div [ngStyle]="{ 'background-color': cattext.color}" >&nbsp;&nbsp;&nbsp;</div></th>
+        </tr>
+        <tr>
+            <th><div matTooltip={{cattext.text}}  style="width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;">{{cattext.text}}</div></th>
+          </tr>
+        </table>
+  </div>
+  <div>
+    <table id="cesium-infoBox-defaultTable" style="width: 140px;position:absolute;padding:4px;background-color:white;display: none;">
+       <tr *ngFor="let pickupArr of pickupArrs"><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px"><div matTooltip={{pickupArr.name}} style="width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.name}}</div></th><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px"><div matTooltip={{pickupArr.data}} style="width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.data}}</div></th></tr>
+       </table>
+     </div>
 </div>

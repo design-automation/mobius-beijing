@@ -19,6 +19,22 @@
   	padding: 0px !important;
   	font-size: 14px;
 }
+#button{
+  position:absolute;
+  z-index: 99;
+
+}
+#Toggle{
+  position: absolute;
+  top: calc(50% - 40px);
+  z-index: 100;
+  width: 30px;
+  height:100px;
+  font-family:sans-serif;
+  background-color: gray;//rgba(20,20,20,0.5);
+  opacity:0.8;
+  border: 1px solid gray;
+}
 
 /* split-area{
   overflow-y: hidden !important;
