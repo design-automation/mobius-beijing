@@ -111,9 +111,10 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__ = __webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_landing_landing_component__ = __webpack_require__("./src/app/ui-components/main/mobius-landing/landing.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__ = __webpack_require__("./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__pipes_short_name_pipe__ = __webpack_require__("./src/app/pipes/short-name.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__ = __webpack_require__("./src/app/ui-components/editors/publish-settings/publish-settings.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm2015/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42_ngx_json_viewer__ = __webpack_require__("./node_modules/ngx-json-viewer/ngx-json-viewer.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__pipes_short_name_pipe__ = __webpack_require__("./src/app/pipes/short-name.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__ui_components_editors_publish_settings_publish_settings_component__ = __webpack_require__("./src/app/ui-components/editors/publish-settings/publish-settings.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm2015/animations.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -135,6 +136,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 /*import { ModuleService } from './global-services/module.service';
 */
+
 
 
 
@@ -206,8 +208,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */],
             __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_landing_landing_component__["a" /* LandingComponent */],
             __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */],
-            __WEBPACK_IMPORTED_MODULE_42__pipes_short_name_pipe__["a" /* ShortNamePipe */],
-            __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_43__pipes_short_name_pipe__["a" /* ShortNamePipe */],
+            __WEBPACK_IMPORTED_MODULE_44__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
             __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
             __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__["a" /* ConsoleComponent */]
         ],
@@ -215,7 +217,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_24__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
             __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_36__ui_components_dialogs_file_load_dialog_component__["a" /* FileLoadDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_43__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_44__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
             __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
             //
             __WEBPACK_IMPORTED_MODULE_26__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
@@ -232,7 +234,7 @@ AppModule = __decorate([
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_44__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_45__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
             __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* RouterModule */].forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
             ),
             __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpClientModule */],
@@ -242,7 +244,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_9_angular_tree_component__["a" /* TreeModule */],
             __WEBPACK_IMPORTED_MODULE_6__custom_angular_modules_CustomMaterialModule__["a" /* CustomMaterialModule */],
             __WEBPACK_IMPORTED_MODULE_34__gs_viewer_gs_viewer_module__["a" /* GSViewer */],
-            __WEBPACK_IMPORTED_MODULE_35__mobius_cesium_mobius_cesium_module__["a" /* MobiusCesium */]
+            __WEBPACK_IMPORTED_MODULE_35__mobius_cesium_mobius_cesium_module__["a" /* MobiusCesium */],
+            __WEBPACK_IMPORTED_MODULE_42_ngx_json_viewer__["a" /* NgxJsonViewerModule */],
         ],
         providers: [__WEBPACK_IMPORTED_MODULE_10__global_services_flowchart_service__["a" /* FlowchartService */], __WEBPACK_IMPORTED_MODULE_12__global_services_layout_service__["a" /* LayoutService */], __WEBPACK_IMPORTED_MODULE_11__global_services_console_service__["a" /* ConsoleService */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
@@ -12338,7 +12341,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.12-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.15-cesium</p>\r\n"
 
 /***/ }),
 
@@ -13591,7 +13594,7 @@ ParameterViewerComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/text-viewer/text-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"default\" *ngIf=\"_selectedNode === undefined\">\r\n\tNo Node Selected\r\n</div>\r\n\r\n<div class=\"container\" *ngIf=\"_selectedNode != undefined\">\r\n\t<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>\r\n\t<hr> -->\r\n\t<mat-accordion multi=\"true\" [displayMode]=\"flat\">\r\n\t\t\t<!-- inputs -->\r\n\t\t\t<mat-expansion-panel [expanded]=\"true\" *ngFor=\"let output of _selectedNode.getOutputs()\">\r\n\t\t\t\t\r\n\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t  {{ output.getName() }}\r\n\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t<p [innerHTML]=\"getType(output)\"></p>\r\n\t\t\t\t\r\n\t\t\t\t\t<div class=\"ace-editor\" ace-editor [(text)]=\"codeStr\"></div>\r\n\r\n\t\t\t</mat-expansion-panel>\r\n\t\t\t\r\n\t</mat-accordion>\r\n</div>"
+module.exports = "<div class=\"default\" *ngIf=\"_selectedNode === undefined\">\r\n\tNo Node Selected\r\n</div>\r\n\r\n<div class=\"container\" *ngIf=\"_selectedNode != undefined\">\r\n\t<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>\r\n\t<hr> -->\r\n\t<mat-accordion multi=\"true\" [displayMode]=\"flat\">\r\n\t\t\t<!-- inputs -->\r\n\t\t\t<mat-expansion-panel [expanded]=\"true\" *ngFor=\"let output of _selectedNode.getOutputs()\">\r\n\t\t\t\t\r\n\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t  {{ output.getName() }}\r\n\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t<p *ngIf=\"!isJSON(output)\" [innerHTML]=\"getText(output)\"></p>\r\n\t\t\t\t\r\n\t\t\t\t<ngx-json-viewer *ngIf=\"isJSON(output)\" [json]=\"output.getValue()\" [expanded]=\"false\"></ngx-json-viewer>\r\n\r\n\t\t\t</mat-expansion-panel>\r\n\t\t\t\r\n\t</mat-accordion>\r\n</div>"
 
 /***/ }),
 
@@ -13609,10 +13612,6 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TextViewerComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_circular_json__ = __webpack_require__("./node_modules/circular-json/build/circular-json.node.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_circular_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_circular_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_beautify__ = __webpack_require__("./node_modules/js-beautify/js/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_beautify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_js_beautify__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13622,8 +13621,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
 
 
 let TextViewerComponent = class TextViewerComponent extends __WEBPACK_IMPORTED_MODULE_1__base_classes_viz_Viewer__["a" /* Viewer */] {
@@ -13649,53 +13646,73 @@ let TextViewerComponent = class TextViewerComponent extends __WEBPACK_IMPORTED_M
         }
         return value;
     }
-    getType(output) {
+    getText(output) {
         let val = output.getValue();
         if (val) {
             let result = val;
-            try {
-                if (typeof (val) == "object") {
-                    let strRep = val.toString();
-                    if (strRep !== "[object Object]") {
-                        return strRep.replace(/\n/g, '<br>');
-                    }
-                    else if (val["type"] == "FeatureCollection") {
-                        let str = "<b>GeoJSON file</b><br>";
-                        str += "Number of features: " + val["features"].length + "<br>";
-                        str += "First few features:<br>";
-                        let sliced = val["features"].slice(0, Math.min(3, val["features"].length));
-                        let features = "";
-                        sliced = sliced.map(function (feature) {
-                            let f = "";
-                            f += "<small><b>Geometry Type:" + feature["geometry"]["type"] + "</b><br>";
-                            f += "<code>" + __WEBPACK_IMPORTED_MODULE_3_js_beautify__["js_beautify"](JSON.stringify(feature)) + "</code></small>";
-                            return f;
-                        });
-                        str += sliced.join("<br><br>");
-                        return str;
-                    }
-                    else {
-                        let str = __WEBPACK_IMPORTED_MODULE_2_circular_json___default.a.stringify(output.getValue());
-                        if (str.length > 1000) {
-                            return str.substr(0, 1000) + "... <br><br>File too long!";
-                        }
-                    }
+            if (typeof (val) == "object") {
+                let strRep = val.toString();
+                if (strRep !== "[object Object]") {
+                    result = strRep.replace(/\n/g, '<br>');
                 }
-                let result = __WEBPACK_IMPORTED_MODULE_2_circular_json___default.a.stringify(output.getValue());
-                if (result.length > 1000) {
-                    result = result.substr(0, 1000) + "... <br><br>File too long!";
-                }
-                return result;
             }
-            catch (ex) {
-                console.log("Error in Text Viewer:", ex);
-                return "error-generating-value";
-            }
+            return result;
         }
         else {
             return "no-value-available";
         }
     }
+    isJSON(output) {
+        let val = output.getValue();
+        return (typeof (val) == "object" && val.toString() == "[object Object]");
+    }
+    // getType(output: IPort): string{
+    // 	let val = output.getValue();
+    // 	if(val){
+    // 		let result = val;
+    // 		try{
+    // 			if(typeof(val) == "object"){
+    // 				let strRep: string = val.toString();
+    // 				if(strRep !== "[object Object]"){
+    // 					return strRep.replace(/\n/g, '<br>');
+    // 				}
+    // 				else if(val["type"] == "FeatureCollection"){
+    // 					let str = "<b>GeoJSON file</b><br>";
+    // 					str += "Number of features: " + val["features"].length + "<br>";
+    // 					str += "First few features:<br>";
+    // 					let sliced = val["features"].slice(0, Math.min(3, val["features"].length));
+    // 					let features: string = "";
+    // 					sliced = sliced.map(function(feature){
+    // 						let f: string = "";
+    // 						f += "<small><b>Geometry Type:" + feature["geometry"]["type"] + "</b><br>";
+    // 						f += "<code>" + js_beautify.js_beautify(JSON.stringify(feature)) +  "</code></small>";
+    // 						return f;
+    // 					})
+    // 					str += sliced.join("<br><br>");
+    // 					return str;
+    // 				}
+    // 				else{
+    // 					let str = CircularJSON.stringify(output.getValue());
+    // 					if(str.length > 1000){
+    // 						return str.substr(0, 1000) + "... <br><br>File too long!";
+    // 					}
+    // 				}
+    // 			}
+    // 			let result =  CircularJSON.stringify(output.getValue());
+    // 			if(result.length > 1000){
+    // 				result = result.substr(0, 1000) + "... <br><br>File too long!";
+    // 			}
+    // 			return result;
+    // 		}
+    // 		catch(ex){
+    // 			console.log("Error in Text Viewer:", ex);
+    // 			return "error-generating-value";
+    // 		}
+    // 	}
+    // 	else{
+    // 		return "no-value-available";
+    // 	}	
+    // }
     update() {
         try {
             this._selectedNode = this.flowchartService.getSelectedNode();
