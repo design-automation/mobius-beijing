@@ -271,11 +271,16 @@ export class FlowchartService {
             let f = fns[i];
             original_mod[f.name] = f.def;
           }
-        }
+         }
         else{
           moduleMap[name] = mod;
           moduleSet.push(mod)
         }
+    })
+
+    // sort the set
+    this._moduleSet = ModuleSet.sort(function(a, b){
+      return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
     })
 
   }
