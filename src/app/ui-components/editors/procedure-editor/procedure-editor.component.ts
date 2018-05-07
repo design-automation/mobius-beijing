@@ -62,7 +62,7 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 			var key = event.keyCode
 			var ctrlDown = event.ctrlKey || event.metaKey // Makey support
 
-			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); console.log("Resturn"); return;	};
+			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); return;	};
 
 			if (ctrlDown && key == KEY_CODE.CUT) {
 				this.copyProcedure(event, this.nodeInFocus, false);
