@@ -12804,6 +12804,13 @@ Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* pl
 module.exports = __webpack_require__("./src/main.ts");
 
 
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
 /***/ })
 
 },[0]);
