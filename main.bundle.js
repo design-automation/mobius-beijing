@@ -3073,6 +3073,10 @@ let FlowchartService = class FlowchartService {
                 moduleSet.push(mod);
             }
         });
+        // sort the set
+        this._moduleSet = __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__["a" /* AllModules */].sort(function (a, b) {
+            return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
+        });
     }
     getModules() {
         return this._moduleSet;
@@ -12341,7 +12345,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.15-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.16-cesium</p>\r\n"
 
 /***/ }),
 
