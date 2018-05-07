@@ -2030,7 +2030,6 @@ class Port {
         this._connected = false;
     }
     setDefaultValue(value) {
-        console.log("setting default:", value);
         this._default = value;
     }
     setComputedValue(value) {
@@ -2040,10 +2039,25 @@ class Port {
         return this._default;
     }
     getValue() {
-        if (this._computed !== undefined)
-            return this._computed;
-        else
-            return this._default;
+        let final;
+        if (this._computed !== undefined) {
+            final = this._computed;
+        }
+        else {
+            final = this._default;
+        }
+        if (this.getType() === __WEBPACK_IMPORTED_MODULE_1__InputPortTypes__["a" /* InputPortTypes */].FilePicker) {
+            try {
+                let _ = JSON.parse(final);
+            }
+            catch (ex) {
+                final = JSON.stringify(final.split("\r")) + ".join('\\r')";
+                //let arrOfStrings = final.split("\n");
+                //final = arrOfStrings + ".join(\"\\n\")" ;
+                //final = new Blob([final], {type : "text/plain"});
+            }
+        }
+        return final;
     }
     //
     //
