@@ -735,18 +735,44 @@ export class FlowchartService {
         }
       }
 
-      this.downloadContent({
-          type: 'text/plain;charset=utf-8',
-          filename: fname,
-          content: fileString
-      });
-      
+
+      // this.downloadContent({
+      //     type: 'text/plain;charset=utf-8',
+      //     filename: fname,
+      //     content: fileString
+      // });
+      var blob = new Blob([fileString], {type: 'application/json'});
+      this.downloadContent(blob, fname);
       this.consoleService.addMessage("File saved successfully");
+      
+      
     }
 
   }
 
-  downloadContent(options) {
+  // downloadContent(filename, filestring){
+  //   var blob = new Blob([filestring], {type: 'application/json'});
+  //   var url = URL.createObjectURL(blob);
+  // }
+
+  downloadContent(blob, filename) {
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 0)
+    }
+  }
+
+  /*downloadContent(options) {
       if (!options || !options.content) {
           throw 'You have at least to provide content to download';
       }
@@ -770,6 +796,6 @@ export class FlowchartService {
           link.click();
           document.body.removeChild(link);
       }
-  }
+  }*/
 
 }

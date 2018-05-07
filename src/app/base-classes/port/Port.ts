@@ -129,6 +129,7 @@ export abstract class Port implements IPort{
 	}
 
 	setDefaultValue(value: any): void{
+		console.log("setting default:", value);
 		this._default = value;
 	}
 
