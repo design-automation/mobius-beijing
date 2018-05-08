@@ -86,7 +86,7 @@
 
 	
 	<button id="execute" 
-			*ngIf="_editable"
+			*ngIf="!globals || _editable"
 			[class.light]="viewer_light" 
 			mat-raised-button 
 			color="accent" 
