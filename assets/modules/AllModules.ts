@@ -8,8 +8,12 @@ import * as MString from "mobius-string";
 import * as MGeojson from "mobius-geojson";
 import * as MCsv from "mobius-csv";
 
+import turf_docs from "mobius-turf/docs_json/mobius-turf.json"; 
 // let arr_Analyse: IModule = ModuleUtils.createModule("arr_Analyse", MArray["Analyse"], "attrib", undefined);
 // 
+
+;
+
 
 let AllModules = [];
 Object.keys(MArray).map(function(key){
@@ -25,9 +29,9 @@ Object.keys(MCsv).map(function(key){
 });
 
 
-Object.keys(MTurf).map(function(key){
+Object.keys(MTurf).map(function(key, index){
 	let pre = "geo_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MTurf[key], "attrib", undefined);
+	let module: IModule = ModuleUtils.createModule( pre + key, MTurf[key], "attrib", turf_docs);
 	AllModules.push(module);
 });
 

@@ -366,22 +366,22 @@ class CodeGenerator {
 class ModuleUtils {
     static createModule(name, fn_list, helpname, help) {
         let helpObj;
-        if (help && help.children) {
-            helpObj = help.children.filter(function (child) {
-                let name = child.name;
-                if (name.substr(1, name.length - 2) == helpname) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            });
-        }
+        // if(help && help.children){
+        // 	helpObj = help.children.filter(function(child){
+        // 		 let name: string = child.name;
+        // 		 if(name.substr(1, name.length - 2)  == helpname){
+        // 		 	return true;
+        // 		 }
+        // 		 else{
+        // 		 	return false;
+        // 		 }
+        // 	})
+        // }
         let obj = {
             _name: name,
             _version: 0.1,
             _author: "Patrick",
-            _helpObj: helpObj
+            _helpObj: help ? help.children : help
         };
         for (let prop in fn_list) {
             obj[prop] = fn_list[prop];
@@ -3069,7 +3069,7 @@ let FlowchartService = class FlowchartService {
                 this.newFile();
                 let data = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](fileString);
                 // load the required modules
-                /* _this.modules.loadModules(data["module"]); */
+                /* _this.modules. s(data["module"]); */
                 // load the required code generator
                 if (_this.code_generator.getLanguage() != data["language"] && data["language"] !== undefined) {
                     _this.code_generator = __WEBPACK_IMPORTED_MODULE_6__base_classes_code_CodeModule__["a" /* CodeFactory */].getCodeGenerator(data["language"]);
@@ -3122,6 +3122,7 @@ let FlowchartService = class FlowchartService {
         this._moduleSet = __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__["a" /* AllModules */].sort(function (a, b) {
             return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
         });
+        console.log(__WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__["a" /* AllModules */]);
     }
     getModules() {
         return this._moduleSet;
@@ -12250,7 +12251,7 @@ GraphEdgeComponent = __decorate([
 /***/ "./src/app/ui-components/help/help-viewer/help-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\">\r\n\t\r\n\t<h1>Möbius Functions</h1>\r\n\r\n\t<!-- <div class='!helpAvailable'>\r\n\t\t<p>Sorry! The help documentation seems to be missing</p>\r\n\t</div> -->\r\n\r\n\t<div class=\"helpAvailable\">\r\n\r\n\t\t<mat-accordion *ngIf='!fnObj'>\r\n\r\n\t\t\t<mat-expansion-panel \r\n\t\t \t\t*ngFor=\"let mod of _loadedModules\"\r\n\t\t \t\t[expanded]=\"mod._name ==_activeMod\">\r\n\t\t \t\t    \t<mat-expansion-panel-header>\r\n\t\t \t\t    \t\t<mat-panel-title>\r\n\t\t \t\t\t\t      {{ mod._name }} \r\n\t\t \t\t\t\t    </mat-panel-title>\r\n\t\t \t\t    \t</mat-expansion-panel-header>\r\n\t\t \t\r\n\t\t \t\t\t\t<mat-list id=\"mod._name\" \r\n\t\t \t\t\t\t\tstyle=\"max-height: 500px; overflow: auto;\">\r\n\t\t \t\r\n\t\t \t\t\t\t\t<h3 mat-subheader *ngIf=\"mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText\" [innerHTML]=\"mod._helpObj[0].comment.shortText\"></h3>\r\n\t\t \t\r\n\t\t \t\t\t\t \t<mat-list-item *ngFor=\"let fn of mod._helpObj[0].children\">\r\n\t\t \t\t\t\t \t\t<div class=\"content\">\r\n\r\n\t\t \t\t\t\t\t \t\t<h4 mat-line>{{fn.name}}</h4>\r\n\t\t \t\t    \t\t\t\t<p class=\"head-descr\" mat-line>{{fn.signatures[0].comment.shortText}}</p>\r\n\t\t \t\t\t\t\t\t\r\n\t\t \t\t\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fn.signatures[0].parameters'>\r\n\t\t \t\t\t\t\t\t\t\t<div *ngFor=\"let pa of fn.signatures[0].parameters\">\r\n\t\t \t\t\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t \t\t\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t \t\t\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t \t\t\t\t\t\t\t\t</div>\r\n\t\t \t\t\t\t\t\t\t</div>\r\n\t\t \t\r\n\t\t \t\t\t\t\t\t\t<div class=\"return-block\">\r\n\t\t \t\t\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t\t \t\t\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fn.signatures[0].comment.returns\"></span>\r\n\t\t \t\t\t    \t\t\t</div>\r\n\t\t \t\r\n\t\t \t\t    \t\t\t\t<p mat-line>\t\r\n\t\t \t\t    \t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}\" target=\"_blank\">More</a>\r\n\t\t \t\t    \t\t\t\t</p>\r\n\t\t \t\r\n\t\t \t    \t\t\t\t</div>\r\n\t\t \t\t\t\t \t</mat-list-item>\r\n\r\n\t\t \t\t\t\t \t<mat-divider></mat-divider>\r\n\t\t \t\t\t\t\r\n\t\t \t\t\t\t</mat-list>\r\n\t\t \t\r\n\t\t \t</mat-expansion-panel>\r\n\t\t \t\r\n\t\t</mat-accordion>\r\n\r\n\t\t<!-- specific function -->\r\n\t\t<div *ngIf='fnObj && fnObj.name'>\r\n\r\n\t\t\t<h4 mat-line>Module: {{fnObj.module}}</h4>\r\n\t\t\t<h4 mat-line>{{fnObj.name}}</h4>\r\n\t\t\t\r\n\t\t\t<div *ngIf='fnObj.content'>\r\n\t\t\t\t<div class=\"content\">\r\n\r\n\t\t\t\t\t<p class=\"head-descr\" mat-line>{{fnObj.content.signatures[0].comment.shortText}}</p>\r\n\t\t\t\t\r\n\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fnObj.content.signatures[0].parameters'>\r\n\t\t\t\t\t\t<div *ngFor=\"let pa of fnObj.content.signatures[0].parameters\">\r\n\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t<div class=\"return-block\">\r\n\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fnObj.content.signatures[0].comment.returns\"></span>\r\n\t    \t\t\t</div>\r\n\r\n\t\t\t\t\t<p mat-line>\t\r\n\t\t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{fnObj._url}}#{{fnObj.name}}\" target=\"_blank\">More</a>\r\n\t\t\t\t\t</p>\r\n\r\n\t\t\t\t</div>\t\r\n\t\t\t</div>\r\n\t\t\r\n\t\t\t<hr>\r\n\t\t\t\r\n\t\t\t<div (click)=\"showAll()\" style=\"cursor: pointer;\">[Show All]</div>\r\n\t\t\r\n\t\t</div>\r\n\r\n\t</div>\r\n\r\n</div>"
+module.exports = "<div class=\"viewer\">\r\n\t\r\n\t<h1>Möbius Functions</h1>\r\n\r\n\t<!-- <div class='!helpAvailable'>\r\n\t\t<p>Sorry! The help documentation seems to be missing</p>\r\n\t</div> -->\r\n\r\n\t<div class=\"helpAvailable\">\r\n\r\n\t\t<mat-accordion *ngIf='!fnObj'>\r\n\r\n\t\t\t<mat-expansion-panel \r\n\t\t \t\t*ngFor=\"let mod of _loadedModules\"\r\n\t\t \t\t[expanded]=\"mod._name ==_activeMod\">\r\n\t\t \t\t    \t<mat-expansion-panel-header>\r\n\t\t \t\t    \t\t<mat-panel-title>\r\n\t\t \t\t\t\t      {{ mod._name }} \r\n\t\t \t\t\t\t    </mat-panel-title>\r\n\t\t \t\t    \t</mat-expansion-panel-header>\r\n\t\t \t\r\n\t\t \t\t\t\t<mat-list id=\"mod._name\" \r\n\t\t \t\t\t\t\tstyle=\"max-height: 500px; overflow: auto;\" *ngIf=\"mod._helpObj\">\r\n\r\n\t\t \t\t\t\t \t<mat-list-item *ngFor=\"let fn of getSubModule(mod._helpObj , mod._name)\">\r\n\t\t \t\t\t\t \t\t<div class=\"content\">\r\n\r\n\t\t \t\t\t\t\t \t\t<h4 mat-line>{{fn.name}}</h4>\r\n\t\t \t\t    \t\t\t\t<p class=\"head-descr\" mat-line>{{fn.signatures[0].comment.shortText}}</p>\r\n\t\t \t\t\t\t\t\t\r\n\t\t \t\t\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fn.signatures[0].parameters'>\r\n\t\t \t\t\t\t\t\t\t\t<div *ngFor=\"let pa of fn.signatures[0].parameters\">\r\n\t\t \t\t\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t \t\t\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t \t\t\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t \t\t\t\t\t\t\t\t</div>\r\n\t\t \t\t\t\t\t\t\t</div>\r\n\t\t \t\r\n\t\t \t\t\t\t\t\t\t<div class=\"return-block\">\r\n\t\t \t\t\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t\t \t\t\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fn.signatures[0].comment.returns\"></span>\r\n\t\t \t\t\t    \t\t\t</div>\r\n\t\t \t\r\n\t\t \t\t    \t\t\t\t<p mat-line>\t\r\n\t\t \t\t    \t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}\" target=\"_blank\">More</a>\r\n\t\t \t\t    \t\t\t\t</p>\r\n\t\t \t\r\n\t\t \t    \t\t\t\t</div>\r\n\t\t \t\t\t\t \t</mat-list-item>\r\n\r\n\t\t \t\r\n\t\t \t\t\t\t\t<!-- <h3 mat-subheader *ngIf=\"mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText\" [innerHTML]=\"mod._helpObj[0].comment.shortText\"></h3> -->\r\n\r\n\t\t \t\t\t\t \t<mat-divider></mat-divider>\r\n\t\t \t\t\t\t\r\n\t\t \t\t\t\t</mat-list>\r\n\t\t \t\r\n\t\t \t</mat-expansion-panel>\r\n\t\t \t\r\n\t\t</mat-accordion>\r\n\r\n\t\t<!-- specific function -->\r\n\t\t<div *ngIf='fnObj && fnObj.name'>\r\n\r\n\t\t\t<h4 mat-line>Module: {{fnObj.module}}</h4>\r\n\t\t\t<h4 mat-line>{{fnObj.name}}</h4>\r\n\t\t\t\r\n\t\t\t<div *ngIf='fnObj.content'>\r\n\t\t\t\t<div class=\"content\">\r\n\r\n\t\t\t\t\t<p class=\"head-descr\" mat-line>{{fnObj.content.signatures[0].comment.shortText}}</p>\r\n\t\t\t\t\r\n\t\t\t\t\t<div  class=\"parameters\" mat-line *ngIf='fnObj.content.signatures[0].parameters'>\r\n\t\t\t\t\t\t<div *ngFor=\"let pa of fnObj.content.signatures[0].parameters\">\r\n\t\t\t\t\t\t\t<span class=\"topic\">{{pa.name}}: </span>\r\n\t\t\t\t\t\t\t<!-- <span *ngIf=\"pa.type\">Type: {{pa.type.type}}</span> -->\r\n\t\t\t\t\t\t\t<span class=\"descr\" *ngIf=\"pa.comment\" [innerHTML]=\"pa.comment.text\"></span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t<div class=\"return-block\">\r\n\t    \t\t\t\t<span class=\"topic\">Returns: </span>\r\n\t    \t\t\t\t<span class=\"descr\" [innerHTML]=\"fnObj.content.signatures[0].comment.returns\"></span>\r\n\t    \t\t\t</div>\r\n\r\n\t\t\t\t\t<p mat-line>\t\r\n\t\t\t\t\t\t<a href=\"https://phtj.github.io/gs-modelling/docs/modules/{{fnObj._url}}#{{fnObj.name}}\" target=\"_blank\">More</a>\r\n\t\t\t\t\t</p>\r\n\r\n\t\t\t\t</div>\t\r\n\t\t\t</div>\r\n\t\t\r\n\t\t\t<hr>\r\n\t\t\t\r\n\t\t\t<div (click)=\"showAll()\" style=\"cursor: pointer;\">[Show All]</div>\r\n\t\t\r\n\t\t</div>\r\n\r\n\t</div>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -12288,11 +12289,6 @@ let HelpViewerComponent = class HelpViewerComponent {
         this.flowchartService = flowchartService;
         this.helpAvailable = false;
         this.sanitizer = sanitizer;
-        // this._subscription = this.layoutService.getMessage().subscribe(message => { 
-        //       if(message.text.startsWith("Module: ")){
-        // 	    this.notify();
-        //       }
-        // });
         try {
             let mods = this.flowchartService.getModules().map(function (m) {
                 return m["_name"].toLowerCase();
@@ -12312,6 +12308,14 @@ let HelpViewerComponent = class HelpViewerComponent {
         }
         catch (ex) {
             this.helpAvailable = false;
+        }
+    }
+    getSubModule(alldocs, modname) {
+        for (let i = 0; i < alldocs.length; i++) {
+            let m = alldocs[i];
+            if (("\"" + modname.split("_")[1] + "\"") == (m.name)) {
+                return ((m.children && m.children.length > 0) ? m.children : []);
+            }
         }
     }
     notify() {
@@ -13933,6 +13937,9 @@ var ViewerContainerComponent_1;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mobius_string__ = __webpack_require__("./node_modules/mobius-string/dist/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mobius_geojson__ = __webpack_require__("./node_modules/mobius-geojson/dist/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mobius_csv__ = __webpack_require__("./node_modules/mobius-csv/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_mobius_turf_docs_json_mobius_turf_json__ = __webpack_require__("./node_modules/mobius-turf/docs_json/mobius-turf.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_mobius_turf_docs_json_mobius_turf_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_mobius_turf_docs_json_mobius_turf_json__);
+
 
 
 
@@ -13942,6 +13949,7 @@ var ViewerContainerComponent_1;
 
 // let arr_Analyse: IModule = ModuleUtils.createModule("arr_Analyse", MArray["Analyse"], "attrib", undefined);
 // 
+;
 let AllModules = [];
 Object.keys(__WEBPACK_IMPORTED_MODULE_2_mobius_array__).map(function (key) {
     let pre = "arr_";
@@ -13953,9 +13961,9 @@ Object.keys(__WEBPACK_IMPORTED_MODULE_6_mobius_csv__).map(function (key) {
     let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_6_mobius_csv__[key], "attrib", undefined);
     AllModules.push(module);
 });
-Object.keys(__WEBPACK_IMPORTED_MODULE_3_mobius_turf__).map(function (key) {
+Object.keys(__WEBPACK_IMPORTED_MODULE_3_mobius_turf__).map(function (key, index) {
     let pre = "geo_";
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_3_mobius_turf__[key], "attrib", undefined);
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(pre + key, __WEBPACK_IMPORTED_MODULE_3_mobius_turf__[key], "attrib", __WEBPACK_IMPORTED_MODULE_7_mobius_turf_docs_json_mobius_turf_json___default.a);
     AllModules.push(module);
 });
 Object.keys(__WEBPACK_IMPORTED_MODULE_5_mobius_geojson__).map(function (key) {
