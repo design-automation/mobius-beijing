@@ -12738,14 +12738,14 @@ MobiusEditorComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n\t\r\n  <h1>Mobius Gallery</h1>\r\n\t<div class=\"description\">\r\n\t\t<p>If you'd like to contribute to showcase your work on this gallery, \r\n      please add your file <a href=\"https://github.com/design-automation/mobius-gallery/\" target=\"_blank\">here</a>.\r\n    </p>\r\n\t</div>\r\n\r\n\t<div class=\"link-container\">\r\n\t\t<a *ngFor=\"let f of all_files\" href=\"./viewer/{{f.name}}\">{{f.name}}</a>\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n\r\n"
+module.exports = "<div class=\"container\">\r\n  <div class=\"flex-container\">\r\n    <div class=\"flex-box\">\r\n      <a *ngFor=\"let f of all_files\" href=\"./viewer/{{f.name}}\">{{f.name}}</a>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
 /***/ "./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  width: 400px;\n  margin: 0 auto;\n  padding-top: 100px; }\n  .container a {\n    font-size: 16px;\n    line-height: 20px; }\n  .container .description {\n    padding-top: 10px;\n    width: 400px;\n    margin: 0 auto;\n    font-size: 14px;\n    line-height: 24px;\n    text-align: justify; }\n  .container .link-container {\n    padding-top: 45px;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: start; }\n"
+module.exports = ".container {\n  margin: 20px; }\n  .container .flex-box {\n    width: 200px;\n    height: 200px;\n    background-color: #fff;\n    color: #000;\n    border: 1px solid #000;\n    border-radius: 0px;\n    padding: 20px;\n    margin: 20px;\n    font-size: 200%;\n    font-family: Arial, Helvetica, sans-serif;\n    overflow: hidden; }\n  .container .flex-box:nth-child(even) {\n    background-color: #fff;\n    color: #000; }\n  .container .flex-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row; }\n"
 
 /***/ }),
 
