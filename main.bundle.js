@@ -12738,7 +12738,7 @@ MobiusEditorComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n  <div class=\"flex-container\">\r\n    <div class=\"flex-box\">\r\n      <a *ngFor=\"let f of all_files\" href=\"./viewer/{{f.name}}\">{{f.name}}</a>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"container\">\r\n  <div class=\"flex-container\">\r\n    <div class=\"flex-box\">Möbius Gallery</div>\r\n    <div class=\"flex-box\">\r\n      <a *ngFor=\"let f of all_files\" href=\"./viewer/{{f.name}}\">{{f.name}}</a>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
