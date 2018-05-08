@@ -891,6 +891,7 @@ class Flowchart {
                 inputPort.update(in_data);
                 return inputPort;
             });
+            this._editable = data["_editable"] == undefined ? true : data["_editable"];
         }
     }
     ;
@@ -924,6 +925,7 @@ class Flowchart {
         this._editable = value;
     }
     get editable() {
+        console.log(this._editable);
         return this._editable;
     }
     //
@@ -11394,17 +11396,6 @@ let ParameterEditorComponent = class ParameterEditorComponent extends __WEBPACK_
             port.setDefaultValue(50);
         }
     }
-    // updateDefaultValue($event, port: InputPort|OutputPort): void{
-    //   let value: string = $event.srcElement.innerText;
-    //   if(value.trim().length > 0){
-    //     port.setDefaultValue(value)
-    //     // put a timeout on this update or something similar to solve jumpiness
-    //   }
-    //   else{
-    //     port.setDefaultValue(undefined)
-    //   }
-    //   this.flowchartService.update();
-    // }
     getInputTypeName(type) {
         if (type == __WEBPACK_IMPORTED_MODULE_1__base_classes_port_PortModule__["b" /* InputPortTypes */].ColorPicker) {
             return "Color";
@@ -12801,7 +12792,7 @@ MobiusGalleryComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-landing/landing.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller</h1>\r\n\t<p>Cesium Integration</p>\r\n\t\r\n\t<div class=\"description\">\r\n\t\t\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller is a web application that allows users to create automated procedures using visual programming. All procedures are executed in the browser on the client side, and as such no server side process is required.\r\n\t\t</p>\r\n\t\t\r\n\t\t<p>\t\t\r\n\t\t\tCurrently, Möbius Modeller has be developed to support Parametric Information Modelling (PIM) in the architectural and urban design domain, allowing procedures to be developed for generating and evaluating 3D models of buildings and urban neighbourhoods.\r\n\t\t</p>\r\n\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller can be customised to a wide different domains by developing specialized function libraries and specialized viewers. Contact us if you are interested in applying the Möbius Modeller in your domain.\r\n\t\t</p>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"link-container\">\r\n\r\n\t\t<a href=\"./editor\" target=\"_blank\">\r\n\t\t\tTry Mobius\r\n\t\t</a>\r\n\r\n\t\t<a href=\"./gallery\" target=\"_blank\">\r\n\t\t\tView Gallery\r\n\t\t</a>\r\n\r\n\t\t<a href=\"https://github.com/design-automation\" target=\"_blank\">\r\n\t\t\tContribute on Github\r\n\t\t</a>\r\n\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n"
+module.exports = "<div class=\"container\">\r\n\t<h1>Mobius Modeller</h1>\r\n\t<p>Cesium Integration</p>\r\n\t\r\n\t<div class=\"description\">\r\n\t\t\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller is a web application that allows users to create automated procedures using visual programming. All procedures are executed in the browser on the client side, and as such no server side process is required.\r\n\t\t</p>\r\n\t\t\r\n\t\t<p>\t\t\r\n\t\t\tCurrently, Möbius Modeller has be developed to support Parametric Information Modelling (PIM) in the architectural and urban design domain, allowing procedures to be developed for generating and evaluating 3D models of buildings and urban neighbourhoods.\r\n\t\t</p>\r\n\r\n\t\t<p>\r\n\t\t\tThe Möbius Modeller can be customised to a wide different domains by developing specialized function libraries and specialized viewers. Contact us if you are interested in applying the Möbius Modeller in your domain.\r\n\t\t</p>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"link-container\">\r\n\r\n\t\t<a href=\"./editor\">\r\n\t\t\tTry Mobius\r\n\t\t</a>\r\n\r\n\t\t<a href=\"./gallery\">\r\n\t\t\tView Gallery\r\n\t\t</a>\r\n\r\n\t\t<a href=\"https://github.com/design-automation\" target=\"_blank\">\r\n\t\t\tContribute on Github\r\n\t\t</a>\r\n\r\n\t</div>\r\n\r\n</div>\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -13490,7 +13481,7 @@ NodeLibraryComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" *ngIf='_inputs == undefined || _inputs.length == 0'>\r\n\t\t\tNo Inputs\r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3>Title: {{flowchartService.getFlowchart().name}}</h3>\r\n\t\t\t<p>{{flowchartService.getFlowchart().description}}</p>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div *ngIf=\"_editable\">\r\n\t\t\t<h4 >Parameters</h4>\r\n\t\t\t<div class='paramater-container single-param-container'\r\n\t\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\r\n\t\t\t\t<div class=\"param-name\">\r\n\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == Input -->\r\n\t\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t\t            \t\t</textarea>\r\n\t\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div> \r\n\r\n\t\t\t\t<!-- if input type == Slider -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == URL -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\">Get Data</button>\r\n\t\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t\t</div>\r\n\t \r\n\t\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\r\n\t</div>\r\n\t\r\n\t<button id=\"execute\" \r\n\t\t\t*ngIf=\"_editable\"\r\n\t\t\t[class.light]=\"viewer_light\" \r\n\t\t\tmat-raised-button \r\n\t\t\tcolor=\"accent\" \r\n\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\tExecute Flowchart\r\n\t</button>  \r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" *ngIf='_inputs == undefined || _inputs.length == 0'>\r\n\t\t\tNo Inputs\r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3>Title: {{flowchartService.getFlowchart().name}}</h3>\r\n\t\t\t<p>{{flowchartService.getFlowchart().description}}</p>\r\n\t\t\t<h4 *ngIf=\"_editable\">Parameters</h4>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class='paramater-container single-param-container'\r\n\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\r\n\t\t\t<div class=\"param-name\">\r\n\t\t\t\t{{ inp.getName() }}\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == Input -->\r\n\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t</form>\r\n\t\t\t</div> \r\n\r\n\t\t\t<!-- if input type == Slider -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n            \t\t\tmatAutosizeMaxRows=\"5\" \r\n            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n            \t\t</textarea>\r\n\t\t\t\t</mat-form-field>\r\n\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == URL -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\">Get Data</button>\r\n\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t</div>\r\n \r\n\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\t\r\n\t<button id=\"execute\" \r\n\t\t\t*ngIf=\"_editable\"\r\n\t\t\t[class.light]=\"viewer_light\" \r\n\t\t\tmat-raised-button \r\n\t\t\tcolor=\"accent\" \r\n\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\tExecute Flowchart\r\n\t</button>  \r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -13538,10 +13529,10 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
     reset() {
         this._node = undefined;
         this._inputs = [];
+        this._editable = this.flowchartService.getFlowchart().editable;
+        ;
         if (this.globals) {
             this._inputs = this.flowchartService.getFlowchart().globals;
-            this._editable = this.flowchartService.getFlowchart().editable;
-            ;
         }
     }
     updateComputedValue($event, input, value) {
@@ -13570,10 +13561,9 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
     //  beware of updating flowchart here - it will go into an unending loop :/
     //
     update() {
+        this._editable = this.flowchartService.getFlowchart().editable;
         if (this.globals) {
             this._inputs = this.flowchartService.getFlowchart().globals;
-            this._editable = this.flowchartService.getFlowchart().editable;
-            ;
             return;
         }
         this._node = this.flowchartService.getSelectedNode();
