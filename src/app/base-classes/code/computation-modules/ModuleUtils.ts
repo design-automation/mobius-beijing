@@ -5,23 +5,23 @@ export class ModuleUtils{
 	static createModule(name: string, fn_list: any, helpname?: string, help?: any){
 
 		let helpObj;
-		if(help && help.children){
-			helpObj = help.children.filter(function(child){
-				 let name: string = child.name;
-				 if(name.substr(1, name.length - 2)  == helpname){
-				 	return true;
-				 }
-				 else{
-				 	return false;
-				 }
-			})
-		}
+		// if(help && help.children){
+		// 	helpObj = help.children.filter(function(child){
+		// 		 let name: string = child.name;
+		// 		 if(name.substr(1, name.length - 2)  == helpname){
+		// 		 	return true;
+		// 		 }
+		// 		 else{
+		// 		 	return false;
+		// 		 }
+		// 	})
+		// }
 
 		let obj: IModule  =  {
 			_name: name, 
 			_version: 0.1, 
 			_author: "Patrick",
-			_helpObj: helpObj
+			_helpObj: help ? help.children : help
 		};
 
 		for (let prop in fn_list){

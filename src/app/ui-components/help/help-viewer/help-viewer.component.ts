@@ -3,8 +3,6 @@ import { FlowchartService } from '../../../global-services/flowchart.service';
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer} from '@angular/platform-browser';
 
-import docs from '../../../../../node_modules/gs-modelling/docs_json/gs-modelling.json';
-
 @Component({
   selector: 'app-help-viewer',
   templateUrl: './help-viewer.component.html',
@@ -24,12 +22,6 @@ export class HelpViewerComponent implements OnInit {
   //modules/_group_.html
   constructor(private sanitizer: DomSanitizer, private flowchartService: FlowchartService) { 
   		this.sanitizer = sanitizer;
-  		// this._subscription = this.layoutService.getMessage().subscribe(message => { 
-    //       if(message.text.startsWith("Module: ")){
-  		// 	    this.notify();
-    //       }
-  		// });
-
       try{
         let mods = this.flowchartService.getModules().map(function(m){
             return m["_name"].toLowerCase();
@@ -50,12 +42,20 @@ export class HelpViewerComponent implements OnInit {
         }
 
         this.helpAvailable = true;
-
       }
       catch(ex){
         this.helpAvailable = false;
       }
 
+  }
+
+  getSubModule(alldocs, modname){
+    for(let i=0; i < alldocs.length; i++){
+      let m = alldocs[i];
+      if( ( "\"" + modname.split("_")[1] + "\"" ) ==  (m.name)){ 
+        return ( (m.children && m.children.length > 0) ? m.children : []);
+      }
+    }
   }
 
   notify(): void{

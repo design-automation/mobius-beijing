@@ -192,7 +192,7 @@ export class FlowchartService {
           let data = CircularJSON.parse(fileString);
 
           // load the required modules
-           /* _this.modules.loadModules(data["module"]); */
+           /* _this.modules. s(data["module"]); */
 
           // load the required code generator
           if (_this.code_generator.getLanguage() != data["language"] && data["language"] !== undefined){
@@ -259,6 +259,8 @@ export class FlowchartService {
     this._moduleSet = ModuleSet.sort(function(a, b){
       return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
     })
+
+    console.log(ModuleSet);
 
   }
 

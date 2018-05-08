@@ -20,11 +20,9 @@
 		 		    	</mat-expansion-panel-header>
 		 	
 		 				<mat-list id="mod._name" 
-		 					style="max-height: 500px; overflow: auto;">
-		 	
-		 					<h3 mat-subheader *ngIf="mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText" [innerHTML]="mod._helpObj[0].comment.shortText"></h3>
-		 	
-		 				 	<mat-list-item *ngFor="let fn of mod._helpObj[0].children">
+		 					style="max-height: 500px; overflow: auto;" *ngIf="mod._helpObj">
+
+		 				 	<mat-list-item *ngFor="let fn of getSubModule(mod._helpObj , mod._name)">
 		 				 		<div class="content">
 
 		 					 		<h4 mat-line>{{fn.name}}</h4>
@@ -49,6 +47,9 @@
 		 	
 		 	    				</div>
 		 				 	</mat-list-item>
+
+		 	
+		 					<!-- <h3 mat-subheader *ngIf="mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText" [innerHTML]="mod._helpObj[0].comment.shortText"></h3> -->
 
 		 				 	<mat-divider></mat-divider>
 		 				
