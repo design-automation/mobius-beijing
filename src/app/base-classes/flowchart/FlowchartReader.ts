@@ -85,6 +85,10 @@ export abstract class FlowchartReader{
 	    	}
 	    }
 
+	    if(fc.selectedNode == undefined){
+	    	fc.selectedNode = fc.getNodes()[0].getId();
+	    }
+
 	    return fc;
 	}
 

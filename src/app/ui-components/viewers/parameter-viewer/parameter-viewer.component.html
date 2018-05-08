@@ -2,13 +2,13 @@
 
 	<div class="container" id="param-container-cesium"  #cesium_param_container>
 
-		<div class="default" *ngIf='_inputs == undefined || _inputs.length == 0'>
-			No Inputs
+		<div class="default" 
+			*ngIf='!globals && (_inputs == undefined || _inputs.length == 0)'>
 		</div>
  
 		<div class="param-in-viewer" *ngIf="globals">
 			<h3>Title: {{flowchartService.getFlowchart().name}}</h3>
-			<p>{{flowchartService.getFlowchart().description}}</p>
+			<div [innerHTML]="flowchartService.getFlowchart().description"></div>
 			<h4 *ngIf="_editable">Parameters</h4>
 		</div>
 		
