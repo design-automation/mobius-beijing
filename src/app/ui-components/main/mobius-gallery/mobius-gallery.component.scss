@@ -1,30 +1,33 @@
 .container{
-   margin: 20px;
+  
+     margin: 20px;
 
-  .flex-box {
-      width: 200px;
-      height: 200px;
-      background-color: #fff;
-      color: #000;
-      border: 1px solid #000;
-      border-radius: 0px;
-      padding: 20px;
-      margin: 20px;
-      font-size: 200%;
-      font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
-  }
+    .flex-box {
+        width: 200px;
+        height: 200px;
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #000;
+        border-radius: 0px;
+        padding: 20px;
+        margin: 20px;
+        font-size: 200%;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        text-align: center;
+        vertical-align: middle;
+        /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
 
-  .flex-box:nth-child(even) {
-      background-color: #fff;
-      color: #000;
-  }
-
-  .flex-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      flex-direction: row;
-  }
+    .flex-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+  
 }
