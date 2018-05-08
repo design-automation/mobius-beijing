@@ -46,7 +46,7 @@
     "mathjs": "^4.1.2",
     "mobius-array": "0.0.3",
     "mobius-csv": "0.0.3",
-    "mobius-geojson": "0.0.6",
+    "mobius-geojson": "0.0.9",
     "mobius-math": "0.0.2",
     "mobius-string": "0.0.3",
     "mobius-turf": "^0.1.12",

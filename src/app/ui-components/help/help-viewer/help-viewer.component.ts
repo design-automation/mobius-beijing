@@ -52,7 +52,7 @@ export class HelpViewerComponent implements OnInit {
   getSubModule(alldocs, modname){
     for(let i=0; i < alldocs.length; i++){
       let m = alldocs[i];
-      if( ( "\"" + modname.split("_")[1] + "\"" ) ==  (m.name)){ 
+       if( ( "\"" + modname.split("_")[1] + "\"" ) ==  (m.name)){ 
         return ( (m.children && m.children.length > 0) ? m.children : []);
       }
     }

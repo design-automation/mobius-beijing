@@ -25,7 +25,9 @@ export class ViewerComponent extends DataSubscriber {
   Min:number;
   texts:Array<any>;
   Cattexts:Array<any>;
+  CatNumtexts:Array<any>;
   pickupArrs:Array<any>;
+  ShowColorBar:boolean=false;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -35,7 +37,7 @@ export class ViewerComponent extends DataSubscriber {
     this.ChromaScale=chroma.scale("SPECTRAL");
     for(var i=79;i>-1;i--){
         this.Colorbar.push(this.ChromaScale(i/80));
-      }
+    }
   }
   ngDoCheck(){
     if(this.ColorValue!==this.dataService.ColorValue){
@@ -45,6 +47,7 @@ export class ViewerComponent extends DataSubscriber {
       for(var i=79;i>-1;i--){
         this.Colorbar.push(this.ChromaScale(i/80));
       }
+
       this.Colortext();
     }
     if(this.Max!==this.dataService.MaxColor){
@@ -64,7 +67,6 @@ export class ViewerComponent extends DataSubscriber {
   notify(message: string): void{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
-
       /*if(this.data!==undefined){
         for(var i=0;i<this.data["features"].length;i++){
           for(var j=0;j<this.data["features"][i]["geometry"].coordinates[0].length;j++){
@@ -103,9 +105,8 @@ export class ViewerComponent extends DataSubscriber {
     });
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     /*viewer.scene.imageryLayers.removeAll();
-    viewer.scene.globe.baseColor=Cesium.Color.GREY;*/
-    /*viewer.scene.backgroundColor = Cesium.Color.GREY;
-    console.log(viewer.scene.globe.baseColor);*/
+    console.log(viewer.scene.imageryLayers);
+    viewer.scene.globe.baseColor = Cesium.Color.GRAY;*/
     if(this.data!==undefined){
       this.viewer=viewer;
       this.dataService.viewer=this.viewer;
@@ -129,8 +130,17 @@ export class ViewerComponent extends DataSubscriber {
             var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10); 
             poly_center=[longitudeString,latitudeString,radius];
             self.poly_center.push(poly_center);
+            
+          }
+          if(entity.billboard!==undefined){
+            entity.billboard = undefined;
+            entity.point = new Cesium.PointGraphics({
+              color: Cesium.Color.BLUE,
+              pixelSize: 10
+            });
           }
         }
+        if(entities[0].polygon!==undefined) {self.ShowColorBar=true;}else{self.ShowColorBar=false;}
         self.dataService.poly_center=self.poly_center;
         self.propertyNames=entities[0].properties.propertyNames;
         for(var i=0;i<self.propertyNames.length;i++){
@@ -144,6 +154,7 @@ export class ViewerComponent extends DataSubscriber {
           }
         }
       });
+      
       this.dataService.cesiumpromise=promise;
       this.dataService.propertyNames=this.propertyNames;
       this.dataService.HeightKey=HeightKey;
@@ -175,7 +186,9 @@ export class ViewerComponent extends DataSubscriber {
 
   Colortext(){
     this.texts=undefined;
-    this.Cattexts=undefined;
+    //this.Cattexts=undefined;
+    this.Cattexts=[];
+    this.CatNumtexts=[];
     var propertyname=this.ColorValue;
     var texts=[];
     var promise=this.dataService.cesiumpromise;
@@ -248,14 +261,30 @@ export class ViewerComponent extends DataSubscriber {
       }
     }
     if(typeof(texts[0])==="string"){
-      this.Cattexts=[];
-      for(var j=0;j<texts.length;j++){
-        var ColorKey:any=[];
-        ColorKey.text=texts[j];
-        this.ChromaScale=chroma.scale("SPECTRAL");
-        ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
-        this.Cattexts.push(ColorKey);
+      if(texts.length<=12){
+        for(var j=0;j<texts.length;j++){
+          var ColorKey:any=[];
+          ColorKey.text=texts[j];
+          this.ChromaScale=chroma.scale("SPECTRAL");
+          ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
+          this.Cattexts.push(ColorKey);
+        }
+      }else{
+        texts=texts.sort();
+        for(var j=0;j<this.Colorbar.length;j++){
+          var ColorKey:any=[];
+          if(j===0){ColorKey.text=texts[j];}else if(j===this.Colorbar.length-1) {ColorKey.text=texts[texts.length-1];}
+          else{ColorKey.text=null;}
+          //ColorKey.text=texts[j];
+          //this.ChromaScale=chroma.scale("SPECTRAL");
+          ColorKey.color=this.Colorbar[j]//this.ChromaScale((j/texts.length).toFixed(2));
+          this.CatNumtexts.push(ColorKey);
+        }
       }
+    }
+    if(this.ShowColorBar===false){
+      this.Cattexts=undefined;
+      this.Colorbar=undefined;
     }
   }
 
@@ -295,7 +324,11 @@ export class ViewerComponent extends DataSubscriber {
           var max=this.dataService.MaxColor;
           var min=this.dataService.MinColor;
           var ChromaScale=this.ChromaScale;
-          for(var j=1;j<range;j++){
+          var texts=entity.properties[this.ColorValue]._value;
+          var rgb=this.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+          if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+          if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+          /*for(var j=1;j<range;j++){
             if(entity.properties[this.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
             var rgb=ColorKey[range-j].color._rgb;
             if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
@@ -305,7 +338,7 @@ export class ViewerComponent extends DataSubscriber {
               if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
               if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }
-          }
+          }*/
         }else{
           var ChromaScale=this.ChromaScale;
           var Colortexts=this.dataService.Colortexts;
@@ -384,14 +417,14 @@ export class ViewerComponent extends DataSubscriber {
 
   showAttribs(event){
     if(this.data!==undefined){
-      if(this.data["crs"]!==undefined&&this.data["crs"].cesium!==undefined){
-        if(this.data["crs"].cesium.select!==undefined){
+      if(this.data["cesium"]!==undefined){
+        if(this.data["cesium"].select!==undefined){
           if(this.viewer.selectedEntity!==undefined){
             var pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
             this.pickupArrs=[];
             this.pickupArrs.push({name:"ID",data:pickup.id.id});
-            for(var i=0;i<this.data["crs"].cesium.select.length;i++){
-              var propertyName:string=this.data["crs"].cesium.select[i];
+            for(var i=0;i<this.data["cesium"].select.length;i++){
+              var propertyName:string=this.data["cesium"].select[i];
               this.pickupArrs.push({name:propertyName,data:this.dataService.SelectedEntity.properties[propertyName]._value})
             }
             var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
