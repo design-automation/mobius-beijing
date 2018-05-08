@@ -69,8 +69,6 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 
 		let portType = parseInt(selectedPort.getType());
 
-		console.log(portType);
-
 		// todo: refactor 
 		switch(portType){
 			case 0: 
