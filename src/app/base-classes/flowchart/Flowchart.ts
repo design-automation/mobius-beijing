@@ -48,6 +48,7 @@ export class Flowchart implements IFlowchart{
 			this.name = data["name"];
 			this.description = data["description"];
 			this.selectedNode = data["selectedNode"];
+
 			this._globals = data["_globals"].map(function(in_data){
 				let inputPort = new InputPort(in_data["_name"]);
 				inputPort.update(in_data);
@@ -96,7 +97,6 @@ export class Flowchart implements IFlowchart{
 	}
 
 	get editable(): any{
-		console.log(this._editable);
 		return this._editable;
 	}
 	//

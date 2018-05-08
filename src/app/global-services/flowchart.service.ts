@@ -213,7 +213,6 @@ export class FlowchartService {
 
           if(this.getSelectedNode() == undefined){
             this.selectNode(this.getNodes().length - 1, 0);
-            console.log("selecting default");
           }
 
           _this.update();
