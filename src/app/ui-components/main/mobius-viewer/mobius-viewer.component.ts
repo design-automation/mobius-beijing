@@ -20,12 +20,11 @@ import { Constants } from "../../../constants";
   animations: [
     trigger('slide_in_out', [
       state('slide_in', style({
-        //background: 'red',
-         opacity: 1
+         "right": "0px"
       })),
       state('slide_out', style({
         //background: 'blue',
-         opacity: 0
+         "right": "-380px"
       })),
       //transition('slide_in <=> slide_out', animate('300ms')),
       transition("slide_in <=> slide_out", animate("3s")),

@@ -1,7 +1,7 @@
 @import '../../../../scss/globals';
 
 $sidebar-width: 350px;
-$btn-height: 100px;
+$btn-height: 70px;
 $btn-width: 30px;
 
 .message{
@@ -29,7 +29,7 @@ $btn-width: 30px;
 	margin: 0px;
 	padding: 0px;
 
-	overflow: hidden;
+	overflow: hidden !important;
 
 	.container{
 		position: relative;
@@ -46,99 +46,41 @@ $btn-width: 30px;
 
 		z-index: 100;
 
-		width: $sidebar-width;
+		width: $sidebar-width + $btn-width;
 		height: 100vh; 
+		padding-left: $btn-width;
 
 		overflow: hidden;
 
+	
+		.nav-toggle-btn{
+			position: absolute;
+			top: 50%;
+			margin-top: -$btn-height/2;
+			margin-left: -$btn-width;
+
+			z-index: 200;
+
+			width: $btn-width;
+			height: $btn-height;
+			
+			border-top: 1px solid gray;
+			border-left: 1px solid gray;
+			border-bottom: 1px solid gray;
+			border-radius: 4px;
+
+			background-color: rgba(20, 20, 20, 0.5);
+			color: #ddd;
+			text-align: center;
+			font-size: 32px;
+			line-height: $btn-height;
+
+			span{
+				vertical-align: middle;
+			}
+		}
 
 	}
 
-	.nav-toggle-btn{
-		z-index: 200;
-
-		position: absolute;
-		
-		top: 50%;
-		right: $sidebar-width;
-
-		margin-top: -$btn-height/2;
-		width: $btn-width;
-		height: $btn-height;
-		
-		border: 1px solid gray;
-		border-radius: 4px;
-
-		background-color: gray;
-	}
 
 }
-
-// #app-container{
-
-// 	position: relative;
-// 	width: 100%; 
-// 	height: 100%;
-
-// 	margin: 0px;
-// 	padding: 0px;
-
-// 	display: flex; 
-// 	flex-direction: column;
-
-// 	-webkit-touch-callout: none;
-// 	-webkit-user-select: none; /* Webkit */
-// 	-moz-user-select: none;    /* Firefox */
-// 	-ms-user-select: none;     /* IE 10  */
-
-// 	/* Currently not supported in Opera but will be soon */
-// 	-o-user-select: none;
-// 	user-select: none;  
-
-// 	#setting{
-// 		position: absolute;
-// 		left: 30px; 
-// 		bottom: 30px;
-// 	}
-
-
-// 	.container{
-// 		position: relative;
-// 		flex-grow: 1;
-
-// 		display: flex;
-// 		flex-direction: column; 
-
-// 		.wrapper{
-// 			position: absolute;
-// 			width: 100%;
-// 			height: 100%;
-	
-// 			.split{
-// 				height: 100%;
-// 				flex-grow: 1; 
-// 			}
-
-// 			.split-area{
-// 				overflow: hidden;
-
-// 				.view-wrapper{
-// 					position: absolute;
-// 					height: 100%;
-// 					width: 100%; 
-// 				}
-// 			}
-// 		}
-
-// 		.floatingbox{
-// 			position: absolute;
-// 			bottom: 0px;
-// 			right: 0px;
-// 			width: 25%;
-// 			height: 80%; 
-// 			border: 2px solid gray;
-// 		}
-
-// 	}
-
-// }
