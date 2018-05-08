@@ -47,7 +47,9 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	  allowDrop:  (element, { parent, index }) => {
 	    return (	parent.data._type !== ProcedureTypes.IfElseControl 
 	    			&& parent.data._type !== ProcedureTypes.Data 
-	    			&& parent.data._type !== ProcedureTypes.Action )
+	    			&& parent.data._type !== ProcedureTypes.Action 
+	    			&& parent.data._type !== ProcedureTypes.LoopBreak 
+	    			&& parent.data._type !== ProcedureTypes.LoopContinue )
 	  }
 	};
 

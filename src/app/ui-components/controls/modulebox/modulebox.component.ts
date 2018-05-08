@@ -20,8 +20,10 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 
   	procedureTypes: ProcedureTypes[] = [
   			ProcedureTypes.Data, 
+  			ProcedureTypes.IfElseControl,
   			ProcedureTypes.ForLoopControl, 
-  			ProcedureTypes.IfElseControl
+  			ProcedureTypes.LoopBreak, 
+  			ProcedureTypes.LoopContinue
   	];
 
   	constructor(injector: Injector, private layoutService: LayoutService) { 
@@ -89,7 +91,13 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 			value = "if-else"
 		}
 		else if(type == ProcedureTypes.ForLoopControl){
-			value = "for-each loop"	
+			value = "loop"	
+		}
+		else if(type == ProcedureTypes.LoopBreak){
+			value = "loop break"	
+		}
+		else if(type == ProcedureTypes.LoopContinue){
+			value = "loop continue"	
 		}
 
 		return value;
@@ -113,8 +121,12 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 			let prod_data :  {variable: string, array_name: string} = {variable: "i", array_name: "[]"};
 			prod = ProcedureFactory.getProcedure( ProcedureTypes.ForLoopControl, prod_data);
 		}
+		else if(type == ProcedureTypes.LoopBreak || type == ProcedureTypes.LoopContinue){
+			alert(type);
+			prod = ProcedureFactory.getProcedure( type );
+			console.log(prod);
+		}
 		else if(type == ProcedureTypes.Action){
-
 		}
 		else{
 			throw Error("Procedure Type invalid");

@@ -4,6 +4,7 @@ import {ActionProcedure} from "./ActionProcedure";
 import {IfElseControlProcedure} from "./IfElseControlProcedure";
 import {ForLoopControlProcedure} from "./ForLoopControlProcedure";
 import {FunctionProcedure} from "./FunctionProcedure";
+import {StatementProcedure} from "./StatementProcedure";
 import {IProcedure} from "./IProcedure";
 
 export class ProcedureFactory{
@@ -24,6 +25,9 @@ export class ProcedureFactory{
 		}
 		else if(type == ProcedureTypes.Function){
 			return new FunctionProcedure(data);
+		}
+		else if(type == ProcedureTypes.LoopBreak || type == ProcedureTypes.LoopContinue){
+			return new StatementProcedure(type);
 		}
 		else{
 			throw Error("Invalid control");

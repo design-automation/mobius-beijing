@@ -538,7 +538,7 @@ export class FlowchartService {
 
   checkProcedure(prod: IProcedure): void{
       // validate procedure
-      let codeString: string = prod.getCodeString(this.code_generator);
+      //let codeString: string = prod.getCodeString(this.code_generator);
   }
 
   disconnectPort(type: string, portIndex: number, nodeIndex: number): void{

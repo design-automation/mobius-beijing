@@ -270,6 +270,9 @@ export class CodeGeneratorJS extends CodeGenerator{
 				}
 
 			}
+			else if(prod_type == ProcedureTypes.LoopContinue || prod_type == ProcedureTypes.LoopBreak){
+				code = procedure.getLeftComponent().expression + ";";
+			}
 			else if(prod_type == ProcedureTypes.Action){
 				let paramList :string[]= [];
 				let params  = procedure.getRightComponent().params;

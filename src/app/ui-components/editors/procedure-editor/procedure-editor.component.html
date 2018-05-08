@@ -22,6 +22,7 @@
 									[nodes]='_procedureArr' 
 									[options]='_tree_options'  
 									(moveNode)="onMoveNode($event)">
+
 								  <ng-template #treeNodeTemplate 
 								  		let-prod 
 								  		let-index="index" 
@@ -104,19 +105,19 @@
 
 												<div *ngIf="prod.data.getType() == 'For Loop'">
 													<div class='procedure-item'>
-													 <span>for (</span> 
-													  
-													  <input matInput class="tree-input" 
+														<span>for each (</span> 
+
+														<input matInput class="tree-input" 
 															[style.width.ch]="prod.data.getLeftComponent().expression.length + 4" 
-													  		[(ngModel)]="prod.data.getLeftComponent().expression" #ctrl="ngModel" required (change)="updateProcedure($event, prod, 'left')" spellcheck="false">
-													  
-													  <span style="margin: 0px 10px;">in</span>  
-													  
-													  <input matInput class="tree-input" 
+																[(ngModel)]="prod.data.getLeftComponent().expression" #ctrl="ngModel" required (change)="updateProcedure($event, prod, 'left')" spellcheck="false">
+
+														<span style="margin: 0px 10px;">in</span>  
+
+														<input matInput class="tree-input" 
 																[style.width.ch]="prod.data.getRightComponent().expression.length + 4" 
-													  			[(ngModel)]="prod.data.getRightComponent().expression" #ctrl="ngModel" 
-													  			required (change)="updateProcedure($event, prod, 'right')" spellcheck="false" list="variable-suggestions"> 
-													  )
+																	[(ngModel)]="prod.data.getRightComponent().expression" #ctrl="ngModel" 
+																	required (change)="updateProcedure($event, prod, 'right')" spellcheck="false" list="variable-suggestions"> 
+														)
 													</div>
 												</div>
 
@@ -152,6 +153,12 @@
 																</div> 
 															</span>	)
 														
+													</div>
+												</div>
+
+												<div *ngIf="prod.data.getType() == 'Loop Break' || prod.data.getType() == 'Loop Continue'">
+													<div class='procedure-item'>
+															{{prod.data.getLeftComponent().expression}}
 													</div>
 												</div>
 
@@ -214,6 +221,7 @@
 
 						    			</div>
 								  </ng-template>
+								  
 						</tree-root> 
 					</div>	
 					<!-- </div>	 -->					
