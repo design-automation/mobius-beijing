@@ -881,6 +881,7 @@ class Flowchart {
         this.description = "Lorem ipsum proident nisi dolor ut minim in in non consectetur ut ut.";
         this.selectedNode = undefined;
         this._globals = [];
+        this._editable = true;
         if (data) {
             this.name = data["name"];
             this.description = data["description"];
@@ -918,6 +919,12 @@ class Flowchart {
     }
     get visibleNode() {
         return this._visibleNode;
+    }
+    set editable(value) {
+        this._editable = value;
+    }
+    get editable() {
+        return this._editable;
     }
     //
     //	Maintains the node order for execution
@@ -2013,6 +2020,7 @@ class Port {
         this._isFunction = portData["_isFunction"];
         this.opts = portData["opts"];
         // todo: assign computed also??
+        this._computed = portData["_computed"];
     }
     //
     //
@@ -3007,21 +3015,6 @@ let FlowchartService = class FlowchartService {
             // // this.layoutService.showConsole();
             this.newFile();
         }
-        //let dialogRef = this.dialog.open(FileLoadDialogComponent, {
-        //     height: '400px',
-        //     width: '600px'
-        // });
-        // dialogRef.afterClosed().subscribe(result => {
-        //     if(result == 'load'){
-        //       console.log();
-        //     }
-        //     else if(result == 'new'){
-        //       this.newFile()
-        //     }
-        //     else{
-        //       this.newFile();
-        //     }
-        // });
     }
     checkSavedNodes() {
         this._savedNodes = [];
@@ -10552,9 +10545,7 @@ let ModuleboxComponent = class ModuleboxComponent extends __WEBPACK_IMPORTED_MOD
             prod = __WEBPACK_IMPORTED_MODULE_4__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedure(__WEBPACK_IMPORTED_MODULE_4__base_classes_procedure_ProcedureModule__["b" /* ProcedureTypes */].ForLoopControl, prod_data);
         }
         else if (type == __WEBPACK_IMPORTED_MODULE_4__base_classes_procedure_ProcedureModule__["b" /* ProcedureTypes */].LoopBreak || type == __WEBPACK_IMPORTED_MODULE_4__base_classes_procedure_ProcedureModule__["b" /* ProcedureTypes */].LoopContinue) {
-            alert(type);
             prod = __WEBPACK_IMPORTED_MODULE_4__base_classes_procedure_ProcedureModule__["a" /* ProcedureFactory */].getProcedure(type);
-            console.log(prod);
         }
         else if (type == __WEBPACK_IMPORTED_MODULE_4__base_classes_procedure_ProcedureModule__["b" /* ProcedureTypes */].Action) {
         }
@@ -11942,7 +11933,7 @@ ProcedureEditorComponent = __decorate([
 /***/ "./src/app/ui-components/editors/publish-settings/publish-settings.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"publish-settings\">\r\n\r\n\t<h2>File Settings</h2>\r\n\r\n\t<div class=\"container\">\r\n\t\t\r\n\t\t<section class=\"filename\">\r\n\t\t\t<label>Name of the file</label>\r\n\t\t\t<input [(ngModel)]=\"_flowchart.name\">\r\n\t\t</section>\r\n\r\n\t\t<section class=\"description\">\r\n\t\t\t<label>Description</label>\r\n\t\t\t<textarea [(ngModel)]=\"_flowchart.description\"  rows=\"4\"></textarea>\r\n\t\t</section>\r\n\r\n\t</div>\r\n\t\r\n\t<div class=\"container\">\r\n\t\t<h3>\r\n\t\t\tGlobal Variables <button (click)=\"addGlobal()\">Add New </button>\r\n\t\t</h3>\r\n\t\t\r\n\t\t<div class=\"global-container\">\r\n\t\t\t<div class='global' *ngFor=\"let inp of _globals; let i=index\">\r\n\r\n\t\t\t\t<span class='name' contenteditable=\"true\" (blur)=\"updateGlobal($event, inp)\" spellcheck=\"false\">\r\n\t\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</span>\r\n\t\t\t\r\n\t\t\t\t<select class='type' (change)=\"updateType($event.target.value, inp)\">\r\n\t         \t    <option *ngFor=\"let x of inputPortOpts\" [value]=\"x\" [selected]=\"inp.getType() == x\">{{getInputTypeName(x)}}</option>\r\n\t            </select>\r\n\r\n\t\t\t\t<div class=\"controls\">\r\n\t\t\t\t\t<button (click)='openSettingsDialog(inp)'>\r\n\t\t\t\t\t\t<mat-icon>settings</mat-icon>\r\n\t\t\t\t\t</button>\r\n\t\t\t        <button (click)='deleteGlobal(i)'>\r\n\t\t\t    \t\t<mat-icon>delete</mat-icon>\r\n\t\t\t\t    </button>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\t<div class=\"container\" *ngIf=\"_nodes.length>0\">\r\n\t\t<h3>Visible Node</h3>\r\n\t\t\r\n\t\t<section>\r\n\r\n\t\t\t<label>Node to Display</label>\r\n\t\t\t<select class='type' (change)=\"_flowchart.selectedNode = $event.target.value;\">\r\n         \t    <option *ngFor=\"let x of _nodes\" \r\n         \t    \t[value]=\"x.getId()\" [selected]=\"_flowchart.selectedNode == x.getId()\">{{x.getName()}}\r\n         \t    </option>\r\n\t        </select>\r\n\t\t\r\n\t\t</section>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"container\" style=\"text-align: center\">\r\n\t\t<button mat-button (click)=\"save()\">Save File</button>\r\n\t</div>\r\n\r\n</div>"
+module.exports = "<div class=\"publish-settings\">\r\n\r\n\t<h2>File Settings</h2>\r\n\r\n\t<div class=\"container\">\r\n\t\t\r\n\t\t<section class=\"filename\">\r\n\t\t\t<label>Name of the file</label>\r\n\t\t\t<input [(ngModel)]=\"_flowchart.name\">\r\n\t\t</section>\r\n\r\n\t\t<section class=\"description\">\r\n\t\t\t<label>Description</label>\r\n\t\t\t<textarea [(ngModel)]=\"_flowchart.description\"  rows=\"4\"></textarea>\r\n\t\t</section>\r\n\r\n\t</div>\r\n\t\r\n\t<div class=\"container\">\r\n\t\t<h3>\r\n\t\t\tGlobal Variables <button (click)=\"addGlobal()\">Add New </button>\r\n\t\t</h3>\r\n\t\t\r\n\t\t<div class=\"global-container\">\r\n\t\t\t<div class='global' *ngFor=\"let inp of _globals; let i=index\">\r\n\r\n\t\t\t\t<span class='name' contenteditable=\"true\" (blur)=\"updateGlobal($event, inp)\" spellcheck=\"false\">\r\n\t\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</span>\r\n\t\t\t\r\n\t\t\t\t<select class='type' (change)=\"updateType($event.target.value, inp)\">\r\n\t         \t    <option *ngFor=\"let x of inputPortOpts\" [value]=\"x\" [selected]=\"inp.getType() == x\">{{getInputTypeName(x)}}</option>\r\n\t            </select>\r\n\r\n\t\t\t\t<div class=\"controls\">\r\n\t\t\t\t\t<button (click)='openSettingsDialog(inp)'>\r\n\t\t\t\t\t\t<mat-icon>settings</mat-icon>\r\n\t\t\t\t\t</button>\r\n\t\t\t        <button (click)='deleteGlobal(i)'>\r\n\t\t\t    \t\t<mat-icon>delete</mat-icon>\r\n\t\t\t\t    </button>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\r\n\t<div class=\"container\" *ngIf=\"_nodes.length>0\">\r\n\t\t<h3>Visible Node</h3>\r\n\t\t\r\n\t\t<section>\r\n\r\n\t\t\t<label>Node to Display</label>\r\n\t\t\t<select class='type' (change)=\"_flowchart.selectedNode = $event.target.value;\">\r\n         \t    <option *ngFor=\"let x of _nodes\" \r\n         \t    \t[value]=\"x.getId()\" [selected]=\"_flowchart.selectedNode == x.getId()\">{{x.getName()}}\r\n         \t    </option>\r\n\t        </select>\r\n\t\t\r\n\t\t</section>\r\n\r\n\t</div>\r\n\r\n\t<div class=\"container\" *ngIf=\"_nodes.length>0\">\r\n\t\t<h3>Is this flowchart editable?</h3>\r\n\t\t\r\n\t\t<section>\r\n\t\t\t<mat-checkbox (change)=\"_flowchart.editable = !_flowchart.editable;\" \r\n\t\t\t[checked]=\"_flowchart.editable\"></mat-checkbox>\r\n\t\t</section>\r\n\r\n\t</div>\r\n\r\n\t<br><hr>\r\n\t<hr>\r\n\r\n\t<div class=\"container\" style=\"text-align: center\">\r\n\t\t<button mat-button (click)=\"save()\">Save File</button>\r\n\t</div>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -12409,7 +12400,7 @@ module.exports = ""
 /***/ "./src/app/ui-components/help/info-viewer/help.model.tpl.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.16-cesium</p>\r\n"
+module.exports = "<h1>About the Model</h1>\r\n\r\n<p>Mobius v0.9.19-cesium</p>\r\n"
 
 /***/ }),
 
@@ -12926,6 +12917,7 @@ let MobiusViewerComponent = class MobiusViewerComponent {
     }
     ngAfterViewInit() {
         this.visible = true;
+        //this.editable = this.flowchartService.getFlowchart().editable;
     }
     getFlowchart(filename) {
         let filepath = __WEBPACK_IMPORTED_MODULE_6__constants__["a" /* Constants */].FILE_URL + filename;
@@ -13498,7 +13490,7 @@ NodeLibraryComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" *ngIf='_inputs == undefined || _inputs.length == 0'>\r\n\t\t\tNo Inputs\r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3>Title: {{flowchartService.getFlowchart().name}}</h3>\r\n\t\t\t<p>{{flowchartService.getFlowchart().description}}</p>\r\n\r\n\t\t\t<h4>Parameters</h4>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div class='paramater-container single-param-container' *ngFor=\"let inp of _inputs\" >\r\n\t\t\t\r\n\r\n\r\n\t\t\t<div class=\"param-name\">\r\n\t\t\t\t{{ inp.getName() }}\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == Input -->\r\n\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t</form>\r\n\t\t\t</div> \r\n\r\n\t\t\t<!-- if input type == Slider -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n            \t\t\tmatAutosizeMaxRows=\"5\" \r\n            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n            \t\t</textarea>\r\n\t\t\t\t</mat-form-field>\r\n\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t</div>\r\n\r\n\t\t\t<!-- if input type == URL -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\">Get Data</button>\r\n\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t</div>\r\n \r\n\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t<div class=\"param-value\" \r\n\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t</div>\r\n\r\n\t\t</div>\r\n\r\n\t\t\t<!-- todo: disable if port is connected -->\r\n\t\t\t<!-- ui options based on type -->\r\n\t\t\t<!-- todo: -->\r\n\t</div>\r\n\t<button id=\"execute\" mat-raised-button color=\"accent\" (click)=\"executeFlowchart($event)\">Execute Flowchart</button>  \r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" *ngIf='_inputs == undefined || _inputs.length == 0'>\r\n\t\t\tNo Inputs\r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3>Title: {{flowchartService.getFlowchart().name}}</h3>\r\n\t\t\t<p>{{flowchartService.getFlowchart().description}}</p>\r\n\t\t</div>\r\n\t\t\r\n\t\t<div *ngIf=\"_editable\">\r\n\t\t\t<h4 >Parameters</h4>\r\n\t\t\t<div class='paramater-container single-param-container'\r\n\t\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\r\n\t\t\t\t<div class=\"param-name\">\r\n\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == Input -->\r\n\t\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t\t            \t\t</textarea>\r\n\t\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div> \r\n\r\n\t\t\t\t<!-- if input type == Slider -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == URL -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\">Get Data</button>\r\n\t\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t\t</div>\r\n\t \r\n\t\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\r\n\t</div>\r\n\t\r\n\t<button id=\"execute\" \r\n\t\t\t*ngIf=\"_editable\"\r\n\t\t\t[class.light]=\"viewer_light\" \r\n\t\t\tmat-raised-button \r\n\t\t\tcolor=\"accent\" \r\n\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\tExecute Flowchart\r\n\t</button>  \r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -13548,21 +13540,10 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
         this._inputs = [];
         if (this.globals) {
             this._inputs = this.flowchartService.getFlowchart().globals;
+            this._editable = this.flowchartService.getFlowchart().editable;
+            ;
         }
     }
-    // addInput(): void{
-    //    	this._node.addInput();
-    // 	  this.flowchartService.update();
-    // }
-    // updateInputName($event, input): void{
-    //   let name: string = $event.srcElement.innerText;
-    //   input.setName(name);
-    //   // put a timeout on this update or something similar to solve jumpiness
-    //   this.flowchartService.update();
-    // }
-    // updateInputType( type:string ){
-    //   alert(type);
-    // }
     updateComputedValue($event, input, value) {
         // for input
         if ($event.srcElement) {
@@ -13591,6 +13572,8 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
     update() {
         if (this.globals) {
             this._inputs = this.flowchartService.getFlowchart().globals;
+            this._editable = this.flowchartService.getFlowchart().editable;
+            ;
             return;
         }
         this._node = this.flowchartService.getSelectedNode();
