@@ -92,23 +92,7 @@ export class ParameterEditorComponent extends Viewer{
         }
 
     }
-
-    // updateDefaultValue($event, port: InputPort|OutputPort): void{
-    //   let value: string = $event.srcElement.innerText;
-
-    //   if(value.trim().length > 0){
-    //     port.setDefaultValue(value)
-    //     // put a timeout on this update or something similar to solve jumpiness
-    //   }
-    //   else{
-    //     port.setDefaultValue(undefined)
-    //   }
-
-    //   this.flowchartService.update();
-
-
-    // }
-
+    
     getInputTypeName(type: InputPortTypes): string{
       if(type == InputPortTypes.ColorPicker){
         return "Color";

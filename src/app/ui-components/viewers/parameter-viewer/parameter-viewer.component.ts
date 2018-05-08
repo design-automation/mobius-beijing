@@ -36,10 +36,10 @@ export class ParameterViewerComponent extends Viewer {
     reset(): void{
       this._node = undefined; 
       this._inputs = [];
+      this._editable = this.flowchartService.getFlowchart().editable;;
 
       if(this.globals){
         this._inputs = this.flowchartService.getFlowchart().globals;
-        this._editable = this.flowchartService.getFlowchart().editable;;
       }
 
     }
@@ -76,9 +76,10 @@ export class ParameterViewerComponent extends Viewer {
   	//
   	update(): void{
 
+      this._editable = this.flowchartService.getFlowchart().editable;
+
       if(this.globals){
         this._inputs = this.flowchartService.getFlowchart().globals;
-        this._editable = this.flowchartService.getFlowchart().editable;;
         return;
       }
 

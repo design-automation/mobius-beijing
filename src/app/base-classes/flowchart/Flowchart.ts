@@ -53,6 +53,7 @@ export class Flowchart implements IFlowchart{
 				inputPort.update(in_data);
 				return inputPort;
 			});
+			this._editable = data["_editable"] == undefined ? true : data["_editable"];
 		}
 	};
 
@@ -95,6 +96,7 @@ export class Flowchart implements IFlowchart{
 	}
 
 	get editable(): any{
+		console.log(this._editable);
 		return this._editable;
 	}
 	//
