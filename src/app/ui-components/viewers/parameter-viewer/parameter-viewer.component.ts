@@ -14,8 +14,8 @@ import 'rxjs/add/operator/map'
 })
 export class ParameterViewerComponent extends Viewer {
     
-    @Input() globals:boolean;
-
+    @Input() globals: boolean;
+    _editable;
 
 	  _node: IGraphNode;
 	  _inputs: InputPort[]|any;
@@ -39,24 +39,10 @@ export class ParameterViewerComponent extends Viewer {
 
       if(this.globals){
         this._inputs = this.flowchartService.getFlowchart().globals;
+        this._editable = this.flowchartService.getFlowchart().editable;;
       }
+
     }
-
-  	// addInput(): void{
-   //    	this._node.addInput();
-  	// 	  this.flowchartService.update();
-	  // }
-
-    // updateInputName($event, input): void{
-    //   let name: string = $event.srcElement.innerText;
-    //   input.setName(name);
-    //   // put a timeout on this update or something similar to solve jumpiness
-    //   this.flowchartService.update();
-    // }
-
-    // updateInputType( type:string ){
-    //   alert(type);
-    // }
 
     updateComputedValue($event, input, value?: any): void{
 
@@ -92,6 +78,7 @@ export class ParameterViewerComponent extends Viewer {
 
       if(this.globals){
         this._inputs = this.flowchartService.getFlowchart().globals;
+        this._editable = this.flowchartService.getFlowchart().editable;;
         return;
       }
 

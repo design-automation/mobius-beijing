@@ -29,6 +29,9 @@ export interface IFlowchart{
 	globals();
 	globals(arr);
 
+	editable();
+	editable(val);
+
 	// icodegenerator
 
 	// get / set

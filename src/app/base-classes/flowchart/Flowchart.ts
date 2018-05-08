@@ -31,6 +31,8 @@ export class Flowchart implements IFlowchart{
 	private _globals = [];
 	private _visibleNode;
 
+	private _editable;
+
 	//
 	//	constructor needs 2 arguments  - username and icodegenerator
 	//
@@ -40,6 +42,7 @@ export class Flowchart implements IFlowchart{
 		this.description = "Lorem ipsum proident nisi dolor ut minim in in non consectetur ut ut.";
 		this.selectedNode = undefined;
 		this._globals = [];
+		this._editable = true;
 
 		if(data){
 			this.name = data["name"];
@@ -87,6 +90,13 @@ export class Flowchart implements IFlowchart{
 		return this._visibleNode;
 	}
 
+	set editable(value){
+		this._editable = value;
+	}
+
+	get editable(): any{
+		return this._editable;
+	}
 	//
 	//	Maintains the node order for execution
 	//

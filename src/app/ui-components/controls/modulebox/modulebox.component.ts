@@ -122,9 +122,7 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 			prod = ProcedureFactory.getProcedure( ProcedureTypes.ForLoopControl, prod_data);
 		}
 		else if(type == ProcedureTypes.LoopBreak || type == ProcedureTypes.LoopContinue){
-			alert(type);
 			prod = ProcedureFactory.getProcedure( type );
-			console.log(prod);
 		}
 		else if(type == ProcedureTypes.Action){
 		}

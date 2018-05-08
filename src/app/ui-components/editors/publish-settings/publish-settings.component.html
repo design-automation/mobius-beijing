@@ -61,6 +61,19 @@
 
 	</div>
 
+	<div class="container" *ngIf="_nodes.length>0">
+		<h3>Is this flowchart editable?</h3>
+		
+		<section>
+			<mat-checkbox (change)="_flowchart.editable = !_flowchart.editable;" 
+			[checked]="_flowchart.editable"></mat-checkbox>
+		</section>
+
+	</div>
+
+	<br><hr>
+	<hr>
+
 	<div class="container" style="text-align: center">
 		<button mat-button (click)="save()">Save File</button>
 	</div>

@@ -39,6 +39,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 	toggle;
     supported: boolean = false;
     slider_state:string;
+    editable: boolean;
 
 	router; sub;
 	filepath: string;
@@ -64,12 +65,13 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 		   this.filepath = this.getFlowchart(params.id);
 		   this.flowchartService.loadFile(this.filepath);
 		});
-		
+
 		this.slider_state = 'slide_in';
 	}
 
 	ngAfterViewInit(){
 		this.visible = true;
+		//this.editable = this.flowchartService.getFlowchart().editable;
 	}
 
 	getFlowchart(filename: string){
