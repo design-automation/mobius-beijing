@@ -119,28 +119,6 @@ export class FlowchartService {
      // // this.layoutService.showConsole();
       this.newFile();
     }
-
-    
-
-
-        //let dialogRef = this.dialog.open(FileLoadDialogComponent, {
-        //     height: '400px',
-        //     width: '600px'
-        // });
-
-        // dialogRef.afterClosed().subscribe(result => {
-
-        //     if(result == 'load'){
-        //       console.log();
-        //     }
-        //     else if(result == 'new'){
-        //       this.newFile()
-        //     }
-        //     else{
-        //       this.newFile();
-        //     }
-
-        // });
   }
 
   checkSavedNodes(): void{ 
