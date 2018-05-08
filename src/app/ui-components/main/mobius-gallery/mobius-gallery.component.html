@@ -1,17 +1,7 @@
 <div class="container">
-	
-  <h1>Mobius Gallery</h1>
-	<div class="description">
-		<p>If you'd like to contribute to showcase your work on this gallery, 
-      please add your file <a href="https://github.com/design-automation/mobius-gallery/" target="_blank">here</a>.
-    </p>
-	</div>
-
-	<div class="link-container">
-		<a *ngFor="let f of all_files" href="./viewer/{{f.name}}">{{f.name}}</a>
-	</div>
-
+  <div class="flex-container">
+    <div class="flex-box">
+      <a *ngFor="let f of all_files" href="./viewer/{{f.name}}">{{f.name}}</a>
+    </div>
+  </div>
 </div>
-
-
-
