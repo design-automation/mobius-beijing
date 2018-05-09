@@ -25,8 +25,7 @@
 		 				 	<mat-list-item 
 		 				 	 	style="padding: 10px 20px; height: auto;"
 		 				 		*ngFor="let fn of getSubModule(mod._helpObj , mod._name)">
-		 				 		<div class="content">
-
+		 				 		<div>
 		 					 		<h4 mat-line>{{fn.name}}</h4>
 
 		 					 		<ng-container *ngIf="fn.signatures">

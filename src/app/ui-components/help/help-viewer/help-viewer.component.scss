@@ -72,15 +72,6 @@ mat-panel-description{
 }
 
 
-.content{
-	width: 100%;
-	text-align: left !important;
-	.head-descr{
-		margin-bottom: $fsize2;
-		font-size: $fsize2;
-	}
-}
-
 /*
 .mat-list-item-content{
 	padding: 0;
@@ -92,7 +83,6 @@ mat-panel-description{
 	border: 0;
 	line-height: $fsize1;
 }*/
-
 
 
 mat-list{
@@ -112,7 +102,7 @@ mat-list{
 		}
 		p{
 			white-space: normal;
-			font-size: $fsize2;
+			font-size: $fsize2 !important;
 			color: $color1;
 			margin:0 !important;
 
@@ -124,6 +114,9 @@ mat-list{
 	}
 	div{
 		padding: 0 !important;
+		&:hover{
+			color:$color1;
+		}
 	}
 }
 
@@ -131,6 +124,10 @@ mat-list{
 	height: auto;
 	margin: 0;
 	padding-left: 20px;
+
+	&:hover{
+		color: $color1;
+	}
 }
 
 
@@ -149,6 +146,9 @@ mat-list{
 	color: $color1;
 	cursor: default !important;
 	white-space: normal;
+	&:hover{
+		color: $color1;
+	}
 }
 
 .return-block{
@@ -161,8 +161,15 @@ mat-list{
 	.topic{
 		margin-right: 5px;
 	}
+	&:hover{
+		color: $color1;
+	}
 }
 
-.example-block{
+.example-block, .example{
 	font-size: $fsize2;
+	&:hover{
+		color: $color1;
+		cursor: default;
+	}
 }
