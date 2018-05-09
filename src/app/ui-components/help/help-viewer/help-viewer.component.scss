@@ -111,9 +111,10 @@ mat-list{
 			//margin-bottom: $fsize2;
 		}
 		p{
+			white-space: normal;
 			font-size: $fsize2;
 			color: $color1;
-			margin:0;
+			margin:0 !important;
 
 			a{
 				color: $color2;
@@ -124,6 +125,12 @@ mat-list{
 	div{
 		padding: 0 !important;
 	}
+}
+
+.parameters{
+	height: auto;
+	margin: 0;
+	padding-left: 20px;
 }
 
 
@@ -137,16 +144,25 @@ mat-list{
 	}
 }
 
-.descr{
+.descr, .type{
 	font-size: $fsize2;
 	color: $color1;
 	cursor: default !important;
+	white-space: normal;
 }
 
 .return-block{
 	//margin-top: $fsize2/2;
 	//display: block;
+	font-size: $fsize2;
+	color: $color1;
+	display: flex;
+	flex-flow: row no-wrap;
 	.topic{
-		text-decoration: underline;
+		margin-right: 5px;
 	}
+}
+
+.example-block{
+	font-size: $fsize2;
 }
