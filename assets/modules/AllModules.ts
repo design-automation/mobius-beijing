@@ -17,7 +17,7 @@ const SPACER = "_";
 import * as MMath from "mobius-math";
 import math_docs from "mobius-math/docs_json/mobius-math.json"; 
 Object.keys(MMath).map(function(submodule){
-	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MMath[submodule], "attrib", math_docs);
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.MATH + SPACER + submodule, MMath[submodule], "attrib", math_docs);
 	AllModules.push(module);
 });
 
@@ -35,7 +35,7 @@ Object.keys(MArray).map(function(submodule){
 import * as MTurf from "mobius-turf";
 import turf_docs from "mobius-turf/docs_json/mobius-turf.json"; 
 Object.keys(MTurf).map(function(submodule){
-	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MTurf[submodule], "attrib", turf_docs);
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.TURF + SPACER + submodule, MTurf[submodule], "attrib", turf_docs);
 	AllModules.push(module);
 });
 
@@ -44,7 +44,7 @@ Object.keys(MTurf).map(function(submodule){
 import * as MString from "mobius-string";
 import string_docs from "mobius-string/docs_json/mobius-string.json"; 
 Object.keys(MString).map(function(submodule){
-	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MString[submodule], "attrib", string_docs);
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.STRING + SPACER + submodule, MString[submodule], "attrib", string_docs);
 	AllModules.push(module);
 });
 
@@ -53,7 +53,7 @@ Object.keys(MString).map(function(submodule){
 import * as MGeojson from "mobius-geojson";
 import geojson_docs from "mobius-geojson/docs_json/mobius-geojson.json"; 
 Object.keys(MGeojson).map(function(submodule){
-	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MGeojson[submodule], "attrib", geojson_docs);
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.GEOJSON + SPACER + submodule, MGeojson[submodule], "attrib", geojson_docs);
 	AllModules.push(module);
 });
 
@@ -62,7 +62,7 @@ Object.keys(MGeojson).map(function(submodule){
 import * as MCsv from "mobius-csv";
 import csv_docs from "mobius-csv/docs_json/mobius-csv.json"; 
 Object.keys(MCsv).map(function(submodule){
-	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MCsv[submodule], "attrib", csv_docs);
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.CSV + SPACER + submodule, MCsv[submodule], "attrib", csv_docs);
 	AllModules.push(module);
 });
 

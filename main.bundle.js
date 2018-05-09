@@ -14002,7 +14002,7 @@ const SPACER = "_";
 
 
 Object.keys(__WEBPACK_IMPORTED_MODULE_1_mobius_math__).map(function (submodule) {
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.ARRAY + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_1_mobius_math__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_2_mobius_math_docs_json_mobius_math_json___default.a);
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.MATH + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_1_mobius_math__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_2_mobius_math_docs_json_mobius_math_json___default.a);
     AllModules.push(module);
 });
 // mobius-array module
@@ -14016,28 +14016,28 @@ Object.keys(__WEBPACK_IMPORTED_MODULE_3_mobius_array__).map(function (submodule)
 
 
 Object.keys(__WEBPACK_IMPORTED_MODULE_5_mobius_turf__).map(function (submodule) {
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.ARRAY + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_5_mobius_turf__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_6_mobius_turf_docs_json_mobius_turf_json___default.a);
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.TURF + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_5_mobius_turf__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_6_mobius_turf_docs_json_mobius_turf_json___default.a);
     AllModules.push(module);
 });
 // mobius-string module
 
 
 Object.keys(__WEBPACK_IMPORTED_MODULE_7_mobius_string__).map(function (submodule) {
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.ARRAY + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_7_mobius_string__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_8_mobius_string_docs_json_mobius_string_json___default.a);
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.STRING + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_7_mobius_string__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_8_mobius_string_docs_json_mobius_string_json___default.a);
     AllModules.push(module);
 });
 // mobius-geojson module
 
 
 Object.keys(__WEBPACK_IMPORTED_MODULE_9_mobius_geojson__).map(function (submodule) {
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.ARRAY + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_9_mobius_geojson__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_10_mobius_geojson_docs_json_mobius_geojson_json___default.a);
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.GEOJSON + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_9_mobius_geojson__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_10_mobius_geojson_docs_json_mobius_geojson_json___default.a);
     AllModules.push(module);
 });
 // mobius-csv module
 
 
 Object.keys(__WEBPACK_IMPORTED_MODULE_11_mobius_csv__).map(function (submodule) {
-    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.ARRAY + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_11_mobius_csv__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_12_mobius_csv_docs_json_mobius_csv_json___default.a);
+    let module = __WEBPACK_IMPORTED_MODULE_0__app_base_classes_code_CodeModule__["b" /* ModuleUtils */].createModule(MODULE_KEY.CSV + SPACER + submodule, __WEBPACK_IMPORTED_MODULE_11_mobius_csv__[submodule], "attrib", __WEBPACK_IMPORTED_MODULE_12_mobius_csv_docs_json_mobius_csv_json___default.a);
     AllModules.push(module);
 });
 
