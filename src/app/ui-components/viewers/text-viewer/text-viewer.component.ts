@@ -17,11 +17,14 @@ export class TextViewerComponent extends Viewer implements OnInit {
 	_selectedNode: IGraphNode;
 	_selectedPort: IPort;
 
+	_outResults;
+
 	constructor(injector: Injector){ 
 		super(injector, "Text Viewer", "Displayed geometry with each node.");  
 	}
 
 	ngOnInit() {
+		this._outResults = [];
 		this.update();
 	}
 
@@ -47,6 +50,7 @@ export class TextViewerComponent extends Viewer implements OnInit {
 	}
 
 	getText(output: IPort): string{
+		console.log("getting text");
 		let val = output.getValue();
 
 		if(val){
@@ -71,70 +75,23 @@ export class TextViewerComponent extends Viewer implements OnInit {
 		return (typeof(val) == "object" && val.toString() == "[object Object]");
 	}
 
-	// getType(output: IPort): string{
-
-	// 	let val = output.getValue();
-	// 	if(val){
-
-	// 		let result = val;
-
-	// 		try{
-	// 			if(typeof(val) == "object"){
-
-	// 				let strRep: string = val.toString();
-	// 				if(strRep !== "[object Object]"){
-	// 					return strRep.replace(/\n/g, '<br>');
-	// 				}
-	// 				else if(val["type"] == "FeatureCollection"){
-
-	// 					let str = "<b>GeoJSON file</b><br>";
-	// 					str += "Number of features: " + val["features"].length + "<br>";
-	// 					str += "First few features:<br>";
-
-	// 					let sliced = val["features"].slice(0, Math.min(3, val["features"].length));
-	// 					let features: string = "";
-	// 					sliced = sliced.map(function(feature){
-	// 						let f: string = "";
-	// 						f += "<small><b>Geometry Type:" + feature["geometry"]["type"] + "</b><br>";
-	// 						f += "<code>" + js_beautify.js_beautify(JSON.stringify(feature)) +  "</code></small>";
-	// 						return f;
-	// 					})
-
-	// 					str += sliced.join("<br><br>");
-
-	// 					return str;
-	// 				}
-	// 				else{
-	// 					let str = CircularJSON.stringify(output.getValue());
-	// 					if(str.length > 1000){
-	// 						return str.substr(0, 1000) + "... <br><br>File too long!";
-	// 					}
-	// 				}
-
-	// 			}
-
-	// 			let result =  CircularJSON.stringify(output.getValue());
-	// 			if(result.length > 1000){
-	// 				result = result.substr(0, 1000) + "... <br><br>File too long!";
-	// 			}
-				
-	// 			return result;
-	// 		}
-	// 		catch(ex){
-	// 			console.log("Error in Text Viewer:", ex);
-	// 			return "error-generating-value";
-	// 		}
-	// 	}
-	// 	else{
-	// 		return "no-value-available";
-	// 	}	
-
-	// }
-
 	update() :void{
+		console.log("update text viewer")
+
 		try{
 			this._selectedNode = this.flowchartService.getSelectedNode();	
 			this._selectedPort = this.flowchartService.getSelectedPort();
+
+			let self = this;
+			this._outResults = this._selectedNode.getOutputs().map(function(output){
+				let name = output.getName();
+				let isJSON = self.isJSON(output);
+				let text = self.getText(output);
+				let value = output.getValue();
+				let outObj = {name: name, isJSON: isJSON, text: text, value: value}
+				console.log(outObj);
+				return outObj;
+			})
 		}
 		catch(ex){
 
