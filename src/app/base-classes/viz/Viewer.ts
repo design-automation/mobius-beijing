@@ -42,8 +42,17 @@ export abstract class Viewer implements OnInit, OnDestroy, IViewer{
   	//	checks if the flowchart service has a flowchart and calls update function for the viewer
   	//
   	notify(message?: string): void{
-  		if ( this.flowchartService.hasFlowchart() && this.flowchartService.getNodes().length > 0 
+  		if ( this.flowchartService.hasFlowchart() 
+  				&& this.flowchartService.getNodes().length > 0 
   				&& this.flowchartService.getSelectedNode() ){
+
+  			if(message && message.startsWith("switch viewer: ")){
+  				if(this._name === "Viewer Container"){
+  					this.update(message);
+  					return;
+  				}
+  			}
+
   			this.update(message);
   		}
   		else{

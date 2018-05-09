@@ -7,20 +7,20 @@
 	<hr> -->
 	<mat-accordion multi="true" [displayMode]="flat">
 			<!-- inputs -->
-			<mat-expansion-panel [expanded]="true" *ngFor="let output of _selectedNode.getOutputs()">
+			<mat-expansion-panel [expanded]="true" *ngFor="let output of _outResults">
 				
 				<mat-expansion-panel-header>
 					<mat-panel-title>
-					  {{ output.getName() }}
+					  {{ output.name }}
 					</mat-panel-title>
 					<mat-panel-description>
 					  <!-- This is a summary of the content -->
 					</mat-panel-description>
 				</mat-expansion-panel-header>
 
-				<p *ngIf="!isJSON(output)" [innerHTML]="getText(output)"></p>
+				<p *ngIf="!output.isJSON" [innerHTML]="output.text"></p>
 				
-				<ngx-json-viewer *ngIf="isJSON(output)" [json]="output.getValue()" [expanded]="false"></ngx-json-viewer>
+				<ngx-json-viewer *ngIf="output.isJSON" [json]="output.value" [expanded]="false"></ngx-json-viewer>
 
 			</mat-expansion-panel>
 			

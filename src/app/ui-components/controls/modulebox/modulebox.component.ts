@@ -26,7 +26,8 @@ export class ModuleboxComponent extends Viewer implements OnInit{
   			ProcedureTypes.LoopContinue
   	];
 
-  	constructor(injector: Injector, private layoutService: LayoutService) { 
+  	constructor(injector: Injector, 
+  		private layoutService: LayoutService) { 
   		super(injector, "module-viewer"); 
 	}
 
@@ -152,6 +153,8 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 
     openModuleHelp($event, category: string): void{
     	$event.stopPropagation();
+
+    	this.flowchartService.switchViewer("help-viewer")
 
     	this.layoutService.showHelp({module: category, name: undefined})
 	}
