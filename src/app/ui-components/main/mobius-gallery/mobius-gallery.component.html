@@ -6,10 +6,11 @@
     	<div class="content">Möbius Gallery</div>
     </div>
     
-    <div class="flex-box">
-      <a *ngFor="let f of all_files" href="./viewer/{{f.name}}">
+    <div class="flex-box"  
+    	*ngFor="let f of all_files">
+     	 <a href="./viewer/{{f.name}}">
       	<div class="content">{{f.name}}</div>
-      </a>
+      	</a>
     </div>
   
   </div>
