@@ -40,7 +40,8 @@
 			 									<span class="topic">{{pa.name}}: </span>
 			 									<span class="topic"  *ngIf="pa.comment">{{pa.comment.text}}: </span>
 			 									<!-- @derek: parameter type and default value -->
-			 									<span class="type" *ngIf="pa.type">Type:{{pa.type.name}}</span>
+			 									<span class="type" *ngIf="pa.type && pa.type.name">Type:{{pa.type.name}}</span>
+			 									<span class="type" *ngIf="pa.type && pa.type.elementType">Type:{{pa.type.type}}</span>
 			 									<span class="default" *ngIf="pa.defaultValue">Default: {{pa.defaultValue}}</span>
 			 									<span class="descr" *ngIf="pa.comment">{{pa.comment.shortText}}</span>
 			 								</div>
