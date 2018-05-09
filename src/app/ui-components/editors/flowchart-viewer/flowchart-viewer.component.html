@@ -23,22 +23,13 @@
 								<input #fileInput style="display: none;"
 						  		type="file" (change)="loadFile()"/>
 							</div>
-							<div (click)="save()">Save</div>
+							<div (click)="save()">Save File</div>
+							<div (click)="publishSettings()">Publish</div>
 						</section>
 
-						<section>
-							<div (click)="publishSettings()">Publish Settings</div>
-						</section>
 
 						<section>
-							<div (click)="addNode($event, undefined)">Empty Node</div>
-						</section>
-
-						<!-- <section>
-							<div (click)="loadFromMemory()">Revert</div>
-						</section> -->
-						
-						<section>
+							<div (click)="addNode($event, undefined)">New Node</div>
 							<app-node-library></app-node-library>
 						</section>
 						

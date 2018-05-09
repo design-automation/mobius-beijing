@@ -23,7 +23,7 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 	@Input() viewer_mode: boolean = false;
 
   	views = [];
-	active_viewer: string = "console-viewer";
+	active_viewer: string = "info-viewer";
 	injector;
 
 	static ComponentMap = {
@@ -52,13 +52,13 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
   	ngOnInit() { }
 
   	ngAfterViewInit(){
-  		this.showConsole();
+  		
   	}
 
 	ngOnDestroy(){ }
 
 	reset(): void{
-		this.active_viewer = "console-viewer";
+		this.active_viewer = "info-viewer";
 		this.updateView();
 	}
 
@@ -71,9 +71,9 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 
 		// todo: refactor 
 		switch(portType){
-			case 0: 
-				this.active_viewer = "three-viewer"
-				break;
+			// case 0: 
+			// 	this.active_viewer = "three-viewer"
+			// 	break;
 			case 1: 
 				this.active_viewer = "code-viewer"
 				alert("code active")
