@@ -22,24 +22,39 @@
 		 				<mat-list id="mod._name" 
 		 					style="max-height: 500px; overflow: auto;" *ngIf="mod._helpObj">
 
-		 				 	<mat-list-item *ngFor="let fn of getSubModule(mod._helpObj , mod._name)">
+		 				 	<mat-list-item 
+		 				 	 	style="padding: 10px 20px; height: auto;"
+		 				 		*ngFor="let fn of getSubModule(mod._helpObj , mod._name)">
 		 				 		<div class="content">
 
 		 					 		<h4 mat-line>{{fn.name}}</h4>
 
-		 					 		<ng-container *ngIf="fn.signatures && fn.signatures[0]">
-			 		    				<p class="head-descr" mat-line>{{fn.signatures[0].comment.shortText}}</p>
-			 						
+		 					 		<ng-container *ngIf="fn.signatures">
+		 					 			<!-- description -->
+			 		    				<p class="head-descr" mat-line *ngIf="fn.signatures[0].comment">
+			 		    				{{fn.signatures[0].comment.shortText}}</p>
+			 							
+			 							<!-- parameters -->
 			 							<div  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
 			 								<div *ngFor="let pa of fn.signatures[0].parameters">
 			 									<span class="topic">{{pa.name}}: </span>
-			 									<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
+			 									<span class="topic"  *ngIf="pa.comment">{{pa.comment.text}}: </span>
+			 									<!-- @derek: parameter type and default value -->
+			 									<span class="type" *ngIf="pa.type">Type:{{pa.type.name}}</span>
+			 									<span class="default" *ngIf="pa.defaultValue">Default: {{pa.defaultValue}}</span>
+			 									<span class="descr" *ngIf="pa.comment">{{pa.comment.shortText}}</span>
 			 								</div>
 			 							</div>
 			 	
-			 							<div class="return-block">
-			 			    				<span class="topic">Returns: </span>
-			 			    				<span class="descr" [innerHTML]="fn.signatures[0].comment.returns"></span>
+			 							<!-- return block-->
+			 							<div class="return-block" *ngIf="fn.signatures[0].comment">
+			 			    				<span class="topic" >Returns: {{fn.signatures[0].comment.returns}}</span>	
+
+											<br>
+			 			    				Example:
+			 			    				<span class="example" 
+			 			    					*ngIf="fn.signatures[0].comment.tags && fn.signatures[0].comment.tags[0]"
+			 			    					[innerHTML]="fn.signatures[0].comment.tags[0].text"></span>
 			 			    			</div>
 			 	
 			 		    				<!-- <p mat-line>	

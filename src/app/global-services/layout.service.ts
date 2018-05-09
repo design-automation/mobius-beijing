@@ -29,8 +29,8 @@ export class LayoutService {
         content: {
           main: EViewer.Flowchart, 
           side: {
-            top: EViewer.Editor, 
-            middle: EViewer.Viewer,
+            top: EViewer.Viewer, 
+            middle: EViewer.Editor,
             bottom: EViewer.Parameter
           }
         }, 
