@@ -13784,7 +13784,7 @@ ParameterViewerComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/text-viewer/text-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"default\" *ngIf=\"_selectedNode === undefined\">\r\n\tNo Node Selected\r\n</div>\r\n\r\n<div class=\"container\" *ngIf=\"_selectedNode != undefined\">\r\n\t<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>\r\n\t<hr> -->\r\n\t<mat-accordion multi=\"true\" [displayMode]=\"flat\">\r\n\t\t\t<!-- inputs -->\r\n\t\t\t<mat-expansion-panel [expanded]=\"true\" *ngFor=\"let output of _selectedNode.getOutputs()\">\r\n\t\t\t\t\r\n\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t  {{ output.getName() }}\r\n\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t<p *ngIf=\"!isJSON(output)\" [innerHTML]=\"getText(output)\"></p>\r\n\t\t\t\t\r\n\t\t\t\t<ngx-json-viewer *ngIf=\"isJSON(output)\" [json]=\"output.getValue()\" [expanded]=\"false\"></ngx-json-viewer>\r\n\r\n\t\t\t</mat-expansion-panel>\r\n\t\t\t\r\n\t</mat-accordion>\r\n</div>"
+module.exports = "<div class=\"default\" *ngIf=\"_selectedNode === undefined\">\r\n\tNo Node Selected\r\n</div>\r\n\r\n<div class=\"container\" *ngIf=\"_selectedNode != undefined\">\r\n\t<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>\r\n\t<hr> -->\r\n\t<mat-accordion multi=\"true\" [displayMode]=\"flat\">\r\n\t\t\t<!-- inputs -->\r\n\t\t\t<mat-expansion-panel [expanded]=\"true\" *ngFor=\"let output of _outResults\">\r\n\t\t\t\t\r\n\t\t\t\t<mat-expansion-panel-header>\r\n\t\t\t\t\t<mat-panel-title>\r\n\t\t\t\t\t  {{ output.name }}\r\n\t\t\t\t\t</mat-panel-title>\r\n\t\t\t\t\t<mat-panel-description>\r\n\t\t\t\t\t  <!-- This is a summary of the content -->\r\n\t\t\t\t\t</mat-panel-description>\r\n\t\t\t\t</mat-expansion-panel-header>\r\n\r\n\t\t\t\t<p *ngIf=\"!output.isJSON\" [innerHTML]=\"output.text\"></p>\r\n\t\t\t\t\r\n\t\t\t\t<ngx-json-viewer *ngIf=\"output.isJSON\" [json]=\"output.value\" [expanded]=\"false\"></ngx-json-viewer>\r\n\r\n\t\t\t</mat-expansion-panel>\r\n\t\t\t\r\n\t</mat-accordion>\r\n</div>"
 
 /***/ }),
 
@@ -13818,6 +13818,7 @@ let TextViewerComponent = class TextViewerComponent extends __WEBPACK_IMPORTED_M
         super(injector, "Text Viewer", "Displayed geometry with each node.");
     }
     ngOnInit() {
+        this._outResults = [];
         this.update();
     }
     reset() {
@@ -13837,6 +13838,7 @@ let TextViewerComponent = class TextViewerComponent extends __WEBPACK_IMPORTED_M
         return value;
     }
     getText(output) {
+        console.log("getting text");
         let val = output.getValue();
         if (val) {
             let result = val;
@@ -13856,57 +13858,21 @@ let TextViewerComponent = class TextViewerComponent extends __WEBPACK_IMPORTED_M
         let val = output.getValue();
         return (typeof (val) == "object" && val.toString() == "[object Object]");
     }
-    // getType(output: IPort): string{
-    // 	let val = output.getValue();
-    // 	if(val){
-    // 		let result = val;
-    // 		try{
-    // 			if(typeof(val) == "object"){
-    // 				let strRep: string = val.toString();
-    // 				if(strRep !== "[object Object]"){
-    // 					return strRep.replace(/\n/g, '<br>');
-    // 				}
-    // 				else if(val["type"] == "FeatureCollection"){
-    // 					let str = "<b>GeoJSON file</b><br>";
-    // 					str += "Number of features: " + val["features"].length + "<br>";
-    // 					str += "First few features:<br>";
-    // 					let sliced = val["features"].slice(0, Math.min(3, val["features"].length));
-    // 					let features: string = "";
-    // 					sliced = sliced.map(function(feature){
-    // 						let f: string = "";
-    // 						f += "<small><b>Geometry Type:" + feature["geometry"]["type"] + "</b><br>";
-    // 						f += "<code>" + js_beautify.js_beautify(JSON.stringify(feature)) +  "</code></small>";
-    // 						return f;
-    // 					})
-    // 					str += sliced.join("<br><br>");
-    // 					return str;
-    // 				}
-    // 				else{
-    // 					let str = CircularJSON.stringify(output.getValue());
-    // 					if(str.length > 1000){
-    // 						return str.substr(0, 1000) + "... <br><br>File too long!";
-    // 					}
-    // 				}
-    // 			}
-    // 			let result =  CircularJSON.stringify(output.getValue());
-    // 			if(result.length > 1000){
-    // 				result = result.substr(0, 1000) + "... <br><br>File too long!";
-    // 			}
-    // 			return result;
-    // 		}
-    // 		catch(ex){
-    // 			console.log("Error in Text Viewer:", ex);
-    // 			return "error-generating-value";
-    // 		}
-    // 	}
-    // 	else{
-    // 		return "no-value-available";
-    // 	}	
-    // }
     update() {
+        console.log("update text viewer");
         try {
             this._selectedNode = this.flowchartService.getSelectedNode();
             this._selectedPort = this.flowchartService.getSelectedPort();
+            let self = this;
+            this._outResults = this._selectedNode.getOutputs().map(function (output) {
+                let name = output.getName();
+                let isJSON = self.isJSON(output);
+                let text = self.getText(output);
+                let value = output.getValue();
+                let outObj = { name: name, isJSON: isJSON, text: text, value: value };
+                console.log(outObj);
+                return outObj;
+            });
         }
         catch (ex) {
         }
