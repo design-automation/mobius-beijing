@@ -69,4 +69,8 @@ export class HelpViewerComponent implements OnInit {
       this.notify();
   };
 
+  replaceLineBreaks(str: string): string{
+      return str.split("\n").join("<br>")
+  }
+
 }

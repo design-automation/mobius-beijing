@@ -53,9 +53,11 @@
 
 											<br>
 			 			    				Example:
+			 			    				<code>
 			 			    				<span class="example" 
 			 			    					*ngIf="fn.signatures[0].comment.tags && fn.signatures[0].comment.tags[0]"
-			 			    					[innerHTML]="fn.signatures[0].comment.tags[0].text"></span>
+			 			    					[innerHTML]="replaceLineBreaks(fn.signatures[0].comment.tags[0].text)"></span>
+			 			    				</code>
 			 			    			</div>
 			 	
 			 		    				<!-- <p mat-line>	
