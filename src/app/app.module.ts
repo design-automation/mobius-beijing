@@ -59,7 +59,7 @@ const appRoutes: Routes = [
   { path: 'editor', component: MobiusEditorComponent },
   { path: 'gallery', component: MobiusGalleryComponent },
   { path: 'viewer/:id',      component: MobiusViewerComponent },
-  { path: '**', component: LandingComponent }
+  { path: '**', component: MobiusEditorComponent }
 ];
 
 
