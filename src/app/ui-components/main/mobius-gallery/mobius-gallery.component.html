@@ -8,11 +8,14 @@
     
     <div class="flex-box"  
     	*ngFor="let f of all_files">
-     	 <a href="./viewer/{{f.name}}">
-      	<div class="content">{{f.name}}</div>
+     	<a href="./viewer/{{f.name}}">
+      		<div class="content">
+      		{{f.name | simplename }}
+      		</div>
       	</a>
     </div>
   
   </div>
 
 </div>
+

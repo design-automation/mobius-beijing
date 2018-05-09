@@ -64,6 +64,7 @@ const appRoutes: Routes = [
 
 
 import { ShortNamePipe } from './pipes/short-name.pipe';
+import { SimpleNamePipe } from './pipes/simple-name.pipe';
 import { PublishSettingsComponent } from './ui-components/editors/publish-settings/publish-settings.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -99,6 +100,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LandingComponent,
     MobiusGalleryComponent,
     ShortNamePipe,
+    SimpleNamePipe,
     PublishSettingsComponent,
     TextViewerComponent,
     ConsoleComponent

@@ -20,3 +20,5 @@ export class MobiusGalleryComponent implements OnInit {
   }
 
 }
+
+

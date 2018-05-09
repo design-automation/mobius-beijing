@@ -38,18 +38,19 @@
             a{
                 text-decoration: none;
                 color: inherit;
+                text-transform: uppercase;
 
                 &:visited{
                     color: inherit;
                 }
             }
 
-            &.header{
-                @extend .highlight;
-                font-weight: 600; 
-                border: 0px; 
-                width: 100%;
-            }
+            // &.header{
+            //     @extend .highlight;
+            //     font-weight: 600; 
+            //     border: 0px; 
+            //     width: 100%;
+            // }
 
         }
     }
@@ -57,7 +58,7 @@
 }
 
 
-.highlight{
-    color: white;
-    background-color: black;
-}
+// .highlight{
+//     color: white;
+//     background-color: black;
+// }
