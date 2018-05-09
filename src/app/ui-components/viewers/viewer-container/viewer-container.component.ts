@@ -62,33 +62,40 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 		this.updateView();
 	}
 
-	update(): void{
+	update(message?: string): void{
 
-		let selectedNode = this.flowchartService.getSelectedNode();
-		let selectedPort = this.flowchartService.getSelectedPort();	
+		if(message && message.startsWith("switch viewer: ")){
+			this.active_viewer = message.split("switch viewer: ")[1];
+			this.updateView();
+		}
+		else{
 
-		let portType = parseInt(selectedPort.getType());
+			let selectedNode = this.flowchartService.getSelectedNode();
+			let selectedPort = this.flowchartService.getSelectedPort();	
 
-		// todo: refactor 
-		switch(portType){
-			// case 0: 
-			// 	this.active_viewer = "three-viewer"
-			// 	break;
-			case 1: 
-				this.active_viewer = "code-viewer"
-				alert("code active")
-				break;
-			case 2: 
-				this.active_viewer = "text-viewer"
-				break;
-			case 3:
-				this.active_viewer = "console-viewer"
-				break;
-			case 4: 
-				this.active_viewer = "cesium-viewer"
-				break;
-			default:
-				this.reset();
+			let portType = parseInt(selectedPort.getType());
+
+			// todo: refactor 
+			switch(portType){
+				// case 0: 
+				// 	this.active_viewer = "three-viewer"
+				// 	break;
+				case 1: 
+					this.active_viewer = "code-viewer"
+ 					break;
+				case 2: 
+					this.active_viewer = "text-viewer"
+					break;
+				case 3:
+					this.active_viewer = "console-viewer"
+					break;
+				case 4: 
+					this.active_viewer = "cesium-viewer"
+					break;
+				default:
+					this.reset();
+			}
+			
 		}
 
 		this.updateView();
@@ -99,6 +106,8 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 		if( !this.views[this.active_viewer] ){
 			this.views[this.active_viewer] = this.createView(this.active_viewer);
 		}
+
+		console.log("update", this.active_viewer);
 
 		this.vc.detach();
 		this.vc.insert(this.views[ this.active_viewer ]);

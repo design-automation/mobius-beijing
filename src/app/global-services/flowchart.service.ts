@@ -117,6 +117,7 @@ export class FlowchartService {
     else{
       this.consoleService.addMessage("Error loading file from memory", EConsoleMessageType.Error);
      // // this.layoutService.showConsole();
+     this.switchViewer("console-viewer");
       this.newFile();
     }
   }
@@ -219,12 +220,14 @@ export class FlowchartService {
 
           this.consoleService.addMessage("File loaded successfully");
           // this.layoutService.showConsole();
+          this.switchViewer("console-viewer");
           
         }
         catch(err){
           this.newFile();
           this.consoleService.addMessage("Error loading file: " + err, EConsoleMessageType.Error);
           // this.layoutService.showConsole();
+          this.switchViewer("console-viewer");
         }
       }
 
@@ -359,6 +362,7 @@ export class FlowchartService {
             node from the library or rename your node and try again.";
             this.consoleService.addMessage(message);
             // this.layoutService.showConsole();
+            this.switchViewer("console-viewer");
             return;
           }
       }
@@ -372,6 +376,7 @@ export class FlowchartService {
 
         this.consoleService.addMessage(message);
         // this.layoutService.showConsole();
+        this.switchViewer("console-viewer");
         this.checkSavedNodes();
         this.update();
       }
@@ -380,6 +385,7 @@ export class FlowchartService {
                                         Post the error message to the dev team on our Slack channel.", EConsoleMessageType.Error);
         this.consoleService.addMessage(ex, EConsoleMessageType.Error);
         // this.layoutService.showConsole();
+        this.switchViewer("console-viewer");
       }
 
     }
@@ -670,6 +676,7 @@ export class FlowchartService {
           this.consoleService.addMessage( errorMessage, EConsoleMessageType.Error );
 
           // this.layoutService.showConsole();
+          this.switchViewer("console-viewer");
       }
 
       this.update();
@@ -752,6 +759,13 @@ export class FlowchartService {
           document.body.removeChild(a);
         }, 0)
     }
+  }
+
+  switchViewer(viewerType: string): void{
+    let self = this;
+    setTimeout(function(){
+      self.update("switch viewer: " + viewerType);
+    }, 200);
   }
 
   /*downloadContent(options) {
