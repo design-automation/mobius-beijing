@@ -35,31 +35,34 @@
 			 		    				{{fn.signatures[0].comment.shortText}}</p>
 			 							
 			 							<!-- parameters -->
-			 							<div  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
-			 								<div *ngFor="let pa of fn.signatures[0].parameters">
+			 							<ul  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
+			 								<li *ngFor="let pa of fn.signatures[0].parameters">
 			 									<span class="topic">{{pa.name}}: </span>
-			 									<span class="topic"  *ngIf="pa.comment">{{pa.comment.text}}: </span>
+			 									<span class="descr"  *ngIf="pa.comment">{{pa.comment.text}}</span>
+
 			 									<!-- @derek: parameter type and default value -->
-			 									<span class="type" *ngIf="pa.type && pa.type.name">Type:{{pa.type.name}}</span>
-			 									<span class="type" *ngIf="pa.type && pa.type.elementType">Type:{{pa.type.type}}</span>
-			 									<span class="default" *ngIf="pa.defaultValue">Default: {{pa.defaultValue}}</span>
+			 									<span class="type" *ngIf="pa.type && pa.type.name">(Type:{{pa.type.name}})</span>
+			 									<span class="type" *ngIf="pa.type && pa.type.elementType">(Type:{{pa.type.type}})</span>
+			 									<span class="descr" *ngIf="pa.defaultValue">Default: {{pa.defaultValue}}</span>
 			 									<span class="descr" *ngIf="pa.comment">{{pa.comment.shortText}}</span>
-			 								</div>
-			 							</div>
+			 								</li>
+			 								<li><div class="return-block" *ngIf="fn.signatures[0].comment">
+				 			    				<span class="topic" >Returns:  </span>
+				 			    				<span class="descr">{{fn.signatures[0].comment.returns}}</span>	
+			 			    				</div></li>
+			 							</ul>
 			 	
 			 							<!-- return block-->
-			 							<div class="return-block" *ngIf="fn.signatures[0].comment">
-			 			    				<span class="topic" >Returns: {{fn.signatures[0].comment.returns}}</span>	
 
-											<br>
-			 			    				Example:
+
+			 			    			<div class="example-block">
+				 			    			<span class="topic">Example: </span>
 			 			    				<code>
-			 			    				<span class="example" 
-			 			    					*ngIf="fn.signatures[0].comment.tags && fn.signatures[0].comment.tags[0]"
-			 			    					[innerHTML]="replaceLineBreaks(fn.signatures[0].comment.tags[0].text)"></span>
+				 			    				<span class="example" 
+				 			    					*ngIf="fn.signatures[0].comment.tags && fn.signatures[0].comment.tags[0]"
+				 			    					[innerHTML]="replaceLineBreaks(fn.signatures[0].comment.tags[0].text)"></span>
 			 			    				</code>
-			 			    			</div>
-			 	
+			 							</div>
 			 		    				<!-- <p mat-line>	
 			 		    					<a href="https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}" target="_blank">More</a>
 			 		    				</p> -->
