@@ -26,31 +26,31 @@
 		 				 		<div class="content">
 
 		 					 		<h4 mat-line>{{fn.name}}</h4>
-		 		    				<p class="head-descr" mat-line>{{fn.signatures[0].comment.shortText}}</p>
-		 						
-		 							<div  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
-		 								<div *ngFor="let pa of fn.signatures[0].parameters">
-		 									<span class="topic">{{pa.name}}: </span>
-		 									<!-- <span *ngIf="pa.type">Type: {{pa.type.type}}</span> -->
-		 									<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
-		 								</div>
-		 							</div>
-		 	
-		 							<div class="return-block">
-		 			    				<span class="topic">Returns: </span>
-		 			    				<span class="descr" [innerHTML]="fn.signatures[0].comment.returns"></span>
-		 			    			</div>
-		 	
-		 		    				<p mat-line>	
-		 		    					<a href="https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}" target="_blank">More</a>
-		 		    				</p>
+
+		 					 		<ng-container *ngIf="fn.signatures && fn.signatures[0]">
+			 		    				<p class="head-descr" mat-line>{{fn.signatures[0].comment.shortText}}</p>
+			 						
+			 							<div  class="parameters" mat-line *ngIf='fn.signatures[0].parameters'>
+			 								<div *ngFor="let pa of fn.signatures[0].parameters">
+			 									<span class="topic">{{pa.name}}: </span>
+			 									<span class="descr" *ngIf="pa.comment" [innerHTML]="pa.comment.text"></span>
+			 								</div>
+			 							</div>
+			 	
+			 							<div class="return-block">
+			 			    				<span class="topic">Returns: </span>
+			 			    				<span class="descr" [innerHTML]="fn.signatures[0].comment.returns"></span>
+			 			    			</div>
+			 	
+			 		    				<!-- <p mat-line>	
+			 		    					<a href="https://phtj.github.io/gs-modelling/docs/modules/{{mod._url}}#{{fn.name}}" target="_blank">More</a>
+			 		    				</p> -->
+		 		    				</ng-container>
 		 	
 		 	    				</div>
 		 				 	</mat-list-item>
 
 		 	
-		 					<!-- <h3 mat-subheader *ngIf="mod._helpObj[0] && mod._helpObj[0].comment && mod._helpObj[0].comment.shortText" [innerHTML]="mod._helpObj[0].comment.shortText"></h3> -->
-
 		 				 	<mat-divider></mat-divider>
 		 				
 		 				</mat-list>

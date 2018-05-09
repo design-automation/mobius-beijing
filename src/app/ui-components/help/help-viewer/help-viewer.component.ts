@@ -46,8 +46,7 @@ export class HelpViewerComponent implements OnInit {
       catch(ex){
         this.helpAvailable = false;
       }
-
-  }
+  };
 
   getSubModule(alldocs, modname){
     for(let i=0; i < alldocs.length; i++){
@@ -56,42 +55,15 @@ export class HelpViewerComponent implements OnInit {
         return ( (m.children && m.children.length > 0) ? m.children : []);
       }
     }
-  }
+  };
 
   notify(): void{
-  		// let url_segment: string = this.layoutService.getUrl();
-    //   let url: string = 'https://phtj.github.io/gs-modelling/docs/' + url_segment;
-    //   this._url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      
-    //   let fnObj = this.layoutService.getObj();
-    //   if(fnObj && fnObj.name){
-    //     this.fnObj = fnObj;
 
-    //     for(let m=0; m < this._loadedModules.length; m++){
-
-    //         if(this._loadedModules[m]._name.toLowerCase() == fnObj.module.toLowerCase()){
-    //           let mo = this._loadedModules[m]._helpObj[0];
-    //           for(let f=0; f < mo.children.length; f++){
-    //               let child = mo.children[f];
-    //               if(fnObj.name.toLowerCase() == child.name.toLowerCase()){
-    //                   fnObj["content"] = child;
-    //                   fnObj["_url"] = this._loadedModules[m]["_url"];
-    //               }
-    //           }
-    //         }
-
-    //     }
-    //   }
-    //   else if(fnObj && fnObj.module && !fnObj.name){
-    //       this._activeMod = fnObj.module.toUpperCase();
-    //       this.fnObj = undefined;
-    //   }
   }
 
   showAll(): void{
-      //this.fnObj = undefined;
-      //this.layoutService.setObj();
-  }  
+
+  };  
 
   ngOnInit() { 
       this.notify();

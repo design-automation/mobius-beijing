@@ -1,57 +1,68 @@
 import {ModuleUtils, IModule} from "../../app/base-classes/code/CodeModule";
 
-
-import * as MMath from "mobius-math";
-import * as MArray from "mobius-array";
-import * as MTurf from "mobius-turf";
-import * as MString from "mobius-string";
-import * as MGeojson from "mobius-geojson";
-import * as MCsv from "mobius-csv";
-
-import turf_docs from "mobius-turf/docs_json/mobius-turf.json"; 
-// let arr_Analyse: IModule = ModuleUtils.createModule("arr_Analyse", MArray["Analyse"], "attrib", undefined);
-// 
-
-;
-
-
 let AllModules = [];
-Object.keys(MArray).map(function(key){
-	let pre = "arr_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MArray[key], "attrib", undefined);
-	AllModules.push(module);
-});
 
-Object.keys(MCsv).map(function(key){
-	let pre = "csv_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MCsv[key], "attrib", undefined);
-	AllModules.push(module);
-});
+enum MODULE_KEY{
+	MATH = "math",
+	ARRAY = "arr",
+	TURF = "geo", 
+	STRING = "str",
+	GEOJSON = "geo",
+	CSV = "io"
+}
 
+const SPACER = "_";
 
-Object.keys(MTurf).map(function(key, index){
-	let pre = "geo_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MTurf[key], "attrib", turf_docs);
-	AllModules.push(module);
-});
-
-Object.keys(MGeojson).map(function(key){
-	let pre = "geo_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MGeojson[key], "attrib", undefined);
+// mobius-math module
+import * as MMath from "mobius-math";
+import math_docs from "mobius-math/docs_json/mobius-math.json"; 
+Object.keys(MMath).map(function(submodule){
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MMath[submodule], "attrib", math_docs);
 	AllModules.push(module);
 });
 
 
-Object.keys(MMath).map(function(key){
-	let pre = "math_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MMath[key], "attrib", undefined);
+// mobius-array module
+import * as MArray from "mobius-array";
+import array_docs from "mobius-array/docs_json/mobius-array.json"; 
+Object.keys(MArray).map(function(submodule){
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MArray[submodule], "attrib", array_docs);
 	AllModules.push(module);
 });
 
 
-Object.keys(MString).map(function(key){
-	let pre = "str_";
-	let module: IModule = ModuleUtils.createModule( pre + key, MString[key], "attrib", undefined);
+// mobius-turf module
+import * as MTurf from "mobius-turf";
+import turf_docs from "mobius-turf/docs_json/mobius-turf.json"; 
+Object.keys(MTurf).map(function(submodule){
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MTurf[submodule], "attrib", turf_docs);
+	AllModules.push(module);
+});
+
+
+// mobius-string module
+import * as MString from "mobius-string";
+import string_docs from "mobius-string/docs_json/mobius-string.json"; 
+Object.keys(MString).map(function(submodule){
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MString[submodule], "attrib", string_docs);
+	AllModules.push(module);
+});
+
+
+// mobius-geojson module
+import * as MGeojson from "mobius-geojson";
+import geojson_docs from "mobius-geojson/docs_json/mobius-geojson.json"; 
+Object.keys(MGeojson).map(function(submodule){
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MGeojson[submodule], "attrib", geojson_docs);
+	AllModules.push(module);
+});
+
+
+// mobius-csv module
+import * as MCsv from "mobius-csv";
+import csv_docs from "mobius-csv/docs_json/mobius-csv.json"; 
+Object.keys(MCsv).map(function(submodule){
+	let module: IModule = ModuleUtils.createModule( MODULE_KEY.ARRAY + SPACER + submodule, MCsv[submodule], "attrib", csv_docs);
 	AllModules.push(module);
 });
 

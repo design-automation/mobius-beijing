@@ -260,8 +260,6 @@ export class FlowchartService {
       return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
     })
 
-    console.log(ModuleSet);
-
   }
 
   getModules(): IModule[]{
