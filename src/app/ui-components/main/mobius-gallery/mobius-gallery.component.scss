@@ -1,26 +1,7 @@
 .container{
-  
-     margin: 20px;
 
-    .flex-box {
-        width: 200px;
-        height: 200px;
-        background-color: #fff;
-        color: #000;
-        border: 1px solid #000;
-        border-radius: 0px;
-        padding: 20px;
-        margin: 20px;
-        font-size: 200%;
-        font-family: Arial, Helvetica, sans-serif;
-        overflow: hidden;
-        text-align: center;
-        vertical-align: middle;
-        /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container */
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
-    }
+    padding: 0px; 
+    margin: 0px;
 
     .flex-container {
         display: flex;
@@ -28,6 +9,55 @@
         justify-content: center;
         flex-wrap: wrap;
         flex-direction: row;
+
+        .flex-box {
+            position: relative;
+
+            width: 200px;
+            height: 200px;
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+            border-radius: 0px;
+            padding: 20px;
+            margin: 20px;
+            font-size: 200%; 
+            line-height: 210%;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+            /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            text-align: center;
+
+            a{
+                text-decoration: none;
+                color: inherit;
+
+                &:visited{
+                    color: inherit;
+                }
+            }
+
+            &.header{
+                @extend .highlight;
+                font-weight: 600; 
+                border: 0px; 
+                display: inline-block;
+            }
+
+        }
     }
   
+}
+
+
+.highlight{
+    color: white;
+    background-color: black;
 }
