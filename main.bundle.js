@@ -3561,8 +3561,8 @@ let LayoutService = LayoutService_1 = class LayoutService {
             content: {
                 main: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Flowchart,
                 side: {
-                    top: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Editor,
-                    middle: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Viewer,
+                    top: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Viewer,
+                    middle: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Editor,
                     bottom: __WEBPACK_IMPORTED_MODULE_2__ui_components_viewers_EViewer__["a" /* EViewer */].Parameter
                 }
             },
