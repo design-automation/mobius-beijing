@@ -3099,9 +3099,9 @@ let FlowchartService = class FlowchartService {
                     this.selectNode(this.getNodes().length - 1, 0);
                 }
                 _this.update();
-                this.consoleService.addMessage("File loaded successfully");
+                //this.consoleService.addMessage("File loaded successfully");
                 // this.layoutService.showConsole();
-                this.switchViewer("console-viewer");
+                //this.switchViewer("console-viewer");
             }
             catch (err) {
                 this.newFile();
