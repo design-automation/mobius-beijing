@@ -45,6 +45,9 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 		let component = ViewerContainerComponent.ComponentMap[component_name];
 		let factory = this.r.resolveComponentFactory(component);
    		let componentRef = factory.create(this.injector);
+   		if(component_name == "cesium-viewer"){
+   			componentRef.instance["mode"] = this.viewer_mode ? "viewer" : "editor";
+   		}
     	let view = componentRef.hostView;
     	return view;
 	}
@@ -106,8 +109,6 @@ export class ViewerContainerComponent extends Viewer implements OnInit {
 		if( !this.views[this.active_viewer] ){
 			this.views[this.active_viewer] = this.createView(this.active_viewer);
 		}
-
-		console.log("update", this.active_viewer);
 
 		this.vc.detach();
 		this.vc.insert(this.views[ this.active_viewer ]);

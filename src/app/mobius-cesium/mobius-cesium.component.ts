@@ -23,12 +23,14 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
 })
 export class MobiuscesiumComponent {
 	@Input() data: JSON;
+  @Input() mode: string;
 	showFiller:boolean;
 
 	constructor(private dataService: DataService){
 
-  	};
-	setModel(data: JSON): void{
+  };
+	
+  setModel(data: JSON): void{
 		try{
 			this.dataService.setGsModel(data);
 		}

@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, Input } from '@angular/core';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IPort } from '../../../base-classes/port/PortModule';
@@ -11,6 +11,8 @@ import * as gs from 'gs-json';
   styleUrls: ['./cesium-viewer.component.scss']
 })
 export class CesiumViewerComponent extends Viewer implements OnInit{
+
+  @Input() mode: string;
 
 	_port: IPort;
 	gs_dummy_data: any = undefined; 
