@@ -30,8 +30,6 @@ export abstract class Viewer implements OnInit, OnDestroy, IViewer{
 			this._message = message; 
 			this.notify(message.text);
 		});
-
-		console.log(this._name + " was created");
   	}
 
   	ngDoCheck(){
