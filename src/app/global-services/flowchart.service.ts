@@ -218,9 +218,9 @@ export class FlowchartService {
 
           _this.update();
 
-          this.consoleService.addMessage("File loaded successfully");
+          //this.consoleService.addMessage("File loaded successfully");
           // this.layoutService.showConsole();
-          this.switchViewer("console-viewer");
+          //this.switchViewer("console-viewer");
           
         }
         catch(err){
