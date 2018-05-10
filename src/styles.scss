@@ -398,7 +398,8 @@ span.addBtn{
 	//border-bottom: 1px solid $color2 !important;
 	font-size: $fsize2 !important;
 	color: $color1;
-	width: 40px;
+	//width: 40px;
+	max-width: 95%;
 }
 
 .mat-input-infix{
