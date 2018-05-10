@@ -19,8 +19,10 @@
 				</mat-expansion-panel-header>
 
 				<p *ngIf="!output.isJSON" [innerHTML]="output.text"></p>
+
+				<p *ngIf="output.isJSON" [innerHTML]="output.text"></p>
 				
-				<ngx-json-viewer *ngIf="output.isJSON" [json]="output.value" [expanded]="false"></ngx-json-viewer>
+				<!-- <ngx-json-viewer *ngIf="output.isJSON" [json]="output.value" [expanded]="false"></ngx-json-viewer> -->
 
 			</mat-expansion-panel>
 			

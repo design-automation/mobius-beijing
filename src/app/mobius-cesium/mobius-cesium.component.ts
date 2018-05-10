@@ -28,9 +28,8 @@ export class MobiuscesiumComponent {
 
 	constructor(private dataService: DataService){
 
-  };
-	
-  setModel(data: JSON): void{
+  	};
+	setModel(data: JSON): void{
 		try{
 			this.dataService.setGsModel(data);
 		}
@@ -42,6 +41,8 @@ export class MobiuscesiumComponent {
 	}
 	ngOnInit() {
 		this.setModel(this.data);
+    //this.mode="viewer";
+    this.dataService.setMode(this.mode);
 
 	}
 	ngDoCheck(){

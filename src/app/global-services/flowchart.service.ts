@@ -768,30 +768,4 @@ export class FlowchartService {
     }, 200);
   }
 
-  /*downloadContent(options) {
-      if (!options || !options.content) {
-          throw 'You have at least to provide content to download';
-      }
-      options.filename = options.filename || 'scene.mob';
-      options.type = options.type || 'text/plain;charset=utf-8';
-      options.bom = options.bom || decodeURIComponent('%ef%bb%bf');
-   
-      if (window.navigator.msSaveBlob) {
-          var blob = new Blob([options.bom + options.content],
-                   {type: options.type });
-          window.navigator.msSaveBlob(blob, options.filename);
-      }
-      else {
-          var link = document.createElement('a');
-          var content = options.bom + options.content;
-          var uriScheme = ['data:', options.type, ','].join('');
-          link.href = uriScheme + content;
-          link.download = options.filename;
-          //FF requires the link in actual DOM
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-      }
-  }*/
-
 }

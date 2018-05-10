@@ -50,23 +50,52 @@ export class TextViewerComponent extends Viewer implements OnInit {
 	}
 
 	getText(output: IPort): string{
-		console.log("getting text");
-		let val = output.getValue();
+		try{
+			let val = output.getValue();
 
-		if(val){
-			let result = val;
+			if(val){
+				let result = val;
 
-			if(typeof(val) == "object"){
-				let strRep: string = val.toString();
-				if(strRep !== "[object Object]"){
-					result = strRep.replace(/\n/g, '<br>');
+				if(Array.isArray(val)){
+					result = "<em>Array(" + val.length + " items)</em>"
 				}
-			}
+				else if(typeof(val) == "object"){
+					let strRep: string = val.toString();
+					if(strRep !== "[object Object]"){
+						result = strRep.replace(/\n/g, '<br>');
+					}
+					else{
+						let keys = Object.keys(val);
+						result = "<b>JSON Object</b><br>"
+						result += output.getName();
+						result += "<ul>" + keys.map(function(k){
+							let type: string = typeof(val[k]);
+							if (Array.isArray(val[k])){
+								type = "<em>array(" + val[k].length + " items)</em>"
+							}
+							else if(type == "string"){
+								type = "\"" + val[k] + "\"";
+							}
+							else if(type == "number"){
+								type = val[k];
+							}
+							else if(type == "object"){
+								type = "<em>" + type + "</em>";
+							}
 
-			return result;
+							return "<li>" + k + " :: "+  type + "</li>";
+						}).join("") + "</ul>";
+					}
+				}
+
+				return result;
+			}
+			else{
+				return "no-value-available";
+			}
 		}
-		else{
-			return "no-value-available";
+		catch(ex){
+			return "error-generating-input";
 		}
 	}
 
@@ -76,8 +105,6 @@ export class TextViewerComponent extends Viewer implements OnInit {
 	}
 
 	update() :void{
-		console.log("update text viewer")
-
 		try{
 			this._selectedNode = this.flowchartService.getSelectedNode();	
 			this._selectedPort = this.flowchartService.getSelectedPort();
@@ -89,7 +116,6 @@ export class TextViewerComponent extends Viewer implements OnInit {
 				let text = self.getText(output);
 				let value = output.getValue();
 				let outObj = {name: name, isJSON: isJSON, text: text, value: value}
-				console.log(outObj);
 				return outObj;
 			})
 		}

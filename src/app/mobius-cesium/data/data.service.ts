@@ -34,6 +34,7 @@ export class DataService {
   ceisumData:Array<any>;
   InitialTool:boolean;
   InitialPub:boolean;
+  mode:string;
 
 
   sendMessage(message?: string) {
@@ -55,12 +56,18 @@ export class DataService {
   getGsModel(): any{
     return this._jsonModel; 
   }
+  setMode(mode:string){
+    this.mode=mode;
+  }
 
   setGsModel(model: JSON){
     this._jsonModel = model;
     if(this._jsonModel===undefined){
       var viewer = new Cesium.Viewer(document.createElement("div"));
-    }
+    }/*else{
+      if(this._jsonModel["cesium"]!==undefined) {this.mode="viewer";}else{this.mode="editor";}
+    }*/
+    //if()
     this.sendMessage("model_update");
   }
 
