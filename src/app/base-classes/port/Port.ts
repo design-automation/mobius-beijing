@@ -46,6 +46,8 @@ export abstract class Port implements IPort{
 	}
 
 	setType(type: InputPortTypes|OutputPortTypes): void{
+		this._default = undefined;
+		this._computed = undefined;
 		this._type = type;
 	}
 

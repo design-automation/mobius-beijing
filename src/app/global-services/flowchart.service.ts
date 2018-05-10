@@ -234,6 +234,10 @@ export class FlowchartService {
 
   }
 
+  getFunction(str): Function{
+    return str;
+  }
+
   loadModules(modules: Object[]): void{
 
     this._moduleSet = [];
@@ -241,26 +245,30 @@ export class FlowchartService {
     let moduleSet = this._moduleSet;
     let moduleMap = this._moduleMap;
 
+    let self = this;
+
     ModuleSet.map(function(mod){
         let name: string = ModuleUtils.getName(mod);
-        
+
         if(moduleMap[name] !== undefined){
           let fns = ModuleUtils.getFunctions(mod);
           let original_mod = moduleMap[name];
+
           for(let i=0; i < fns.length; i++){
             let f = fns[i];
-            original_mod[f.name] = f.def;
+            original_mod[f.name] = self.getFunction(f.def);
           }
-         }
+
+        }
         else{
           moduleMap[name] = mod;
-          moduleSet.push(mod)
+          moduleSet.push(mod);
         }
     })
 
     // sort the set
-    this._moduleSet = ModuleSet.sort(function(a, b){
-      return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
+    this._moduleSet = this._moduleSet.sort(function(a, b){
+      return a["_name"].toLowerCase().localeCompare(b["_name"].toLowerCase());
     })
 
   }

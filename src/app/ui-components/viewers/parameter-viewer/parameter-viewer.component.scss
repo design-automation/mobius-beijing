@@ -166,6 +166,9 @@ $default-height: 2*$text-height;
 	flex-direction: column;
 	justify-content: flex-start;
 
+	height: 100%; 
+	justify-content: space-between;
+
 	.mat-input-element{
 		vertical-align: middle !important;
 		font-family: 'Roboto', sans-serif;
