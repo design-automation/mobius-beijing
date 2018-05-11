@@ -270,6 +270,9 @@ class CodeFactory {
         if (language == "js") {
             return new __WEBPACK_IMPORTED_MODULE_0__generators_javascript_generator__["a" /* CodeGeneratorJS */]();
         }
+        /*else if(language == "py"){
+            return new CodeGeneratorPY();
+        }*/
         else
             throw Error("Unknown language");
     }
@@ -1602,7 +1605,7 @@ class GraphNode {
     //
     //
     addInput(name) {
-        let default_name = "in" + this.inputPortCounter;
+        let default_name = /*this._name + */ "in" + this.inputPortCounter;
         if (name !== undefined) {
             default_name = name;
         }
@@ -1614,7 +1617,7 @@ class GraphNode {
         return this._inputs.length;
     }
     addOutput(name) {
-        let default_name = "out" + this.outputPortCounter;
+        let default_name = /*this._name +*/ "out" + this.outputPortCounter;
         if (name !== undefined) {
             default_name = name;
         }
@@ -2793,11 +2796,11 @@ class Viewer {
 "use strict";
 class Constants {
     static get GALLERY_URL() {
-        return "https://api.github.com/repos/design-automation/mobius-cesium/contents/src/assets/json-files?ref=master";
+        return "https://api.github.com/repos/design-automation/mobius-gallery/contents/examples?ref=master";
     }
     ;
     static get FILE_URL() {
-        return "https://raw.githubusercontent.com/design-automation/mobius-cesium/master/src/assets/json-files/";
+        return "https://raw.githubusercontent.com/design-automation/mobius-gallery/master/examples/";
     }
     ;
 }
@@ -2957,8 +2960,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 let FlowchartService = class FlowchartService {
     constructor(consoleService, 
-        //private layoutService: LayoutService, 
-        dialog, http) {
+    //private layoutService: LayoutService, 
+    dialog, http) {
         this.consoleService = consoleService;
         this.dialog = dialog;
         this.http = http;
@@ -7647,16 +7650,16 @@ MobiuscesiumComponent = __decorate([
         template: __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.html"),
         styles: [__webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.scss")],
         animations: [
-            Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["k" /* trigger */])('slide_in_out', [
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* style */])({
+            Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["m" /* trigger */])('slide_in_out', [
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["k" /* style */])({
                     width: '280px',
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* style */])({
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["k" /* style */])({
                     width: '0px'
                     // css styles when the element is in slide_out
                 })),
                 // animation effect when transitioning from one state to another
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* transition */])('slide_in <=> slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])(300))
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["l" /* transition */])('slide_in <=> slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])(300))
             ]),
         ]
     }),
@@ -12896,10 +12899,12 @@ let MobiusEditorComponent = class MobiusEditorComponent {
         else if (navigator.userAgent.indexOf("Firefox") != -1) {
             brw = 'Firefox';
         }
-        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) {
+        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) //IF IE > 10
+         {
             brw = 'IE';
         }
-        else if (window.navigator.userAgent.indexOf("Edge") > -1) {
+        else if (window.navigator.userAgent.indexOf("Edge") > -1) //IF IE > 10
+         {
             brw = 'Edge';
         }
         else {
@@ -12939,7 +12944,7 @@ module.exports = "<div class=\"container\">\r\n\r\n  <div class=\"flex-container
 /***/ "./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  padding: 0px;\n  margin: 0px;\n  background: -webkit-gradient(linear, left top, left bottom, from(rgba(24, 23, 23, 0.45)), to(rgba(247, 107, 229, 0.45))), url('mobius-cesium-1.950bdee00fe0cd8a065b.JPG');\n  background: linear-gradient(rgba(24, 23, 23, 0.45), rgba(247, 107, 229, 0.45)), url('mobius-cesium-1.950bdee00fe0cd8a065b.JPG');\n  background-size: cover;\n  background-position: top;\n  height: 100%; }\n  .container .flex-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row; }\n  .container .flex-container .flex-box {\n      position: relative;\n      width: 200px;\n      height: 200px;\n      background-color: transparent;\n      background-color: rgba(0, 0, 0, 0.7);\n      color: white;\n      border: 1px solid #000;\n      border-radius: 0px;\n      padding: 20px;\n      margin: 20px;\n      font-size: 200%;\n      line-height: 210%;\n      font-family: Arial, Helvetica, sans-serif;\n      overflow: hidden;\n      /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container */\n      overflow-wrap: break-word;\n      word-wrap: break-word;\n      word-break: break-word;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: vertical;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: column;\n              flex-direction: column;\n      -webkit-box-pack: center;\n          -ms-flex-pack: center;\n              justify-content: center;\n      text-align: center; }\n  .container .flex-container .flex-box a {\n        text-decoration: none;\n        color: inherit;\n        text-transform: uppercase; }\n  .container .flex-container .flex-box a:visited {\n          color: inherit; }\n"
+module.exports = ".container {\n  padding: 0px;\n  margin: 0px;\n  background: -webkit-gradient(linear, left top, left bottom, from(rgba(24, 23, 23, 0.45)), to(rgba(247, 107, 229, 0.45))), url('mobius-cesium-1.950bdee00fe0cd8a065b.JPG');\n  background: linear-gradient(rgba(24, 23, 23, 0.45), rgba(247, 107, 229, 0.45)), url('mobius-cesium-1.950bdee00fe0cd8a065b.JPG');\n  background-size: cover;\n  background-position: top;\n  height: 100%;\n  overflow: auto; }\n  .container .flex-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row; }\n  .container .flex-container .flex-box {\n      position: relative;\n      width: 200px;\n      height: 200px;\n      background-color: transparent;\n      background-color: rgba(0, 0, 0, 0.7);\n      color: white;\n      border: 1px solid #000;\n      border-radius: 0px;\n      padding: 20px;\n      margin: 20px;\n      font-size: 200%;\n      line-height: 210%;\n      font-family: Arial, Helvetica, sans-serif;\n      overflow: hidden;\n      /* https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container */\n      overflow-wrap: break-word;\n      word-wrap: break-word;\n      word-break: break-word;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: vertical;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: column;\n              flex-direction: column;\n      -webkit-box-pack: center;\n          -ms-flex-pack: center;\n              justify-content: center;\n      text-align: center; }\n  .container .flex-container .flex-box a {\n        text-decoration: none;\n        color: inherit;\n        text-transform: uppercase; }\n  .container .flex-container .flex-box a:visited {\n          color: inherit; }\n"
 
 /***/ }),
 
@@ -13126,10 +13131,12 @@ let MobiusViewerComponent = class MobiusViewerComponent {
         else if (navigator.userAgent.indexOf("Firefox") != -1) {
             brw = 'Firefox';
         }
-        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) {
+        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) //IF IE > 10
+         {
             brw = 'IE';
         }
-        else if (window.navigator.userAgent.indexOf("Edge") > -1) {
+        else if (window.navigator.userAgent.indexOf("Edge") > -1) //IF IE > 10
+         {
             brw = 'Edge';
         }
         else {
@@ -13147,16 +13154,16 @@ MobiusViewerComponent = __decorate([
         template: __webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.scss")],
         animations: [
-            Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["k" /* trigger */])('slide_in_out', [
-                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["h" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["i" /* style */])({
+            Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["m" /* trigger */])('slide_in_out', [
+                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["j" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["k" /* style */])({
                     "right": "0px"
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["h" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["i" /* style */])({
+                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["j" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["k" /* style */])({
                     //background: 'blue',
                     "right": "-380px"
                 })),
                 //transition('slide_in <=> slide_out', animate('300ms')),
-                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["j" /* transition */])("slide_in <=> slide_out", Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["e" /* animate */])("3s")),
+                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["l" /* transition */])("slide_in <=> slide_out", Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["e" /* animate */])("3s")),
             ]),
         ]
     }),
@@ -13542,7 +13549,7 @@ GeometryViewerComponent = __decorate([
 //                   version: "0.1.1",
 //               },
 //               skins: null,
-//           }; 
+//           };
 
 
 /***/ }),
