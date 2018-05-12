@@ -647,12 +647,38 @@ export class FlowchartService {
           let variable_name: string = varName;
           let variable_value: string = value; 
 
-          if(Array.isArray(variable_value)){
-             variable_value = "[" + variable_value + "]";
+          if(Array.isArray(value)){
+             variable_value = "<em>Array(" + value.length + " items)</em>"; //"[" + variable_value + "]";
           }
+          else if(typeof value == 'string'){
+             variable_value = "\"" + value + "\"";
+          }
+          else if(typeof(value) == "object"){
+            let strRep: string = value.toString();
+            if(strRep !== "[object Object]"){
+              variable_value = strRep.replace(/\n/g, '<br>');
+            }
+            else{
+              let keys = Object.keys(value);
+              variable_value = "<em>JSON Object Property Set:(" + keys.toString() + ")</em>";;
+              // variable_value += "<ul>" + keys.map(function(k){
+              //   let type: string = typeof(variable_value[k]);
+              //   if (Array.isArray(variable_value[k])){
+              //     type = "<em>array(" + variable_value[k].length + " items)</em>"
+              //   }
+              //   else if(type == "string"){
+              //     type = "\"" + variable_value[k] + "\"";
+              //   }
+              //   else if(type == "number"){
+              //     type = variable_value[k];
+              //   }
+              //   else if(type == "object"){
+              //     type = "<em>" + type + "</em>";
+              //   }
 
-          if(typeof variable_value == 'string'){
-             variable_value = "\"" + variable_value + "\"";
+              //   return "<li>" + k + " :: "+  type + "</li>";
+              // }).join("") + "</ul>";
+            }
           }
 
           consoleHTML += "<div class='console-line'>" +  "<span class='var-name'>Value of "  + variable_name + ": </span>" + 
