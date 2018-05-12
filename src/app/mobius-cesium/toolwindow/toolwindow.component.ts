@@ -10,6 +10,7 @@ import * as chroma from "chroma-js";
   styleUrls: ['./toolwindow.component.css']
 })
 export class ToolwindowComponent extends DataSubscriber implements OnInit{
+  //@Output() selectChange
   myElement;
   data:any;
   viewer:any;
@@ -50,6 +51,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   CheckDisable:boolean=false;
   CheckImagery:boolean;
   mode:string;
+  CheckInvert:boolean;
+  //MatTab:string;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -58,13 +61,18 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
     this.CheckOpp=this.dataService.CheckOpp;
+    this.CheckInvert=this.dataService.CheckInvert;
     if(this.dataService.HideNum!==undefined) {
       this.HideNum=this.dataService.HideNum;
       this.hideElementArr=this.dataService.hideElementArr;
     }
+    //this.MatTab=
   }
  
   ngOnInit() {
+    this.data = this.dataService.getGsModel();
+    this.mode=this.dataService.mode; 
+    this.LoadData(this.data);
   }
 
   notify(message: string): void{
@@ -75,12 +83,13 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.mode=this.dataService.mode; 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          if(this.data["cesium"]===undefined){
+          //if(this.data["cesium"]===undefined){
+            if(this.mode==="editor")
               this.LoadData(this.data);
-              this.InitialTool=true;
+              /*this.InitialTool=true;
           }else{
             this.InitialTool=false;
-          }
+          }*/
         }
       }
       catch(ex){
@@ -100,7 +109,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   ngDoCheck(){
-    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined&&this.InitialTool===true){
+    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined){
        if(this.ID!==this.dataService.SelectedEntity._id){
           this.ID=this.dataService.SelectedEntity._id;
           this.Properties=[];
@@ -112,7 +121,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           }
         }
     }
-    if(this.viewer!==undefined&&this.InitialTool===true){
+    if(this.viewer!==undefined){
      if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;
@@ -219,6 +228,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       var min = Math.min.apply(Math, texts);
       for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
+        this.ChromaScale=chroma.scale("SPECTRAL");
         var Color=this.ChromaScale(Number(((max-texts[j])/(max-min)).toFixed(2)));
         ColorKey.color=Color;
         ColorKey.text=texts[j];
@@ -892,6 +902,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   ColorByNumCat(entity){
     var ChromaScale=this.ChromaScale;
+    //console.log(this.ChromaScale(0))
     var ColorKey=this.ColorKey;
     var range=ColorKey.length;
     var self=this;
@@ -1108,5 +1119,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }
 
   }
+
+  /*changeinvert(){
+    this.CheckInvert=this.dataService.CheckInvert;
+    this.CheckInvert=!this.CheckInvert;
+    if(this.CheckInvert===true){
+      
+    }
+    console.log(this.CheckInvert);
+    this.dataService.CheckInvert=this.CheckInvert;
+  }*/
 
 }
