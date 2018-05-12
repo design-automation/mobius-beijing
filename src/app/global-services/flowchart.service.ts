@@ -660,7 +660,7 @@ export class FlowchartService {
             }
             else{
               let keys = Object.keys(value);
-              variable_value = "<em>JSON Object Property Set:(" + keys.toString() + ")</em>";;
+              variable_value = "<em>JSON Object with properties: (" + keys.toString() + ")</em>";;
               // variable_value += "<ul>" + keys.map(function(k){
               //   let type: string = typeof(variable_value[k]);
               //   if (Array.isArray(variable_value[k])){
