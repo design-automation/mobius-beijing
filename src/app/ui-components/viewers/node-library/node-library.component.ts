@@ -38,6 +38,11 @@ export class NodeLibraryComponent extends Viewer{
 	    this.update();
 	}
 
+	deleteNode($event, node): void{
+		$event.stopPropagation();
+		this.flowchartService.clearLibrary(node["_id"]);
+	}
+
 	clearLibrary(){
 		this.flowchartService.clearLibrary();
 	}

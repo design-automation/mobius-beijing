@@ -400,20 +400,45 @@ export class FlowchartService {
 
   }
 
-  clearLibrary(): void{
+  clearLibrary(nodeID ?: string): void{
+
     let nav: any = navigator;
     let myStorage = window.localStorage;
 
-    let property = "MOBIUS_NODES";
-    let storageString = myStorage.removeItem(property);
+    let property = MOBIUS.PROPERTY.NODE;
 
-    // print message to console
-    this.consoleService.addMessage("Node Library was cleared.");
+    if(nodeID == undefined){
+      let storageString = myStorage.removeItem(property);
+      this.consoleService.addMessage("Node Library was cleared.");
+    }
+    else{
+      this._savedNodes = this._savedNodes.filter(function(node){
+         return node["_id"] != nodeID;
+      });
+      
+      if(this._savedNodes.length == 0){
+        myStorage.removeItem(property);
+      }
+      else{
+        let nodesStorage = CircularJSON.stringify({ n: this._savedNodes });
+        myStorage.setItem(property, nodesStorage);
+      }
+      this.consoleService.addMessage("Node from library was deleted.");
+    }
 
     this.getNodes().map(function(node){
-      node.removeType();
+
+      if(nodeID === undefined){
+        node.removeType();
+      }
+      else if(node.getType() == nodeID){
+        node.removeType();
+      }
+
     })
 
+    // print message to console
+    this.switchViewer("console-viewer");
     this.checkSavedNodes();
     this.update();
   }

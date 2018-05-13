@@ -8,5 +8,10 @@
 <br>
 <div class="node" *ngFor="let n of _savedNodes; let i=index"
 	(click)="addNode($event, i)">
+	<div class="node-name">
 	{{n._name}}
+	</div>
+	<div class="node-functions" (click)="deleteNode($event, n)">
+		[x]
+	</div>
 </div>

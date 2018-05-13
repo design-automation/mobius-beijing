@@ -2,6 +2,16 @@
 
 .node{
 	cursor: pointer;
+
+	display: flex; 
+	flex-direction: row; 
+	justify-content: space-between;
+
+	margin-right: 15px;
+
+	.node-functions{
+		color: gray;
+	}
 	
 	&:hover{
 		color: white;
