@@ -3250,16 +3250,37 @@ let FlowchartService = class FlowchartService {
             }
         }
     }
-    clearLibrary() {
+    clearLibrary(nodeID) {
         let nav = navigator;
         let myStorage = window.localStorage;
-        let property = "MOBIUS_NODES";
-        let storageString = myStorage.removeItem(property);
-        // print message to console
-        this.consoleService.addMessage("Node Library was cleared.");
+        let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
+        if (nodeID == undefined) {
+            let storageString = myStorage.removeItem(property);
+            this.consoleService.addMessage("Node Library was cleared.");
+        }
+        else {
+            this._savedNodes = this._savedNodes.filter(function (node) {
+                return node["_id"] != nodeID;
+            });
+            if (this._savedNodes.length == 0) {
+                myStorage.removeItem(property);
+            }
+            else {
+                let nodesStorage = __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"]({ n: this._savedNodes });
+                myStorage.setItem(property, nodesStorage);
+            }
+            this.consoleService.addMessage("Node from library was deleted.");
+        }
         this.getNodes().map(function (node) {
-            node.removeType();
+            if (nodeID === undefined) {
+                node.removeType();
+            }
+            else if (node.getType() == nodeID) {
+                node.removeType();
+            }
         });
+        // print message to console
+        this.switchViewer("console-viewer");
         this.checkSavedNodes();
         this.update();
     }
@@ -13856,14 +13877,14 @@ ModuleViewerComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/node-library/node-library.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class=\"disabled\">Save Library</div>\r\n<div class=\"disabled\">Load Library</div>\r\n\r\n<div class=\"node\" (click)=\"clearLibrary()\">\r\n\tClear Library\r\n</div>\r\n<br>\r\n<div class=\"node\" *ngFor=\"let n of _savedNodes; let i=index\"\r\n\t(click)=\"addNode($event, i)\">\r\n\t{{n._name}}\r\n</div>\r\n"
+module.exports = "\r\n<div class=\"disabled\">Save Library</div>\r\n<div class=\"disabled\">Load Library</div>\r\n\r\n<div class=\"node\" (click)=\"clearLibrary()\">\r\n\tClear Library\r\n</div>\r\n<br>\r\n<div class=\"node\" *ngFor=\"let n of _savedNodes; let i=index\"\r\n\t(click)=\"addNode($event, i)\">\r\n\t<div class=\"node-name\">\r\n\t{{n._name}}\r\n\t</div>\r\n\t<div class=\"node-functions\" (click)=\"deleteNode($event, n)\">\r\n\t\t[x]\r\n\t</div>\r\n</div>\r\n"
 
 /***/ }),
 
 /***/ "./src/app/ui-components/viewers/node-library/node-library.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.node {\n  cursor: pointer; }\n\n.node:hover {\n    color: white; }\n\n.disabled {\n  color: #8AA8C0; }\n"
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.node {\n  cursor: pointer;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  margin-right: 15px; }\n\n.node .node-functions {\n    color: gray; }\n\n.node:hover {\n    color: white; }\n\n.disabled {\n  color: #8AA8C0; }\n"
 
 /***/ }),
 
@@ -13905,6 +13926,10 @@ let NodeLibraryComponent = class NodeLibraryComponent extends __WEBPACK_IMPORTED
             this.flowchartService.addNode(type);
         }
         this.update();
+    }
+    deleteNode($event, node) {
+        $event.stopPropagation();
+        this.flowchartService.clearLibrary(node["_id"]);
     }
     clearLibrary() {
         this.flowchartService.clearLibrary();
