@@ -65,6 +65,7 @@
 					*ngIf="inp.getType() == InputPortTypes.FilePicker">
 					<input type="file" id="file" (change)="handleFileInput($event.target.files, inp)">
 					<span *ngIf='inp.getDefaultValue()'>(has default)</span>
+					<span *ngIf='!inp.getDefaultValue() && inp.getValue()'>(file loaded)</span>
 				</div>
 
 				<!-- if input type == URL -->

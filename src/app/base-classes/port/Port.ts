@@ -159,7 +159,12 @@ export abstract class Port implements IPort{
 			}
 			catch(ex){
 
-				final = JSON.stringify(final.split("\r")) + ".join('\\r')";
+				try{
+					final = JSON.stringify(final.split("\r")) + ".join('\\r')";
+				}
+				catch(ex){
+					// do nothing
+				}
 				//let arrOfStrings = final.split("\n");
 				//final = arrOfStrings + ".join(\"\\n\")" ;
 				//final = new Blob([final], {type : "text/plain"});
