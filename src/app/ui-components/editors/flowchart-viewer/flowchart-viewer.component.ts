@@ -691,8 +691,8 @@ export class FlowchartViewerComponent extends Viewer{
 
   publishSettings(): void{
     let dialogRef = this.dialog.open(PublishSettingsComponent, {
-            height: '800px',
-            width: '500px',          
+            height: '500px',
+            width: '450px',          
             data: { 
                   }
         });
