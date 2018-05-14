@@ -11749,8 +11749,8 @@ let FlowchartViewerComponent = class FlowchartViewerComponent extends __WEBPACK_
     }
     publishSettings() {
         let dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_5__publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */], {
-            height: '800px',
-            width: '500px',
+            height: '500px',
+            width: '450px',
             data: {}
         });
         dialogRef.afterClosed().subscribe(result => {
