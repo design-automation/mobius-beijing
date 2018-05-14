@@ -130,7 +130,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.ColorNames=["None"].concat(this.ColorNames);
         this.dataService.propertyNames=this.ColorNames;
         this.selectColor=this.ColorValue;
-        this.onChangeColor(this.ColorValue);
+        //this.onChangeColor(this.ColorValue);
       }
       if(this.HeightValue!==this.dataService.HeightValue||this.HeightKey!==this.dataService.HeightKey){
         this.HeightValue=this.dataService.HeightValue;
