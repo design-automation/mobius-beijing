@@ -540,12 +540,40 @@ split-area{
    color: #F1F1F1;
 }
 
-#Attribute-container{
+#Attribute-container, #Setting-Container{
 	height: 100%;
 	box-sizing: border-box;
 	padding-bottom: 2*$header-height;
 }
 #AttribsView{
+	overflow-y: auto;
+	height: 100%;
+	padding: 0 $default-side-padding;
+	table{
+		width: 100%;
+		tbody{
+			width: 100%;
+			tr{
+				display: flex;
+				flex-flow: row nowrap;
+				width: 100%;
+				th{
+					display: flex;
+					margin: 0;
+					width: 50% !important;
+					div{
+						width: 100% !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+#SettingView{
+	padding-left: $default-side-padding;
+	padding-right: $default-side-padding;
+	font-size: $fsize2;
 	overflow-y: auto;
 	height: 100%;
 }
