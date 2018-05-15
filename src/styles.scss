@@ -539,3 +539,13 @@ split-area{
 .cesium-infoBox {
    color: #F1F1F1;
 }
+
+#Attribute-container{
+	height: 100%;
+	box-sizing: border-box;
+	padding-bottom: 2*$header-height;
+}
+#AttribsView{
+	overflow-y: auto;
+	height: 100%;
+}
