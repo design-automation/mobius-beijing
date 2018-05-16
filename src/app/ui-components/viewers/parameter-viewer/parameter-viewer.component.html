@@ -8,7 +8,7 @@
 		</div>
  
 		<div class="param-in-viewer" *ngIf="globals">
-			<h3>{{flowchartService.getFlowchart().name | simplename }}</h3>
+			<h3 class="flo_title">{{flowchartService.getFlowchart().name | simplename }}</h3>
 			<div [innerHTML]="flowchartService.getFlowchart().description"></div>
 			<h4 *ngIf="_editable && _inputs.length">Parameters</h4>
 		</div>
