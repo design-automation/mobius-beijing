@@ -7595,17 +7595,49 @@ let DataService = class DataService {
         this._jsonModel = model;
         if (this._jsonModel === undefined) {
             var viewer = new Cesium.Viewer(document.createElement("div"));
-        } /*else{
-          if(this._jsonModel["cesium"]!==undefined) {this.mode="viewer";}else{this.mode="editor";}
-        }*/
-        //if()
+        }
+        else {
+            try {
+                this.propertyNames = Object.keys(model["features"][0].properties);
+                this.ColorValue = this.propertyNames[0];
+                this.propertyNames.sort();
+                this.propertyNames.unshift("None");
+                let feature_instance = model["features"][0];
+                this.HeightKey = this.propertyNames.filter(function (prop_name) {
+                    let value = feature_instance.properties[prop_name];
+                    return (typeof (value) === 'number');
+                });
+                this.HeightValue = this.HeightKey[0];
+                this.HeightKey.sort();
+                this.HeightKey.unshift("None");
+                // console.log(this.propertyNames);
+                // this.HeightKey = this.propertyNames.filter(function(prop_name){
+                //   console.log(prop_name);
+                //   let value =  feature_instance.properties[prop_name];
+                //   console.log(value);
+                //   return (typeof(value) === 'number');
+                // });
+                // console.log(this.HeightKey);
+            }
+            catch (ex) {
+                console.log("property names errored");
+            }
+        }
         this.sendMessage("model_update");
+    }
+    getPropertyNames() {
+        return this.propertyNames;
     }
     getColorValue(ColorValue) {
         this.ColorValue = ColorValue;
     }
     getHeightValue(HeightValue) {
         this.HeightValue = HeightValue;
+    }
+    getViData(ColorProperty, ColorMin, ColorMax, ExtrudeProperty, ExtrudeMin, ExtrudeMax, Scale, Invert, HeightChart) {
+        this.ViData = { ColorProperty: ColorProperty, ColorMin: ColorMin, ColorMax: ColorMax,
+            ExtrudeProperty: ExtrudeProperty, ExtrudeMin: ExtrudeMin, ExtrudeMax: ExtrudeMax,
+            Scale: Scale, Invert: Invert, HeightChart: HeightChart };
     }
 };
 DataService = __decorate([
@@ -7620,7 +7652,7 @@ DataService = __decorate([
 /***/ "./src/app/mobius-cesium/mobius-cesium.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<!-- <split direction=\"horizontal\" style=\"background-color: #8aa8c0;\">\r\n\t\t<split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow:hidden;\">\r\n\t\t    <app-toolwindow></app-toolwindow>\r\n\t\t</split-area>\r\n\t\t<split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t\t<cesium-viewer></cesium-viewer>\r\n\t\t</split-area>\r\n\t</split> -->\r\n\r\n\t<cesium-viewer></cesium-viewer>\r\n\t<div id=\"Toggle\" (click)=\"toggleSlider()\" ><span style=\"vertical-align: middle;\">▹</span></div>\r\n\t<div id=\"slide-nav\"  [@slide_in_out]=\"slider_state\" style=\"position: absolute;z-index: 101;top:0px;height: 100%\">\r\n  \t\t<app-toolwindow ></app-toolwindow>\r\n  \t\t<!-- <app-publish ></app-publish> -->\r\n\t</div>\r\n\t\r\n\t\r\n\t\r\n</div>\r\n"
+module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<!-- <split direction=\"horizontal\" style=\"background-color: #8aa8c0;\">\r\n\t\t<split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow:hidden;\">\r\n\t\t    <app-toolwindow></app-toolwindow>\r\n\t\t</split-area>\r\n\t\t<split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t\t<cesium-viewer></cesium-viewer>\r\n\t\t</split-area>\r\n\t</split> -->\r\n\r\n\t<cesium-viewer></cesium-viewer>\r\n\t<div id=\"Toggle\" (click)=\"toggleSlider()\" ><span style=\"vertical-align: middle;\">▹</span></div>\r\n\t<div id=\"slide-nav\"  [@slide_in_out]=\"slider_state\" style=\"position: absolute;z-index: 101;top:0px;height: 100%\">\r\n  \t\t<app-toolwindow ></app-toolwindow>\r\n  \t\t<!-- <app-publish ></app-publish> -->\r\n  \t\t<!-- <app-setting ></app-setting> -->\r\n\t</div>\r\n\t\r\n\t\r\n\t\r\n</div>\r\n"
 
 /***/ }),
 
@@ -7660,6 +7692,7 @@ let MobiuscesiumComponent = class MobiuscesiumComponent {
     setModel(data) {
         try {
             this.dataService.setGsModel(data);
+            // console.log("mode: ", this.mode);
         }
         catch (ex) {
             this.data = undefined;
@@ -7668,12 +7701,15 @@ let MobiuscesiumComponent = class MobiuscesiumComponent {
     }
     ngOnInit() {
         this.setModel(this.data);
-        //this.mode="viewer";
+        // console.log("Setting", this.mode)
         this.dataService.setMode(this.mode);
+        // console.log(this.data);
     }
     ngDoCheck() {
         if (this.dataService.getGsModel() !== this.data) {
             this.setModel(this.data);
+            // console.log("data changed");
+            // console.log("mode:", this.mode);
         }
     }
     toggleSlider() {
@@ -7763,6 +7799,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+/*import { SettingComponent } from './setting/setting.component';
+import { VisualiseComponent } from './setting/visualise.component';
+import { AttributesComponent } from './setting/attributes.copmponent';*/
+//import { PublishComponent } from './setting/publish.component';
 let MobiusCesium = MobiusCesium_1 = class MobiusCesium {
     static forRoot() {
         return {
@@ -7789,6 +7829,10 @@ MobiusCesium = MobiusCesium_1 = __decorate([
         declarations: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */],
             __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__["a" /* ViewerComponent */],
             __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__["a" /* ToolwindowComponent */],
+            /*PublishComponent,*/
+            /*SettingComponent,
+            VisualiseComponent,
+            AttributesComponent,*/
             __WEBPACK_IMPORTED_MODULE_6__toolwindow_publish_component__["a" /* PublishComponent */]],
         providers: [__WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */]],
     })
@@ -8879,6 +8923,7 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
                     //if(this.data["cesium"]===undefined){
                     if (this.mode === "editor" && this.data["cesium"] === undefined)
                         this.LoadData(this.data);
+                    // console.log("toolwindow is updating");
                     /*this.InitialTool=true;
                 }else{
                   this.InitialTool=false;
@@ -8891,13 +8936,15 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
         }
     }
     LoadData(data) {
-        if (data !== undefined) {
-            if (data["features"] !== undefined) {
-                this.PropertyNames = Object.getOwnPropertyNames(data["features"][0].properties);
-                this.PropertyNames.sort();
-                this.viewer = this.dataService.viewer;
-            }
-        }
+        this.PropertyNames = this.dataService.getPropertyNames();
+        this.viewer = this.dataService.viewer;
+        // if(data!==undefined){
+        //   if(data["features"]!==undefined){
+        //     this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
+        //     this.PropertyNames.sort();
+        //     this.viewer=this.dataService.viewer;
+        //   }
+        // }
     }
     ngDoCheck() {
         if (this.viewer !== undefined && this.dataService.SelectedEntity !== undefined) {
@@ -8916,20 +8963,20 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
             if (this.ColorValue !== this.dataService.ColorValue || this.ColorNames !== this.dataService.propertyNames) {
                 this.ColorValue = this.dataService.ColorValue;
                 this.ColorNames = this.dataService.propertyNames;
-                this.ColorNames.sort();
-                this.ColorNames = ["None"].concat(this.ColorNames);
-                this.dataService.propertyNames = this.ColorNames;
+                //this.ColorNames.sort();
+                //this.ColorNames=["None"].concat(this.ColorNames);
+                //this.dataService.propertyNames=this.ColorNames;
                 this.selectColor = this.ColorValue;
-                //this.onChangeColor(this.ColorValue);
+                this.onChangeColor(this.ColorValue);
             }
             if (this.HeightValue !== this.dataService.HeightValue || this.HeightKey !== this.dataService.HeightKey) {
                 this.HeightValue = this.dataService.HeightValue;
-                this.HeightKey = this.dataService.HeightKey;
-                this.HeightKey.sort();
-                this.HeightKey = ["None"].concat(this.HeightKey);
-                this.dataService.HeightKey = this.HeightKey;
+                this.HeightKey = this.dataService.HeightKey; //this.dataService.HeightKey;
+                //this.HeightKey.sort();
+                //this.HeightKey=["None"].concat(this.HeightKey);
+                //this.dataService.HeightKey=this.HeightKey;
                 this.selectHeight = this.HeightValue;
-                //this.onChangeHeight(this.HeightValue);
+                this.onChangeHeight(this.HeightValue);
             }
         }
     }
@@ -10074,6 +10121,7 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
         }*/
     }
     ngOnInit() {
+        this.mode = this.dataService.mode;
     }
     notify(message) {
         if (message == "model_update") {
@@ -10096,6 +10144,7 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
         }
     }
     LoadData(data) {
+        //console.log("loading data in cesium viewer on model_update");
         if (document.getElementsByClassName('cesium-viewer').length !== 0) {
             document.getElementsByClassName('cesium-viewer')[0].remove();
         }
@@ -10203,6 +10252,8 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
             var promise = Cesium.GeoJsonDataSource.load(this.data);
             var self = this;
             var HeightKey = [];
+            self.propertyNames = self.dataService.getPropertyNames();
+            // console.log("propertynames from dataservice: ", self.propertyNames.length, self.dataService.getPropertyNames().length);
             promise.then(function (dataSource) {
                 viewer.dataSources.add(dataSource);
                 var entities = dataSource.entities.values;
@@ -10234,44 +10285,41 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
                     self.ShowColorBar = false;
                 }
                 self.dataService.poly_center = self.poly_center;
-                self.propertyNames = entities[0].properties.propertyNames;
-                for (var i = 0; i < self.propertyNames.length; i++) {
-                    if (self.propertyNames[i].indexOf("ID") !== -1 || self.propertyNames[i].indexOf("id") !== -1) {
-                        self.propertyNames.splice(i, 1);
-                        i = i - 1;
-                    }
-                    else {
-                        if (typeof (entity.properties[self.propertyNames[i]]._value) === "number") {
-                            HeightKey.push(self.propertyNames[i]);
-                        }
-                    }
-                }
+                //console.log("prop names from ds", self.dataService.propertyNames);
+                //console.log(self.propertyNames, Object.keys(self.data.features[0].properties));
+                // for(var i=0;i<self.propertyNames.length;i++){
+                //   if(self.propertyNames[i].indexOf("ID")!==-1||self.propertyNames[i].indexOf("id")!==-1){
+                //     self.propertyNames.splice(i,1);
+                //     i=i-1;
+                //   }else{
+                //     if(typeof(entity.properties[self.propertyNames[i]]._value)==="number"){
+                //       HeightKey.push(self.propertyNames[i]);
+                //     }
+                //   }
+                // }
             });
             this.dataService.cesiumpromise = promise;
-            this.dataService.propertyNames = this.propertyNames;
-            this.dataService.HeightKey = HeightKey;
-            if (this.dataService.ColorValue === undefined) {
-                this.ColorValue = this.propertyNames.sort()[0];
-                this.dataService.ColorValue = this.ColorValue;
-            }
-            else if (this.propertyNames.indexOf(this.dataService.ColorValue) === -1) {
-                this.ColorValue = this.propertyNames.sort()[0];
-                this.dataService.ColorValue = this.ColorValue;
-            }
-            else {
-                this.ColorValue = this.dataService.ColorValue;
-            }
-            if (this.dataService.HeightValue === undefined) {
-                this.HeightValue = HeightKey.sort()[0];
-                this.dataService.HeightValue = this.HeightValue;
-            }
-            else if (HeightKey.indexOf(this.dataService.HeightValue) === -1) {
-                this.HeightValue = HeightKey.sort()[0];
-                this.dataService.HeightValue = this.HeightValue;
-            }
-            else {
-                this.HeightValue = this.dataService.HeightValue;
-            }
+            //this.dataService.propertyNames=this.propertyNames;
+            //this.dataService.HeightKey=HeightKey;
+            /*if(this.dataService.ColorValue===undefined){
+              this.ColorValue=this.propertyNames.sort()[0];
+              this.dataService.ColorValue=this.ColorValue;
+              
+            }else if(this.propertyNames.indexOf(this.dataService.ColorValue)===-1){
+              this.ColorValue=this.propertyNames.sort()[0];
+              this.dataService.ColorValue=this.ColorValue;
+            }else{
+              this.ColorValue=this.dataService.ColorValue;
+            }*/
+            // if(this.dataService.HeightValue===undefined){
+            //   this.HeightValue=HeightKey.sort()[0];
+            //   this.dataService.HeightValue=this.HeightValue;
+            // }else if(HeightKey.indexOf(this.dataService.HeightValue)===-1){
+            //   this.HeightValue=HeightKey.sort()[0];
+            //   this.dataService.HeightValue=this.HeightValue;
+            // }else{
+            //   this.HeightValue=this.dataService.HeightValue;
+            // }
             viewer.zoomTo(promise);
             this.Colortext();
         }
@@ -10325,6 +10373,56 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
             }
             Min = Number(Min);
             Max = Number(Max);
+            /*let letter_map = ["", "K", "M", "B"];
+            function getLetter(number){
+              let power = 0;
+              while(number > 0){
+                number = number / Math.pow(10, power);
+                power = power + 1;
+              }
+      
+              return letter_map[power];
+            }
+            function rangeMap(Min, Max){
+              let range_values = [Min]
+              for(var i=1;i<10;i++){
+                 range_values.push((Min+((Max-Min)/10)*(i)));
+              }
+              range_values.push(Max)
+      
+              let texts = range_values.map(function(value){
+      
+                let number_of_digits = numOfDigits(value)
+                let letter = letter_map[number_of_digits];
+                if(number_of_digits < 4){
+                  // do nothing
+                }
+                else if(number_of_digits > 3 && number_of_digits < 6){
+                  scale_factor = Math.pow(10, 3);
+                }
+                else if(number_of_digits > 6)
+                let scaled_value = value / Math.pow(10, number_of_digits);
+                return value.toFixed(0).concat(letter);
+              });
+      
+              return texts;
+            }
+      
+            
+      
+      
+      
+            function formatNumber(num){
+              let letter_map = ["K", "M", "B"];
+              let max_scale = Math.floor(num/1000);
+              
+              if(max_scale == 0){
+                return num.toFixed(2);
+              }
+      
+              let scaled_down_number = num / (10000*max_scale);
+              return scaled_down_number + letter_map[max_scale];
+            }*/
             if (Max <= 1) {
                 this.texts = [Min];
                 for (var i = 1; i < 10; i++) {
