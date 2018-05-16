@@ -8,9 +8,9 @@
 		</div>
  
 		<div class="param-in-viewer" *ngIf="globals">
-			<h3>Title: {{flowchartService.getFlowchart().name}}</h3>
+			<h3>{{flowchartService.getFlowchart().name | simplename }}</h3>
 			<div [innerHTML]="flowchartService.getFlowchart().description"></div>
-			<h4 *ngIf="_editable">Parameters</h4>
+			<h4 *ngIf="_editable && _inputs.length">Parameters</h4>
 		</div>
 
 		<div class='paramater-container single-param-container'
