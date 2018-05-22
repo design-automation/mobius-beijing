@@ -270,9 +270,6 @@ class CodeFactory {
         if (language == "js") {
             return new __WEBPACK_IMPORTED_MODULE_0__generators_javascript_generator__["a" /* CodeGeneratorJS */]();
         }
-        /*else if(language == "py"){
-            return new CodeGeneratorPY();
-        }*/
         else
             throw Error("Unknown language");
     }
@@ -1605,7 +1602,7 @@ class GraphNode {
     //
     //
     addInput(name) {
-        let default_name = /*this._name + */ "in" + this.inputPortCounter;
+        let default_name = "in" + this.inputPortCounter;
         if (name !== undefined) {
             default_name = name;
         }
@@ -1617,7 +1614,7 @@ class GraphNode {
         return this._inputs.length;
     }
     addOutput(name) {
-        let default_name = /*this._name +*/ "out" + this.outputPortCounter;
+        let default_name = "out" + this.outputPortCounter;
         if (name !== undefined) {
             default_name = name;
         }
@@ -2965,8 +2962,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 let FlowchartService = class FlowchartService {
     constructor(consoleService, 
-    //private layoutService: LayoutService, 
-    dialog, http) {
+        //private layoutService: LayoutService, 
+        dialog, http) {
         this.consoleService = consoleService;
         this.dialog = dialog;
         this.http = http;
@@ -3491,8 +3488,9 @@ let FlowchartService = class FlowchartService {
                     // }).join("") + "</ul>";
                 }
             }
-            consoleHTML += "<div class='console-line'>" + "<span class='var-name'>Value of " + variable_name + ": </span>" +
-                "<span class='var-value'>" + variable_value + "</div>";
+            consoleHTML = "Value of : " + variable_name + " is " + variable_value + "<br>";
+            // consoleHTML += "<div class='console-line'>" +  "<span class='var-name'>Value of "  + variable_name + ": </span>" + 
+            //        "<span class='var-value'>"  + variable_value +  "</div>";
             consoleMessages.push(consoleHTML);
         };
         try {
@@ -7598,18 +7596,20 @@ let DataService = class DataService {
         }
         else {
             try {
-                this.propertyNames = Object.keys(model["features"][0].properties);
+                /*this.propertyNames = Object.keys(model["features"][0].properties);
                 this.ColorValue = this.propertyNames[0];
-                this.propertyNames.sort();
+                this.propertyNames.sort()
                 this.propertyNames.unshift("None");
+        
+        
                 let feature_instance = model["features"][0];
-                this.HeightKey = this.propertyNames.filter(function (prop_name) {
-                    let value = feature_instance.properties[prop_name];
-                    return (typeof (value) === 'number');
+                this.HeightKey = this.propertyNames.filter(function(prop_name){
+                    let value =  feature_instance.properties[prop_name];
+                    return (typeof(value) === 'number');
                 });
                 this.HeightValue = this.HeightKey[0];
-                this.HeightKey.sort();
-                this.HeightKey.unshift("None");
+                this.HeightKey.sort()
+                this.HeightKey.unshift("None");*/
                 // console.log(this.propertyNames);
                 // this.HeightKey = this.propertyNames.filter(function(prop_name){
                 //   console.log(prop_name);
@@ -7625,6 +7625,44 @@ let DataService = class DataService {
         }
         this.sendMessage("model_update");
     }
+    getValue(model) {
+        this.propertyNames = Object.keys(model["features"][0].properties);
+        this.ColorValue = this.propertyNames[0];
+        this.propertyNames.sort();
+        this.propertyNames.unshift("None");
+        let feature_instance = model["features"][0];
+        this.HeightKey = this.propertyNames.filter(function (prop_name) {
+            let value = feature_instance.properties[prop_name];
+            return (typeof (value) === 'number');
+        });
+        this.HeightValue = this.HeightKey[0];
+        this.HeightKey.sort();
+        this.HeightKey.unshift("None");
+    }
+    LoadJSONData() {
+        var cesiumData = this._jsonModel["cesium"];
+        var data = [];
+        this.ceisumData = [];
+        this.propertyNames = [];
+        this.HeightKey = [];
+        if (cesiumData["colour"] !== undefined && cesiumData["colour"]["attribs"] !== undefined) {
+            for (var i = 0; i < cesiumData["colour"]["attribs"].length; i++) {
+                this.propertyNames.push(cesiumData["colour"]["attribs"][i]["name"]);
+            }
+            this.ColorValue = this.propertyNames[0];
+        }
+        if (cesiumData["extrude"] !== undefined && cesiumData["extrude"]["attribs"] !== undefined) {
+            for (var i = 0; i < cesiumData["extrude"]["attribs"].length; i++) {
+                this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
+            }
+            this.HeightValue = this.HeightKey[0];
+            this.PuScaleValue = undefined;
+            /*let self=this;
+            setTimeout(function(){
+              self.onChangeHeight(self.HeightKey[0]);
+            },3000)*/
+        }
+    }
     getPropertyNames() {
         return this.propertyNames;
     }
@@ -7634,10 +7672,15 @@ let DataService = class DataService {
     getHeightValue(HeightValue) {
         this.HeightValue = HeightValue;
     }
-    getViData(ColorProperty, ColorMin, ColorMax, ExtrudeProperty, ExtrudeMin, ExtrudeMax, Scale, Invert, HeightChart) {
+    getViData(ColorProperty, ColorMin, ColorMax, ExtrudeProperty, ExtrudeMin, ExtrudeMax, Scale, Invert, HeightChart, Filter) {
         this.ViData = { ColorProperty: ColorProperty, ColorMin: ColorMin, ColorMax: ColorMax,
             ExtrudeProperty: ExtrudeProperty, ExtrudeMin: ExtrudeMin, ExtrudeMax: ExtrudeMax,
-            Scale: Scale, Invert: Invert, HeightChart: HeightChart };
+            Scale: Scale, Invert: Invert, HeightChart: HeightChart, Filter: Filter };
+    }
+    getPuData(ColorProperty, ColorMin, ColorMax, ColorInvert, ExtrudeProperty, ExtrudeMin, ExtrudeMax, Scale, Invert, HeightChart, Filter) {
+        this.PuData = { ColorProperty: ColorProperty, ColorMin: ColorMin, ColorMax: ColorMax, ColorInvert: ColorInvert,
+            ExtrudeProperty: ExtrudeProperty, ExtrudeMin: ExtrudeMin, ExtrudeMax: ExtrudeMax,
+            Scale: Scale, Invert: Invert, HeightChart: HeightChart, Filter: Filter };
     }
 };
 DataService = __decorate([
@@ -7740,16 +7783,16 @@ MobiuscesiumComponent = __decorate([
         template: __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.html"),
         styles: [__webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.scss")],
         animations: [
-            Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["m" /* trigger */])('slide_in_out', [
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["k" /* style */])({
+            Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["k" /* trigger */])('slide_in_out', [
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* style */])({
                     width: '280px',
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["k" /* style */])({
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* style */])({
                     width: '0px'
                     // css styles when the element is in slide_out
                 })),
                 // animation effect when transitioning from one state to another
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["l" /* transition */])('slide_in <=> slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])(300))
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* transition */])('slide_in <=> slide_out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])(300))
             ]),
         ]
     }),
@@ -7801,8 +7844,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 /*import { SettingComponent } from './setting/setting.component';
 import { VisualiseComponent } from './setting/visualise.component';
-import { AttributesComponent } from './setting/attributes.copmponent';*/
-//import { PublishComponent } from './setting/publish.component';
+import { AttributesComponent } from './setting/attributes.copmponent';
+import { PublishComponent } from './setting/publish.component';*/
 let MobiusCesium = MobiusCesium_1 = class MobiusCesium {
     static forRoot() {
         return {
@@ -7853,7 +7896,7 @@ module.exports = "#publishwindow{\r\n  position: relative;\r\n  height: 100%;\r\
 /***/ "./src/app/mobius-cesium/toolwindow/publish.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"publishwindow\" *ngIf=\"ceisumData!==undefined\">\r\n     <!--  <div id=\"PublishView\" style=\"margin-left: 5px;margin-top: 5px;\" *ngIf=\"ceisumData!==undefined\"> -->\r\n        <div *ngIf=\"ceisumData.colorDefault!==undefined\">\r\n        <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 280px\" *ngIf=\"ceisumData.colorDescr!==undefined\"><div style=\"width: 280px;color:#ddd !important;border:0;text-align: left;font-weight: normal\">{{ceisumData.colorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Color&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"ColorValue\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.heightDefault!==undefined\">\r\n        <hr>\r\n          <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 280px\" *ngIf=\"ceisumData.heightDescr!==undefined\"><div style=\"width: 280px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">{{ceisumData.heightDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Extrude&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"HeightValue\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:40px;height: 25px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:40px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"ceisumData.heightMin!==undefined\">{{ceisumData.heightMin}}</div></th></tr>\r\n\r\n          <tr><th style=\"width:40px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"ceisumData.heightMax!==undefined\">{{ceisumData.heightMax}}</div></th></tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.filter!==undefined\">\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr >\r\n          <th style=\"width:280px;height: 25px;\"><div style=\"width:280px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:80px;color:#395D73 !important;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:80px;color:#395D73 !important;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n         <!--  <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;background-color: rgba(0,0,0,0);border:0px;\" (click)=\"Disable(item.id)\"><span id={{item.id}} ><i class=\"material-icons\" style=\"color:#ddd;\">check_circle</i></span></button></th> -->\r\n        <th style=\"width:20px;height: 25px;\" id={{item.id}}><span id={{item.id}} (click)=\"Disable(item.id)\" style=\"width:20px;height: 25px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#ddd;font-size:16px\">check_circle</i></span></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      <button style=\"background-color: #ddd ;color:#395D73;\" (click)=\"reset()\">Reset</button>\r\n      </div>\r\n    <!-- </div> -->\r\n</div>"
+module.exports = "<div id=\"publishwindow\" *ngIf=\"ceisumData!==undefined\">\r\n     <!--  <div id=\"PublishView\" style=\"margin-left: 5px;margin-top: 5px;\" *ngIf=\"ceisumData!==undefined\"> -->\r\n        <div *ngIf=\"ceisumData.colorDefault!==undefined\">\r\n        <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 280px\" *ngIf=\"ceisumData.colorDescr!==undefined\"><div style=\"color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;\">{{ceisumData.colorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;\">Color&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"ColorValue\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.heightDefault!==undefined\">\r\n        <hr>\r\n          <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 280px\" *ngIf=\"ceisumData.heightDescr!==undefined\"><div style=\"color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;\">{{ceisumData.heightDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;\">Extrude&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"HeightValue\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:40px;height: 25px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;\">Min&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:40px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;\" *ngIf=\"ceisumData.heightMin!==undefined\">{{ceisumData.heightMin}}</div></th></tr>\r\n\r\n          <tr><th style=\"width:40px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;\">Max&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;\" *ngIf=\"ceisumData.heightMax!==undefined\">{{ceisumData.heightMax}}</div></th></tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.filter!==undefined\">\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr >\r\n          <th style=\"width:280px;height: 25px;\"><div style=\"width:280px;color:#ddd !important;text-align: justify;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:80px;color:#395D73 !important;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:80px;color:#395D73 !important;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n         <!--  <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;background-color: rgba(0,0,0,0);border:0px;\" (click)=\"Disable(item.id)\"><span id={{item.id}} ><i class=\"material-icons\" style=\"color:#ddd;\">check_circle</i></span></button></th> -->\r\n        <th style=\"width:20px;height: 25px;\" id={{item.id}}><span id={{item.id}} (click)=\"Disable(item.id)\" style=\"width:20px;height: 25px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#ddd;font-size:16px\">check_circle</i></span></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      <div style=\"padding: 10px 10px 0px 10px;\">\r\n      <button style=\"background-color: #ddd ;color:#395D73;\" (click)=\"reset()\">Reset</button></div>\r\n      </div>\r\n    <!-- </div> -->\r\n</div>"
 
 /***/ }),
 
@@ -7887,15 +7930,15 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         this.InitialTool = false;
         this.CheckDisable = false;
         this.hideElementArr = [];
-        this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-        this.HideNum = [];
-        this.ScaleValue = this.dataService.ScaleValue;
-        this.CheckScale = this.dataService.CheckScale;
-        this.CheckOpp = this.dataService.CheckOpp;
-        if (this.dataService.HideNum !== undefined) {
-            this.HideNum = this.dataService.HideNum;
-            this.hideElementArr = this.dataService.hideElementArr;
-        }
+        /*this.ChromaScale=chroma.scale("SPECTRAL");
+        this.HideNum=[];
+        this.ScaleValue=this.dataService.ScaleValue;
+        this.CheckScale=this.dataService.CheckScale;
+        this.CheckOpp=this.dataService.CheckOpp;
+        if(this.dataService.HideNum!==undefined) {
+          this.HideNum=this.dataService.HideNum;
+          this.hideElementArr=this.dataService.hideElementArr;
+        }*/
     }
     ngOnInit() {
         this.data = this.dataService.getGsModel();
@@ -7910,14 +7953,15 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
             this.mode = this.dataService.mode;
             try {
                 if (this.data !== undefined && this.data["features"] !== undefined) {
-                    //if(this.data["cesium"]!==undefined){
-                    //if(this.mode==="viewer")
-                    this.LoadData(this.data);
-                    /*this.InitialTool=false;
-        
-                  }else{
-                    this.InitialTool=true;
-                  }*/
+                    if (this.data["cesium"] !== undefined) {
+                        if (this.mode === "viewer") {
+                            this.LoadData(this.data);
+                        }
+                        /*this.InitialTool=false;
+            
+                      }else{
+                        this.InitialTool=true;*/
+                    }
                 }
             }
             catch (ex) {
@@ -7926,7 +7970,6 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         }
     }
     LoadData(data) {
-        //console.log(data);
         if (data["features"] !== undefined) {
             this.PropertyNames = Object.getOwnPropertyNames(data["features"][0].properties);
             this.PropertyNames.sort();
@@ -7942,22 +7985,26 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         this.ceisumData = [];
         this.ColorNames = [];
         this.HeightKey = [];
-        if (cesiumData["colour"] !== undefined && cesiumData["colour"]["attribs"] !== undefined) {
-            for (var i = 0; i < cesiumData["colour"]["attribs"].length; i++) {
-                this.ColorNames.push(cesiumData["colour"]["attribs"][i]["name"]);
-            }
-            this.ColorValue = this.ColorNames[0];
+        this.ColorNames = this.dataService.propertyNames;
+        this.HeightKey = this.dataService.HeightKey;
+        this.ColorValue = this.dataService.ColorValue;
+        this.HeightValue = this.dataService.HeightValue;
+        /*if(cesiumData["colour"]!==undefined&&cesiumData["colour"]["attribs"]!==undefined){
+          for(var i=0;i<cesiumData["colour"]["attribs"].length;i++){
+            this.ColorNames.push(cesiumData["colour"]["attribs"][i]["name"]);
+          }
+          this.ColorValue=this.ColorNames[0];
         }
-        if (cesiumData["extrude"] !== undefined && cesiumData["extrude"]["attribs"] !== undefined) {
-            for (var i = 0; i < cesiumData["extrude"]["attribs"].length; i++) {
-                this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
-            }
-            this.HeightValue = this.HeightKey[0];
-            let self = this;
-            setTimeout(function () {
-                self.onChangeHeight(self.HeightKey[0]);
-            }, 3000);
-        }
+        if(cesiumData["extrude"]!==undefined&&cesiumData["extrude"]["attribs"]!==undefined){
+          for(var i=0;i<cesiumData["extrude"]["attribs"].length;i++){
+            this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
+          }
+          this.HeightValue=this.HeightKey[0];
+          let self=this;
+          setTimeout(function(){
+            self.onChangeHeight(self.HeightKey[0]);
+          },3000)
+        }*/
         if (cesiumData["colour"] !== undefined) {
             if (cesiumData["colour"].descr !== undefined)
                 data.colorDescr = cesiumData["colour"].descr;
@@ -8061,16 +8108,17 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         }
         this.dataService.CheckOpp = this.CheckOpp;
         if (data.heightScale !== undefined) {
-            this.ScaleValue = data.heightScale;
+            this.PuScaleValue = data.heightScale;
         }
         else {
-            this.ScaleValue = 1;
+            this.PuScaleValue = 1;
         }
-        this.dataService.ScaleValue = this.ScaleValue;
-        this.dataService.propertyNames = this.ColorNames;
-        this.dataService.ColorValue = this.ColorValue;
-        this.dataService.HeightKey = this.HeightKey;
-        this.dataService.HeightValue = this.HeightValue;
+        this.dataService.PuScaleValue = this.PuScaleValue;
+        /*this.dataService.propertyNames=this.ColorNames;
+        this.dataService.ColorValue=this.ColorValue;
+        this.dataService.HeightKey=this.HeightKey;
+        //console.log(this.dataService.HeightKey);
+        this.dataService.HeightValue=this.HeightValue;*/
         if (cesiumData["filters"] !== undefined && cesiumData["filters"].length !== 0) {
             data.filter = cesiumData["filters"];
         }
@@ -8078,6 +8126,7 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         this.ceisumData = data;
         this.dataService.ceisumData = this.ceisumData;
         this.onChangeColor(this.ColorValue);
+        //this.onChangeHeight(this.HeightValue);
         if (cesiumData["filters"] !== undefined) {
             this.addHide();
         }
@@ -8177,8 +8226,8 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         this.dataService.CheckExtrude = this.CheckExtrude;
         this.CheckOpp = this.ceisumData["heightInvert"];
         this.dataService.CheckOpp = this.CheckOpp;
-        this.ScaleValue = this.ceisumData["heightScale"];
-        this.dataService.ScaleValue = this.ScaleValue;
+        this.PuScaleValue = this.ceisumData["heightScale"];
+        this.dataService.PuScaleValue = this.PuScaleValue;
         this.dataService.ceisumData = this.ceisumData;
         this.Hide();
         this.dataService.getHeightValue(this.HeightValue);
@@ -8483,7 +8532,7 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         return texts;
     }
     ChangeCategory(categary, id, type) {
-        var scale = this.ScaleValue / this.Max;
+        var scale = this.PuScaleValue; ///this.Max;
         var index = this.HideNum.indexOf(id);
         var promise = this.dataService.cesiumpromise;
         if (type === 1) {
@@ -8526,7 +8575,7 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
         var propertyname = [];
         var relation = [];
         var text = [];
-        var scale = this.ScaleValue;
+        var scale = this.PuScaleValue;
         var Max;
         var Min;
         if (this.ceisumData["heightMax"] !== undefined) {
@@ -8835,6 +8884,7 @@ let PublishComponent = class PublishComponent extends __WEBPACK_IMPORTED_MODULE_
     }
     reset() {
         if (this.data["cesium"] !== undefined) {
+            this.dataService.LoadJSONData();
             this.LoadData(this.data);
         }
     }
@@ -8862,7 +8912,7 @@ module.exports = "#toolwindow{\r\n  position: relative;\r\n  height: 100%;\r\n  
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\">\r\n    <mat-tab label=\"&nbsp;Visualise&nbsp;\" *ngIf=\"mode==='editor'\">\r\n      <div id=\"SettingView\" style=\"background-color: rgba(20,20,20,0.5);height: 100%;\" >\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><div style=\"width:80px;height: 18px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"button\" value=\"Disable\" style=\"color:#395d73;width: 80px;height: 22px;\" (click)=\"changeImagery()\"></div></th>\r\n        </tr>\r\n      </table>\r\n      <hr>\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n          <table>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{Min}} style=\"width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:80px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{Max}} style=\"width: 80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n          <!-- <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n            <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckInvert\" (click)=\"changeinvert()\"></div></th></tr > -->\r\n      </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Extrude</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:80px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{HeightMax}} style=\"width: 80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n            <!-- <th style=\"width:80px;height: 25px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th> -->\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{ScaleValue}} style=\"width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changescale($event.target.value)\" ></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude();Hide()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 75px;height: 22px;\"><div class=\"Hide\" style=\"width: 75px;height: 22;color:#ddd !important;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 75px;height: 22px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 22px;\"><div style=\"width:20px;height: 22px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:85px;height: 22px;\"><div style=\"width:85px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 22px;\"><div style=\"width:40px;height: 22px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 22px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 22px;\"><div style=\"width:40px;height: 22px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 22px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 22px;\"><div style=\"width:73px;height: 22px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 22px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:20px;height: 22px;\" id={{item.id}}><span id={{item.id}} (click)=\"deleteHide(item.id)\" style=\"width:20px;height: 22px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#ddd;font-size:16px\">delete</i></span></th>\r\n        <th style=\"width:20px;height: 22px;\" id={{item.id}}><span id={{item.id}} (click)=\"Disable(item.id)\" style=\"width:20px;height: 22px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#ddd;font-size:16px\">check_circle</i></span></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 22px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 22px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 22px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Attributes\" *ngIf=\"mode==='editor'\">\r\n      <div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.5);height: 100%;\"  >\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <div style=\"background-color: rgba(20,20,20,0.5);height: 100%;\" ><app-publish  ></app-publish></div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\"  (click)=\"changedata($event.target.innerText)\">\r\n    <mat-tab label=\"&nbsp;Visualise&nbsp;\" *ngIf=\"mode==='editor'\">\r\n      <div id=\"SettingView\" style=\"background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;\" >\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><div style=\"width:80px;height: 18px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"button\" value=\"Disable\" style=\"color:#395d73;width: 80px;height: 22px;\" (click)=\"changeImagery()\"></div></th>\r\n        </tr>\r\n      </table>\r\n      <hr>\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"ColorValue\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n          <table>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{Min}} style=\"width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:80px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{Max}} style=\"width: 80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n          <!-- <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n            <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckInvert\" (click)=\"changeinvert()\"></div></th></tr > -->\r\n      </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Extrude</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"HeightValue\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:80px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{HeightMax}} style=\"width: 80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n            <!-- <th style=\"width:80px;height: 25px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th> -->\r\n          <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{ScaleValue}} style=\"width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changescale($event.target.value)\" ></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude();Hide()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 75px;height: 22px;\"><div class=\"Hide\" style=\"width: 75px;height: 22;color:#ddd !important;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 75px;height: 22px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 22px;\"><div style=\"width:20px;height: 22px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:85px;height: 22px;\"><div style=\"width:85px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 22px;\"><div style=\"width:40px;height: 22px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 22px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 22px;\"><div style=\"width:40px;height: 22px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 22px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 22px;\"><div style=\"width:73px;height: 22px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 22px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:20px;height: 22px;\" id={{item.id}}><span id={{item.id}} (click)=\"deleteHide(item.id)\" style=\"width:20px;height: 22px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#ddd;font-size:16px\">delete</i></span></th>\r\n        <th style=\"width:20px;height: 22px;\" id={{item.id}}><span id={{item.id}} (click)=\"Disable(item.id)\" style=\"width:20px;height: 22px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#ddd;font-size:16px\">check_circle</i></span></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 22px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 22px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 22px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Attributes\" *ngIf=\"mode==='editor'\">\r\n      <div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;\"  >\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <div style=\"background-color: rgba(20,20,20,0.5);height: 100%;\" ><app-publish *ngIf=\"ViType==='&nbsp;Publish&nbsp;'\"></app-publish></div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
@@ -8895,22 +8945,33 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
         this.InitialTool = false;
         this.CheckDisable = false;
         this.hideElementArr = [];
-        this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-        this.HideNum = [];
-        this.ScaleValue = this.dataService.ScaleValue;
-        this.CheckScale = this.dataService.CheckScale;
-        this.CheckOpp = this.dataService.CheckOpp;
-        this.CheckInvert = this.dataService.CheckInvert;
-        if (this.dataService.HideNum !== undefined) {
-            this.HideNum = this.dataService.HideNum;
-            this.hideElementArr = this.dataService.hideElementArr;
-        }
-        //this.MatTab=
+        /*this.ChromaScale=chroma.scale("SPECTRAL");
+        this.HideNum=[];
+        this.ScaleValue=this.dataService.ScaleValue;
+        this.CheckScale=this.dataService.CheckScale;
+        this.CheckOpp=this.dataService.CheckOpp;
+        this.CheckInvert=this.dataService.CheckInvert;
+        if(this.dataService.HideNum!==undefined) {
+          this.HideNum=this.dataService.HideNum;
+          this.hideElementArr=this.dataService.hideElementArr;
+        }*/
     }
     ngOnInit() {
         this.data = this.dataService.getGsModel();
         this.mode = this.dataService.mode;
-        this.LoadData(this.data);
+        if (this.mode === "editor") {
+            this.changedata(" Visualise ");
+        }
+        else if (this.mode === "viewer") {
+            this.changedata(" Publish ");
+        }
+        /*if(this.mode==="editor"){
+          this.LoadData(this.data);
+          this.ViType=" Visualise ";
+        }else if(this.mode==="viewer"){
+          this.ViType=" Publish ";
+          this.dataService.LoadJSONData();
+        }*/
     }
     notify(message) {
         if (message == "model_update") {
@@ -8921,8 +8982,17 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
             try {
                 if (this.data !== undefined && this.data["features"] !== undefined) {
                     //if(this.data["cesium"]===undefined){
-                    if (this.mode === "editor" && this.data["cesium"] === undefined)
-                        this.LoadData(this.data);
+                    //if(this.mode==="editor"&&this.data["cesium"]===undefined)
+                    if (this.mode === "editor") {
+                        /*this.LoadData(this.data);
+                        this.ViType=" Visualise ";*/
+                        this.changedata(" Visualise ");
+                    }
+                    else if (this.mode === "viewer") {
+                        /*this.dataService.LoadJSONData();
+                        this.ViType=" Publish ";*/
+                        this.changedata(" Publish ");
+                    }
                     // console.log("toolwindow is updating");
                     /*this.InitialTool=true;
                 }else{
@@ -8935,9 +9005,34 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
             }
         }
     }
+    changedata(event) {
+        if (event === " Visualise ") {
+            this.ViType = event;
+            /*this.dataService.ScaleValue=1;
+            this.ScaleValue=1;*/
+            this.dataService.getValue(this.data);
+            this.LoadData(this.data);
+        }
+        else if (event === " Publish ") {
+            this.ViType = event;
+            this.dataService.LoadJSONData();
+        }
+    }
     LoadData(data) {
         this.PropertyNames = this.dataService.getPropertyNames();
+        //this.ColorValue=this.dataService.ColorValue;
+        //this.HeightValue=this.dataService.HeightValue;
         this.viewer = this.dataService.viewer;
+        this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
+        this.HideNum = [];
+        this.ScaleValue = this.dataService.ScaleValue;
+        this.CheckScale = this.dataService.CheckScale;
+        this.CheckOpp = this.dataService.CheckOpp;
+        this.CheckInvert = this.dataService.CheckInvert;
+        if (this.dataService.HideNum !== undefined) {
+            this.HideNum = this.dataService.HideNum;
+            this.hideElementArr = this.dataService.hideElementArr;
+        }
         // if(data!==undefined){
         //   if(data["features"]!==undefined){
         //     this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
@@ -8952,31 +9047,36 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
                 this.ID = this.dataService.SelectedEntity._id;
                 this.Properties = [];
                 for (var i = 0; i < this.PropertyNames.length; i++) {
-                    var Properties = [];
-                    Properties.Name = this.PropertyNames[i];
-                    Properties.Value = this.dataService.SelectedEntity.properties[this.PropertyNames[i]]._value;
-                    this.Properties.push(Properties);
+                    if (this.PropertyNames[i] !== "None") {
+                        var Properties = [];
+                        Properties.Name = this.PropertyNames[i];
+                        Properties.Value = this.dataService.SelectedEntity.properties[Properties.Name]._value;
+                        this.Properties.push(Properties);
+                    }
                 }
             }
         }
-        if (this.viewer !== undefined) {
-            if (this.ColorValue !== this.dataService.ColorValue || this.ColorNames !== this.dataService.propertyNames) {
-                this.ColorValue = this.dataService.ColorValue;
-                this.ColorNames = this.dataService.propertyNames;
-                //this.ColorNames.sort();
-                //this.ColorNames=["None"].concat(this.ColorNames);
-                //this.dataService.propertyNames=this.ColorNames;
-                this.selectColor = this.ColorValue;
-                this.onChangeColor(this.ColorValue);
-            }
-            if (this.HeightValue !== this.dataService.HeightValue || this.HeightKey !== this.dataService.HeightKey) {
-                this.HeightValue = this.dataService.HeightValue;
-                this.HeightKey = this.dataService.HeightKey; //this.dataService.HeightKey;
-                //this.HeightKey.sort();
-                //this.HeightKey=["None"].concat(this.HeightKey);
-                //this.dataService.HeightKey=this.HeightKey;
-                this.selectHeight = this.HeightValue;
-                this.onChangeHeight(this.HeightValue);
+        if (this.ViType === " Visualise ") {
+            if (this.viewer !== undefined) {
+                if (this.ColorValue !== this.dataService.ColorValue || this.ColorNames !== this.dataService.propertyNames) {
+                    this.ColorValue = this.dataService.ColorValue;
+                    this.ColorNames = this.dataService.propertyNames;
+                    //this.ColorNames.sort();
+                    //this.ColorNames=["None"].concat(this.ColorNames);
+                    //this.dataService.propertyNames=this.ColorNames;
+                    this.selectColor = this.ColorValue;
+                    this.onChangeColor(this.ColorValue);
+                }
+                if (this.HeightValue !== this.dataService.HeightValue || this.HeightKey !== this.dataService.HeightKey) {
+                    this.HeightValue = this.dataService.HeightValue;
+                    this.HeightKey = this.dataService.HeightKey; //this.dataService.HeightKey;
+                    //console.log(this.HeightValue);
+                    //this.HeightKey.sort();
+                    //this.HeightKey=["None"].concat(this.HeightKey);
+                    //this.dataService.HeightKey=this.HeightKey;
+                    this.selectHeight = this.HeightValue;
+                    this.onChangeHeight(this.HeightValue);
+                }
             }
         }
     }
@@ -9373,8 +9473,8 @@ let ToolwindowComponent = class ToolwindowComponent extends __WEBPACK_IMPORTED_M
         else {
             this.Hide();
         }
-        //this.Hide();
         this.dataService.ScaleValue = this.ScaleValue;
+        //this.Hide();
     }
     checkscale() {
         this.CheckScale = !this.CheckScale;
@@ -10045,14 +10145,14 @@ ToolwindowComponent = __decorate([
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n\r\n\r\n#ColorBar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 60px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n/*.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n\r\n.cesium-infoBox-title{\r\n  height:14px;\r\n  background: #395D73;\r\n}\r\n.cesium-viewer{\r\n  font-size: 14px !important;\r\n}\r\nbody{\r\n  font-size: 10px;\r\n}\r\n\r\n.cesium-infoBox-description{\r\n  background-color: red !important;\r\n}\r\n\r\n.cesium-infoBox-description table{\r\n  background-color: #F1F1F1;\r\n}\r\n.cesium-infoBox-iframe{\r\n  max-height: 300px !important;\r\n  height:650px !important;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}*/\r\n\r\n"
+module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n\r\n\r\n#ColorBar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 60px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n#Colortext{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 30px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n/*.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n\r\n.cesium-infoBox-title{\r\n  height:14px;\r\n  background: #395D73;\r\n}\r\n.cesium-viewer{\r\n  font-size: 14px !important;\r\n}\r\nbody{\r\n  font-size: 10px;\r\n}\r\n\r\n.cesium-infoBox-description{\r\n  background-color: red !important;\r\n}\r\n\r\n.cesium-infoBox-description table{\r\n  background-color: #F1F1F1;\r\n}\r\n.cesium-infoBox-iframe{\r\n  max-height: 300px !important;\r\n  height:650px !important;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}*/\r\n\r\n"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);\">\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n     </div>\r\n</div>"
+module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);\">\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n        \r\n     </div>\r\n     <!-- <div id=\"Colortext\" *ngIf=\"mode==='viewer'\" >\r\n          <div>Color: </div>\r\n        </div> -->\r\n     \r\n</div>"
 
 /***/ }),
 
@@ -10252,8 +10352,8 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
             var promise = Cesium.GeoJsonDataSource.load(this.data);
             var self = this;
             var HeightKey = [];
-            self.propertyNames = self.dataService.getPropertyNames();
-            // console.log("propertynames from dataservice: ", self.propertyNames.length, self.dataService.getPropertyNames().length);
+            //self.propertyNames = self.dataService.getPropertyNames();
+            //console.log("propertynames from dataservice: ", self.propertyNames.length, self.dataService.getPropertyNames().length);
             promise.then(function (dataSource) {
                 viewer.dataSources.add(dataSource);
                 var entities = dataSource.entities.values;
@@ -10299,6 +10399,12 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
                 // }
             });
             this.dataService.cesiumpromise = promise;
+            if (this.mode === "editor") {
+                this.dataService.getValue(this.data);
+            }
+            else if (this.mode === "viewer") {
+                this.dataService.LoadJSONData();
+            }
             //this.dataService.propertyNames=this.propertyNames;
             //this.dataService.HeightKey=HeightKey;
             /*if(this.dataService.ColorValue===undefined){
@@ -10534,6 +10640,7 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
     ColorSelect(entity) {
         this.ColorValue = this.dataService.ColorValue;
         var ColorKey = this.dataService.Colortexts;
+        this.propertyNames = this.dataService.propertyNames;
         var range = ColorKey.length;
         for (var i = 0; i < this.propertyNames.length; i++) {
             if (this.ColorValue === this.propertyNames[i]) {
@@ -13264,12 +13371,10 @@ let MobiusEditorComponent = class MobiusEditorComponent {
         else if (navigator.userAgent.indexOf("Firefox") != -1) {
             brw = 'Firefox';
         }
-        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) //IF IE > 10
-         {
+        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) {
             brw = 'IE';
         }
-        else if (window.navigator.userAgent.indexOf("Edge") > -1) //IF IE > 10
-         {
+        else if (window.navigator.userAgent.indexOf("Edge") > -1) {
             brw = 'Edge';
         }
         else {
@@ -13496,12 +13601,10 @@ let MobiusViewerComponent = class MobiusViewerComponent {
         else if (navigator.userAgent.indexOf("Firefox") != -1) {
             brw = 'Firefox';
         }
-        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) //IF IE > 10
-         {
+        else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document["documentMode"] == true)) {
             brw = 'IE';
         }
-        else if (window.navigator.userAgent.indexOf("Edge") > -1) //IF IE > 10
-         {
+        else if (window.navigator.userAgent.indexOf("Edge") > -1) {
             brw = 'Edge';
         }
         else {
@@ -13519,16 +13622,16 @@ MobiusViewerComponent = __decorate([
         template: __webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.scss")],
         animations: [
-            Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["m" /* trigger */])('slide_in_out', [
-                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["j" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["k" /* style */])({
+            Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["k" /* trigger */])('slide_in_out', [
+                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["h" /* state */])('slide_in', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["i" /* style */])({
                     "right": "0px"
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["j" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["k" /* style */])({
+                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["h" /* state */])('slide_out', Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["i" /* style */])({
                     //background: 'blue',
                     "right": "-380px"
                 })),
                 //transition('slide_in <=> slide_out', animate('300ms')),
-                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["l" /* transition */])("slide_in <=> slide_out", Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["e" /* animate */])("3s")),
+                Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["j" /* transition */])("slide_in <=> slide_out", Object(__WEBPACK_IMPORTED_MODULE_3__angular_animations__["e" /* animate */])("3s")),
             ]),
         ]
     }),
@@ -13914,7 +14017,7 @@ GeometryViewerComponent = __decorate([
 //                   version: "0.1.1",
 //               },
 //               skins: null,
-//           };
+//           }; 
 
 
 /***/ }),
@@ -14055,14 +14158,14 @@ NodeLibraryComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" \r\n\t\t\t*ngIf='!globals && (_inputs == undefined || _inputs.length == 0)'>\r\n\t\t\tNo node selected \r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3 class=\"flo_title\">{{flowchartService.getFlowchart().name | simplename }}</h3>\r\n\t\t\t<div [innerHTML]=\"flowchartService.getFlowchart().description\"></div>\r\n\t\t\t<h4 *ngIf=\"_editable && _inputs.length\">Parameters</h4>\r\n\t\t</div>\r\n\r\n\t\t<div class='paramater-container single-param-container'\r\n\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\t\t\t\t<div class=\"param-name\">\r\n\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == Input -->\r\n\t\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t\t            \t\t</textarea>\r\n\t\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div> \r\n\r\n\t\t\t\t<!-- if input type == Slider -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t\t\t<span *ngIf='!inp.getDefaultValue() && inp.getValue()'>(file loaded)</span>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == URL -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\" style=\"max-height: 25px;\">Get Data</button>\r\n\t\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t\t</div>\r\n\t \r\n\t\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<button id=\"execute\" \r\n\t\t\t\t*ngIf=\"!globals || _editable\"\r\n\t\t\t\tmat-raised-button \r\n\t\t\t\tcolor=\"accent\" \r\n\t\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\t\tExecute Flowchart\r\n\t\t</button>  \r\n\t\r\n\t</div>\r\n\r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" \r\n\t\t\t*ngIf='!globals && (_inputs == undefined || _inputs.length == 0)'>\r\n\t\t\tNo node selected \r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3>Title: {{flowchartService.getFlowchart().name}}</h3>\r\n\t\t\t<div [innerHTML]=\"flowchartService.getFlowchart().description\"></div>\r\n\t\t\t<h4 *ngIf=\"_editable\">Parameters</h4>\r\n\t\t</div>\r\n\r\n\t\t<div class='paramater-container single-param-container'\r\n\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\t\t\t\t<div class=\"param-name\">\r\n\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == Input -->\r\n\t\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t\t            \t\t</textarea>\r\n\t\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div> \r\n\r\n\t\t\t\t<!-- if input type == Slider -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, inp)\">\r\n\t\t\t\t\t<span *ngIf='inp.getDefaultValue()'>(has default)</span>\r\n\t\t\t\t\t<span *ngIf='!inp.getDefaultValue() && inp.getValue()'>(file loaded)</span>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == URL -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\" style=\"max-height: 25px;\">Get Data</button>\r\n\t\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t\t</div>\r\n\t \r\n\t\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t\t</div>\r\n\t\t</div>\r\n\t\t\r\n\t\t<button id=\"execute\" \r\n\t\t\t\t*ngIf=\"!globals || _editable\"\r\n\t\t\t\tmat-raised-button \r\n\t\t\t\tcolor=\"accent\" \r\n\t\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\t\tExecute Flowchart\r\n\t\t</button>  \r\n\t\r\n\t</div>\r\n\r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
 /***/ "./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.globals-viewer {\n  background-color: red; }\n\ndiv.mat-input-wrapper.mat-form-field-wrapper {\n  padding: 0; }\n\n.flo_title {\n  text-transform: uppercase; }\n\n.param-in-viewer {\n  font-size: 14px;\n  line-height: 16px;\n  text-align: justify;\n  padding: 45px 10px 10px 10px; }\n\n.box-text-values, #param-container-cesium .single-param-container .param-value .slider-container .content {\n  font-size: 12px;\n  height: 24px;\n  line-height: 24px;\n  text-align: center;\n  color: #395D73; }\n\n.viewer {\n  font-family: sans-serif;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -ms-flex-wrap: no-wrap;\n      flex-wrap: no-wrap;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  background-color: white;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 30px; }\n\n.viewer.globals-viewer {\n    padding: 0px;\n    background-color: rgba(20, 20, 20, 0.5);\n    border-left: 1px solid gray;\n    color: #ddd; }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    overflow: auto;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    height: auto;\n    padding-bottom: 36px; }\n\n.viewer .container .paramater-container {\n      -webkit-box-flex: 1;\n          -ms-flex-positive: 1;\n              flex-grow: 1;\n      -ms-flex-negative: 0;\n          flex-shrink: 0;\n      height: auto;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: horizontal;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: row;\n              flex-direction: row;\n      -webkit-box-pack: space-equally;\n          -ms-flex-pack: space-equally;\n              justify-content: space-equally;\n      font-size: 15px;\n      line-height: 18px;\n      width: 100%;\n      padding: 2px 0px;\n      /*.connection{\r\n\t\t\t\t\t//border-bottom: 1px solid $color2;\r\n\t\t\t\t\tpadding: 0 0 $default-side-padding 0;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t}*/\n      /*border-top: 1px dashed $color1;\r\n\t\t\tborder-bottom: 1px dashed $color1;*/ }\n\n.viewer .container .paramater-container .info {\n        background-color: white;\n        padding: 0 15px;\n        color: #395D73;\n        width: 20%;\n        max-width: 100px; }\n\n.viewer .container .paramater-container .info .param {\n          display: -webkit-box;\n          display: -ms-flexbox;\n          display: flex;\n          height: 100%;\n          -webkit-box-align: center;\n              -ms-flex-align: center;\n                  align-items: center;\n          -webkit-box-pack: end;\n              -ms-flex-pack: end;\n                  justify-content: flex-end; }\n\n.viewer .container .paramater-container .info .param .content {\n            font-size: 12px; }\n\n.viewer .container .paramater-container .value {\n        font-family: 'Ubuntu Mono', monospace;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-align: center;\n            -ms-flex-align: center;\n                align-items: center;\n        -webkit-box-pack: end;\n            -ms-flex-pack: end;\n                justify-content: flex-end;\n        width: 80%;\n        -webkit-box-flex: 0;\n            -ms-flex-positive: 0;\n                flex-grow: 0;\n        -ms-flex-negative: 0;\n            flex-shrink: 0; }\n\n.viewer .container .paramater-container .value .curr-value {\n          width: 100px; }\n\n.viewer .container .paramater-container .value .slider-container {\n          display: -webkit-box;\n          display: -ms-flexbox;\n          display: flex;\n          -webkit-box-orient: horizontal;\n          -webkit-box-direction: reverse;\n              -ms-flex-flow: row-reverse no-wrap;\n                  flex-flow: row-reverse no-wrap;\n          -webkit-box-align: center;\n              -ms-flex-align: center;\n                  align-items: center;\n          padding: 0 15px;\n          width: 100%; }\n\n.viewer .container .paramater-container .value .slider-container .content {\n            font-size: 12px;\n            color: #395D73; }\n\n#execute {\n  width: 100%;\n  background-color: #82BF6E;\n  color: white;\n  height: 36px;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n  -ms-flex-negative: 0;\n      flex-shrink: 0; }\n\n#execute:hover {\n    background-color: #F0BFA0;\n    color: #F07A79; }\n\n#param-container-cesium {\n  overflow-x: hidden;\n  padding: 3px;\n  margin-top: 5px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-pack: start;\n      -ms-flex-pack: start;\n          justify-content: flex-start;\n  height: 100%;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between; }\n\n#param-container-cesium .mat-input-element {\n    vertical-align: middle !important;\n    font-family: 'Roboto', sans-serif; }\n\n#param-container-cesium .mat-input-element textarea {\n      padding-left: 5px; }\n\n#param-container-cesium .mat-input-element .mat-input-wrapper {\n      border-bottom: none !important; }\n\n#param-container-cesium textarea {\n    height: 24px;\n    font-size: 12px;\n    line-height: 24px;\n    border: 1px solid #395D73;\n    text-align: center; }\n\n#param-container-cesium .single-param-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    margin: 0px 0px 5px 0px;\n    padding: 0px;\n    font-family: 'Roboto', sans-serif; }\n\n#param-container-cesium .single-param-container .param-name {\n      width: 90px;\n      min-height: 24px;\n      line-height: 24px;\n      vertical-align: middle;\n      word-wrap: break-word;\n      padding-left: 5px;\n      font-size: 12px; }\n\n#param-container-cesium .single-param-container .param-value {\n      min-width: 40px;\n      padding: 0px;\n      margin: 0px 0px 0px 10px;\n      -webkit-box-flex: 1;\n          -ms-flex-positive: 1;\n              flex-grow: 1;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: horizontal;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: row;\n              flex-direction: row;\n      -ms-flex-wrap: wrap;\n          flex-wrap: wrap; }\n\n#param-container-cesium .single-param-container .param-value .content {\n        width: 100%;\n        height: 100%;\n        vertical-align: middle; }\n\n#param-container-cesium .single-param-container .param-value .content .mat-input-container {\n          width: 100%; }\n\n#param-container-cesium .single-param-container .param-value .content .mat-input-container .mat-input-wrapper {\n            border-bottom: 0px; }\n\n#param-container-cesium .single-param-container .param-value .curr-value {\n        width: 40px;\n        height: 24px; }\n\n#param-container-cesium .single-param-container .param-value .slider-container {\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-orient: horizontal;\n        -webkit-box-direction: normal;\n            -ms-flex-direction: row;\n                flex-direction: row;\n        -webkit-box-flex: 1;\n            -ms-flex-positive: 1;\n                flex-grow: 1;\n        margin-left: 5px; }\n\n#param-container-cesium .single-param-container .param-value .slider-container .content {\n          width: 40px; }\n\n#param-container-cesium .single-param-container .param-value .slider-container .mat-slider-horizontal {\n          padding: 0px;\n          height: 24px;\n          min-width: 50px;\n          -webkit-box-flex: 1;\n              -ms-flex-positive: 1;\n                  flex-grow: 1; }\n\n#param-container-cesium .single-param-container .param-value .slider-container .mat-slider-horizontal .mat-slider-wrapper {\n            top: 12px !important; }\n"
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.globals-viewer {\n  background-color: red; }\n\ndiv.mat-input-wrapper.mat-form-field-wrapper {\n  padding: 0; }\n\n.param-in-viewer {\n  font-size: 14px;\n  line-height: 16px;\n  text-align: justify;\n  padding: 45px 10px 10px 10px; }\n\n.box-text-values, #param-container-cesium .single-param-container .param-value .slider-container .content {\n  font-size: 12px;\n  height: 24px;\n  line-height: 24px;\n  text-align: center;\n  color: #395D73; }\n\n.viewer {\n  font-family: sans-serif;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -ms-flex-wrap: no-wrap;\n      flex-wrap: no-wrap;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  background-color: white;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 30px; }\n\n.viewer.globals-viewer {\n    padding: 0px;\n    background-color: rgba(20, 20, 20, 0.5);\n    border-left: 1px solid gray;\n    color: #ddd; }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    overflow: auto;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    height: auto;\n    padding-bottom: 36px; }\n\n.viewer .container .paramater-container {\n      -webkit-box-flex: 1;\n          -ms-flex-positive: 1;\n              flex-grow: 1;\n      -ms-flex-negative: 0;\n          flex-shrink: 0;\n      height: auto;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: horizontal;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: row;\n              flex-direction: row;\n      -webkit-box-pack: space-equally;\n          -ms-flex-pack: space-equally;\n              justify-content: space-equally;\n      font-size: 15px;\n      line-height: 18px;\n      width: 100%;\n      padding: 2px 0px;\n      /*.connection{\r\n\t\t\t\t\t//border-bottom: 1px solid $color2;\r\n\t\t\t\t\tpadding: 0 0 $default-side-padding 0;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t}*/\n      /*border-top: 1px dashed $color1;\r\n\t\t\tborder-bottom: 1px dashed $color1;*/ }\n\n.viewer .container .paramater-container .info {\n        background-color: white;\n        padding: 0 15px;\n        color: #395D73;\n        width: 20%;\n        max-width: 100px; }\n\n.viewer .container .paramater-container .info .param {\n          display: -webkit-box;\n          display: -ms-flexbox;\n          display: flex;\n          height: 100%;\n          -webkit-box-align: center;\n              -ms-flex-align: center;\n                  align-items: center;\n          -webkit-box-pack: end;\n              -ms-flex-pack: end;\n                  justify-content: flex-end; }\n\n.viewer .container .paramater-container .info .param .content {\n            font-size: 12px; }\n\n.viewer .container .paramater-container .value {\n        font-family: 'Ubuntu Mono', monospace;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-align: center;\n            -ms-flex-align: center;\n                align-items: center;\n        -webkit-box-pack: end;\n            -ms-flex-pack: end;\n                justify-content: flex-end;\n        width: 80%;\n        -webkit-box-flex: 0;\n            -ms-flex-positive: 0;\n                flex-grow: 0;\n        -ms-flex-negative: 0;\n            flex-shrink: 0; }\n\n.viewer .container .paramater-container .value .curr-value {\n          width: 100px; }\n\n.viewer .container .paramater-container .value .slider-container {\n          display: -webkit-box;\n          display: -ms-flexbox;\n          display: flex;\n          -webkit-box-orient: horizontal;\n          -webkit-box-direction: reverse;\n              -ms-flex-flow: row-reverse no-wrap;\n                  flex-flow: row-reverse no-wrap;\n          -webkit-box-align: center;\n              -ms-flex-align: center;\n                  align-items: center;\n          padding: 0 15px;\n          width: 100%; }\n\n.viewer .container .paramater-container .value .slider-container .content {\n            font-size: 12px;\n            color: #395D73; }\n\n#execute {\n  width: 100%;\n  background-color: #82BF6E;\n  color: white;\n  height: 36px;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n  -ms-flex-negative: 0;\n      flex-shrink: 0; }\n\n#execute:hover {\n    background-color: #F0BFA0;\n    color: #F07A79; }\n\n#param-container-cesium {\n  overflow-x: hidden;\n  padding: 3px;\n  margin-top: 5px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-pack: start;\n      -ms-flex-pack: start;\n          justify-content: flex-start;\n  height: 100%;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between; }\n\n#param-container-cesium .mat-input-element {\n    vertical-align: middle !important;\n    font-family: 'Roboto', sans-serif; }\n\n#param-container-cesium .mat-input-element textarea {\n      padding-left: 5px; }\n\n#param-container-cesium .mat-input-element .mat-input-wrapper {\n      border-bottom: none !important; }\n\n#param-container-cesium textarea {\n    height: 24px;\n    font-size: 12px;\n    line-height: 24px;\n    border: 1px solid #395D73;\n    text-align: center; }\n\n#param-container-cesium .single-param-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n    margin: 0px 0px 5px 0px;\n    padding: 0px;\n    font-family: 'Roboto', sans-serif; }\n\n#param-container-cesium .single-param-container .param-name {\n      width: 90px;\n      min-height: 24px;\n      line-height: 24px;\n      vertical-align: middle;\n      word-wrap: break-word;\n      padding-left: 5px;\n      font-size: 12px; }\n\n#param-container-cesium .single-param-container .param-value {\n      min-width: 40px;\n      padding: 0px;\n      margin: 0px 0px 0px 10px;\n      -webkit-box-flex: 1;\n          -ms-flex-positive: 1;\n              flex-grow: 1;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: horizontal;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: row;\n              flex-direction: row;\n      -ms-flex-wrap: wrap;\n          flex-wrap: wrap; }\n\n#param-container-cesium .single-param-container .param-value .content {\n        width: 100%;\n        height: 100%;\n        vertical-align: middle; }\n\n#param-container-cesium .single-param-container .param-value .content .mat-input-container {\n          width: 100%; }\n\n#param-container-cesium .single-param-container .param-value .content .mat-input-container .mat-input-wrapper {\n            border-bottom: 0px; }\n\n#param-container-cesium .single-param-container .param-value .curr-value {\n        width: 40px;\n        height: 24px; }\n\n#param-container-cesium .single-param-container .param-value .slider-container {\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-orient: horizontal;\n        -webkit-box-direction: normal;\n            -ms-flex-direction: row;\n                flex-direction: row;\n        -webkit-box-flex: 1;\n            -ms-flex-positive: 1;\n                flex-grow: 1;\n        margin-left: 5px; }\n\n#param-container-cesium .single-param-container .param-value .slider-container .content {\n          width: 40px; }\n\n#param-container-cesium .single-param-container .param-value .slider-container .mat-slider-horizontal {\n          padding: 0px;\n          height: 24px;\n          min-width: 50px;\n          -webkit-box-flex: 1;\n              -ms-flex-positive: 1;\n                  flex-grow: 1; }\n\n#param-container-cesium .single-param-container .param-value .slider-container .mat-slider-horizontal .mat-slider-wrapper {\n            top: 12px !important; }\n"
 
 /***/ }),
 
