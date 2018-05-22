@@ -258,8 +258,10 @@ export class Flowchart implements IFlowchart{
   		let _node = this.getNodeByIndex(nodeIndex);
 
   		_node.getInputs().map(function(input){
-  			input.disconnect();
-  			input.setComputedValue(undefined);
+  			if(input.isConnected()){
+	  			input.disconnect();
+	  			input.setComputedValue(undefined);
+  			}
   		})
 
   		_node.getOutputs().map(function(output){
