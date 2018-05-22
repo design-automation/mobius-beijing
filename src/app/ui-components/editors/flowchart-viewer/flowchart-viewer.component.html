@@ -121,12 +121,11 @@
 												(dragend)="nodeDragEnd($event, node)">
 												
 												<div class="node-name" 
-														[class.selected]="node_index == _selectedNodeIndex"
-														matTooltip="{{node.getName()}}">
-													    <input matInput
-													    style="margin: 2px; min-width: 50px; max-width: 80px;"
-													    placeholder="Value" value="{{ node.getName() }}"
-													    (change)="updateNodeName($event)"/>
+													[class.selected]="node_index == _selectedNodeIndex">
+												    <input matInput
+												    [(ngModel)]="node.name"
+												    style="margin: 2px; min-width: 50px; max-width: 80px;"
+												    placeholder="Node Name"/>
 												</div>
 												
 												<!--inputs -->
@@ -190,7 +189,7 @@
 									<!-- temporary edge -->
 									<app-graph-edge 
 											[class.hidden]="!_linkMode"
-											[edge]="{inputPosition: mouse_pos.start, outputPosition: mouse_pos.current}"
+											[edge]="{inputPosition: portDragProp._mouse_pos.start, outputPosition: portDragProp._mouse_pos.current}"
 											[temporary]="true">
 									</app-graph-edge>
 								</div>

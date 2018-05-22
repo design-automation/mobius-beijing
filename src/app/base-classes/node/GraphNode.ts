@@ -26,7 +26,6 @@ export class GraphNode implements IGraphNode{
 	private _isDisabled: boolean = false; 
 	public _hasError: boolean = false;
 
-
 	private _position: any;
 
 	private _dependencies: any = [];
@@ -41,16 +40,25 @@ export class GraphNode implements IGraphNode{
 		this._type = type;
 	}
 
+	get name(){
+		console.log("Getting name")
+		return this._name;
+	}
+
+	set name(value: string){
+		this._name = name;
+	}
+
 	//	
 	//
 	//
-	getName(): string{ 
-		return this._name; 
-	};
+	// getName(): string{ 
+	// 	return this._name; 
+	// };
 
-	setName(name: string): void{
-		this._name = name; 
-	}
+	// setName(name: string): void{
+	// 	this._name = name; 
+	// }
 
 	getId(): string { 
 		return this._id; 
@@ -209,7 +217,8 @@ export class GraphNode implements IGraphNode{
 	}
 
 	addFnOutput( code_generator: ICodeGenerator ): number{
-		let index_output: number = this.addOutput(this.getName() + "_function");
+		let node_name = this._name + "_function";
+		let index_output: number = this.addOutput( node_name );
 		let fnOutput: OutputPort = this.getOutputByIndex(index_output - 1);
 
 		fnOutput.setDefaultValue( this.getFunction(code_generator) );

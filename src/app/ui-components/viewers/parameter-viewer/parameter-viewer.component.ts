@@ -5,7 +5,7 @@ import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule';
 
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-parameter-viewer',
@@ -15,13 +15,16 @@ import 'rxjs/add/operator/map'
 export class ParameterViewerComponent extends Viewer {
     
     @Input() globals: boolean;
+    @Input() _node: IGraphNode;
+    //@Input() _editable: boolean; 
+    
     _editable;
 
-	  _node: IGraphNode;
-	  _inputs: InputPort[]|any;
+    _inputs: InputPort[]|any;
     isVisible: boolean = false;
 
     InputPortTypes = InputPortTypes;
+
 
     @ViewChild('cesium_param_container') el:ElementRef;
 

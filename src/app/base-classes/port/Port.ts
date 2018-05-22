@@ -144,6 +144,9 @@ export abstract class Port implements IPort{
 	}
 
 	getValue(): any{
+
+		console.log("getting value");
+
 		let final;  
 
 		if (this._computed !== undefined){

@@ -188,6 +188,8 @@ export class FlowchartViewerComponent extends Viewer{
 
   update(){
 
+    console.log("updated")
+
     this._nodes = this.flowchartService.getNodes();
     this._edges = this.flowchartService.getEdges();
 
@@ -305,23 +307,21 @@ export class FlowchartViewerComponent extends Viewer{
   //
   //  node dragging
   //
-  dragStart = {x: 0, y: 0};
-  trend = {x: 1, y: 1};
-  shakeCount: number = 0;
+  dragProp = {dragStart: {x: 0, y: 0}, trend: {x: 1, y: 1}, shakeCount: 0};
 
   nodeDragStart($event, node): void{
     $event.dataTransfer.setDragImage( new Image(), 0, 0);
     // todo : find more elegant solution
-    this.dragStart = {x: $event.pageX, y: $event.pageY}; 
+    this.dragProp.dragStart = {x: $event.pageX, y: $event.pageY}; 
 
-    this.trend = {x: 1, y: 1};
-    this.shakeCount = 0; 
+    this.dragProp.trend = {x: 1, y: 1};
+    this.dragProp.shakeCount = 0; 
   }
 
   nodeDragging($event, node, nodeIndex): void{
     this.pan_mode = false;
-    let relX: number = $event.pageX - this.dragStart.x; 
-    let relY: number = $event.pageY - this.dragStart.y;
+    let relX: number = $event.pageX - this.dragProp.dragStart.x; 
+    let relY: number = $event.pageY - this.dragProp.dragStart.y;
 
     // if node is going beyond canvas, do nothing
     if( (node.position[0] + relX/this.zoom) < 0 || (node.position[1] + relY/this.zoom) < 0){
@@ -331,14 +331,14 @@ export class FlowchartViewerComponent extends Viewer{
     node.position[0] += relX/this.zoom; 
     node.position[1] += relY/this.zoom; 
 
-    this.dragStart = {x: $event.pageX, y: $event.pageY};
+    this.dragProp.dragStart = {x: $event.pageX, y: $event.pageY};
 
     if(relX && relY){
-      if( Math.sign(relX) !== this.trend.x || Math.sign(relY) !== this.trend.y ){
-        this.trend = {x: Math.sign(relX), y: Math.sign(relY) };
-        this.shakeCount++;
+      if( Math.sign(relX) !== this.dragProp.trend.x || Math.sign(relY) !== this.dragProp.trend.y ){
+        this.dragProp.trend = {x: Math.sign(relX), y: Math.sign(relY) };
+        this.dragProp.shakeCount++;
 
-        if(this.shakeCount == 8){
+        if(this.dragProp.shakeCount == 8){
            this.flowchartService.disconnectNode(nodeIndex);
         }
 
@@ -350,8 +350,8 @@ export class FlowchartViewerComponent extends Viewer{
 
   nodeDragEnd($event, node): void{
     this.pan_mode = false;
-    let relX: number = $event.pageX - this.dragStart.x; 
-    let relY: number = $event.pageY - this.dragStart.y;
+    let relX: number = $event.pageX - this.dragProp.dragStart.x; 
+    let relY: number = $event.pageY - this.dragProp.dragStart.y;
 
     if( (node.position[0] + relX/this.zoom) < 0 || (node.position[1] + relY/this.zoom) < 0){
       return;
@@ -360,10 +360,10 @@ export class FlowchartViewerComponent extends Viewer{
     node.position[0] += relX; 
     node.position[1] += relY; 
 
-    this.dragStart = {x:  0, y: 0};
+    this.dragProp.dragStart = {x:  0, y: 0};
 
-    this.trend = {x: 1, y: 1};
-    this.shakeCount = 0;
+    this.dragProp.trend = {x: 1, y: 1};
+    this.dragProp.shakeCount = 0;
 
     this.updateEdges();
   }
@@ -371,22 +371,24 @@ export class FlowchartViewerComponent extends Viewer{
   //
   //  port dragging to link
   //
-  _startPort: InputPort|OutputPort;
-  _endPort: InputPort|OutputPort;
-  _linkMode: boolean = false;
-  mouse_pos = { 
-                start: {x: 0, y: 0}, 
-                current: {x: 0, y: 0}
-              }
+  portDragProp = { _startPort: undefined, 
+                   _endPort: undefined, 
+                   dragStart: {x: 0, y: 0},
+                   _linkMode: false, 
+                   _mouse_pos: { 
+                        start: {x: 0, y: 0}, 
+                        current: {x: 0, y: 0}
+                      }
+                 }
 
   portDragStart($event, port: InputPort|OutputPort, address: number[]){
 
       $event.stopPropagation();
 
       $event.dataTransfer.setDragImage( new Image(), 0, 0);
-      this._startPort = port; 
-      this._startPort['address'] = address;
-      this._linkMode = true;
+      this.portDragProp._startPort = port; 
+      this.portDragProp._startPort['address'] = address;
+      this.portDragProp._linkMode = true;
 
       let type: string;
       if(port instanceof InputPort){
@@ -399,10 +401,10 @@ export class FlowchartViewerComponent extends Viewer{
 
       let port_position =  this.getPortPosition(address[0], address[1], type);
 
-      this.mouse_pos.start = {x: port_position.x, y: port_position.y };
-      this.mouse_pos.current = {x: port_position.x, y: port_position.y };
+      this.portDragProp._mouse_pos.start = {x: port_position.x, y: port_position.y };
+      this.portDragProp._mouse_pos.current = {x: port_position.x, y: port_position.y };
       
-      this.dragStart = {x: $event.clientX, y: $event.clientY};
+      this.portDragProp.dragStart = {x: $event.clientX, y: $event.clientY};
   }
 
   portDragging($event, port: InputPort|OutputPort){
@@ -411,56 +413,56 @@ export class FlowchartViewerComponent extends Viewer{
 
       // todo: compute total offset of this div dynamically
       // urgent!
-      let relX: number = $event.clientX - this.dragStart.x; 
-      let relY: number = $event.clientY - this.dragStart.y;
+      let relX: number = $event.clientX - this.portDragProp.dragStart.x; 
+      let relY: number = $event.clientY - this.portDragProp.dragStart.y;
 
-      this.mouse_pos.current.x += relX/this.zoom; 
-      this.mouse_pos.current.y += relY/this.zoom; 
+      this.portDragProp._mouse_pos.current.x += relX/this.zoom; 
+      this.portDragProp._mouse_pos.current.y += relY/this.zoom; 
 
-      this.dragStart = {x: $event.clientX, y: $event.clientY}; 
+      this.portDragProp.dragStart = {x: $event.clientX, y: $event.clientY}; 
   }
 
   portDragEnd($event, port: InputPort|OutputPort){
 
       $event.stopPropagation();
 
-      let relX: number = $event.clientX - this.dragStart.x; 
-      let relY: number = $event.clientY - this.dragStart.y;
-      this.mouse_pos.current.x += relX; 
-      this.mouse_pos.current.y += relY; 
+      let relX: number = $event.clientX - this.portDragProp.dragStart.x; 
+      let relY: number = $event.clientY - this.portDragProp.dragStart.y;
+      this.portDragProp._mouse_pos.current.x += relX; 
+      this.portDragProp._mouse_pos.current.y += relY; 
       
-      this.dragStart = {x: 0, y: 0}; 
+      this.portDragProp.dragStart = {x: 0, y: 0}; 
 
-      this._startPort = undefined; 
-      this._endPort = undefined;
-      this._linkMode = false;
+      this.portDragProp._startPort = undefined; 
+      this.portDragProp._endPort = undefined;
+      this.portDragProp._linkMode = false;
   }
 
   portDrop($event, port: InputPort|OutputPort, address: number[]){
       
-      this._endPort = port; 
-      this._endPort["address"] = address;
+      this.portDragProp._endPort = port; 
+      this.portDragProp._endPort["address"] = address;
 
-      if(this._startPort !== undefined && this._endPort !== undefined){
+      if(this.portDragProp._startPort !== undefined && this.portDragProp._endPort !== undefined){
 
 
         let inputPort: number[]; 
         let outputPort: number[];
 
-        if( this._startPort instanceof InputPort ){
-          inputPort = this._startPort["address"];
+        if( this.portDragProp._startPort instanceof InputPort ){
+          inputPort = this.portDragProp._startPort["address"];
         }
 
-        if( this._startPort instanceof OutputPort ){
-          outputPort = this._startPort["address"];
+        if( this.portDragProp._startPort instanceof OutputPort ){
+          outputPort = this.portDragProp._startPort["address"];
         }
 
-        if( this._endPort instanceof InputPort ){
-          inputPort = this._endPort["address"];
+        if( this.portDragProp._endPort instanceof InputPort ){
+          inputPort = this.portDragProp._endPort["address"];
         }
 
-        if( this._endPort instanceof OutputPort ){
-          outputPort = this._startPort["address"];
+        if( this.portDragProp._endPort instanceof OutputPort ){
+          outputPort = this.portDragProp._startPort["address"];
         }
 
         if( inputPort !== undefined && outputPort !== undefined){
@@ -471,8 +473,8 @@ export class FlowchartViewerComponent extends Viewer{
         }
 
         // clear the variables
-        this._startPort = undefined; 
-        this._endPort = undefined;
+        this.portDragProp._startPort = undefined; 
+        this.portDragProp._endPort = undefined;
       }
   }
 
@@ -611,44 +613,10 @@ export class FlowchartViewerComponent extends Viewer{
     return path;
   }
 
-  edgeClicked(): void{
-    alert("Edge clicked");
-  }
-
-
-  updateNodeName($event): void{
-    let name: string =  $event.target.value.trim(); 
-    name = name.replace(/[^\w\[\]]/gi, '');
-
-    if(name.length == 0){
-      return;
-    }
-
-    // check no other node has the same name
-    let flag: boolean = false;
-    for(let i=0; i < this._nodes.length; i++){
-        if(this._nodes[i].getName() == name){
-          this.consoleService.addMessage("Node with this name already exists in the flowchart!");
-          flag = true;
-          break;
-        }
-    }
-
-    if(!flag){
-      this._selectedNode.setName(name);
-      this.flowchartService.update();
-    }
-    else{
-      $event.target.value = this._selectedNode.getName();
-    }
-
-  }
 
   saveNode(node: IGraphNode): void{
     this.flowchartService.saveNode(node);
   }
-
-
 
   //
   //

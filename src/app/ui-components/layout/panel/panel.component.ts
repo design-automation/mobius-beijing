@@ -20,7 +20,7 @@ export class PanelComponent extends Viewer implements OnInit{
   @Input() panel_id: string;
 
   _lsubscription: Subscription;
-  _selectedNodeName: string;
+  _selectedNodeName;
   active_viewer: string;
 
 
@@ -46,7 +46,7 @@ export class PanelComponent extends Viewer implements OnInit{
   }
 
   update(): void{
-    this._selectedNodeName = this.flowchartService.getSelectedNode().getName();
+    this._selectedNodeName = this.flowchartService.getSelectedNode().name;
   }
 
   updateView(){ 

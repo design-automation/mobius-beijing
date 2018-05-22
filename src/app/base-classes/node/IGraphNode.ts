@@ -5,13 +5,14 @@ import {IProcedure} from "../procedure/ProcedureModule";
 export interface IGraphNode{
 
 	position: number[];
+	name;
 
 	// prototype
-	getName(): string; 
+	// getName(): string; 
 	getId(): string;
 	getVersion(): number; 
 
-	setName(name: string): void;
+	//setName(name: string): void;
 
 	getType(): string; // id of another node - if undefined, means not derived from another
 	removeType(): void;

@@ -111,7 +111,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			});
 
 			// make function call and assign to variable of same name
-			fn_call = "let " + node.getName() +  "=" + node.getName() + node.getVersion() + "( " + param_values.join(", ") + " );" ;
+			fn_call = "let " + node.name +  "=" + node.name + node.getVersion() + "( " + param_values.join(", ") + " );" ;
 
 			if(node.isDisabled()){
 				fn_call = "/* " + fn_call + " */";
@@ -130,7 +130,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			}
 
 			// make function
-			fn_def += "function " + node.getName() + node.getVersion() + "( " + params.join(", ") + " )() \n" ;
+			fn_def += "function " + node.name + node.getVersion() + "( " + params.join(", ") + " )() \n" ;
 			
 			return fn_def;
 		}
@@ -161,7 +161,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			}
 
 			// make function
-			fn_code += "function " + node.getName() + node.getVersion() + "( " + params.join(", ") + " ) { \n" ;
+			fn_code += "function " + node.name + node.getVersion() + "( " + params.join(", ") + " ) { \n" ;
 			fn_code += ( initializations.length > 0 ? initializations.join(";\n") + ";\n" : "" );
 			
 			// add outputs 
@@ -209,7 +209,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 		}
 
 		getNodeOutputCode(node: IGraphNode, output_idx: number): string{
-			return node.getName() + "." + node.getOutputByIndex(output_idx).getName(); 
+			return node.name + "." + node.getOutputByIndex(output_idx).getName(); 
 		}
 
 		generateConnectionLine(destination_node: IGraphNode, destination_port: number, source_node: IGraphNode, source_port: number): string{
@@ -401,7 +401,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			str +=	this.getNodeCode(node, prodArr) + "\n" + 
 					this.getFunctionCall(node, [], true) + "\n" + 
-					"return " + node.getName() + ";" + "})(); \
+					"return " + node.name + ";" + "})(); \
 					";
 
 			let result: any;

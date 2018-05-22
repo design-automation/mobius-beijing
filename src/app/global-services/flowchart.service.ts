@@ -108,16 +108,11 @@ export class FlowchartService {
 
     if(message){
       this.loadFile(storageString);
-      /*if (confirm(message)) {
-         this.loadFile(storageString);
-      } else {
-          this.newFile();
-      }*/
     }
     else{
       this.consoleService.addMessage("Error loading file from memory", EConsoleMessageType.Error);
-     // // this.layoutService.showConsole();
-     this.switchViewer("console-viewer");
+      // // this.layoutService.showConsole();
+      this.switchViewer("console-viewer");
       this.newFile();
     }
   }
@@ -365,7 +360,7 @@ export class FlowchartService {
       for(let i=0; i < nodes.length; i++){
 
           let node_in_lib: IGraphNode = nodes[i];
-          if(node_in_lib["_name"] === node.getName()){
+          if(node_in_lib["_name"] === node.name){
             message = "Node with this name already exists in the library. Either delete existing\
             node from the library or rename your node and try again.";
             this.consoleService.addMessage(message);
