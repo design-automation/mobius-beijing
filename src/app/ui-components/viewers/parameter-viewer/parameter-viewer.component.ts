@@ -30,7 +30,11 @@ export class ParameterViewerComponent extends Viewer {
 
   	constructor(injector: Injector, private http: HttpClient){  
         super(injector, "parameter-viewer"); 
-     }
+    }
+
+    trackByFn(index, item) {
+      return item.getId(); // or item.id
+    }
 
   	ngOnInit() {
       this.update();
@@ -65,12 +69,12 @@ export class ParameterViewerComponent extends Viewer {
 
     getValue(port :InputPort): any{
 
-        if(port.getType() == InputPortTypes.Checkbox){
-          return port.getValue() || false;
-        }
-        else{
-          return (port.getValue() || " ");
-        }
+        // if(port.getType() == InputPortTypes.Checkbox){
+        //   return port.getValue() || false;
+        // }
+        // else{
+        //   return (port.getValue() || " ");
+        // }
 
     }
   	//

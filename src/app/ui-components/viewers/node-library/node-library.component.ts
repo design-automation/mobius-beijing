@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, Inject } from '@angular/core';
+import { Component, OnInit, Injector, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 
@@ -7,7 +7,8 @@ import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeMod
 @Component({
   selector: 'app-node-library',
   templateUrl: './node-library.component.html',
-  styleUrls: ['./node-library.component.scss']
+  styleUrls: ['./node-library.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NodeLibraryComponent extends Viewer{
 

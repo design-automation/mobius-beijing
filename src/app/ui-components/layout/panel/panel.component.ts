@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Injector,
          ViewChild, ViewContainerRef, 
-         ComponentFactoryResolver} from '@angular/core';
+         ComponentFactoryResolver, ChangeDetectionStrategy} from '@angular/core';
          
 import { LayoutService } from '../../../global-services/layout.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -12,7 +12,8 @@ import { Viewer } from '../../../base-classes/viz/Viewer';
 @Component({
   selector: 'app-panel',
   templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.scss']
+  styleUrls: ['./panel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PanelComponent extends Viewer implements OnInit{
 

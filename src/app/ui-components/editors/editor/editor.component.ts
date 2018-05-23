@@ -1,4 +1,4 @@
-import { Component,  Injector } from '@angular/core';
+import { Component,  Injector, ChangeDetectionStrategy } from '@angular/core';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
@@ -6,7 +6,8 @@ import { IGraphNode } from '../../../base-classes/node/NodeModule';
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss']
+  styleUrls: ['./editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditorComponent extends Viewer{
  

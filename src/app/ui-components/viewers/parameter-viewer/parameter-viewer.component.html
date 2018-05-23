@@ -15,13 +15,14 @@
 		</div>
 
 		<div class='paramater-container single-param-container'
-			 *ngFor="let inp of _inputs" >
+			 *ngFor="let inp of _inputs " >
 				<div class="param-name">
 					{{ inp.getName() }}
 				</div>
 
 				<!-- if input type == Input -->
-				<div class="param-value" *ngIf="inp.getType() == InputPortTypes.Input">
+				<div class="param-value" 
+					*ngIf="inp.getType() == InputPortTypes.Input">
 					<form  class='content'>
 						<mat-form-field>
 							<textarea matInput 

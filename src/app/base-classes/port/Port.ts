@@ -145,7 +145,9 @@ export abstract class Port implements IPort{
 
 	getValue(): any{
 
-		console.log("getting value");
+		if(this._type == InputPortTypes.FilePicker){
+			return "some-file";
+		}
 
 		let final;  
 

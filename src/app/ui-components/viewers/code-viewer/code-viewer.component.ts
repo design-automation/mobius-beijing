@@ -20,7 +20,7 @@ export class CodeViewerComponent extends Viewer {
 	}
 
 	update(): void{
-		this.code = js_beautify.js_beautify(this.flowchartService.getCode());
+		this.code = "Test";//js_beautify.js_beautify(this.flowchartService.getCode());
 	}
 
 	reset(): void{

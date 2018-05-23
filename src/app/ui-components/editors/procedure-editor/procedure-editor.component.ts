@@ -1,4 +1,4 @@
-import {Component, Injector, OnInit, ViewChild, HostListener} from '@angular/core';
+import {Component, Injector, OnInit, ViewChild, HostListener, ChangeDetectionStrategy} from '@angular/core';
 import {NgModel} from '@angular/forms';
 
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
@@ -21,7 +21,8 @@ export enum KEY_CODE {
 @Component({
   selector: 'app-procedure-editor',
   templateUrl: './procedure-editor.component.html',
-  styleUrls: ['./procedure-editor.component.scss']
+  styleUrls: ['./procedure-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProcedureEditorComponent extends Viewer implements OnInit{
 

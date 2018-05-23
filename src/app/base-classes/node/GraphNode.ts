@@ -41,12 +41,11 @@ export class GraphNode implements IGraphNode{
 	}
 
 	get name(){
-		console.log("Getting name")
 		return this._name;
 	}
 
 	set name(value: string){
-		this._name = name;
+		this._name = value;
 	}
 
 	//	

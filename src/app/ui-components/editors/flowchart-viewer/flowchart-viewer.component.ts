@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy, Injector, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { NgClass } from '@angular/common';
+import {  Component, OnInit, OnDestroy, 
+          Injector, ViewChild, ElementRef, HostListener,
+          Input } from '@angular/core';
+
+import { IFlowchart } from '../../../base-classes/flowchart/IFlowchart';
 
 import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
 import { Viewer } from '../../../base-classes/viz/Viewer';
-import { FlowchartService } from '../../../global-services/flowchart.service';
 import { ConsoleService } from '../../../global-services/console.service';
 
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -19,7 +21,9 @@ import {PublishSettingsComponent} from '../publish-settings/publish-settings.com
   templateUrl: './flowchart-viewer.component.html',
   styleUrls: ['./flowchart-viewer.component.scss']
 })
-export class FlowchartViewerComponent extends Viewer{
+export class FlowchartViewerComponent{
+
+  @Input() flowchart: IFlowchart;
 
   pan_mode: boolean = false;
   pan_init;
@@ -43,43 +47,6 @@ export class FlowchartViewerComponent extends Viewer{
   constructor(injector: Injector, 
     private consoleService: ConsoleService, 
     public dialog: MatDialog){  
-    super(injector, "FlowchartViewer");  
-
-    // bad bad bad!
-    /*let self = this;
-    document.addEventListener("keydown", function(e) {
-      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
-        e.preventDefault();
-        self.save(true);
-        //your implementation or function calls
-      }
-    }, false);*/
-
-  }
-
-  ngOnDestroy(){
-    this.consoleService = null;
-    this._nodes = null; 
-    this._edges = null;
-  }
-
-  reset(){ 
-
-    if( this.flowchartService.getNodes().length ){
-         this.update();
-    }
-    else{
-      this._selectedNode = undefined;
-      this._selectedNodeIndex = undefined;
-      this._selectedPortIndex = undefined;
-      this._nodes = [];
-      this._edges = [];
-    }
-
-  }
-
-  editNode(): void{
-    ////this.layoutService.toggleEditor();
   }
 
   deleteNode(node_index: number): void{

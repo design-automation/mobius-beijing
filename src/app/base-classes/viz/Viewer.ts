@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Injector} from '@angular/core';
 import { FlowchartService } from '../../global-services/flowchart.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -7,7 +7,7 @@ interface IViewer{
 	reset(): void;
 }
 
-export abstract class Viewer implements OnInit, OnDestroy, IViewer{
+export abstract class Viewer implements OnInit, OnDestroy, IViewer, OnChanges{
 
 	private _name: string;
 	private _description: string;
@@ -20,7 +20,10 @@ export abstract class Viewer implements OnInit, OnDestroy, IViewer{
 
 	protected panelOpenState: boolean = true;
 
-	constructor(injector: Injector, name?: string, description?: string, author?: string) { 
+	constructor(injector: Injector, 
+			name?: string, 
+			description?: string, 
+			author?: string) { 
 		this._name = name;
 		this._description = description; 
 		this._author = author;
@@ -32,8 +35,12 @@ export abstract class Viewer implements OnInit, OnDestroy, IViewer{
 		});
   	}
 
+  	ngOnChanges(){
+  		console.log(`${this._name} changed`);
+  	}
+
   	ngDoCheck(){
-  		
+  		console.log(`${this._name} do check`);
   	}
 
   	//
