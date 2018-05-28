@@ -795,7 +795,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
                 str += "const " + globals[g].name + " =" + globals[g].value + ";\n";
             }
         }
-        str += this.getNodeCode(node, prodArr) + "\n" +
+        str += this.getNodeCode(node, undefined /*prodArr*/) + "\n" +
             this.getFunctionCall(node, [], true) + "\n" +
             "return " + node.getName() + ";" + "})(); \
 					";
@@ -1053,8 +1053,10 @@ class Flowchart {
     disconnectNode(nodeIndex) {
         let _node = this.getNodeByIndex(nodeIndex);
         _node.getInputs().map(function (input) {
-            input.disconnect();
-            input.setComputedValue(undefined);
+            if (input.isConnected()) {
+                input.disconnect();
+                input.setComputedValue(undefined);
+            }
         });
         _node.getOutputs().map(function (output) {
             output.disconnect();
