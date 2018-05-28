@@ -135,7 +135,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return fn_def;
 		}
 
-		getNodeCode(node: IGraphNode, prodArr ?: number[], withoutFnOutput?: boolean): string{ 	
+		getNodeCode(node: IGraphNode, prodArr?: number, withoutFnOutput?: boolean): string{ 	
 			let nodeVars: string[] = [];
 			let fn_code :string = "";
 
@@ -242,7 +242,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return (nodeVars.indexOf( var_name ) > -1);
 		}
 
-		generateProcedureCode(procedure: IProcedure, nodeVars: string[]=[], prodFn ?: any, prodArr ?: number[]){
+		generateProcedureCode(procedure: IProcedure, nodeVars: string[]=[], prodFn ?: any, prodArr?: number){
 
 			// change based on type
 			let code: string; 
@@ -322,7 +322,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				}
 				else if(prod_type == ProcedureTypes.ElseControl){
 					statement = "else{";
-					code = "prodArr.push(" + procedure["id"] + ");\n" + code; 
+					code = "prodArr = (" + procedure["id"] + ");\n" + code; 
 				}
 				else if(prod_type == ProcedureTypes.ForLoopControl){
 					statement = "for ( let " + procedure.getLeftComponent().expression + " of " + procedure.getRightComponent().expression + "){"
@@ -352,7 +352,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			// add procedure id to track failing
 			if(prodArr && prod_type != ProcedureTypes.ElseControl){ 
-				code = "prodArr.push(" + procedure["id"] + ");\n" + code; 
+				code = "prodArr = (" + procedure["id"] + ");\n" + code; 
 			};
 
 			return code;
@@ -384,11 +384,11 @@ export class CodeGeneratorJS extends CodeGenerator{
 							__Mobius__Modules__: IModule[], 
 							print: Function, globals?: any): any{
 
-			let prodArr: number[] = [];
+			//let prodArr: number[] = [];
+			let prodArr: number = 1;
 
 			window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
 			window["__MOBIUS_PRINT__"] = print;
-
 
 			//let gis = this._modules["gis"];
 			let str: string = "(function(){";
@@ -399,7 +399,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 	 			}
 			}
 
-			str +=	this.getNodeCode(node, undefined/*prodArr*/) + "\n" + 
+			str +=	this.getNodeCode(node, prodArr) + "\n" + 
 					this.getFunctionCall(node, [], true) + "\n" + 
 					"return " + node.getName() + ";" + "})(); \
 					";
@@ -414,7 +414,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 				// Unexpected Identifier
 				// Unexpected token
-				let prodWithError: number = prodArr.pop(); 
+				let prodWithError: number = prodArr;//.pop(); 
 
 				let markError = function(prod: IProcedure, id: number){
 					if(prod["id"] && id && prod["id"] == id){
