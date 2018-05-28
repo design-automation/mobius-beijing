@@ -739,7 +739,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
             }
             else if (prod_type == __WEBPACK_IMPORTED_MODULE_1__procedure_ProcedureModule__["b" /* ProcedureTypes */].ElseControl) {
                 statement = "else{";
-                code = "prodArr.push(" + procedure["id"] + ");\n" + code;
+                code = "prodArr = (" + procedure["id"] + ");\n" + code;
             }
             else if (prod_type == __WEBPACK_IMPORTED_MODULE_1__procedure_ProcedureModule__["b" /* ProcedureTypes */].ForLoopControl) {
                 statement = "for ( let " + procedure.getLeftComponent().expression + " of " + procedure.getRightComponent().expression + "){";
@@ -764,7 +764,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
         }
         // add procedure id to track failing
         if (prodArr && prod_type != __WEBPACK_IMPORTED_MODULE_1__procedure_ProcedureModule__["b" /* ProcedureTypes */].ElseControl) {
-            code = "prodArr.push(" + procedure["id"] + ");\n" + code;
+            code = "prodArr = (" + procedure["id"] + ");\n" + code;
         }
         ;
         return code;
@@ -785,7 +785,8 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
         return prepend + port.getName() + " = " + port.getDefaultValue();
     }
     executeNode(node, params, __Mobius__Modules__, print, globals) {
-        let prodArr = [];
+        //let prodArr: number[] = [];
+        let prodArr = 1;
         window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
         window["__MOBIUS_PRINT__"] = print;
         //let gis = this._modules["gis"];
@@ -795,7 +796,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
                 str += "const " + globals[g].name + " =" + globals[g].value + ";\n";
             }
         }
-        str += this.getNodeCode(node, undefined /*prodArr*/) + "\n" +
+        str += this.getNodeCode(node, prodArr) + "\n" +
             this.getFunctionCall(node, [], true) + "\n" +
             "return " + node.getName() + ";" + "})(); \
 					";
@@ -807,7 +808,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
             node.hasError();
             // Unexpected Identifier
             // Unexpected token
-            let prodWithError = prodArr.pop();
+            let prodWithError = prodArr; //.pop(); 
             let markError = function (prod, id) {
                 if (prod["id"] && id && prod["id"] == id) {
                     prod.setError(true);
