@@ -399,7 +399,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 	 			}
 			}
 
-			str +=	this.getNodeCode(node, prodArr) + "\n" + 
+			str +=	this.getNodeCode(node, undefined/*prodArr*/) + "\n" + 
 					this.getFunctionCall(node, [], true) + "\n" + 
 					"return " + node.getName() + ";" + "})(); \
 					";
