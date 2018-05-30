@@ -3,6 +3,9 @@ import {OutputPortTypes} from "./OutputPortTypes";
 
 export interface IPort{
 
+	_hasDefault: boolean;
+	_hasComputed: boolean
+
 
 	getId(): string;
 	getType(): InputPortTypes|OutputPortTypes;
@@ -32,7 +35,7 @@ export interface IPort{
 	setDefaultValue(value: any): void; 
 	setComputedValue(value: any): void;
 
-	getValue(): any;
+	getValue(compress?: boolean): any;
 
 	reset(); 
 }
