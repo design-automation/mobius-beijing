@@ -35,7 +35,7 @@
 		&:hover{
 			.content{
 				flex-flow: row wrap;
-				height: auto !important;
+				height: auto; 
 			}
 			.controls{
 				display: flex;
@@ -55,7 +55,7 @@
 			//width: 100px;
 			display: flex;
 			flex-flow: row nowrap;
-			height: $fsize1;
+			height: auto;
 			font-size: $fsize2;
 			line-height: $fsize1;
 			justify-content: space-between;
@@ -63,7 +63,10 @@
 			margin: 2px 0px;
 			
 			.row{
-				height: 20px !important;
+				height: auto !important;
+			}
+			.hidden{
+				display: none !important;
 			}
 			span{
 				padding:0 !important;
