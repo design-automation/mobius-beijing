@@ -58,10 +58,10 @@
 							</div>	 -->
 						</div>			
 						<div class="controls">
-							<button mat-button (click)='openSettingsDialog(inp)'>
+							<button mat-button (click)='openSettingsDialog(inp)' tabindex="-1">
 								<mat-icon>settings</mat-icon>
 							</button>
-					        <button mat-button (click)='deletePort($event, "input", i)'>
+					        <button mat-button (click)='deletePort($event, "input", i)' tabindex="-1">
 					    		<mat-icon>delete</mat-icon>
     					    </button>
 						</div>
@@ -104,7 +104,7 @@
 						</div>
 						</div>
 						<div class="controls">
-					        <button mat-button (click)='deletePort($event, "output", o)'>
+					        <button mat-button (click)='deletePort($event, "output", o)' tabindex="-1">
 					    		<mat-icon>delete</mat-icon>
     					    </button>
 						</div>
