@@ -583,6 +583,7 @@ export class Flowchart implements IFlowchart{
 				continue;
 			}
 
+			console.log("executing node");
 			node.execute(code_generator, modules, print, gld);
 
 			this.updateDependentInputs(node, originalRank); 

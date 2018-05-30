@@ -4,7 +4,8 @@ import {OutputPortTypes} from "./OutputPortTypes";
 export interface IPort{
 
 	_hasDefault: boolean;
-	_hasComputed: boolean
+	_hasComputed: boolean;
+	_executionAddr: string;
 
 
 	getId(): string;

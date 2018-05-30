@@ -153,36 +153,44 @@ export abstract class Port implements IPort{
 		return this._default;
 	}
 
+
+	_executionAddr: string = undefined;
 	getValue(): any{
 
 		let final;  
 
-		if (this._computed !== undefined){
-			final = this._computed;
+		if(this._executionAddr !== undefined){
+			return this._executionAddr;
 		}
 		else{
-			final = this._default;
+			if (this._computed !== undefined){
+				final = this._computed;
+			}
+			else{
+				final = this._default;
+			}
 		}
 
-		if(this.getType() === InputPortTypes.FilePicker){
+		/*if(this.getType() === InputPortTypes.FilePicker){
 
 			try{
 				let _ = JSON.parse(final);
 			}
 			catch(ex){
-
+				console.log(ex);
 				try{
+					console.log(final);
 					final = JSON.stringify(final.split("\r")) + ".join('\\r')";
 				}
 				catch(ex){
 					// do nothing
 				}
-				//let arrOfStrings = final.split("\n");
-				//final = arrOfStrings + ".join(\"\\n\")" ;
-				//final = new Blob([final], {type : "text/plain"});
+			// 	//let arrOfStrings = final.split("\n");
+			// 	//final = arrOfStrings + ".join(\"\\n\")" ;
+			// 	//final = new Blob([final], {type : "text/plain"});
 			}
 				
-		}
+		}*/
 		
 		return final;
 	}

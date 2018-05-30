@@ -390,7 +390,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
 			window["__MOBIUS_PRINT__"] = print;
 
-			//let gis = this._modules["gis"];
+
 			let str: string = "(function(){";
 
 			if(globals){
@@ -407,7 +407,11 @@ export class CodeGeneratorJS extends CodeGenerator{
 			let result: any;
 
 			try{
+				console.log("script execution started: ", str.length);
+				// result =  Function('return ' + str )(); 
+				console.log(str);
 				result = eval(str);
+				console.log("script execution finsihed");
 			}
 			catch(ex){
 				node.hasError();

@@ -1,7 +1,7 @@
 import {IdGenerator} from '../misc/GUID';
 
 import {IProcedure, ProcedureFactory, ProcedureTypes} from "../procedure/ProcedureModule";
-import {InputPort, OutputPort} from "../port/PortModule";
+import {InputPort, OutputPort, InputPortTypes} from "../port/PortModule";
 import {ICodeGenerator, IModule} from "../code/CodeModule";
 
 import {IGraphNode} from './IGraphNode';
@@ -367,8 +367,12 @@ export class GraphNode implements IGraphNode{
 	//
 	execute(code_generator: ICodeGenerator, modules: IModule[], print: Function, globals?: any): void{
 
+		let window_params: string[] = [];
+
 		let params: any[] = [];
-		this.getInputs().map(function(i){ 
+		let self = this;
+
+		this.getInputs().map(function(i, index){ 
 			if(i.isFunction()){
 				let oNode: IGraphNode = i.getFnValue();
 				let codeString: string = code_generator.getNodeCode(oNode);
@@ -386,11 +390,22 @@ export class GraphNode implements IGraphNode{
 				params[i.getName()] = fn_def;
 			}
 			else{
-				params[i.getName()] = i.getValue(); 
+				
+				if(i.getType() === InputPortTypes.FilePicker){
+					let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
+					window[file_name] = i.getValue();
+					params[i.getName()] = "window[" + file_name + "]";
+					window_params.push("window[" + file_name + "]");
+					i._executionAddr =  "window['" + file_name + "']";;
+				}
+				else{
+					params[i.getName()] = i.getValue(); 
+				}
+
 			}
 		});
 
-		let self = this;
+		
 		this.getOutputs().map(function(o){
 			if(o.isFunction()){
 				let node_code: string =  code_generator.getNodeCode(self, undefined, true);
@@ -408,6 +423,13 @@ export class GraphNode implements IGraphNode{
 		}
 
 		this._hasExecuted = true;
+
+		// delete all files stored in window reference
+		window_params.map(function(filename){
+			delete window[filename];
+		})
+
+		this.getInputs().map( i => i._executionAddr = undefined );
 
 	}
 
