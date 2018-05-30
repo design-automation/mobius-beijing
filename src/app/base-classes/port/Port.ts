@@ -21,6 +21,9 @@ export abstract class Port implements IPort{
 	private _default: any = undefined;  
 	private _computed: any = undefined;
 
+	public _hasDefault: boolean;
+	public _hasComputed: boolean;
+
 	protected _isFunction: boolean = false;
 
 	constructor(name: string){ 
@@ -133,10 +136,17 @@ export abstract class Port implements IPort{
 
 	setDefaultValue(value: any): void{
 		this._default = value;
+
+		if(value !== undefined){
+			this._hasDefault = true;
+		}
 	}
 
 	setComputedValue(value: any): void{
 		this._computed = value;
+		if(value !== undefined){
+			this._hasComputed = true;
+		}
 	}
 
 	getDefaultValue(): any{
@@ -144,6 +154,7 @@ export abstract class Port implements IPort{
 	}
 
 	getValue(): any{
+
 		let final;  
 
 		if (this._computed !== undefined){
@@ -154,6 +165,7 @@ export abstract class Port implements IPort{
 		}
 
 		if(this.getType() === InputPortTypes.FilePicker){
+
 			try{
 				let _ = JSON.parse(final);
 			}
@@ -169,6 +181,7 @@ export abstract class Port implements IPort{
 				//final = arrOfStrings + ".join(\"\\n\")" ;
 				//final = new Blob([final], {type : "text/plain"});
 			}
+				
 		}
 		
 		return final;
