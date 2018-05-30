@@ -176,19 +176,19 @@
 														<button mat-button 
 															*ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'"
 															(click)="copyProcedure($event, prod, false)"
-															matTooltip="Cut Procedure Line">
+															matTooltip="Cut Procedure Line" tabindex="-1">
 															<mat-icon>content_cut</mat-icon>
 														</button>
 														<button mat-button 
 															*ngIf="prod.data.getType() != 'Else' && prod.data.getType() != 'If'"
 															(click)="copyProcedure($event, prod, true)"
-															matTooltip="Copy Procedure Line">
+															matTooltip="Copy Procedure Line" tabindex="-1">
 															<mat-icon>content_copy</mat-icon>
 														</button>
 														<button mat-button 
 														 	*ngIf="copiedProd && prod.data.getType() != 'IfElse'" 
 															(click)="pasteProcedure($event, prod)"
-															matTooltip="Paste Procedure">
+															matTooltip="Paste Procedure" tabindex="-1">
 															<mat-icon>content_paste</mat-icon>
 														</button>
 													</div>
