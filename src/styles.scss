@@ -149,6 +149,7 @@ split-gutter{
 	font-size: $fsize2 !important;
 	line-height: $fsize2 !important;
 	vertical-align: center !important;
+	margin-top: 7px !important;
 	margin-bottom: $fsize1 !important;
 	.node-content-wrapper{
 		width:100% !important;
@@ -158,6 +159,9 @@ split-gutter{
 		border-bottom: 1px solid $color2;
 		margin-bottom: 5px;
 		min-height: 18px;
+
+		padding-right: 15px !important;
+		box-sizing: border-box !important;
 		&:hover{
 			background-color: rgba(240,191,160,0.3) !important;
 			//margin-bottom: $fsize1 !important;

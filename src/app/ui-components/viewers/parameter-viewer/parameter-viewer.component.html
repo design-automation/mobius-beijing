@@ -13,8 +13,9 @@
 			<h4 *ngIf="_editable && _inputs.length">Parameters</h4>
 		</div>
 
-		<div class='paramater-container single-param-container'
-			 *ngFor="let inp of _inputs" >
+		<div class="p-container">
+			<div class='paramater-container single-param-container'
+				 *ngFor="let inp of _inputs" >
 				<div class="param-name">
 					{{ inp.getName() }}
 				</div>
@@ -61,7 +62,7 @@
 				</div>
 
 				<!-- if input type == FilePicker -->
-				<div class="param-value" 
+				<div class="param-value file-picker" 
 					*ngIf="inp.getType() == InputPortTypes.FilePicker">
 					<input type="file" id="file" (change)="handleFileInput($event.target.files, inp)">
 					<span *ngIf='inp._hasDefault && !inp._hasComputed'>(has default)</span>
@@ -82,18 +83,15 @@
 					<mat-checkbox #val (change)="updateComputedValue($event, inp, val.checked)" 
 					[checked]="inp.getValue()"></mat-checkbox>
 				</div>
+			</div>
 		</div>
-		
 		<button id="execute" 
-				*ngIf="!globals || _editable"
-				mat-raised-button 
-				color="accent" 
-				(click)="executeFlowchart($event)">
-				Execute Flowchart
-		</button>  
-	
+			*ngIf="!globals || _editable"
+			mat-raised-button 
+			color="accent" 
+			(click)="executeFlowchart($event)">
+			Execute Flowchart
+		</button> 	
 	</div>
-
-
 </div>
 
