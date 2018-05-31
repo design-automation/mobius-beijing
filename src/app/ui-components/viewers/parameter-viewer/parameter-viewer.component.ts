@@ -104,36 +104,55 @@ export class ParameterViewerComponent extends Viewer {
         this.flowchartService.execute();
     }
 
+    //
+    //
+    //
     processing = {value: false};
-    handleFileInput(fileList, input){
+    handleFileInput($event, input){
+
+      let fileList = $event.target.files;
       let file: File = fileList[0];
-      var reader = new FileReader();
-      let fs = this.flowchartService;
-      let ps = this.processing;
-      reader.onload = (function(reader)
-      {
-          return function()
-          {
-              let contents = reader.result;
+      let size = Math.round(file.size/10**6);
 
-              try{
-                contents = JSON.parse(contents);//Function('use strict; return ' + value);
-              }
-              catch(ex){
-                console.error("Not JSON");
-                // do nothing
-              }
+      let run_file = true;
+      if(size > 300){
+        run_file = confirm(`The file you are trying to load is ${size}MB and might cause unexpected crashes. Do you want to continue?`);
+      }
 
-              //fs.freeze = false;
-              ps.value = false;
-              input.setComputedValue(contents);
-              fs.update();
-          }
-      })(reader);
+      if(run_file){
+        var reader = new FileReader();
+        let fs = this.flowchartService;
+        let ps = this.processing;
+        reader.onload = (function(reader)
+        {
+            return function()
+            {
+                let contents = reader.result;
 
-      //fs.freeze = true;
-      ps.value = true;
-      reader.readAsText(file);
+                try{
+                  contents = JSON.parse(contents);//Function('use strict; return ' + value);
+                }
+                catch(ex){
+                  console.error("Not JSON");
+                  // do nothing
+                }
+
+                //fs.freeze = false;
+                ps.value = false;
+                input.setComputedValue(contents);
+                fs.update();
+            }
+        })(reader);
+
+        //fs.freeze = true;
+        ps.value = true;
+        reader.readAsText(file);
+      }
+      else{
+        // reset
+        //$event.target.files = [];
+        $event.target.value = '';
+      }
     
     }
 

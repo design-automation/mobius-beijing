@@ -64,7 +64,7 @@
 				<!-- if input type == FilePicker -->
 				<div class="param-value file-picker" 
 					*ngIf="inp.getType() == InputPortTypes.FilePicker">
-					<input type="file" id="file" (change)="handleFileInput($event.target.files, inp)">
+					<input type="file" id="file" (change)="handleFileInput($event, inp)">
 					<span *ngIf='inp._hasDefault && !inp._hasComputed'>(has default)</span>
 					<span *ngIf='inp._hasComputed'>(file loaded)</span>
 				</div>
