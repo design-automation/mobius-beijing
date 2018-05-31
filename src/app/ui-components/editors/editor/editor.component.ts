@@ -12,6 +12,7 @@ export class EditorComponent extends Viewer{
  
   _selectedNode: IGraphNode; 
   _moduleList = [];
+  _freeze: boolean;
 
   isVisible: boolean = false;
 
@@ -19,8 +20,13 @@ export class EditorComponent extends Viewer{
     super(injector, "Editor");  
   }
 
+  ngOnInit(){
+    this._freeze = this.flowchartService.freeze;
+  }
+
   update(){
     this._selectedNode = this.flowchartService.getSelectedNode();
+    this._freeze = this.flowchartService.freeze;
 
     if(this._selectedNode == undefined){
       this.isVisible = false;

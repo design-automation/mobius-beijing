@@ -104,22 +104,35 @@ export class ParameterViewerComponent extends Viewer {
         this.flowchartService.execute();
     }
 
+    processing = {value: false};
     handleFileInput(fileList, input){
       let file: File = fileList[0];
       var reader = new FileReader();
       let fs = this.flowchartService;
+      let ps = this.processing;
       reader.onload = (function(reader)
       {
           return function()
           {
-              var contents = reader.result;
-              /*var lines = contents.split('\n');
-              contents = lines.join("\\\n");*/
+              let contents = reader.result;
+
+              try{
+                contents = JSON.parse(contents);//Function('use strict; return ' + value);
+              }
+              catch(ex){
+                console.error("Not JSON");
+                // do nothing
+              }
+
+              //fs.freeze = false;
+              ps.value = false;
               input.setComputedValue(contents);
               fs.update();
           }
       })(reader);
 
+      //fs.freeze = true;
+      ps.value = true;
       reader.readAsText(file);
     
     }

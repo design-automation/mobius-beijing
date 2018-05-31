@@ -85,13 +85,17 @@
 				</div>
 			</div>
 		</div>
+
 		<button id="execute" 
 			*ngIf="!globals || _editable"
 			mat-raised-button 
 			color="accent" 
+			[disabled]='processing.value'
 			(click)="executeFlowchart($event)">
-			Execute Flowchart
+			<span *ngIf='!processing.value'>Execute Flowchart</span>
+			<span *ngIf='processing.value'>Processing...</span>
 		</button> 	
+	
 	</div>
 </div>
 

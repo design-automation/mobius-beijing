@@ -43,6 +43,8 @@ export class FlowchartService {
 
   private _savedNodes: IGraphNode[] = [];
 
+  private _freeze: boolean = false;
+
   private check(){
     return this._flowchart != undefined;
   }
@@ -55,6 +57,14 @@ export class FlowchartService {
       //this.checkSavedFile();
       //this.autoSave(60*5);
   };
+
+  get freeze(){
+    return this._freeze;
+  }
+
+  set freeze(value){
+    this._freeze = value;
+  }
 
   getCodeGenerator(): ICodeGenerator{
     return this.code_generator;

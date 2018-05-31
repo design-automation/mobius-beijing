@@ -147,6 +147,8 @@ export abstract class Port implements IPort{
 		if(value !== undefined){
 			this._hasComputed = true;
 		}
+		
+
 	}
 
 	getDefaultValue(): any{
@@ -160,6 +162,7 @@ export abstract class Port implements IPort{
 		let final;  
 
 		if(this._executionAddr !== undefined){
+			console.log("Sending execution address");
 			return this._executionAddr;
 		}
 		else{
