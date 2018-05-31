@@ -1,3 +1,45 @@
 .globals-viewer{
 	background-color: red;
 }	
+
+
+#param-container-cesium{
+	overflow: hidden !important;
+	.p-container{
+		height: 100%;
+		overflow-y: auto !important;
+		.paramater-container{
+			display: flex;
+			flex-flow: row nowrap !important;
+			flex-grow: 0;
+			flex-shrink: 0;
+			height: auto;
+			.param-name{
+				width: 10%;
+				flex-grow: 0;
+				flex-shrink:0;
+				height: auto !important;
+			}
+			.param-value{
+				display: flex;
+				flex-flow: row nowrap !important;
+				justify-content: space-between;
+				textarea{
+					padding: 0px 2px;
+					padding-top: 4px; 
+					text-align: justify;
+					line-height: $fsize1;
+					box-sizing: border-box;
+				}
+				small{
+					background-color: white;
+					border: 1px solid $color1;
+				}
+				input{
+					background-color: white;
+					border-style: none;
+				}
+			}
+		}
+	}
+}
