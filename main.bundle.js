@@ -1763,18 +1763,42 @@ class GraphNode {
         let window_params = [];
         let params = [];
         let self = this;
+        let live_data_downloads = 0;
         this.getInputs().map(function (i, index) {
-            if (i.isFunction()) {
+            // if any of the inputs is a web url, get data first
+            if (i.getType() == __WEBPACK_IMPORTED_MODULE_2__port_PortModule__["b" /* InputPortTypes */].URL) {
+                live_data_downloads++;
+                let urlString = i.getOpts().url;
+                fetch(urlString)
+                    .then((res) => res.text())
+                    .then((out) => {
+                    let val = out;
+                    try {
+                        val = JSON.parse(out);
+                    }
+                    catch (ex) {
+                    }
+                    i.setComputedValue(val);
+                    // file processing
+                    let file_name = "MOBIUS_FILES_" + self._id + "I" + index;
+                    window[file_name] = i.getValue();
+                    params[i.getName()] = "window[" + file_name + "]";
+                    window_params.push("window[" + file_name + "]");
+                    i._executionAddr = "window['" + file_name + "']";
+                    ;
+                    live_data_downloads--;
+                    // when last of all data has downloaded
+                    if (live_data_downloads == 0) {
+                        outputProcessing();
+                    }
+                })
+                    .catch(err => { alert("Oops...Error fetching data from URL."); throw err; });
+            }
+            else if (i.isFunction()) {
                 let oNode = i.getFnValue();
                 let codeString = code_generator.getNodeCode(oNode);
                 // converts string to functin
                 let fn_def = Function("return " + codeString)();
-                // define a new function whicih has Modules in its scope
-                // extremely possible memory leak
-                /*let wrapper_fn = function(){
-                    let value = fn_def.bind({Modules: modules}).apply(arguments);
-                    return value;
-                }*/
                 params[i.getName()] = fn_def;
             }
             else {
@@ -1791,25 +1815,31 @@ class GraphNode {
                 }
             }
         });
-        this.getOutputs().map(function (o) {
-            if (o.isFunction()) {
-                let node_code = code_generator.getNodeCode(self, undefined, true);
-                o.setDefaultValue(node_code);
+        // this code runs only after live_data_downloads = 0;
+        function outputProcessing() {
+            self.getOutputs().map(function (o) {
+                if (o.isFunction()) {
+                    let node_code = code_generator.getNodeCode(self, undefined, true);
+                    o.setDefaultValue(node_code);
+                }
+            });
+            // use code generator to execute code
+            let result = code_generator.executeNode(self, params, modules, print, globals);
+            // add results to self node
+            for (let n = 0; n < self._outputs.length; n++) {
+                let output_port = self._outputs[n];
+                output_port.setComputedValue(result[output_port.getName()]);
             }
-        });
-        // use code generator to execute code
-        let result = code_generator.executeNode(this, params, modules, print, globals);
-        // add results to this node
-        for (let n = 0; n < this._outputs.length; n++) {
-            let output_port = this._outputs[n];
-            output_port.setComputedValue(result[output_port.getName()]);
+            self._hasExecuted = true;
+            // delete all files stored in window reference
+            window_params.map(function (filename) {
+                delete window[filename];
+            });
+            self.getInputs().map(i => i._executionAddr = undefined);
         }
-        this._hasExecuted = true;
-        // delete all files stored in window reference
-        window_params.map(function (filename) {
-            delete window[filename];
-        });
-        this.getInputs().map(i => i._executionAddr = undefined);
+        if (live_data_downloads == 0) {
+            outputProcessing();
+        }
     }
     getResult() {
         let final_values = {};
@@ -11048,7 +11078,7 @@ ParameterSettingsDialogComponent = __decorate([
 /***/ "./src/app/ui-components/editors/parameter-editor/parameter-settings-dialog.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Input Name: {{input.getName()}}</h2>\r\n<h3>Input Type: {{input.getType()}}</h3>\r\n\r\n<div *ngIf='type == inputPortTypes.Input'>\r\n\r\n\t<form class=\"example-form\">\r\n\t  <mat-form-field class=\"example-full-width\">\r\n\t    <textarea matInput \r\n\t    \t\tmatTextareaAutosize \r\n\t\t\t\tmatAutosizeMinRows=\"2\"\r\n    \t\t\tmatAutosizeMaxRows=\"8\" \r\n    \t\t\tplaceholder=\"Default Value\" \r\n    \t\t\tvalue=\"{{ default(input) }}\"\r\n    \t\t\t(change)=\"updateDefaultValue($event, input)\">\r\n\t\t</textarea>\r\n\t  </mat-form-field>\r\n\t</form>\r\n\t\r\n</div>\r\n\r\n<div *ngIf='type == inputPortTypes.Slider'>\r\n\t<form class=\"example-form\"\r\n\t\t\tstyle=\"display: flex; flex-direction: column;\">\r\n\t\t  <mat-form-field class=\"example-full-width\" style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Minimum Value\" \r\n\t\t    \t(change)=\"updateSliderOpts($event, 'min')\" \r\n\t\t    \tvalue=\"{{ opts.min }}\">\r\n\t\t    <!-- <mat-hint>Enter the minimum slider value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\t\t  <mat-form-field class=\"example-full-width\"  style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Maximum Value\" \r\n\t\t    \t(change)=\"updateSliderOpts($event, 'max')\" \r\n\t\t    \tvalue=\"{{ opts.max }}\">\r\n\t\t  \t<!-- <mat-hint>Enter the maximum slider value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\t\t  <mat-form-field class=\"example-full-width\"  style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Step\" \r\n\t\t    \t(change)=\"updateSliderOpts($event, 'step')\" \r\n\t\t    \tvalue=\"{{ opts.step }}\">\r\n\t\t  \t<!-- <mat-hint>Enter the step size value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\t\t  <mat-form-field class=\"example-full-width\"  style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Default Value\" \r\n\t\t    (change)=\"updateDefaultValue($event, input)\" \r\n\t\t    value=\"{{ default(input) }}\">\r\n\t\t  \t<!-- <mat-hint>Enter the default value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\r\n\r\n\t</form>\r\n</div>\r\n\r\n\r\n<div *ngIf='type == inputPortTypes.FilePicker'>\r\n\t<!-- if input type == FilePicker -->\r\n\t<div class=\"value\">\r\n\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, input)\">\r\n\t\t<br><br>\r\n\t\t<div *ngIf=\"input.getDefaultValue()\">\r\n\t\t\t<h3>Default File:</h3> \r\n\t\t\t<div style=\"max-height: 150px; overflow-y: auto\">File Loaded<!-- {{input.getDefaultValue()}} --></div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n\r\n<div *ngIf='type == inputPortTypes.URL'>\r\n\t<!-- if input type == FilePicker -->\r\n\t<!-- <div class=\"value\">\r\n\t\thttp://<input type=\"text\" [(ngModel)]=\"url\">\r\n\t\t<button (click)=\"handleURL($event, input)\">Get Data</button>\r\n\t\t<button *ngIf=\"input.getDefaultValue()\" (click)=\"clear($event, input)\">Clear</button>\r\n\t\t<br><br>\r\n\t\t<div *ngIf=\"input.getDefaultValue()\">\r\n\t\t\t<h3>Default File:</h3>\r\n\r\n\t\t\t<p>Loaded file!</p>\r\n\t\t</div>\r\n\t</div> -->\r\n\tURL:\r\n\t<small><input type=\"text\" value=\"{{input.getOpts().url}}\" (change)=\"updateURL($event, input)\" #url></small>\r\n\t<button (click)=\"getDataFromURL($event, input)\">Get Data</button>\r\n</div>\r\n\r\n\r\n<!-- checkbox -->\r\n<div *ngIf='type == inputPortTypes.Checkbox'>\r\n\t<div>\r\n\t\t<mat-checkbox #val \r\n\t\t(change)=\"input.setDefaultValue(val.checked)\" \r\n\t\t[checked]=\"input.getDefaultValue()\"></mat-checkbox>\r\n\t</div>\r\n</div>\r\n\r\n\r\n<!-- <div *ngIf='type == inputPortTypes.File'>\r\n\tSunt dolor in officia veniam id tempor occaecat sint ea exercitation ut aliqua esse eu laborum elit commodo ea amet magna id consequat dolor occaecat esse id tempor labore nulla nisi velit mollit voluptate.\r\n</div>\r\n\r\n<div *ngIf='type == inputPortTypes.Input'>\r\n\tSunt dolor in officia veniam id tempor occaecat sint ea exercitation ut aliqua esse eu laborum elit commodo ea amet magna id consequat dolor occaecat esse id tempor labore nulla nisi velit mollit voluptate.\r\n</div> -->\r\n<!-- \r\n<div class=\"options\" style=\"width: 100%\" *ngIf='inp.getType() == inputPortOpts[1]'>\r\n\tMin: <input/><br>\r\n\tMax: <input/><br>\r\n\tStep: <input/><br>\r\n\tvalue: <input/><br>\r\n</div> -->"
+module.exports = "<h2>Input Name: {{input.getName()}}</h2>\r\n<h3>Input Type: {{input.getType()}}</h3>\r\n\r\n<div *ngIf='type == inputPortTypes.Input'>\r\n\r\n\t<form class=\"example-form\">\r\n\t  <mat-form-field class=\"example-full-width\">\r\n\t    <textarea matInput \r\n\t    \t\tmatTextareaAutosize \r\n\t\t\t\tmatAutosizeMinRows=\"2\"\r\n    \t\t\tmatAutosizeMaxRows=\"8\" \r\n    \t\t\tplaceholder=\"Default Value\" \r\n    \t\t\tvalue=\"{{ default(input) }}\"\r\n    \t\t\t(change)=\"updateDefaultValue($event, input)\">\r\n\t\t</textarea>\r\n\t  </mat-form-field>\r\n\t</form>\r\n\t\r\n</div>\r\n\r\n<div *ngIf='type == inputPortTypes.Slider'>\r\n\t<form class=\"example-form\"\r\n\t\t\tstyle=\"display: flex; flex-direction: column;\">\r\n\t\t  <mat-form-field class=\"example-full-width\" style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Minimum Value\" \r\n\t\t    \t(change)=\"updateSliderOpts($event, 'min')\" \r\n\t\t    \tvalue=\"{{ opts.min }}\">\r\n\t\t    <!-- <mat-hint>Enter the minimum slider value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\t\t  <mat-form-field class=\"example-full-width\"  style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Maximum Value\" \r\n\t\t    \t(change)=\"updateSliderOpts($event, 'max')\" \r\n\t\t    \tvalue=\"{{ opts.max }}\">\r\n\t\t  \t<!-- <mat-hint>Enter the maximum slider value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\t\t  <mat-form-field class=\"example-full-width\"  style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Step\" \r\n\t\t    \t(change)=\"updateSliderOpts($event, 'step')\" \r\n\t\t    \tvalue=\"{{ opts.step }}\">\r\n\t\t  \t<!-- <mat-hint>Enter the step size value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\t\t  <mat-form-field class=\"example-full-width\"  style=\"height: 45px;\">\r\n\t\t    <input matInput placeholder=\"Default Value\" \r\n\t\t    (change)=\"updateDefaultValue($event, input)\" \r\n\t\t    value=\"{{ default(input) }}\">\r\n\t\t  \t<!-- <mat-hint>Enter the default value</mat-hint> -->\r\n\t\t  </mat-form-field>\r\n\r\n\r\n\r\n\t</form>\r\n</div>\r\n\r\n\r\n<div *ngIf='type == inputPortTypes.FilePicker'>\r\n\t<!-- if input type == FilePicker -->\r\n\t<div class=\"value\">\r\n\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event.target.files, input)\">\r\n\t\t<br><br>\r\n\t\t<div *ngIf=\"input.getDefaultValue()\">\r\n\t\t\t<h3>Default File:</h3> \r\n\t\t\t<div style=\"max-height: 150px; overflow-y: auto\">File Loaded<!-- {{input.getDefaultValue()}} --></div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n\r\n<div *ngIf='type == inputPortTypes.URL'>\r\n\t<!-- if input type == FilePicker -->\r\n\t<!-- <div class=\"value\">\r\n\t\thttp://<input type=\"text\" [(ngModel)]=\"url\">\r\n\t\t<button (click)=\"handleURL($event, input)\">Get Data</button>\r\n\t\t<button *ngIf=\"input.getDefaultValue()\" (click)=\"clear($event, input)\">Clear</button>\r\n\t\t<br><br>\r\n\t\t<div *ngIf=\"input.getDefaultValue()\">\r\n\t\t\t<h3>Default File:</h3>\r\n\r\n\t\t\t<p>Loaded file!</p>\r\n\t\t</div>\r\n\t</div> -->\r\n\tURL:\r\n\t<small><input type=\"text\" value=\"{{input.getOpts().url}}\" (change)=\"updateURL($event, input)\" #url></small>\r\n\t<!-- <button (click)=\"getDataFromURL($event, input)\">Get Data</button> -->\r\n</div>\r\n\r\n\r\n<!-- checkbox -->\r\n<div *ngIf='type == inputPortTypes.Checkbox'>\r\n\t<div>\r\n\t\t<mat-checkbox #val \r\n\t\t(change)=\"input.setDefaultValue(val.checked)\" \r\n\t\t[checked]=\"input.getDefaultValue()\"></mat-checkbox>\r\n\t</div>\r\n</div>\r\n\r\n\r\n<!-- <div *ngIf='type == inputPortTypes.File'>\r\n\tSunt dolor in officia veniam id tempor occaecat sint ea exercitation ut aliqua esse eu laborum elit commodo ea amet magna id consequat dolor occaecat esse id tempor labore nulla nisi velit mollit voluptate.\r\n</div>\r\n\r\n<div *ngIf='type == inputPortTypes.Input'>\r\n\tSunt dolor in officia veniam id tempor occaecat sint ea exercitation ut aliqua esse eu laborum elit commodo ea amet magna id consequat dolor occaecat esse id tempor labore nulla nisi velit mollit voluptate.\r\n</div> -->\r\n<!-- \r\n<div class=\"options\" style=\"width: 100%\" *ngIf='inp.getType() == inputPortOpts[1]'>\r\n\tMin: <input/><br>\r\n\tMax: <input/><br>\r\n\tStep: <input/><br>\r\n\tvalue: <input/><br>\r\n</div> -->"
 
 /***/ }),
 
@@ -12897,7 +12927,7 @@ NodeLibraryComponent = __decorate([
 /***/ "./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" \r\n\t\t\t*ngIf='!globals && (_inputs == undefined || _inputs.length == 0)'>\r\n\t\t\tNo node selected \r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3 class=\"flo_title\">{{flowchartService.getFlowchart().name | simplename }}</h3>\r\n\t\t\t<div [innerHTML]=\"flowchartService.getFlowchart().description\"></div>\r\n\t\t\t<h4 *ngIf=\"_editable && _inputs.length\">Parameters</h4>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"p-container\">\r\n\t\t\t<div class='paramater-container single-param-container'\r\n\t\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\t\t\t\t<div class=\"param-name\">\r\n\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == Input -->\r\n\t\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t\t            \t\t</textarea>\r\n\t\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div> \r\n\r\n\t\t\t\t<!-- if input type == Slider -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t\t<div class=\"param-value file-picker\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event, inp)\">\r\n\t\t\t\t\t<span *ngIf='inp._hasDefault && !inp._hasComputed'>(has default)</span>\r\n\t\t\t\t\t<span *ngIf='inp._hasComputed'>(file loaded)</span>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == URL -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" #url disabled></small>\r\n\t\t\t\t\t<button (click)=\"getDataFromURL($event, inp)\" style=\"max-height: 25px;\">Get Data</button>\r\n\t\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t\t</div>\r\n\t \r\n\t\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\r\n\t\t<button id=\"execute\" \r\n\t\t\t*ngIf=\"!globals || _editable\"\r\n\t\t\tmat-raised-button \r\n\t\t\tcolor=\"accent\" \r\n\t\t\t[disabled]='processing.value'\r\n\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\t<span *ngIf='!processing.value'>Execute Flowchart</span>\r\n\t\t\t<span *ngIf='processing.value'>Processing...</span>\r\n\t\t</button> \t\r\n\t\r\n\t</div>\r\n</div>\r\n\r\n"
+module.exports = "<div class=\"viewer\" [class.globals-viewer]=\"globals\">\r\n\r\n\t<div class=\"container\" id=\"param-container-cesium\"  #cesium_param_container>\r\n\r\n\t\t<div class=\"default\" \r\n\t\t\t*ngIf='!globals && (_inputs == undefined || _inputs.length == 0)'>\r\n\t\t\tNo node selected \r\n\t\t</div>\r\n \r\n\t\t<div class=\"param-in-viewer\" *ngIf=\"globals\">\r\n\t\t\t<h3 class=\"flo_title\">{{flowchartService.getFlowchart().name | simplename }}</h3>\r\n\t\t\t<div [innerHTML]=\"flowchartService.getFlowchart().description\"></div>\r\n\t\t\t<h4 *ngIf=\"_editable && _inputs.length\">Parameters</h4>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"p-container\">\r\n\t\t\t<div class='paramater-container single-param-container'\r\n\t\t\t\t *ngFor=\"let inp of _inputs\" >\r\n\t\t\t\t<div class=\"param-name\">\r\n\t\t\t\t\t{{ inp.getName() }}\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == Input -->\r\n\t\t\t\t<div class=\"param-value\" *ngIf=\"inp.getType() == InputPortTypes.Input\">\r\n\t\t\t\t\t<form  class='content'>\r\n\t\t\t\t\t\t<mat-form-field>\r\n\t\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t\t            \t\t</textarea>\r\n\t\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div> \r\n\r\n\t\t\t\t<!-- if input type == Slider -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Slider\">\r\n\t\t\t\t\t<mat-form-field class=\"curr-value\">\r\n\t\t\t\t\t\t<textarea matInput \r\n\t\t\t\t\t\t\tmatTextareaAutosize \r\n\t\t\t\t\t\t\tmatAutosizeMinRows=\"1\"\r\n\t            \t\t\tmatAutosizeMaxRows=\"5\" \r\n\t            \t\t\t(change)=\"updateComputedValue($event, inp)\"\r\n\t            \t\t\tvalue=\"{{ getValue(inp) }}\">\r\n\t            \t\t</textarea>\r\n\t\t\t\t\t</mat-form-field>\r\n\t\t\t\t\t<div class=\"slider-container\" *ngIf=\"el.nativeElement.offsetWidth > 200\">\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().min}}</span>\r\n\t\t\t\t\t\t<mat-slider min=\"{{inp.getOpts().min}}\" \r\n\t\t\t\t\t\t\t\t\tmax=\"{{inp.getOpts().max}}\" \r\n\t\t\t\t\t\t\t\t\tstep=\"{{inp.getOpts().step}}\" \r\n\t\t\t\t\t\t\t\t\t[thumb-label]=\"true\"\r\n\t\t\t\t\t\t\t\t\t#val\r\n\t\t\t\t\t\t\t\t\t[(ngModel)]=\"val.value\"\r\n\t\t\t\t\t\t\t\t\t(change)=\"updateComputedValue($event, inp, val.value)\"\r\n\t\t\t\t\t\t\t\t\tvalue=\"{{ getValue(inp) }}\"></mat-slider>\r\n\t\t\t\t\t\t<span class='content'>{{inp.getOpts().max}}</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == FilePicker -->\r\n\t\t\t\t<div class=\"param-value file-picker\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.FilePicker\">\r\n\t\t\t\t\t<input type=\"file\" id=\"file\" (change)=\"handleFileInput($event, inp)\">\r\n\t\t\t\t\t<span *ngIf='inp._hasDefault && !inp._hasComputed'>(has default)</span>\r\n\t\t\t\t\t<span *ngIf='inp._hasComputed'>(file loaded)</span>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<!-- if input type == URL -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.URL\">\r\n\t\t\t\t\t<small><input type=\"text\" value=\"{{inp.getOpts().url}}\" (change)=\"updateURL($event, inp)\"></small>\r\n\t\t\t\t\t<span *ngIf='inp.getValue()'>(has data)</span>\r\n\t\t\t\t</div>\r\n\t \r\n\t\t\t\t<!-- if input type == Checkbox -->\r\n\t\t\t\t<div class=\"param-value\" \r\n\t\t\t\t\t*ngIf=\"inp.getType() == InputPortTypes.Checkbox\">\r\n\t\t\t\t\t<mat-checkbox #val (change)=\"updateComputedValue($event, inp, val.checked)\" \r\n\t\t\t\t\t[checked]=\"inp.getValue()\"></mat-checkbox>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\r\n\t\t<button id=\"execute\" \r\n\t\t\t*ngIf=\"!globals || _editable\"\r\n\t\t\tmat-raised-button \r\n\t\t\tcolor=\"accent\" \r\n\t\t\t[disabled]='processing.value'\r\n\t\t\t(click)=\"executeFlowchart($event)\">\r\n\t\t\t<span *ngIf='!processing.value'>Execute Flowchart</span>\r\n\t\t\t<span *ngIf='processing.value'>Processing...</span>\r\n\t\t</button> \t\r\n\t\r\n\t</div>\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -12953,6 +12983,16 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
         ;
         if (this.globals) {
             this._inputs = this.flowchartService.getFlowchart().globals;
+        }
+    }
+    updateURL($event, input) {
+        let value;
+        if ($event.srcElement) {
+            value = $event.srcElement.value;
+            value = value.trim();
+            if (value.length != 0) {
+                input.setOpts({ url: value });
+            }
         }
     }
     updateComputedValue($event, input, value) {
