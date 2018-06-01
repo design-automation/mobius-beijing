@@ -72,8 +72,7 @@
 				<!-- if input type == URL -->
 				<div class="param-value" 
 					*ngIf="inp.getType() == InputPortTypes.URL">
-					<small><input type="text" value="{{inp.getOpts().url}}" #url disabled></small>
-					<button (click)="getDataFromURL($event, inp)" style="max-height: 25px;">Get Data</button>
+					<small><input type="text" value="{{inp.getOpts().url}}" (change)="updateURL($event, inp)"></small>
 					<span *ngIf='inp.getValue()'>(has data)</span>
 				</div>
 	 

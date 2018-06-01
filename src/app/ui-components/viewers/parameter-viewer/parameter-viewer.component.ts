@@ -44,6 +44,17 @@ export class ParameterViewerComponent extends Viewer {
 
     }
 
+    updateURL($event, input){
+      let value;
+      if($event.srcElement){
+        value = $event.srcElement.value;
+        value = value.trim();
+        if(value.length != 0){
+          input.setOpts({url: value});
+        }
+      }
+    }
+
     updateComputedValue($event, input, value?: any): void{
 
       // for input

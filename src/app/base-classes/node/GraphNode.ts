@@ -372,25 +372,53 @@ export class GraphNode implements IGraphNode{
 		let params: any[] = [];
 		let self = this;
 
+		let live_data_downloads = 0;
+
 		this.getInputs().map(function(i, index){ 
-			if(i.isFunction()){
+
+			// if any of the inputs is a web url, get data first
+			if(i.getType() == InputPortTypes.URL){
+				live_data_downloads++;
+				let urlString: any = i.getOpts().url;
+				fetch(urlString)
+				.then((res) => res.text())
+				.then((out) => {
+					let val = out;
+
+					try{
+						val = JSON.parse(out);
+					}
+					catch(ex){
+
+					}
+
+					i.setComputedValue(val);
+					// file processing
+					let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
+					window[file_name] = i.getValue();
+					params[i.getName()] = "window[" + file_name + "]";
+					window_params.push("window[" + file_name + "]");
+					i._executionAddr =  "window['" + file_name + "']";;
+
+					live_data_downloads--;
+
+					// when last of all data has downloaded
+					if(live_data_downloads == 0){
+						outputProcessing();
+					}
+
+				})
+				.catch(err => { alert("Oops...Error fetching data from URL."); throw err; });
+			}
+			else if(i.isFunction()){
 				let oNode: IGraphNode = i.getFnValue();
 				let codeString: string = code_generator.getNodeCode(oNode);
 
 				// converts string to functin
 				let fn_def = Function("return " + codeString)();
-
-				// define a new function whicih has Modules in its scope
-				// extremely possible memory leak
-				/*let wrapper_fn = function(){
-					let value = fn_def.bind({Modules: modules}).apply(arguments);
-					return value;
-				}*/
-
 				params[i.getName()] = fn_def;
 			}
 			else{
-				
 				if(i.getType() === InputPortTypes.FilePicker){
 					let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
 					window[file_name] = i.getValue();
@@ -401,35 +429,42 @@ export class GraphNode implements IGraphNode{
 				else{
 					params[i.getName()] = i.getValue(); 
 				}
-
 			}
+
 		});
 
-		
-		this.getOutputs().map(function(o){
-			if(o.isFunction()){
-				let node_code: string =  code_generator.getNodeCode(self, undefined, true);
-				o.setDefaultValue( node_code );
+		// this code runs only after live_data_downloads = 0;
+	    function outputProcessing(){
+			self.getOutputs().map(function(o){
+				if(o.isFunction()){
+					let node_code: string =  code_generator.getNodeCode(self, undefined, true);
+					o.setDefaultValue( node_code );
+				}
+			})
+
+			// use code generator to execute code
+			let result: any  = code_generator.executeNode(self, params, modules, print, globals);
+
+			// add results to self node
+			for( let n=0;  n < self._outputs.length; n++ ){
+				let output_port = self._outputs[n];
+				output_port.setComputedValue(result[output_port.getName()]);
 			}
-		})
 
-		// use code generator to execute code
-		let result: any  = code_generator.executeNode(this, params, modules, print, globals);
+			self._hasExecuted = true;
 
-		// add results to this node
-		for( let n=0;  n < this._outputs.length; n++ ){
-			let output_port = this._outputs[n];
-			output_port.setComputedValue(result[output_port.getName()]);
-		}
+			// delete all files stored in window reference
+			window_params.map(function(filename){
+				delete window[filename];
+			})
 
-		this._hasExecuted = true;
+			self.getInputs().map( i => i._executionAddr = undefined );
+	    }
 
-		// delete all files stored in window reference
-		window_params.map(function(filename){
-			delete window[filename];
-		})
 
-		this.getInputs().map( i => i._executionAddr = undefined );
+	    if(live_data_downloads == 0){
+	    	outputProcessing();
+	    }
 
 	}
 

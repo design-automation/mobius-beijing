@@ -147,8 +147,6 @@ export abstract class Port implements IPort{
 		if(value !== undefined){
 			this._hasComputed = true;
 		}
-		
-
 	}
 
 	getDefaultValue(): any{
