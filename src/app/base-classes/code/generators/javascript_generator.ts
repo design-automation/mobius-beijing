@@ -391,7 +391,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			window["__MOBIUS_PRINT__"] = print;
 
 
-			let str: string = "(function(){";
+			let str: string = "" //"(function(){";
 
 			if(globals){
 				for(let g=0; g < globals.length; g++){
@@ -401,8 +401,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			str +=	this.getNodeCode(node, prodArr) + "\n" + 
 					this.getFunctionCall(node, [], true) + "\n" + 
-					"return " + node.getName() + ";" + "})(); \
-					";
+					"return " + node.getName() + ";" 
+					//"})();";
 
 			let result: any;
 
@@ -410,7 +410,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 				console.log("script execution started: ", str.length);
 				// result =  Function('return ' + str )(); 
 				console.log(str);
-				result = eval(str);
+				result = (new Function('params', str))(params);
+				//result = eval(str);
 				console.log("script execution finsihed");
 			}
 			catch(ex){
