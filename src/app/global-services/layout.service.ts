@@ -15,6 +15,7 @@ import { ParameterViewerComponent } from "../ui-components/viewers/parameter-vie
 @Injectable()
 export class LayoutService {
 
+   
   	private layout = {
         useTransition: true,
         mode: 'Editor',
@@ -120,7 +121,6 @@ export class LayoutService {
     restore(panel_id: string): void{
       alert("To be implemented");
     }
-
 
 
     // functions

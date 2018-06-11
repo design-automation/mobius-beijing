@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LayoutService } from '../../../global-services/layout.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
+import { MobiusService } from '../../../global-services/mobius.service';
 
 @Component({
   selector: 'app-mobius-editor',
@@ -18,14 +19,23 @@ export class MobiusEditorComponent implements OnInit {
 	layout;
 	toggle;
     supported: boolean = false;
+    processing: boolean = false;
 
-    constructor(private layoutService: LayoutService, private flowchartService: FlowchartService){ 
+    constructor(private layoutService: LayoutService, 
+    			private flowchartService: FlowchartService, 
+    			private mobiusService: MobiusService){ 
 
     	let browser: string = this.checkBrowser();
     	if(browser == "Chrome"){
     		this.layout = layoutService.getAssets(); 
     		this.toggle = layoutService.toggleMode;
     		this.supported = true;
+    		this.processing = mobiusService.processing;
+    		let self = this;
+    		mobiusService.stateChangedEmitter().subscribe({
+    			next(value){ self.processing = value; console.log(`Message: ${value}`); },
+    			error(message){ console.log(message) }
+    		})
     	}
     	else{
     		alert("Oops... You seem to be using a browser not supported by Mobius. Please use Chrome.");

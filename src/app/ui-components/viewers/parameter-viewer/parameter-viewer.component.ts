@@ -5,6 +5,8 @@ import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule';
 
+import {MobiusService} from '../../../global-services/mobius.service';
+
 import 'rxjs/add/operator/map'
 
 @Component({
@@ -25,7 +27,8 @@ export class ParameterViewerComponent extends Viewer {
 
     @ViewChild('cesium_param_container') el:ElementRef;
 
-  	constructor(injector: Injector, private http: HttpClient){  
+  	constructor(injector: Injector, 
+                  private http: HttpClient, private mobiusService: MobiusService){  
         super(injector, "parameter-viewer"); 
      }
 
@@ -111,8 +114,16 @@ export class ParameterViewerComponent extends Viewer {
     //
     //
     executeFlowchart($event): void{
+
         $event.stopPropagation();
-        this.flowchartService.execute();
+
+        this.mobiusService.processing = true;
+
+        let fs = this.flowchartService;
+        setTimeout(function(){
+          fs.execute();
+        }, 400)
+
     }
 
     //
@@ -133,7 +144,8 @@ export class ParameterViewerComponent extends Viewer {
       if(run_file){
         var reader = new FileReader();
         let fs = this.flowchartService;
-        let ps = this.processing;
+        let ms = this.mobiusService;
+        ms.processing = true;
         reader.onload = (function(reader)
         {
             return function()
@@ -149,14 +161,13 @@ export class ParameterViewerComponent extends Viewer {
                 }
 
                 //fs.freeze = false;
-                ps.value = false;
                 input.setComputedValue(contents);
+                ms.processing = false;
                 fs.update();
             }
         })(reader);
 
         //fs.freeze = true;
-        ps.value = true;
         reader.readAsText(file);
       }
       else{

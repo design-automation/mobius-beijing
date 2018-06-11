@@ -29,6 +29,34 @@ body{
 	overflow: hidden;
 }
 
+.message-general{
+	width: 100%; 
+	height: 100%; 
+	position: absolute;
+	background-repeat: no-repeat;
+	background-position: center;
+	z-index: 100;
+
+	&.loading{
+		background-image: url("./assets/img/loading_icon.gif");
+	}
+
+	&.sad-face{
+		background-image: url("./assets/img/SadSmiley.gif")
+	}
+
+	&.processing{
+		position: absolute;
+		top: 0px;
+		background-color: rgba(0,0,0,0.4);
+
+		.loading{
+			background-image: url("./assets/img/loading-2.gif");
+		}
+	}
+}
+
+
 .hidden{
 	display: none !important;
 }

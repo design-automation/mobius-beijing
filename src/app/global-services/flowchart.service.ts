@@ -14,6 +14,7 @@ import * as CircularJSON from 'circular-json';
 import {AllModules as ModuleSet} from "../../assets/modules/AllModules";
 
 import {ConsoleService, EConsoleMessageType} from "./console.service";
+import {MobiusService} from "./mobius.service";
 //import {LayoutService} from "./layout.service";
 
 import {MOBIUS} from './mobius.constants';
@@ -50,7 +51,7 @@ export class FlowchartService {
   }
 
   constructor(private consoleService: ConsoleService, 
-              //private layoutService: LayoutService, 
+              private mobiusService: MobiusService, 
               public dialog: MatDialog, private http: HttpClient) { 
       this.newFile();
       this.checkSavedNodes();
@@ -732,6 +733,8 @@ export class FlowchartService {
           printFunction = null;
           
           this.consoleService.addMessage("Flowchart was successfully executed.");
+          
+          this.mobiusService.processing = false;
       }
       catch(ex){
         

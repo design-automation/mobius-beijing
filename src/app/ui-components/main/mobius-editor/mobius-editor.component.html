@@ -2,12 +2,6 @@
 
   <div class="container">
 
-    <!-- <div 
-        style="position: absolute; bottom: 50px; left: 50px;z-index: 200;"
-        (click)="toggle()">
-        Mode: {{layout.mode}}
-    </div> -->
-
     <div class="wrapper">
 
       <split  direction="horizontal" 
@@ -52,4 +46,8 @@
 
   </div>
 
+</div>
+
+<div class="message-general processing" *ngIf="processing">
+    <div class="message-general loading"></div>
 </div>

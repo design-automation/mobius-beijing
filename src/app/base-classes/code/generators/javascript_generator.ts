@@ -407,12 +407,12 @@ export class CodeGeneratorJS extends CodeGenerator{
 			let result: any;
 
 			try{
-				console.log("script execution started: ", str.length);
+				//console.log("script execution started: ", str.length);
 				// result =  Function('return ' + str )(); 
-				console.log(str);
+				//console.log(str);
 				result = (new Function('params', str))(params);
 				//result = eval(str);
-				console.log("script execution finsihed");
+				//console.log("script execution finsihed");
 			}
 			catch(ex){
 				node.hasError();
