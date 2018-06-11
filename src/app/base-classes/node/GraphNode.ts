@@ -92,6 +92,8 @@ export class GraphNode implements IGraphNode{
 
 		// map direct properties
 		this.portCounter = nodeData["portCounter"];
+		this.inputPortCounter = nodeData["inputPortCounter"];
+		this.outputPortCounter = nodeData["outputPortCounter"];
 		this._isDisabled = nodeData["_isDisabled"];
 
 
