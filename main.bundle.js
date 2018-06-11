@@ -82,46 +82,48 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__global_services_flowchart_service__ = __webpack_require__("./src/app/global-services/flowchart.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__global_services_console_service__ = __webpack_require__("./src/app/global-services/console.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ui_components_controls_flowchart_controls_flowchart_controls_component__ = __webpack_require__("./src/app/ui-components/controls/flowchart-controls/flowchart-controls.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ui_components_controls_main_menu_menu_component__ = __webpack_require__("./src/app/ui-components/controls/main-menu/menu.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ui_components_editors_procedure_editor_procedure_editor_component__ = __webpack_require__("./src/app/ui-components/editors/procedure-editor/procedure-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ui_components_editors_parameter_editor_parameter_editor_component__ = __webpack_require__("./src/app/ui-components/editors/parameter-editor/parameter-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_settings_dialog_component__ = __webpack_require__("./src/app/ui-components/editors/parameter-editor/parameter-settings-dialog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_flowchart_viewer_flowchart_viewer_component__ = __webpack_require__("./src/app/ui-components/editors/flowchart-viewer/flowchart-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ui_components_viewers_code_viewer_code_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/code-viewer/code-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_geometry_viewer_geometry_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/geometry-viewer/geometry-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_cesium_viewer_cesium_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/cesium-viewer/cesium-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ui_components_viewers_module_viewer_module_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/module-viewer/module-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_parameter_viewer_parameter_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ui_components_controls_modulebox_modulebox_component__ = __webpack_require__("./src/app/ui-components/controls/modulebox/modulebox.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ui_components_editors_editor_editor_component__ = __webpack_require__("./src/app/ui-components/editors/editor/editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ui_components_viewers_viewer_container_viewer_container_component__ = __webpack_require__("./src/app/ui-components/viewers/viewer-container/viewer-container.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/text-viewer/text-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ui_components_viewers_node_library_node_library_component__ = __webpack_require__("./src/app/ui-components/viewers/node-library/node-library.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ui_components_layout_panel_panel_component__ = __webpack_require__("./src/app/ui-components/layout/panel/panel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__ = __webpack_require__("./src/app/ui-components/console/console.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ui_components_help_info_viewer_info_viewer_component__ = __webpack_require__("./src/app/ui-components/help/info-viewer/info-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ui_components_help_help_viewer_help_viewer_component__ = __webpack_require__("./src/app/ui-components/help/help-viewer/help-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ui_components_help_info_viewer_help_template__ = __webpack_require__("./src/app/ui-components/help/info-viewer/help.template.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__gs_viewer_gs_viewer_module__ = __webpack_require__("./src/app/gs-viewer/gs-viewer.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__mobius_cesium_mobius_cesium_module__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__ui_components_dialogs_file_load_dialog_component__ = __webpack_require__("./src/app/ui-components/dialogs/file-load-dialog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__ui_components_graph_graph_edge_graph_edge_component__ = __webpack_require__("./src/app/ui-components/graph/graph-edge/graph-edge.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__ui_components_main_mobius_editor_mobius_editor_component__ = __webpack_require__("./src/app/ui-components/main/mobius-editor/mobius-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__ = __webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_landing_landing_component__ = __webpack_require__("./src/app/ui-components/main/mobius-landing/landing.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__ = __webpack_require__("./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42_ngx_json_viewer__ = __webpack_require__("./node_modules/ngx-json-viewer/ngx-json-viewer.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__pipes_short_name_pipe__ = __webpack_require__("./src/app/pipes/short-name.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__pipes_simple_name_pipe__ = __webpack_require__("./src/app/pipes/simple-name.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__ui_components_editors_publish_settings_publish_settings_component__ = __webpack_require__("./src/app/ui-components/editors/publish-settings/publish-settings.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm2015/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__global_services_mobius_service__ = __webpack_require__("./src/app/global-services/mobius.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ui_components_controls_flowchart_controls_flowchart_controls_component__ = __webpack_require__("./src/app/ui-components/controls/flowchart-controls/flowchart-controls.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ui_components_controls_main_menu_menu_component__ = __webpack_require__("./src/app/ui-components/controls/main-menu/menu.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ui_components_editors_procedure_editor_procedure_editor_component__ = __webpack_require__("./src/app/ui-components/editors/procedure-editor/procedure-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_editor_component__ = __webpack_require__("./src/app/ui-components/editors/parameter-editor/parameter-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_parameter_editor_parameter_settings_dialog_component__ = __webpack_require__("./src/app/ui-components/editors/parameter-editor/parameter-settings-dialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ui_components_editors_flowchart_viewer_flowchart_viewer_component__ = __webpack_require__("./src/app/ui-components/editors/flowchart-viewer/flowchart-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_code_viewer_code_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/code-viewer/code-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_geometry_viewer_geometry_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/geometry-viewer/geometry-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ui_components_viewers_cesium_viewer_cesium_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/cesium-viewer/cesium-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_module_viewer_module_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/module-viewer/module-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ui_components_viewers_parameter_viewer_parameter_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ui_components_controls_modulebox_modulebox_component__ = __webpack_require__("./src/app/ui-components/controls/modulebox/modulebox.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ui_components_editors_editor_editor_component__ = __webpack_require__("./src/app/ui-components/editors/editor/editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_viewer_container_viewer_container_component__ = __webpack_require__("./src/app/ui-components/viewers/viewer-container/viewer-container.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ui_components_viewers_text_viewer_text_viewer_component__ = __webpack_require__("./src/app/ui-components/viewers/text-viewer/text-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ui_components_viewers_node_library_node_library_component__ = __webpack_require__("./src/app/ui-components/viewers/node-library/node-library.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ui_components_layout_panel_panel_component__ = __webpack_require__("./src/app/ui-components/layout/panel/panel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ui_components_console_console_component__ = __webpack_require__("./src/app/ui-components/console/console.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ui_components_help_info_viewer_info_viewer_component__ = __webpack_require__("./src/app/ui-components/help/info-viewer/info-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ui_components_help_help_viewer_help_viewer_component__ = __webpack_require__("./src/app/ui-components/help/help-viewer/help-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__ui_components_help_info_viewer_help_template__ = __webpack_require__("./src/app/ui-components/help/info-viewer/help.template.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__gs_viewer_gs_viewer_module__ = __webpack_require__("./src/app/gs-viewer/gs-viewer.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__mobius_cesium_mobius_cesium_module__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__ui_components_dialogs_file_load_dialog_component__ = __webpack_require__("./src/app/ui-components/dialogs/file-load-dialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__ui_components_graph_graph_edge_graph_edge_component__ = __webpack_require__("./src/app/ui-components/graph/graph-edge/graph-edge.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_editor_mobius_editor_component__ = __webpack_require__("./src/app/ui-components/main/mobius-editor/mobius-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_viewer_mobius_viewer_component__ = __webpack_require__("./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_landing_landing_component__ = __webpack_require__("./src/app/ui-components/main/mobius-landing/landing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__ui_components_main_mobius_gallery_mobius_gallery_component__ = __webpack_require__("./src/app/ui-components/main/mobius-gallery/mobius-gallery.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43_ngx_json_viewer__ = __webpack_require__("./node_modules/ngx-json-viewer/ngx-json-viewer.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__pipes_short_name_pipe__ = __webpack_require__("./src/app/pipes/short-name.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__pipes_simple_name_pipe__ = __webpack_require__("./src/app/pipes/simple-name.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__ui_components_editors_publish_settings_publish_settings_component__ = __webpack_require__("./src/app/ui-components/editors/publish-settings/publish-settings.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm2015/animations.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -168,10 +170,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 const appRoutes = [
-    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_38__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */] },
-    { path: 'gallery', component: __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */] },
-    { path: 'viewer/:id', component: __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */] },
-    { path: '**', component: __WEBPACK_IMPORTED_MODULE_38__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */] }
+    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */] },
+    { path: 'gallery', component: __WEBPACK_IMPORTED_MODULE_42__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */] },
+    { path: 'viewer/:id', component: __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */] },
+    { path: '**', component: __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */] }
 ];
 
 
@@ -183,61 +185,61 @@ AppModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["J" /* NgModule */])({
         declarations: [
             __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__ui_components_controls_main_menu_menu_component__["a" /* MenuComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_flowchart_viewer_flowchart_viewer_component__["a" /* FlowchartViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_19__ui_components_viewers_code_viewer_code_viewer_component__["a" /* CodeViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_geometry_viewer_geometry_viewer_component__["a" /* GeometryViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_cesium_viewer_cesium_viewer_component__["a" /* CesiumViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__ui_components_controls_flowchart_controls_flowchart_controls_component__["a" /* FlowchartControlsComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__ui_components_viewers_module_viewer_module_viewer_component__["a" /* ModuleViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__ui_components_editors_procedure_editor_procedure_editor_component__["a" /* ProcedureEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_16__ui_components_editors_parameter_editor_parameter_editor_component__["a" /* ParameterEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_24__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
-            __WEBPACK_IMPORTED_MODULE_25__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_26__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
-            __WEBPACK_IMPORTED_MODULE_28__ui_components_viewers_node_library_node_library_component__["a" /* NodeLibraryComponent */],
-            __WEBPACK_IMPORTED_MODULE_29__ui_components_layout_panel_panel_component__["a" /* PanelComponent */],
-            __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_32__ui_components_help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_31__ui_components_help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_33__ui_components_help_info_viewer_help_template__["c" /* MobiusAbout */],
-            __WEBPACK_IMPORTED_MODULE_33__ui_components_help_info_viewer_help_template__["a" /* HelpFundamentals */],
-            __WEBPACK_IMPORTED_MODULE_33__ui_components_help_info_viewer_help_template__["b" /* HelpModel */],
-            __WEBPACK_IMPORTED_MODULE_36__ui_components_dialogs_file_load_dialog_component__["a" /* FileLoadDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_37__ui_components_graph_graph_edge_graph_edge_component__["a" /* GraphEdgeComponent */],
-            __WEBPACK_IMPORTED_MODULE_38__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_landing_landing_component__["a" /* LandingComponent */],
-            __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */],
-            __WEBPACK_IMPORTED_MODULE_43__pipes_short_name_pipe__["a" /* ShortNamePipe */],
-            __WEBPACK_IMPORTED_MODULE_44__pipes_simple_name_pipe__["a" /* SimpleNamePipe */],
-            __WEBPACK_IMPORTED_MODULE_45__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__["a" /* ConsoleComponent */]
+            __WEBPACK_IMPORTED_MODULE_15__ui_components_controls_main_menu_menu_component__["a" /* MenuComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__ui_components_editors_flowchart_viewer_flowchart_viewer_component__["a" /* FlowchartViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_code_viewer_code_viewer_component__["a" /* CodeViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_geometry_viewer_geometry_viewer_component__["a" /* GeometryViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__ui_components_viewers_cesium_viewer_cesium_viewer_component__["a" /* CesiumViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__ui_components_controls_flowchart_controls_flowchart_controls_component__["a" /* FlowchartControlsComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_module_viewer_module_viewer_component__["a" /* ModuleViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__ui_components_editors_procedure_editor_procedure_editor_component__["a" /* ProcedureEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_editor_component__["a" /* ParameterEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
+            __WEBPACK_IMPORTED_MODULE_29__ui_components_viewers_node_library_node_library_component__["a" /* NodeLibraryComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__ui_components_layout_panel_panel_component__["a" /* PanelComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_33__ui_components_help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_32__ui_components_help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_34__ui_components_help_info_viewer_help_template__["c" /* MobiusAbout */],
+            __WEBPACK_IMPORTED_MODULE_34__ui_components_help_info_viewer_help_template__["a" /* HelpFundamentals */],
+            __WEBPACK_IMPORTED_MODULE_34__ui_components_help_info_viewer_help_template__["b" /* HelpModel */],
+            __WEBPACK_IMPORTED_MODULE_37__ui_components_dialogs_file_load_dialog_component__["a" /* FileLoadDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_38__ui_components_graph_graph_edge_graph_edge_component__["a" /* GraphEdgeComponent */],
+            __WEBPACK_IMPORTED_MODULE_39__ui_components_main_mobius_editor_mobius_editor_component__["a" /* MobiusEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_40__ui_components_main_mobius_viewer_mobius_viewer_component__["a" /* MobiusViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_41__ui_components_main_mobius_landing_landing_component__["a" /* LandingComponent */],
+            __WEBPACK_IMPORTED_MODULE_42__ui_components_main_mobius_gallery_mobius_gallery_component__["a" /* MobiusGalleryComponent */],
+            __WEBPACK_IMPORTED_MODULE_44__pipes_short_name_pipe__["a" /* ShortNamePipe */],
+            __WEBPACK_IMPORTED_MODULE_45__pipes_simple_name_pipe__["a" /* SimpleNamePipe */],
+            __WEBPACK_IMPORTED_MODULE_46__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_28__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__ui_components_console_console_component__["a" /* ConsoleComponent */]
         ],
         entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_24__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
-            __WEBPACK_IMPORTED_MODULE_17__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_36__ui_components_dialogs_file_load_dialog_component__["a" /* FileLoadDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_45__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__ui_components_controls_modulebox_modulebox_component__["a" /* ModuleboxComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_parameter_editor_parameter_settings_dialog_component__["a" /* ParameterSettingsDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_37__ui_components_dialogs_file_load_dialog_component__["a" /* FileLoadDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_46__ui_components_editors_publish_settings_publish_settings_component__["a" /* PublishSettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__ui_components_viewers_parameter_viewer_parameter_viewer_component__["a" /* ParameterViewerComponent */],
             //
-            __WEBPACK_IMPORTED_MODULE_26__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__ui_components_editors_flowchart_viewer_flowchart_viewer_component__["a" /* FlowchartViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_25__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_viewer_container_viewer_container_component__["a" /* ViewerContainerComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__ui_components_editors_flowchart_viewer_flowchart_viewer_component__["a" /* FlowchartViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__ui_components_editors_editor_editor_component__["a" /* EditorComponent */],
             //
-            __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_geometry_viewer_geometry_viewer_component__["a" /* GeometryViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_cesium_viewer_cesium_viewer_component__["a" /* CesiumViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_19__ui_components_viewers_code_viewer_code_viewer_component__["a" /* CodeViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_30__ui_components_console_console_component__["a" /* ConsoleComponent */],
-            __WEBPACK_IMPORTED_MODULE_32__ui_components_help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
-            __WEBPACK_IMPORTED_MODULE_31__ui_components_help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */]
+            __WEBPACK_IMPORTED_MODULE_21__ui_components_viewers_geometry_viewer_geometry_viewer_component__["a" /* GeometryViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__ui_components_viewers_cesium_viewer_cesium_viewer_component__["a" /* CesiumViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_28__ui_components_viewers_text_viewer_text_viewer_component__["a" /* TextViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__ui_components_viewers_code_viewer_code_viewer_component__["a" /* CodeViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__ui_components_console_console_component__["a" /* ConsoleComponent */],
+            __WEBPACK_IMPORTED_MODULE_33__ui_components_help_help_viewer_help_viewer_component__["a" /* HelpViewerComponent */],
+            __WEBPACK_IMPORTED_MODULE_32__ui_components_help_info_viewer_info_viewer_component__["a" /* InfoViewerComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_46__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_47__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
             __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* RouterModule */].forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
             ),
             __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpClientModule */],
@@ -246,11 +248,11 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_7_angular_split__["a" /* AngularSplitModule */],
             __WEBPACK_IMPORTED_MODULE_9_angular_tree_component__["a" /* TreeModule */],
             __WEBPACK_IMPORTED_MODULE_6__custom_angular_modules_CustomMaterialModule__["a" /* CustomMaterialModule */],
-            __WEBPACK_IMPORTED_MODULE_34__gs_viewer_gs_viewer_module__["a" /* GSViewer */],
-            __WEBPACK_IMPORTED_MODULE_35__mobius_cesium_mobius_cesium_module__["a" /* MobiusCesium */],
-            __WEBPACK_IMPORTED_MODULE_42_ngx_json_viewer__["a" /* NgxJsonViewerModule */],
+            __WEBPACK_IMPORTED_MODULE_35__gs_viewer_gs_viewer_module__["a" /* GSViewer */],
+            __WEBPACK_IMPORTED_MODULE_36__mobius_cesium_mobius_cesium_module__["a" /* MobiusCesium */],
+            __WEBPACK_IMPORTED_MODULE_43_ngx_json_viewer__["a" /* NgxJsonViewerModule */],
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_10__global_services_flowchart_service__["a" /* FlowchartService */], __WEBPACK_IMPORTED_MODULE_12__global_services_layout_service__["a" /* LayoutService */], __WEBPACK_IMPORTED_MODULE_11__global_services_console_service__["a" /* ConsoleService */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_10__global_services_flowchart_service__["a" /* FlowchartService */], __WEBPACK_IMPORTED_MODULE_12__global_services_layout_service__["a" /* LayoutService */], __WEBPACK_IMPORTED_MODULE_11__global_services_console_service__["a" /* ConsoleService */], __WEBPACK_IMPORTED_MODULE_13__global_services_mobius_service__["a" /* MobiusService */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
@@ -789,7 +791,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
         let prodArr = 1;
         window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
         window["__MOBIUS_PRINT__"] = print;
-        let str = "(function(){";
+        let str = ""; //"(function(){";
         if (globals) {
             for (let g = 0; g < globals.length; g++) {
                 str += "const " + globals[g].name + " =" + globals[g].value + ";\n";
@@ -797,15 +799,16 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
         }
         str += this.getNodeCode(node, prodArr) + "\n" +
             this.getFunctionCall(node, [], true) + "\n" +
-            "return " + node.getName() + ";" + "})(); \
-					";
+            "return " + node.getName() + ";";
+        //"})();";
         let result;
         try {
-            console.log("script execution started: ", str.length);
+            //console.log("script execution started: ", str.length);
             // result =  Function('return ' + str )(); 
-            console.log(str);
-            result = eval(str);
-            console.log("script execution finsihed");
+            //console.log(str);
+            result = (new Function('params', str))(params);
+            //result = eval(str);
+            //console.log("script execution finsihed");
         }
         catch (ex) {
             node.hasError();
@@ -1541,6 +1544,8 @@ class GraphNode {
         }
         // map direct properties
         this.portCounter = nodeData["portCounter"];
+        this.inputPortCounter = nodeData["inputPortCounter"];
+        this.outputPortCounter = nodeData["outputPortCounter"];
         this._isDisabled = nodeData["_isDisabled"];
         // add inputs
         let inputs = nodeData["_inputs"];
@@ -3005,8 +3010,9 @@ ConsoleService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_circular_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_circular_json__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__assets_modules_AllModules__ = __webpack_require__("./src/assets/modules/AllModules.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__console_service__ = __webpack_require__("./src/app/global-services/console.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mobius_constants__ = __webpack_require__("./src/app/global-services/mobius.constants.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm2015/material.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mobius_service__ = __webpack_require__("./src/app/global-services/mobius.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mobius_constants__ = __webpack_require__("./src/app/global-services/mobius.constants.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm2015/material.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3026,14 +3032,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 //import {LayoutService} from "./layout.service";
 
 
 let FlowchartService = class FlowchartService {
-    constructor(consoleService, 
-        //private layoutService: LayoutService, 
-        dialog, http) {
+    constructor(consoleService, mobiusService, dialog, http) {
         this.consoleService = consoleService;
+        this.mobiusService = mobiusService;
         this.dialog = dialog;
         this.http = http;
         /*private _ffactory = new FlowchartFactory();
@@ -3076,7 +3082,7 @@ let FlowchartService = class FlowchartService {
         }
         else {
             let myStorage = window.localStorage;
-            let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
+            let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
             let storageString = myStorage.getItem(property);
             if (storageString) {
                 let fc = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](storageString)["flowchart"]["_lastSaved"];
@@ -3090,7 +3096,7 @@ let FlowchartService = class FlowchartService {
     }
     openFileLoadDialog() {
         let myStorage = window.localStorage;
-        let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
+        let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
         let storageString = myStorage.getItem(property);
         let message;
         if (storageString) {
@@ -3116,7 +3122,7 @@ let FlowchartService = class FlowchartService {
     checkSavedNodes() {
         this._savedNodes = [];
         let myStorage = window.localStorage;
-        let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
+        let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
         let storageString = myStorage.getItem(property);
         let nodesStorage = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](storageString == null ? __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"]({ n: [] }) : storageString);
         let nodeData = nodesStorage.n;
@@ -3284,7 +3290,7 @@ let FlowchartService = class FlowchartService {
             let message;
             let nav = navigator;
             let myStorage = window.localStorage;
-            let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
+            let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
             let storageString = myStorage.getItem(property);
             // initialize node storage by reading from localStorage or reading an empty array
             let nodesStorage = __WEBPACK_IMPORTED_MODULE_7_circular_json__["parse"](storageString == null ? __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"]({ n: [] }) : storageString);
@@ -3326,7 +3332,7 @@ let FlowchartService = class FlowchartService {
     clearLibrary(nodeID) {
         let nav = navigator;
         let myStorage = window.localStorage;
-        let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
+        let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.NODE;
         if (nodeID == undefined) {
             let storageString = myStorage.removeItem(property);
             this.consoleService.addMessage("Node Library was cleared.");
@@ -3576,6 +3582,7 @@ let FlowchartService = class FlowchartService {
             consoleMessages = null;
             printFunction = null;
             this.consoleService.addMessage("Flowchart was successfully executed.");
+            this.mobiusService.processing = false;
         }
         catch (ex) {
             if (consoleMessages.length > 1) {
@@ -3608,7 +3615,7 @@ let FlowchartService = class FlowchartService {
             file["flowchart"] = this._flowchart;
             fileString = __WEBPACK_IMPORTED_MODULE_7_circular_json__["stringify"](file);
             let myStorage = window.localStorage;
-            let property = __WEBPACK_IMPORTED_MODULE_10__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
+            let property = __WEBPACK_IMPORTED_MODULE_11__mobius_constants__["a" /* MOBIUS */].PROPERTY.FLOWCHART;
             myStorage.setItem(property, fileString);
             this.consoleService.addMessage("Autosaved flowchart.");
         }
@@ -3664,7 +3671,8 @@ let FlowchartService = class FlowchartService {
 FlowchartService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_9__console_service__["a" /* ConsoleService */],
-        __WEBPACK_IMPORTED_MODULE_11__angular_material__["f" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */]])
+        __WEBPACK_IMPORTED_MODULE_10__mobius_service__["a" /* MobiusService */],
+        __WEBPACK_IMPORTED_MODULE_12__angular_material__["f" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */]])
 ], FlowchartService);
 
 
@@ -3861,6 +3869,50 @@ const MOBIUS = {
     }
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = MOBIUS;
+
+
+
+/***/ }),
+
+/***/ "./src/app/global-services/mobius.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MobiusService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+let MobiusService = class MobiusService {
+    constructor() {
+        this._processing = false;
+        this.stateChanged = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["w" /* EventEmitter */]();
+        let self = this;
+    }
+    get processing() {
+        return this._processing;
+    }
+    set processing(value) {
+        console.log(`Processing value ${value}`);
+        this._processing = value;
+        this.stateChanged.emit(this._processing);
+    }
+    stateChangedEmitter() {
+        return this.stateChanged;
+    }
+};
+MobiusService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
+    __metadata("design:paramtypes", [])
+], MobiusService);
 
 
 
@@ -12060,7 +12112,7 @@ PanelComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-editor/mobius-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n\r\n    <!-- <div \r\n        style=\"position: absolute; bottom: 50px; left: 50px;z-index: 200;\"\r\n        (click)=\"toggle()\">\r\n        Mode: {{layout.mode}}\r\n    </div> -->\r\n\r\n    <div class=\"wrapper\">\r\n\r\n      <split  direction=\"horizontal\" \r\n              gutterColor=\"#8AA8C0\"\r\n              [gutterSize]=\"layout.gutter\" \r\n              [useTransition]=\"layout.useTransition\">\r\n\r\n            <!-- main pane -->\r\n            <split-area [size]=\"layout.size.main\" order=\"1\">\r\n              <app-panel panel_id=\"main\"></app-panel>\r\n            </split-area>\r\n\r\n            <!-- secondary split pane -->\r\n            <split-area \r\n              [size]=\"layout.size.side\"  order=\"2\">\r\n\r\n                <split  direction=\"vertical\"\r\n                        gutterColor=\"#8AA8C0\"\r\n                        [gutterSize]=\"layout.gutter\" \r\n                        [useTransition]=\"layout.useTransition\">\r\n\r\n                    <split-area [size]=\"layout.size.top\" order=\"1\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"top\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <split-area [size]=\"layout.size.middle\" order=\"2\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"middle\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <!-- fixed -->\r\n                    <split-area [size]=\"layout.size.bottom\" order=\"3\">\r\n                      <app-panel panel_id=\"bottom\"></app-panel>\r\n                    </split-area>\r\n\r\n                </split>\r\n\r\n            </split-area>\r\n            \r\n      </split>\r\n\r\n    </div>\r\n\r\n  </div>\r\n\r\n</div>\r\n"
+module.exports = "<div id=\"app-container\" *ngIf=\"supported\">\r\n\r\n  <div class=\"container\">\r\n\r\n    <div class=\"wrapper\">\r\n\r\n      <split  direction=\"horizontal\" \r\n              gutterColor=\"#8AA8C0\"\r\n              [gutterSize]=\"layout.gutter\" \r\n              [useTransition]=\"layout.useTransition\">\r\n\r\n            <!-- main pane -->\r\n            <split-area [size]=\"layout.size.main\" order=\"1\">\r\n              <app-panel panel_id=\"main\"></app-panel>\r\n            </split-area>\r\n\r\n            <!-- secondary split pane -->\r\n            <split-area \r\n              [size]=\"layout.size.side\"  order=\"2\">\r\n\r\n                <split  direction=\"vertical\"\r\n                        gutterColor=\"#8AA8C0\"\r\n                        [gutterSize]=\"layout.gutter\" \r\n                        [useTransition]=\"layout.useTransition\">\r\n\r\n                    <split-area [size]=\"layout.size.top\" order=\"1\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"top\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <split-area [size]=\"layout.size.middle\" order=\"2\" [visible]=\"layout.mode == 'Editor'\">\r\n                      <app-panel panel_id=\"middle\"></app-panel>\r\n                    </split-area>\r\n\r\n                    <!-- fixed -->\r\n                    <split-area [size]=\"layout.size.bottom\" order=\"3\">\r\n                      <app-panel panel_id=\"bottom\"></app-panel>\r\n                    </split-area>\r\n\r\n                </split>\r\n\r\n            </split-area>\r\n            \r\n      </split>\r\n\r\n    </div>\r\n\r\n  </div>\r\n\r\n</div>\r\n\r\n<div class=\"message-general processing\" *ngIf=\"processing\">\r\n    <div class=\"message-general loading\"></div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -12079,6 +12131,7 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm2015/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__ = __webpack_require__("./src/app/global-services/layout.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_services_flowchart_service__ = __webpack_require__("./src/app/global-services/flowchart.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__global_services_mobius_service__ = __webpack_require__("./src/app/global-services/mobius.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12091,16 +12144,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 let MobiusEditorComponent = class MobiusEditorComponent {
-    constructor(layoutService, flowchartService) {
+    constructor(layoutService, flowchartService, mobiusService) {
         this.layoutService = layoutService;
         this.flowchartService = flowchartService;
+        this.mobiusService = mobiusService;
         this.supported = false;
+        this.processing = false;
         let browser = this.checkBrowser();
         if (browser == "Chrome") {
             this.layout = layoutService.getAssets();
             this.toggle = layoutService.toggleMode;
             this.supported = true;
+            this.processing = mobiusService.processing;
+            let self = this;
+            mobiusService.stateChangedEmitter().subscribe({
+                next(value) { self.processing = value; console.log(`Message: ${value}`); },
+                error(message) { console.log(message); }
+            });
         }
         else {
             alert("Oops... You seem to be using a browser not supported by Mobius. Please use Chrome.");
@@ -12166,7 +12228,9 @@ MobiusEditorComponent = __decorate([
         template: __webpack_require__("./src/app/ui-components/main/mobius-editor/mobius-editor.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/main/mobius-editor/mobius-editor.component.scss")]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__["a" /* LayoutService */], __WEBPACK_IMPORTED_MODULE_2__global_services_flowchart_service__["a" /* FlowchartService */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__global_services_layout_service__["a" /* LayoutService */],
+        __WEBPACK_IMPORTED_MODULE_2__global_services_flowchart_service__["a" /* FlowchartService */],
+        __WEBPACK_IMPORTED_MODULE_3__global_services_mobius_service__["a" /* MobiusService */]])
 ], MobiusEditorComponent);
 
 
@@ -12279,14 +12343,14 @@ LandingComponent = __decorate([
 /***/ "./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"app-container\" *ngIf=\"supported && visible\">\r\n\r\n    <div class=\"container\">\r\n        <app-viewer-container viewer_mode=true></app-viewer-container>\r\n    </div>\r\n\r\n\r\n    <div class=\"side-bar-container\" [@slide_in_out]=\"slider_state\">\r\n    \t<div class=\"nav-toggle-btn\" (click)=\"toggleMenu()\">\r\n    \t\t<span *ngIf=\"slider_state == 'slide_in'\">▹</span>\r\n    \t\t<span *ngIf=\"slider_state == 'slide_out'\">◃</span>\r\n    \t</div>\r\n        <app-parameter-viewer globals=true></app-parameter-viewer>\r\n    </div>\r\n\r\n\r\n</div>\r\n\r\n\r\n<div class=\"message sad-face\" *ngIf=\"!supported\">\r\n\r\n</div>\r\n\r\n\r\n<div class=\"message loading\" *ngIf=\"!visible\">\r\n\r\n</div>"
+module.exports = "<div id=\"app-container\" *ngIf=\"supported && visible\">\r\n\r\n    <div class=\"container\">\r\n        <app-viewer-container viewer_mode=true></app-viewer-container>\r\n    </div>\r\n\r\n\r\n    <div class=\"side-bar-container\" [@slide_in_out]=\"slider_state\">\r\n    \t<div class=\"nav-toggle-btn\" (click)=\"toggleMenu()\">\r\n    \t\t<span *ngIf=\"slider_state == 'slide_in'\">▹</span>\r\n    \t\t<span *ngIf=\"slider_state == 'slide_out'\">◃</span>\r\n    \t</div>\r\n        <app-parameter-viewer globals=true></app-parameter-viewer>\r\n    </div>\r\n\r\n\r\n</div>\r\n\r\n\r\n<div class=\"message-general sad-face\" *ngIf=\"!supported\">\r\n\r\n</div>\r\n\r\n\r\n<div class=\"message-general loading\" *ngIf=\"!visible\">\r\n\r\n</div>"
 
 /***/ }),
 
 /***/ "./src/app/ui-components/main/mobius-viewer/mobius-viewer.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.message {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  background-repeat: no-repeat;\n  background-position: center; }\n\n.message.loading {\n    background-image: url('loading_icon.f4404720ece11355df31.gif'); }\n\n.message.sad-face {\n    background-image: url('SadSmiley.6ed32e038bdfc4867915.gif'); }\n\n#app-container {\n  width: 100%;\n  height: 100%;\n  margin: 0px;\n  padding: 0px;\n  overflow: hidden !important; }\n\n#app-container .container {\n    position: relative;\n    height: 100vh !important;\n    overflow: hidden; }\n\n#app-container .side-bar-container {\n    position: absolute;\n    top: 0px;\n    right: 0px;\n    z-index: 100;\n    width: 380px;\n    height: 100vh;\n    padding-left: 30px;\n    overflow: hidden; }\n\n#app-container .side-bar-container .nav-toggle-btn {\n      position: absolute;\n      top: 50%;\n      margin-top: -35px;\n      margin-left: -30px;\n      z-index: 200;\n      width: 30px;\n      height: 70px;\n      border-top: 1px solid gray;\n      border-left: 1px solid gray;\n      border-bottom: 1px solid gray;\n      border-radius: 4px;\n      background-color: rgba(20, 20, 20, 0.5);\n      color: #ddd;\n      text-align: center;\n      font-size: 32px;\n      line-height: 70px;\n      cursor: pointer; }\n\n#app-container .side-bar-container .nav-toggle-btn span {\n        vertical-align: middle; }\n"
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n#app-container {\n  width: 100%;\n  height: 100%;\n  margin: 0px;\n  padding: 0px;\n  overflow: hidden !important; }\n\n#app-container .container {\n    position: relative;\n    height: 100vh !important;\n    overflow: hidden; }\n\n#app-container .side-bar-container {\n    position: absolute;\n    top: 0px;\n    right: 0px;\n    z-index: 100;\n    width: 380px;\n    height: 100vh;\n    padding-left: 30px;\n    overflow: hidden; }\n\n#app-container .side-bar-container .nav-toggle-btn {\n      position: absolute;\n      top: 50%;\n      margin-top: -35px;\n      margin-left: -30px;\n      z-index: 200;\n      width: 30px;\n      height: 70px;\n      border-top: 1px solid gray;\n      border-left: 1px solid gray;\n      border-bottom: 1px solid gray;\n      border-radius: 4px;\n      background-color: rgba(20, 20, 20, 0.5);\n      color: #ddd;\n      text-align: center;\n      font-size: 32px;\n      line-height: 70px;\n      cursor: pointer; }\n\n#app-container .side-bar-container .nav-toggle-btn span {\n        vertical-align: middle; }\n"
 
 /***/ }),
 
@@ -12947,7 +13011,8 @@ module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  f
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm2015/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_classes_viz_Viewer__ = __webpack_require__("./src/app/base-classes/viz/Viewer.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_classes_port_PortModule__ = __webpack_require__("./src/app/base-classes/port/PortModule.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__("./node_modules/rxjs/_esm2015/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__global_services_mobius_service__ = __webpack_require__("./src/app/global-services/mobius.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__ = __webpack_require__("./node_modules/rxjs/_esm2015/add/operator/map.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12962,10 +13027,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_IMPORTED_MODULE_2__base_classes_viz_Viewer__["a" /* Viewer */] {
-    constructor(injector, http) {
+    constructor(injector, http, mobiusService) {
         super(injector, "parameter-viewer");
         this.http = http;
+        this.mobiusService = mobiusService;
         this.isVisible = false;
         this.InputPortTypes = __WEBPACK_IMPORTED_MODULE_3__base_classes_port_PortModule__["b" /* InputPortTypes */];
         //
@@ -13042,7 +13109,11 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
     //
     executeFlowchart($event) {
         $event.stopPropagation();
-        this.flowchartService.execute();
+        this.mobiusService.processing = true;
+        let fs = this.flowchartService;
+        setTimeout(function () {
+            fs.execute();
+        }, 400);
     }
     handleFileInput($event, input) {
         let fileList = $event.target.files;
@@ -13055,7 +13126,8 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
         if (run_file) {
             var reader = new FileReader();
             let fs = this.flowchartService;
-            let ps = this.processing;
+            let ms = this.mobiusService;
+            ms.processing = true;
             reader.onload = (function (reader) {
                 return function () {
                     let contents = reader.result;
@@ -13067,13 +13139,12 @@ let ParameterViewerComponent = class ParameterViewerComponent extends __WEBPACK_
                         // do nothing
                     }
                     //fs.freeze = false;
-                    ps.value = false;
                     input.setComputedValue(contents);
+                    ms.processing = false;
                     fs.update();
                 };
             })(reader);
             //fs.freeze = true;
-            ps.value = true;
             reader.readAsText(file);
         }
         else {
@@ -13108,7 +13179,8 @@ ParameterViewerComponent = __decorate([
         template: __webpack_require__("./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.html"),
         styles: [__webpack_require__("./src/app/ui-components/viewers/parameter-viewer/parameter-viewer.component.scss")]
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */], __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_4__global_services_mobius_service__["a" /* MobiusService */]])
 ], ParameterViewerComponent);
 
 
