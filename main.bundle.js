@@ -2087,7 +2087,7 @@ class Port {
         this._isFunction = portData["_isFunction"];
         this.opts = portData["opts"];
         // todo: assign computed also??
-        this._computed = portData["_computed"];
+        // this._computed = portData["_computed"];
     }
     //
     //
@@ -3582,7 +3582,6 @@ let FlowchartService = class FlowchartService {
             consoleMessages = null;
             printFunction = null;
             this.consoleService.addMessage("Flowchart was successfully executed.");
-            this.mobiusService.processing = false;
         }
         catch (ex) {
             if (consoleMessages.length > 1) {
@@ -3595,6 +3594,7 @@ let FlowchartService = class FlowchartService {
             // this.layoutService.showConsole();
             this.switchViewer("console-viewer");
         }
+        this.mobiusService.processing = false;
         this.update();
     }
     //
