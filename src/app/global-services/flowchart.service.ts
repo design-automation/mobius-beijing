@@ -734,7 +734,7 @@ export class FlowchartService {
           
           this.consoleService.addMessage("Flowchart was successfully executed.");
           
-          this.mobiusService.processing = false;
+          
       }
       catch(ex){
         
@@ -750,6 +750,8 @@ export class FlowchartService {
           // this.layoutService.showConsole();
           this.switchViewer("console-viewer");
       }
+
+      this.mobiusService.processing = false;
 
       this.update();
   }
