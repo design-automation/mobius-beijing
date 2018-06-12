@@ -28,19 +28,6 @@ export class HelpViewerComponent implements OnInit {
         });
 
         this._loadedModules = this.flowchartService.getModules();
-
-        // for(let i=0; i < this._loadedModules.length; i++){
-        //   let mod = this._loadedModules[i];
-      
-        //   let originalName: string = mod._name; 
-        //   if(mod._helpObj[0]){
-        //     let n: string = mod._helpObj[0].name;
-        //     n = n.substr(1, n.length-2);
-        //     originalName = n;
-        //   }
-        //   mod["_url"] = "_" + originalName + "_.html";
-        // }
-
         this.helpAvailable = true;
       }
       catch(ex){

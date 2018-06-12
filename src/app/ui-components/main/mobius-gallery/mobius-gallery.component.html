@@ -1,21 +1,21 @@
 <div class="container">
 
-  <div class="flex-container">
+  <div class="container__element container__element--header">
+    Möbius Gallery
+  </div>
 
-    <div class="flex-box header">
-    	<div class="content">Möbius Gallery</div>
+  <div class="container__element container__element--subheader">
+      Displaying {{all_files.length}} projects
+  </div>
+
+  <div class="container__element container__element--project-container">
+    <div class="project-container__project" *ngFor="let f of all_files">
+        <div class="project__content">
+          <a href="./viewer/{{f.name}}">
+            {{ f.name | simplename }}
+          </a>
+        </div>
     </div>
-    
-    <div class="flex-box"  
-    	*ngFor="let f of all_files">
-     	<a href="./viewer/{{f.name}}">
-      		<div class="content">
-      		{{ f.name | simplename }}
-      		</div>
-      	</a>
-    </div>
-  
   </div>
 
 </div>
-
