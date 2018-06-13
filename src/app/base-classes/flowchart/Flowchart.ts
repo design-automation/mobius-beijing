@@ -496,54 +496,11 @@ export class Flowchart implements IFlowchart{
 			if(outVal && outVal.constructor.name == "Model"){
 				let modelData: string = outVal.toJSON();
 				let model = new gs.Model(JSON.parse(modelData));
-				// todo: change in kernel
-        		//model["_kernel"]._objs = JSON.parse(JSON.stringify(outVal["_kernel"]._objs));
-        		//model["_kernel"]._points = JSON.parse(JSON.stringify(outVal["_kernel"]._points));
-				// console.log( JSON.stringify(model["_kernel"]["_objs"]) );
 				inputPort.setComputedValue( model );
 			}
 			else{
-				inputPort.setComputedValue( outVal );
+				inputPort.setComputedValue( JSON.parse(JSON.stringify(outVal)) );
 			}
-
-			
-
-
-			// let value = outputPort.getValue();
-			// if( value["_kernel"] && value["_id"] ){
-
-			// 	console.log(value);
-
-			// 	let obj: gs.Model = outputPort.getValue().getModel();
-				
-			// 	let objStr: string = obj.toJSON();
-				
-			// 	let entity = value.constructor;
-			// 	let new_obj = new entity();
-			// 	new_obj["_id"] = value["_id"];
-
-			// 	let new_model = new gs.Model(JSON.parse(objStr));
-
-			// 	inputPort.setComputedValue(new_obj);
-			// }
-			// else{
-			// 	inputPort.setComputedValue(value);
-			// }
-
-
-
-			// create a new object
-			//let entity = obj.constructor;
-			// let kernelCons = obj["_kernel"].constructor;
-			// let new_obj = new entity();
-			// new_obj["_id"] = obj["_id"];
-			
-			// new_obj["_kernel"] = new kernelCons();
-			// new_obj["_kernel"]["_model"]  = new kernelCons();
-			// ["_attribs", "_groups", "_metadata", "_objs", "_points", "_topos_trees"].map(function(prop: string){
-			// 	new_obj["_kernel"]["_model"][prop] = obj["_kernel"][prop];
-			// })
-			// console.log(new_obj);
 
 		}
 	}
@@ -595,32 +552,6 @@ export class Flowchart implements IFlowchart{
 		return true;
 	}
 
-	/*executeNode(node: IGraphNode){
-
-		console.log("Executing ", node.getName());
-		
-		let params :any = null;
-
-		if( node.isIndependent() == false ){
-			params = {};
-			let dependencies :any = node.getDependencies();
-
-			for(let d=0; d < dependencies.length; d++){
-				// dependencies are stored as an array of arrays - [ [], [], [] ]
-				// the 0th index stores the node, the 1st index stores the port number
-				let parent_node = this.getNode(dependencies[d][0]); 
-				if(parent_node.getStatus() == 1){
-					let source_port = parent_node.getOutputByIndex(dependencies[d][1]);
-					let my_port = node.getInputByIndex(dependencies[d][2]);
-					params[my_port.getName()]  = source_port.getValue();
-					my_port.setValue(source_port.getValue());
-				}
-			}
-		}
-		
-		node.executeNode(this.code_generator, params);
-
-	}*/
 
 	save(): string{
 		throw Error("Not implemented");
