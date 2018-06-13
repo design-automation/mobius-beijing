@@ -811,6 +811,7 @@ class CodeGeneratorJS extends __WEBPACK_IMPORTED_MODULE_0__CodeGenerator__["a" /
             //console.log("script execution finsihed");
         }
         catch (ex) {
+            console.log(`Execution Error: ${ex}`);
             node.hasError();
             // Unexpected Identifier
             // Unexpected token
@@ -1246,40 +1247,11 @@ class Flowchart {
             if (outVal && outVal.constructor.name == "Model") {
                 let modelData = outVal.toJSON();
                 let model = new __WEBPACK_IMPORTED_MODULE_1_gs_json__["Model"](JSON.parse(modelData));
-                // todo: change in kernel
-                //model["_kernel"]._objs = JSON.parse(JSON.stringify(outVal["_kernel"]._objs));
-                //model["_kernel"]._points = JSON.parse(JSON.stringify(outVal["_kernel"]._points));
-                // console.log( JSON.stringify(model["_kernel"]["_objs"]) );
                 inputPort.setComputedValue(model);
             }
             else {
-                inputPort.setComputedValue(outVal);
+                inputPort.setComputedValue(JSON.parse(JSON.stringify(outVal)));
             }
-            // let value = outputPort.getValue();
-            // if( value["_kernel"] && value["_id"] ){
-            // 	console.log(value);
-            // 	let obj: gs.Model = outputPort.getValue().getModel();
-            // 	let objStr: string = obj.toJSON();
-            // 	let entity = value.constructor;
-            // 	let new_obj = new entity();
-            // 	new_obj["_id"] = value["_id"];
-            // 	let new_model = new gs.Model(JSON.parse(objStr));
-            // 	inputPort.setComputedValue(new_obj);
-            // }
-            // else{
-            // 	inputPort.setComputedValue(value);
-            // }
-            // create a new object
-            //let entity = obj.constructor;
-            // let kernelCons = obj["_kernel"].constructor;
-            // let new_obj = new entity();
-            // new_obj["_id"] = obj["_id"];
-            // new_obj["_kernel"] = new kernelCons();
-            // new_obj["_kernel"]["_model"]  = new kernelCons();
-            // ["_attribs", "_groups", "_metadata", "_objs", "_points", "_topos_trees"].map(function(prop: string){
-            // 	new_obj["_kernel"]["_model"][prop] = obj["_kernel"][prop];
-            // })
-            // console.log(new_obj);
         }
     }
     //
@@ -1314,32 +1286,6 @@ class Flowchart {
         }
         return true;
     }
-    /*executeNode(node: IGraphNode){
-
-        console.log("Executing ", node.getName());
-        
-        let params :any = null;
-
-        if( node.isIndependent() == false ){
-            params = {};
-            let dependencies :any = node.getDependencies();
-
-            for(let d=0; d < dependencies.length; d++){
-                // dependencies are stored as an array of arrays - [ [], [], [] ]
-                // the 0th index stores the node, the 1st index stores the port number
-                let parent_node = this.getNode(dependencies[d][0]);
-                if(parent_node.getStatus() == 1){
-                    let source_port = parent_node.getOutputByIndex(dependencies[d][1]);
-                    let my_port = node.getInputByIndex(dependencies[d][2]);
-                    params[my_port.getName()]  = source_port.getValue();
-                    my_port.setValue(source_port.getValue());
-                }
-            }
-        }
-        
-        node.executeNode(this.code_generator, params);
-
-    }*/
     save() {
         throw Error("Not implemented");
         /*this.reset();
@@ -1730,40 +1676,6 @@ class GraphNode {
     //
     //
     //
-    /*isIndependent(): boolean{
-        if(this._dependencies.length > 0)
-            return false;
-        return true;
-    }
-
-    addDependency(node_port_input_idx : number[]){
-
-        if( this._dependencyNodes.indexOf( node_port_input_idx[0] ) == -1){
-            this._dependencyNodes.push(node_port_input_idx[0]);
-        }
-
-        this._dependencies.push(node_port_input_idx);
-    }
-    
-    removeDependency(node_port_idx: number[]){
-        
-    }
-
-    getDependencies(): number[][]{
-        return this._dependencies;
-    }
-
-    
-    getDependencyNodes(): number[]{
-        return this._dependencyNodes
-    };
-    
-    rank(): number{
-        return this._dependencyNodes.length
-    };*/
-    //
-    //
-    //
     execute(code_generator, modules, print, globals) {
         let window_params = [];
         let params = [];
@@ -1785,12 +1697,11 @@ class GraphNode {
                     }
                     i.setComputedValue(val);
                     // file processing
-                    let file_name = "MOBIUS_FILES_" + self._id + "I" + index;
+                    /*let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
                     window[file_name] = i.getValue();
                     params[i.getName()] = "window[" + file_name + "]";
                     window_params.push("window[" + file_name + "]");
-                    i._executionAddr = "window['" + file_name + "']";
-                    ;
+                    i._executionAddr =  "window['" + file_name + "']";;*/
                     live_data_downloads--;
                     // when last of all data has downloaded
                     if (live_data_downloads == 0) {
@@ -1807,17 +1718,7 @@ class GraphNode {
                 params[i.getName()] = fn_def;
             }
             else {
-                if (i.getType() === __WEBPACK_IMPORTED_MODULE_2__port_PortModule__["b" /* InputPortTypes */].FilePicker) {
-                    let file_name = "MOBIUS_FILES_" + self._id + "I" + index;
-                    window[file_name] = i.getValue();
-                    params[i.getName()] = "window[" + file_name + "]";
-                    window_params.push("window[" + file_name + "]");
-                    i._executionAddr = "window['" + file_name + "']";
-                    ;
-                }
-                else {
-                    params[i.getName()] = i.getValue();
-                }
+                params[i.getName()] = i.getValue();
             }
         });
         // this code runs only after live_data_downloads = 0;
@@ -1840,7 +1741,7 @@ class GraphNode {
             window_params.map(function (filename) {
                 delete window[filename];
             });
-            self.getInputs().map(i => i._executionAddr = undefined);
+            //self.getInputs().map( i => i._executionAddr = undefined );
         }
         if (live_data_downloads == 0) {
             outputProcessing();
@@ -2028,48 +1929,13 @@ class Port {
         this._default = undefined;
         this._computed = undefined;
         this._isFunction = false;
+        // ------------ Port Values Functions 
         this._executionAddr = undefined;
         this._id = __WEBPACK_IMPORTED_MODULE_0__misc_GUID__["a" /* IdGenerator */].getId();
         this._name = name;
         this.opts = {};
     }
-    isFunction() {
-        return this._isFunction;
-    }
-    setIsFunction() {
-        this._isFunction = true;
-    }
-    getId() {
-        return this._id;
-    }
-    getType() {
-        return this._type;
-    }
-    setType(type) {
-        this._default = undefined;
-        this._computed = undefined;
-        this._type = type;
-    }
-    setOpts(opts) {
-    }
-    getOpts() {
-        throw Error("not defined");
-    }
-    isSelected() {
-        return this._selected;
-    }
-    isDisabled() {
-        return this._disabled;
-    }
-    disable() {
-        this._disabled = true;
-    }
-    enable() {
-        this._disabled = false;
-    }
-    //
-    //
-    //
+    // ----- Update function for Port from Data 
     update(portData, type) {
         this._id = portData["_id"];
         this._type = portData["_type"];
@@ -2089,18 +1955,48 @@ class Port {
         // todo: assign computed also??
         // this._computed = portData["_computed"];
     }
-    //
-    //
-    //
+    // ---- Getters and Settings
+    // TODO: Convert to get/set methods
+    getId() {
+        return this._id;
+    }
     getName() {
         return this._name;
     }
     setName(name) {
         this._name = name;
     }
-    //
-    //
-    //
+    getType() {
+        return this._type;
+    }
+    setType(type) {
+        this._default = undefined;
+        this._computed = undefined;
+        this._type = type;
+    }
+    setOpts(opts) {
+    }
+    getOpts() {
+        throw Error("not defined");
+    }
+    isFunction() {
+        return this._isFunction;
+    }
+    setIsFunction() {
+        this._isFunction = true;
+    }
+    isSelected() {
+        return this._selected;
+    }
+    isDisabled() {
+        return this._disabled;
+    }
+    disable() {
+        this._disabled = true;
+    }
+    enable() {
+        this._disabled = false;
+    }
     isConnected() {
         return this._connected;
     }
@@ -2110,25 +2006,9 @@ class Port {
     disconnect() {
         this._connected = false;
     }
-    setDefaultValue(value) {
-        this._default = value;
-        if (value !== undefined) {
-            this._hasDefault = true;
-        }
-    }
-    setComputedValue(value) {
-        this._computed = value;
-        if (value !== undefined) {
-            this._hasComputed = true;
-        }
-    }
-    getDefaultValue() {
-        return this._default;
-    }
     getValue() {
         let final;
         if (this._executionAddr !== undefined) {
-            console.log("Sending execution address");
             return this._executionAddr;
         }
         else {
@@ -2139,37 +2019,49 @@ class Port {
                 final = this._default;
             }
         }
-        /*if(this.getType() === InputPortTypes.FilePicker){
-
-            try{
-                let _ = JSON.parse(final);
-            }
-            catch(ex){
-                console.log(ex);
-                try{
-                    console.log(final);
-                    final = JSON.stringify(final.split("\r")) + ".join('\\r')";
-                }
-                catch(ex){
-                    // do nothing
-                }
-            // 	//let arrOfStrings = final.split("\n");
-            // 	//final = arrOfStrings + ".join(\"\\n\")" ;
-            // 	//final = new Blob([final], {type : "text/plain"});
-            }
-                
-        }*/
         return final;
     }
-    //
-    //
-    //
     reset() {
-        this._computed = undefined;
+        this.setComputedValue(undefined);
+    }
+    setComputedValue(value) {
+        if (value == undefined)
+            return;
+        switch (this._type) {
+            case __WEBPACK_IMPORTED_MODULE_1__InputPortTypes__["a" /* InputPortTypes */].FilePicker:
+            case __WEBPACK_IMPORTED_MODULE_1__InputPortTypes__["a" /* InputPortTypes */].URL:
+                this._computed = FileUtils.add_file_to_memory(value, this._id);
+                break;
+            default:
+                this._computed = value;
+        }
+        this._hasComputed = true;
+    }
+    //--- Default Values
+    getDefaultValue() {
+        //console.log(`Get default`);
+        return this._default;
+    }
+    // Todo: Is this redundant?	
+    setDefaultValue(value) {
+        //console.log(`Set default called with ${value}`);
+        this._default = value;
+        if (value !== undefined) {
+            this._hasDefault = true;
+        }
     }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Port;
 
+class FileUtils {
+    static add_file_to_memory(value, id) {
+        let file_name = FileUtils.PREFIX + id;
+        window[file_name] = value;
+        // TODO: Convert this to a decorator
+        return "(new Function('value', 'return value'))( window[ '" + file_name + "' ])";
+    }
+}
+FileUtils.PREFIX = "MOBIUS_FILES_";
 
 
 /***/ }),
@@ -3901,7 +3793,6 @@ let MobiusService = class MobiusService {
         return this._processing;
     }
     set processing(value) {
-        console.log(`Processing value ${value}`);
         this._processing = value;
         this.stateChanged.emit(this._processing);
     }
@@ -12150,8 +12041,8 @@ let MobiusEditorComponent = class MobiusEditorComponent {
             this.processing = mobiusService.processing;
             let self = this;
             mobiusService.stateChangedEmitter().subscribe({
-                next(value) { self.processing = value; console.log(`Message: ${value}`); },
-                error(message) { console.log(message); }
+                next(value) { self.processing = value; },
+                error(message) { }
             });
         }
         else {
@@ -12531,6 +12422,7 @@ let CesiumViewerComponent = class CesiumViewerComponent extends __WEBPACK_IMPORT
             if (this._port) {
                 let portValue = this._port.getValue();
                 if (portValue) {
+                    console.log(portValue.features[0]);
                     this.gs_dummy_data = portValue;
                 }
                 else {
