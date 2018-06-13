@@ -16,7 +16,6 @@ export class MobiusService {
     }
 
     set processing(value){
-      console.log(`Processing value ${value}`);
       this._processing = value;
       this.stateChanged.emit(this._processing);
     }

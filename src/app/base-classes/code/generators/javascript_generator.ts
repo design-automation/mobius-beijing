@@ -415,6 +415,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 				//console.log("script execution finsihed");
 			}
 			catch(ex){
+
+				console.log(`Execution Error: ${ex}`)
 				node.hasError();
 
 				// Unexpected Identifier

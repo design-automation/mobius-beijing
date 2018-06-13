@@ -331,42 +331,6 @@ export class GraphNode implements IGraphNode{
 	//
 	//
 	//
-	/*isIndependent(): boolean{
-		if(this._dependencies.length > 0)
-			return false; 
-		return true;
-	}
-
-	addDependency(node_port_input_idx : number[]){
-
-		if( this._dependencyNodes.indexOf( node_port_input_idx[0] ) == -1){
-			this._dependencyNodes.push(node_port_input_idx[0]);
-		}
-
-		this._dependencies.push(node_port_input_idx);
-	}
-	
-	removeDependency(node_port_idx: number[]){
-		
-	}
-
-	getDependencies(): number[][]{
-		return this._dependencies;
-	}
-
-	
-	getDependencyNodes(): number[]{ 
-		return this._dependencyNodes 
-	};
-	
-	rank(): number{ 
-		return this._dependencyNodes.length 
-	};*/
-
-
-	//
-	//
-	//
 	execute(code_generator: ICodeGenerator, modules: IModule[], print: Function, globals?: any): void{
 
 		let window_params: string[] = [];
@@ -396,11 +360,11 @@ export class GraphNode implements IGraphNode{
 
 					i.setComputedValue(val);
 					// file processing
-					let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
+					/*let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
 					window[file_name] = i.getValue();
 					params[i.getName()] = "window[" + file_name + "]";
 					window_params.push("window[" + file_name + "]");
-					i._executionAddr =  "window['" + file_name + "']";;
+					i._executionAddr =  "window['" + file_name + "']";;*/
 
 					live_data_downloads--;
 
@@ -421,16 +385,7 @@ export class GraphNode implements IGraphNode{
 				params[i.getName()] = fn_def;
 			}
 			else{
-				if(i.getType() === InputPortTypes.FilePicker){
-					let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
-					window[file_name] = i.getValue();
-					params[i.getName()] = "window[" + file_name + "]";
-					window_params.push("window[" + file_name + "]");
-					i._executionAddr =  "window['" + file_name + "']";;
-				}
-				else{
-					params[i.getName()] = i.getValue(); 
-				}
+				params[i.getName()] = i.getValue(); 
 			}
 
 		});
@@ -442,7 +397,8 @@ export class GraphNode implements IGraphNode{
 					let node_code: string =  code_generator.getNodeCode(self, undefined, true);
 					o.setDefaultValue( node_code );
 				}
-			})
+			});
+
 
 			// use code generator to execute code
 			let result: any  = code_generator.executeNode(self, params, modules, print, globals);
@@ -460,7 +416,10 @@ export class GraphNode implements IGraphNode{
 				delete window[filename];
 			})
 
-			self.getInputs().map( i => i._executionAddr = undefined );
+			//self.getInputs().map( i => i._executionAddr = undefined );
+
+
+
 	    }
 
 

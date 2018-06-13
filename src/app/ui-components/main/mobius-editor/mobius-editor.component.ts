@@ -33,8 +33,8 @@ export class MobiusEditorComponent implements OnInit {
     		this.processing = mobiusService.processing;
     		let self = this;
     		mobiusService.stateChangedEmitter().subscribe({
-    			next(value){ self.processing = value; console.log(`Message: ${value}`); },
-    			error(message){ console.log(message) }
+    			next(value){ self.processing = value; },
+    			error(message){ }
     		})
     	}
     	else{
