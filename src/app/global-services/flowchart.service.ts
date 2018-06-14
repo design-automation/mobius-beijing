@@ -1,7 +1,9 @@
-import {Injectable, Input, Output} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Subject} from 'rxjs/Subject';
+import {Injectable, Input, Output, EventEmitter} from '@angular/core';
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+
 
 import {IFlowchart, Flowchart, FlowchartReader} from '../base-classes/flowchart/FlowchartModule';
 import {IGraphNode, GraphNode} from '../base-classes/node/NodeModule';
@@ -46,6 +48,9 @@ export class FlowchartService {
 
   private _freeze: boolean = false;
 
+  private fcX = new Subject<{status:number, fc:IFlowchart}>();
+  private nX = new Subject<IGraphNode>();
+
   private check(){
     return this._flowchart != undefined;
   }
@@ -66,6 +71,17 @@ export class FlowchartService {
   set freeze(value){
     this._freeze = value;
   }
+
+  get flowchart(): Observable<{fc:IFlowchart, status:number}>{
+    return this.fcX.asObservable();
+  }
+
+  get selected_node(): Observable<IGraphNode>{
+    return this.nX.asObservable();
+  }
+
+
+
 
   getCodeGenerator(): ICodeGenerator{
     return this.code_generator;
@@ -228,6 +244,7 @@ export class FlowchartService {
           }
 
           _this.update();
+
 
           //this.consoleService.addMessage("File loaded successfully");
           // this.layoutService.showConsole();
@@ -478,11 +495,16 @@ export class FlowchartService {
     }
 
     this._flowchart.addNode(new_node);
+    this.fcX.next({status: 1, fc:<IFlowchart>this._flowchart});
+    //this.update();
 
     this.selectNode(this._flowchart.getNodes().length - 1);
 
     // print message to console
     this.consoleService.addMessage("New Node was added");
+
+
+   //
 
   }
 
@@ -621,7 +643,7 @@ export class FlowchartService {
     this._selectedNode = nodeIndex;
     this._selectedPort = portIndex || 0;
     this._selectedProcedure = undefined;
-    this.update();
+    //this.fcX.next({status: -1, fc:<IFlowchart>this._flowchart});
   }
 
   selectProcedure(prod: IProcedure): void{
@@ -760,7 +782,9 @@ export class FlowchartService {
   // get execution code    
   //
   getCode(): string{
-    return this.code_generator.getDisplayCode(this._flowchart);
+    console.log("get code called");
+    return ""
+    //return this.code_generator.getDisplayCode(this._flowchart);
   }
 
   saveFile(local?: boolean): void{

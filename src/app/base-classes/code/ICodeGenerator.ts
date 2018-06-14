@@ -16,7 +16,7 @@ export interface ICodeGenerator{
 		setModules(modules: IModule[]): void;
 
 		// takes a flowchart and generates some code string 
-		getDisplayCode(flowchart: IFlowchart) :string;
+		display_code(flowchart: IFlowchart) :string;
 
 		// various functions to generate different parts of the code
 		getDefinition(node: IGraphNode): string;

@@ -15,7 +15,7 @@ import { FlowchartService } from './global-services/flowchart.service';
 import { ConsoleService } from './global-services/console.service';
 import { LayoutService } from './global-services/layout.service'; 
 import { MobiusService } from './global-services/mobius.service'; 
-
+import { CodeService } from './global-services/code.service'; 
 
 /*import { ModuleService } from './global-services/module.service';
 */
@@ -143,7 +143,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MobiusCesium,
     NgxJsonViewerModule,
   ],
-  providers: [FlowchartService, LayoutService, ConsoleService, MobiusService],
+  providers: [FlowchartService, 
+              LayoutService, 
+              ConsoleService, 
+              MobiusService,
+              CodeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

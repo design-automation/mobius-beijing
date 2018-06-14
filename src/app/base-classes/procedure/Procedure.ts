@@ -106,18 +106,13 @@ export abstract class Procedure implements IProcedure{
 		}
 	}
 
-	printToConsole(): boolean{
+	get print(): boolean{
 		return this._printToConsole;
 	}
 
-	enablePrint(): void{
-		this._printToConsole = true;
+	set print(value: boolean){
+		this._printToConsole = value;
 	}
-
-	disablePrint(): void{
-		this._printToConsole = false;
-	}
-
 
 	hasParent(): boolean{
 		if(this._parent == undefined){

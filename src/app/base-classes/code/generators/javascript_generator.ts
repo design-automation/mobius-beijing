@@ -15,7 +15,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 		//
 		//	gets the display code for the flowchart
 		//
-		getDisplayCode(flow: IFlowchart){
+		display_code(flow: IFlowchart){
 
 			let fn_calls :string[]= [];
 			let code_defs: string[] = [];

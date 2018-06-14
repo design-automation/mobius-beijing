@@ -36,7 +36,6 @@ export class CesiumViewerComponent extends Viewer implements OnInit{
 
           let portValue = this._port.getValue();
           if(portValue){
-            console.log(portValue.features[0])
             this.gs_dummy_data = portValue;
           }
           else{

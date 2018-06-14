@@ -25,7 +25,7 @@ export abstract class CodeGenerator implements ICodeGenerator{
 	}
 
 	// takes a flowchart and generates some code string 
-	getDisplayCode(flowchart:IFlowchart) :string{
+	display_code(flowchart:IFlowchart) :string{
 		throw Error("Not implemented");
 	};
 

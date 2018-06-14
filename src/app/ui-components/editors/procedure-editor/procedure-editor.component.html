@@ -27,7 +27,9 @@
 								  		let-prod 
 								  		let-index="index" 
 								  		class="tree-node-wrapper">
-								  		<div class = "full-container" (click)="focus($event, prod)" (mouseover)="hover($event, prod)">
+								  		<div class = "full-container" 
+								  			(click)="_activeProcedure = prod" 
+								  			(mouseover)="_activeProcedure = prod">
 
 								  			<div class = "seg1" 
 								  				[class.print]="prod.data.printToConsole()"

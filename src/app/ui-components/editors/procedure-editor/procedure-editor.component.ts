@@ -1,5 +1,8 @@
-import {Component, Injector, OnInit, ViewChild, HostListener} from '@angular/core';
-import {NgModel} from '@angular/forms';
+import { Component, 
+		 OnInit, OnDestroy,
+		 ViewChild, HostListener} from '@angular/core';
+
+import { NgModel } from '@angular/forms';
 
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
 import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
@@ -8,9 +11,7 @@ import {Viewer} from '../../../base-classes/viz/Viewer';
 import {FlowchartService} from '../../../global-services/flowchart.service';
 import {LayoutService} from '../../../global-services/layout.service';
 
-
 import {ModuleUtils} from "../../../base-classes/code/CodeModule";
-
 
 export enum KEY_CODE {
   CUT = 88,
@@ -18,23 +19,24 @@ export enum KEY_CODE {
   PASTE = 86 
 }
 
+
+/*
+ *	Displays the drag-drop procedure for a node
+ *
+ * 	Updates on:
+ * 	- selected_node is changed
+ * 	- selected_node is updated
+ */
+
 @Component({
   selector: 'app-procedure-editor',
   templateUrl: './procedure-editor.component.html',
   styleUrls: ['./procedure-editor.component.scss']
 })
-export class ProcedureEditorComponent extends Viewer implements OnInit{
+export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
+	// ----- Tree Initialization
 	@ViewChild('tree') tree;
-
-	_focusedProd;
-
-  	_procedureArr: IProcedure[] = [];
-  	_node: IGraphNode;
-
-  	_variableList: string[];
-
-  	//_treeNodes = [];
 	_tree_options = {
 	  allowDrag: function(element){
 	  	if(element.data._type == ProcedureTypes.IfControl || element.data._type == ProcedureTypes.ElseControl){
@@ -54,45 +56,29 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	};
 
 
-	constructor(injector: Injector, private layoutService: LayoutService){  
-		super(injector, "procedure-editor"); 
-	}
+	// ----- Private Variables
+	private _nodeX;
+  	_node: IGraphNode;  // node displayed
+  	_activeProcedure;			// procedure in focus
+  	_procedureArr: IProcedure[] = [];
+  	_variableList: string[];
+  	copiedProd: IProcedure;
 
-	@HostListener('window:keyup', ['$event'])
-		keyEvent(event: KeyboardEvent) {
-
-			var key = event.keyCode
-			var ctrlDown = event.ctrlKey || event.metaKey // Makey support
-
-			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); return;	};
-
-			if (ctrlDown && key == KEY_CODE.CUT) {
-				this.copyProcedure(event, this.nodeInFocus, false);
-			}
-			else if(ctrlDown && key == KEY_CODE.COPY) {
-				this.copyProcedure(event, this.nodeInFocus, true);
-			}
-			else if(ctrlDown && key == KEY_CODE.PASTE){
-				this.pasteProcedure(event, this.nodeInFocus);
-			}
-		}
-
-
-	nodeInFocus;
-	hover($event, node): void{
-		//console.log("hovering", $event, node)
-		this.nodeInFocus = node;
-	}
+	constructor(private _fs: FlowchartService, 
+				private _ls: LayoutService) { }
 
 	ngOnInit(){
-		this.setProperties();
-		this.tree.treeModel.update();
+		this._nodeX = this._fs.selected_node.subscribe((node:IGraphNode) => {
+			this.setProperties();
+			this.tree.treeModel.update();
+		})
 	}
 
-	ngAfterViewInit() {
-    	this.tree.treeModel.expandAll();
-  	}
+	ngOnDestroy(){
+		this._nodeX.unsubsribe()
+	}
 
+	
 	reset():void{
 		this._procedureArr = [];
 		this._node = undefined;
@@ -103,7 +89,7 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 		if(message == "procedure"){
 			this.tree.treeModel.update();
 			this._variableList = this._node.getVariableList();
-			this._focusedProd = this.flowchartService.getSelectedProcedure();
+			this._activeProcedure = this.flowchartService.getSelectedProcedure();
 		}
 		else{
 			this.setProperties();
@@ -118,19 +104,19 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 		let selectedProd = this.flowchartService.getSelectedProcedure();
 
 		if(selectedProd){
-			this._focusedProd = selectedProd;
+			this._activeProcedure = selectedProd;
 			
 		}
 		else{
 			if(this._procedureArr.length>1){
-				this._focusedProd = this._procedureArr[0];
+				this._activeProcedure = this._procedureArr[0];
 			}
 			else{
 				// do nothing
 			}
 		}
 
-		this.tree.treeModel.setFocusedNode(this._focusedProd )
+		this.tree.treeModel.setFocusedNode(this._activeProcedure )
 
 		this._variableList = this._node.getVariableList();
 
@@ -152,11 +138,6 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	//
 	// Procedure Functions 
 	//
-	focus($event, prod): void{
-		this._focusedProd = prod;
-		this.flowchartService.selectProcedure(prod.data);
-	}
-
 	openHelp($event, prod): void{
 		$event.stopPropagation();
 
@@ -168,12 +149,7 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 	}
 
 	togglePrint(prod: IProcedure): void{
-		if (prod.printToConsole()){
-			prod.disablePrint();
-		}
-		else{
-			prod.enablePrint();
-		}
+		prod.print = !prod.print;
 	}
 
 	toggle(prod: IProcedure): void{
@@ -184,6 +160,76 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 			prod.disable();
 		}
 	}
+
+
+	//
+	//
+	//
+	onMoveNode($event) {
+		// get previous parent
+		let moved_procedure: IProcedure = $event.node;
+		let to_procedure: IProcedure = $event.to.parent;
+		let moved_position: number = $event.to.index;
+
+		moved_procedure.setParent(to_procedure);
+
+	}
+
+	//
+	//	procedure update
+	//
+	updateProcedure($event: Event, prod: any, property: string){
+
+		// todo: change this string attachment!
+		if(property == 'left' && prod.data._type !== "If"){
+			prod.data.getLeftComponent().expression = prod.data.getLeftComponent().expression.replace(/[^\w\[\]]/gi, '');
+		}
+
+		if(property == 'right' && prod.data._type == "Function"){
+			this.updateFunctionProd(prod.data);
+		}
+
+		this._variableList = this._node.getVariableList();
+
+	}
+
+	// helper function
+	updateFunctionProd(prod: any){
+		let rightC = prod.getRightComponent();
+		let reqParams = prod.updateParams().length;
+
+
+		if(rightC.params.length > reqParams){
+			rightC.params = rightC.params.slice(0, reqParams);
+		}
+
+		let paramStr = rightC.params.join(",");
+		let expr: string = prod.getFunctionName() + "(" + paramStr + ")" + "." + rightC.category;
+		rightC.expression = expr;
+	}
+
+
+
+	// ---- Cut / Copy / Paste Functions
+	@HostListener('window:keyup', ['$event'])
+		keyEvent(event: KeyboardEvent) {
+
+			var key = event.keyCode
+			var ctrlDown = event.ctrlKey || event.metaKey // Makey support
+
+			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); return;	};
+
+			if (ctrlDown && key == KEY_CODE.CUT) {
+				this.copyProcedure(event, this._activeProcedure, false);
+			}
+			else if(ctrlDown && key == KEY_CODE.COPY) {
+				this.copyProcedure(event, this._activeProcedure, true);
+			}
+			else if(ctrlDown && key == KEY_CODE.PASTE){
+				this.pasteProcedure(event, this._activeProcedure);
+			}
+		}
+
 
 	deleteProcedure(node): void{
 
@@ -196,11 +242,8 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 			parent.data.deleteChild(node.data);
 			this.tree.treeModel.update();
 		}
-
-		this.flowchartService.selectProcedure(undefined);
 	}
-
-	copiedProd: IProcedure;
+	
 	copyProcedure($event, node, copy: boolean): void{
 		try{
 			let prod: IProcedure = node.data;
@@ -264,53 +307,5 @@ export class ProcedureEditorComponent extends Viewer implements OnInit{
 			this.copiedProd = undefined;
 		}
 	}
-
-	//
-	//
-	//
-	onMoveNode($event) {
-		// get previous parent
-		let moved_procedure: IProcedure = $event.node;
-		let to_procedure: IProcedure = $event.to.parent;
-		let moved_position: number = $event.to.index;
-
-		moved_procedure.setParent(to_procedure);
-
-	}
-
-	//
-	//	procedure update
-	//
-	updateProcedure($event: Event, prod: any, property: string){
-
-		// todo: change this string attachment!
-		if(property == 'left' && prod.data._type !== "If"){
-			prod.data.getLeftComponent().expression = prod.data.getLeftComponent().expression.replace(/[^\w\[\]]/gi, '');
-		}
-
-		if(property == 'right' && prod.data._type == "Function"){
-			this.updateFunctionProd(prod.data);
-		}
-
-		this._variableList = this._node.getVariableList();
-
-	}
-
-	// helper function
-	updateFunctionProd(prod: any){
-		let rightC = prod.getRightComponent();
-		let reqParams = prod.updateParams().length;
-
-
-		if(rightC.params.length > reqParams){
-			rightC.params = rightC.params.slice(0, reqParams);
-		}
-
-		let paramStr = rightC.params.join(",");
-		let expr: string = prod.getFunctionName() + "(" + paramStr + ")" + "." + rightC.category;
-		rightC.expression = expr;
-	}
-
-
 
 }

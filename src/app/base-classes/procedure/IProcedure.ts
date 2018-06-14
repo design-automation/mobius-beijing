@@ -23,6 +23,8 @@ export interface IProcedure{
 	hasChildren: boolean; 
 	children: IProcedure[];
 
+	print;
+
 	getLevel(): number;
 
 	getType(): ProcedureTypes; 
@@ -39,10 +41,6 @@ export interface IProcedure{
 
 	setError(value: boolean): void;
 	getError(): void;
-
-	printToConsole(): boolean;
-	enablePrint(): void;
-	disablePrint(): void;
 
 	hasParent(): boolean;
 	setParent(parent: IProcedure): void;
