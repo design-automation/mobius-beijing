@@ -21,7 +21,7 @@ export class CodeViewerComponent implements OnInit, OnDestroy{
 
 	ngOnInit(){
 		this._flowchartX = this._fs.flowchart.subscribe((fc) => {
-			this.update_code(fc.fc);
+			this.update_code(fc);
 		})
 	}
 

@@ -1,4 +1,4 @@
-import { Component,  Injector } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
@@ -8,54 +8,29 @@ import { IGraphNode } from '../../../base-classes/node/NodeModule';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent extends Viewer{
- 
-  _selectedNode: IGraphNode; 
+export class EditorComponent implements OnInit, OnDestroy{
+  
+  private _nodeX;
+
   _moduleList = [];
   _freeze: boolean;
 
   isVisible: boolean = false;
 
-  constructor(injector: Injector){  
-    super(injector, "Editor");  
+  constructor(private _fs: FlowchartService){}
+
+  ngOnInit(){ 
+    this._nodeX = this._fs.active_node.subscribe( (node:IGraphNode) => this.update_view(node) );
+    this._freeze = this._fs.freeze;
   }
 
-  ngOnInit(){
-    this._freeze = this.flowchartService.freeze;
+  ngOnDestroy(){
+    this._nodeX.unsubscribe() 
   }
 
-  update(){
-    this._selectedNode = this.flowchartService.getSelectedNode();
-    this._freeze = this.flowchartService.freeze;
-
-    if(this._selectedNode == undefined){
-      this.isVisible = false;
-    }
-    else{
-      this.isVisible = true;
-    }
-  }
-
-  reset(){
-    this._selectedNode = this.flowchartService.getSelectedNode();
-    if(this._selectedNode == undefined){
-      this.isVisible = false;
-    }
-    else{
-      this.isVisible = true;
-    }
-  }
-
-
-  updateNodeName($event, node): void{
-    let name: string =  $event.srcElement.value;
-
-    name = name.replace(/[^\w]/gi, '');
-
-    if(name.trim().length > 0){
-      node.setName(name);
-      this.flowchartService.update();
-    }
+  update_view(node:IGraphNode){
+    this._freeze = this._fs.freeze;
+    this.isVisible = node == undefined ? false : true; 
   }
 
 }

@@ -48,7 +48,7 @@ export class FlowchartService {
 
   private _freeze: boolean = false;
 
-  private fcX = new Subject<{status:number, fc:IFlowchart}>();
+  private fcX = new Subject<IFlowchart>();
   private nX = new Subject<IGraphNode>();
 
   private check(){
@@ -72,14 +72,21 @@ export class FlowchartService {
     this._freeze = value;
   }
 
-  get flowchart(): Observable<{fc:IFlowchart, status:number}>{
+  get flowchart(): Observable<IFlowchart>{
     return this.fcX.asObservable();
   }
 
-  get selected_node(): Observable<IGraphNode>{
+  get active_node(): Observable<IGraphNode>{
     return this.nX.asObservable();
   }
 
+  set active_node(nodeIndex){
+    this._selectedNode = nodeIndex;
+    this._selectedPort = 0;
+    this._selectedProcedure = undefined;
+
+    this.nX.next(<IGraphNode>this._flowchart.getNodes()[nodeIndex]);
+  }
 
 
 
@@ -495,7 +502,7 @@ export class FlowchartService {
     }
 
     this._flowchart.addNode(new_node);
-    this.fcX.next({status: 1, fc:<IFlowchart>this._flowchart});
+    this.fcX.next(<IFlowchart>this._flowchart);
     //this.update();
 
     this.selectNode(this._flowchart.getNodes().length - 1);
@@ -643,7 +650,8 @@ export class FlowchartService {
     this._selectedNode = nodeIndex;
     this._selectedPort = portIndex || 0;
     this._selectedProcedure = undefined;
-    //this.fcX.next({status: -1, fc:<IFlowchart>this._flowchart});
+
+    this.nX.next(<IGraphNode>this._flowchart.getNodes()[nodeIndex]);
   }
 
   selectProcedure(prod: IProcedure): void{

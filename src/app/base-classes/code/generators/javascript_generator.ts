@@ -265,7 +265,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 				code =  init + procedure.getLeftComponent().expression + " = " + procedure.getRightComponent().expression + ";";
 
-				if(procedure.printToConsole()){
+				if(procedure.print){
 					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.getLeftComponent().expression + "\', " + procedure.getLeftComponent().expression + ");\n";
 				}
 
@@ -304,7 +304,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 						+ right.module.trim()
 						+ "." + right.fn_name + "( " + paramList.join(",") + " );\n";
 
-				if(procedure.printToConsole()){
+				if(procedure.print){
 					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.getLeftComponent().expression + "\', " + procedure.getLeftComponent().expression + ");\n";
 				}
 

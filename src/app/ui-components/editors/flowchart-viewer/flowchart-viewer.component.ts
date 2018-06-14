@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, Injector, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, 
+         OnInit, OnDestroy, 
+         ViewChild, ElementRef, 
+         HostListener } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
@@ -19,7 +22,7 @@ import {PublishSettingsComponent} from '../publish-settings/publish-settings.com
   templateUrl: './flowchart-viewer.component.html',
   styleUrls: ['./flowchart-viewer.component.scss']
 })
-export class FlowchartViewerComponent extends Viewer{
+export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
   pan_mode: boolean = false;
   pan_init;
@@ -40,32 +43,27 @@ export class FlowchartViewerComponent extends Viewer{
 
   showDialog: {status: boolean, position: number[]} = {status: false, position: [0,0]};
 
-  constructor(injector: Injector, 
+  private _flowchartX;
+
+  constructor(private _fs: FlowchartService, 
     private consoleService: ConsoleService, 
-    public dialog: MatDialog){  
-    super(injector, "FlowchartViewer");  
+    public dialog: MatDialog){}
 
-    // bad bad bad!
-    /*let self = this;
-    document.addEventListener("keydown", function(e) {
-      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
-        e.preventDefault();
-        self.save(true);
-        //your implementation or function calls
-      }
-    }, false);*/
-
+  ngOnInit(){
+    this._flowchartX = this._fs.flowchart.subscribe((fc) => this.update_flowchart(fc) );
   }
 
   ngOnDestroy(){
-    this.consoleService = null;
-    this._nodes = null; 
-    this._edges = null;
+    this._flowchartX.unsubscribe()
+  }
+
+  update_flowchart(fc){
+    console.log("Flowchart-Updated-in-Viewer");
   }
 
   reset(){ 
 
-    if( this.flowchartService.getNodes().length ){
+    if( this._fs.getNodes().length ){
          this.update();
     }
     else{
@@ -85,7 +83,7 @@ export class FlowchartViewerComponent extends Viewer{
   deleteNode(node_index: number): void{
     this._selectedNode = undefined; 
     ////this.layoutService.hideEditor();
-    this.flowchartService.deleteNode(node_index);
+    this._fs.deleteNode(node_index);
   }
 
   toggleNode(node: IGraphNode, node_index: number): void{ 
@@ -98,11 +96,11 @@ export class FlowchartViewerComponent extends Viewer{
   }
 
   addFunctionOutput(node_index){
-    this.flowchartService.disconnectNode(node_index);
+    this._fs.disconnectNode(node_index);
     
     let node: IGraphNode = this._nodes[node_index];
-    node.addFnOutput( this.flowchartService.getCodeGenerator() );
-    this.flowchartService.update();
+    node.addFnOutput( this._fs.getCodeGenerator() );
+    this._fs.update();
   }
 
   //
@@ -145,7 +143,7 @@ export class FlowchartViewerComponent extends Viewer{
   }
 
   lastSaved(): Date{
-    let date: Date = this.flowchartService.getLastSaved();
+    let date: Date = this._fs.getLastSaved();
     return date;
   }
 
@@ -188,8 +186,8 @@ export class FlowchartViewerComponent extends Viewer{
 
   update(){
 
-    this._nodes = this.flowchartService.getNodes();
-    this._edges = this.flowchartService.getEdges();
+    this._nodes = this._fs.getNodes();
+    this._edges = this._fs.getEdges();
 
     let m = this._margin; 
     let pw = this._portWidth;
@@ -206,9 +204,9 @@ export class FlowchartViewerComponent extends Viewer{
 
     this.updateEdges();
 
-    this._selectedNode = this.flowchartService.getSelectedNode();
-    this._selectedNodeIndex = this.flowchartService.getSelectedNodeIndex();
-    this._selectedPortIndex = this.flowchartService.getSelectedPortIndex();
+    this._selectedNode = this._fs.getSelectedNode();
+    this._selectedNodeIndex = this._fs.getSelectedNodeIndex();
+    this._selectedPortIndex = this._fs.getSelectedPortIndex();
   }
 
   resetData(): void{
@@ -225,7 +223,7 @@ export class FlowchartViewerComponent extends Viewer{
       return false;
     }
 
-    return this.flowchartService.isSelected(node);
+    return this._fs.isSelected(node);
   }
 
   isPortSelected(nodeIndex:number, portIndex: number){
@@ -247,17 +245,17 @@ export class FlowchartViewerComponent extends Viewer{
   addNode($event, type: number): void{
     $event.stopPropagation();
     if(type == undefined){
-      this.flowchartService.addNode();
+      this._fs.addNode();
     }
     else{
-      this.flowchartService.addNode(type);
+      this._fs.addNode(type);
     }
 
     this.update();
   }
 
   addEdge(outputPortAddress: number[], inputPortAddress: number[]): void{
-    this.flowchartService.addEdge(outputPortAddress, inputPortAddress);
+    this._fs.addEdge(outputPortAddress, inputPortAddress);
   }
 
   //
@@ -267,19 +265,19 @@ export class FlowchartViewerComponent extends Viewer{
   //
   deselect($event){
      $event.stopPropagation();
-     this.flowchartService.selectNode(undefined, undefined);
+     this._fs.selectNode(undefined, undefined);
   }
 
   clickNode($event: Event, nodeIndex: number): void{
     // select the node
     $event.stopPropagation();
-    this.flowchartService.selectNode(nodeIndex);
+    this._fs.selectNode(nodeIndex);
   }
 
   clickPort($event: Event, nodeIndex: number, portIndex: number): void{
     // select the node
     $event.stopPropagation();
-    this.flowchartService.selectNode(nodeIndex, portIndex);
+    this._fs.selectNode(nodeIndex, portIndex);
   }
 
   // clickEdge(): void{
@@ -298,7 +296,7 @@ export class FlowchartViewerComponent extends Viewer{
   //       this._nodes[nodeIndex].addOutput();
   //   }  
 
-  //   this.flowchartService.update();
+  //   this._fs.update();
   // }
 
 
@@ -339,7 +337,7 @@ export class FlowchartViewerComponent extends Viewer{
         this.shakeCount++;
 
         if(this.shakeCount == 8){
-           this.flowchartService.disconnectNode(nodeIndex);
+           this._fs.disconnectNode(nodeIndex);
         }
 
       }
@@ -636,7 +634,7 @@ export class FlowchartViewerComponent extends Viewer{
 
     if(!flag){
       this._selectedNode.setName(name);
-      this.flowchartService.update();
+      this._fs.update();
     }
     else{
       $event.target.value = this._selectedNode.getName();
@@ -645,7 +643,7 @@ export class FlowchartViewerComponent extends Viewer{
   }
 
   saveNode(node: IGraphNode): void{
-    this.flowchartService.saveNode(node);
+    this._fs.saveNode(node);
   }
 
 
@@ -664,7 +662,7 @@ export class FlowchartViewerComponent extends Viewer{
     if (file) {
         var reader = new FileReader();
         reader.readAsText(file, "UTF-8");
-        let fs = this.flowchartService;
+        let fs = this._fs;
         reader.onload = function (evt) {
           let fileString: string = evt.target["result"];
           fs.loadFile(fileString);
@@ -673,20 +671,20 @@ export class FlowchartViewerComponent extends Viewer{
             console.log("Error reading file");
         }
     }
-    // this.flowchartService.loadFile(url);
+    // this._fs.loadFile(url);
   }
 
   loadFromMemory(): void{
-    this.flowchartService.checkSavedFile();
+    this._fs.checkSavedFile();
   }
 
   save(value: boolean): void{
-    this.flowchartService.saveFile(value);
+    this._fs.saveFile(value);
     //this.layoutService.showConsole();
   }
 
   newfile(): void{
-    this.flowchartService.newFile();
+    this._fs.newFile();
   }
 
   publishSettings(): void{

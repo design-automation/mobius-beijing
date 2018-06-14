@@ -67,41 +67,39 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	constructor(private _fs: FlowchartService, 
 				private _ls: LayoutService) { }
 
-	ngOnInit(){
-		this._nodeX = this._fs.selected_node.subscribe((node:IGraphNode) => {
-			this.setProperties();
-			this.tree.treeModel.update();
-		})
+	ngOnInit(){ 
+		this._nodeX = this._fs.active_node.subscribe((node:IGraphNode) => this.update_node(node))
 	}
 
 	ngOnDestroy(){
-		this._nodeX.unsubsribe()
+		this._nodeX.unsubsribe();
 	}
 
-	
-	reset():void{
-		this._procedureArr = [];
-		this._node = undefined;
-		this._variableList = [];
+	update_node(node: IGraphNode): void{
+		this._node = node;
+		this._procedureArr = node.getProcedure();
+		this._variableList = node.getVariableList();
+
+		this.tree.treeModel.update();
 	}
 
-	update(message: string){
-		if(message == "procedure"){
-			this.tree.treeModel.update();
-			this._variableList = this._node.getVariableList();
-			this._activeProcedure = this.flowchartService.getSelectedProcedure();
-		}
-		else{
-			this.setProperties();
-		}
-	}	
+	// update(message: string){
+	// 	if(message == "procedure"){
+	// 		this.tree.treeModel.update();
+	// 		this._variableList = this._node.getVariableList();
+	// 		this._activeProcedure = this._fs.getSelectedProcedure();
+	// 	}
+	// 	else{
+	// 		this.setProperties();
+	// 	}
+	// }	
 
-	setProperties(): void{
-		this._node = this.flowchartService.getSelectedNode();
+	/*setProperties(): void{
+		this._node = this._fs.getSelectedNode();
 		this._procedureArr = this._node.getProcedure();	
 
 		// if procedure is selected, add it
-		let selectedProd = this.flowchartService.getSelectedProcedure();
+		let selectedProd = this._fs.getSelectedProcedure();
 
 		if(selectedProd){
 			this._activeProcedure = selectedProd;
@@ -127,7 +125,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 			}
 		}
 
-	}
+	}*/
 	
 
 	
@@ -144,7 +142,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 		if(prod.data._type == "Action"){
 			let fn = prod.data.getRightComponent().expression.split(".");
 			fn = { module: fn[0], name: fn[1] };
-			this.layoutService.showHelp(fn);
+			this._ls.showHelp(fn);
 		}
 	}
 
