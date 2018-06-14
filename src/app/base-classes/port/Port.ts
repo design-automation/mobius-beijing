@@ -54,7 +54,7 @@ export abstract class Port implements IPort{
 		this.opts = portData["opts"];
 
 		// todo: assign computed also??
-		// this._computed = portData["_computed"];
+		this._computed = portData["_computed"];
 	}	
 
 
