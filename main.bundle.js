@@ -1953,7 +1953,7 @@ class Port {
         this._isFunction = portData["_isFunction"];
         this.opts = portData["opts"];
         // todo: assign computed also??
-        // this._computed = portData["_computed"];
+        this._computed = portData["_computed"];
     }
     // ---- Getters and Settings
     // TODO: Convert to get/set methods
