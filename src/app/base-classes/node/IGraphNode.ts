@@ -5,6 +5,13 @@ import {IProcedure} from "../procedure/ProcedureModule";
 export interface IGraphNode{
 
 	position: number[];
+	name: string;
+	id: string;
+
+	inputs: InputPort[];
+	outputs: OutputPort[];
+
+	enabled: boolean;
 
 	// prototype
 	getName(): string; 

@@ -13,23 +13,24 @@ import * as js_beautify from 'js-beautify';
 })
 export class CodeViewerComponent implements OnInit, OnDestroy{
 
+	private subscriptions = [];
+	
 	private _codeString: string;
-	private _flowchartX;
 
 	constructor(private _cs: CodeService, 
 				private _fs: FlowchartService) { }
 
 	ngOnInit(){
-		this._flowchartX = this._fs.flowchart.subscribe((fc) => {
-			this.update_code(fc);
-		})
-	}
-
-	update_code(fc): void{
-		this._codeString = js_beautify.js_beautify(this._cs.generator.display_code(fc)); 
+		this.subscriptions.push( 	
+			this._fs.flowchart$.subscribe((fc) => 
+				this._codeString = js_beautify.js_beautify(this._cs.generator.display_code(fc)) ) 
+		);
 	}
 
 	ngOnDestroy(){
-		this._flowchartX.unsubscribe();
+		this.subscriptions.map(function(s){
+			s.unsubscribe();
+		})
 	}
+
 } 

@@ -1,9 +1,12 @@
 import { Component, 
+         Output, EventEmitter,
          OnInit, OnDestroy, 
          ViewChild, ElementRef, 
          HostListener } from '@angular/core';
 import { NgClass } from '@angular/common';
 
+import { IFlowchart } from '../../../base-classes/flowchart/IFlowchart';
+import { FlowchartUtils } from '../../../base-classes/flowchart/Flowchart';
 import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
@@ -16,6 +19,56 @@ import {MatMenuModule} from '@angular/material/menu';
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {PublishSettingsComponent} from '../publish-settings/publish-settings.component';
+
+
+abstract class  FlowchartRenderUtils{
+  private static _portWidth: number = 15; 
+  private static _margin: number = 10;  
+
+  public static node_width(node: IGraphNode): number{
+    let max = Math.max(node.inputs.length, node.outputs.length); 
+    let width = FlowchartRenderUtils._margin*(max+1) + (max)*FlowchartRenderUtils._portWidth;
+    return width;
+  }
+
+
+  public static get_port_position(node: IGraphNode, portIndex: number, portType: string): {x: number, y: number}{
+
+    let x: number;
+    let y: number;
+    let port_size: number = 15;
+
+    let name: string = "n" + node.id + portType + portIndex;
+    let el: any = document.getElementById(name);
+
+    if(el == null || node == undefined){
+      return {x: 0, y: 0};
+    }
+
+    let node_pos: number[] = node.position;
+
+    let port_pos_x = el.offsetLeft;
+    let port_pos_y = el.offsetTop;
+    let node_width = el.offsetParent.offsetWidth;
+
+    if(portType == "pi"){
+      x = node_pos[0];
+      y = node_pos[1] + (port_pos_y + port_size/2);
+    } 
+    else if(portType == "po"){
+      x = node_pos[0] + node_width;
+      y = node_pos[1] + (port_pos_y + port_size/2);
+    }
+    else{
+      throw Error("Unknown port type");
+    }
+
+    return {x: x, y: y};
+  }
+
+
+}
+
 
 @Component({
   selector: 'app-flowchart-viewer',
@@ -30,75 +83,69 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   top: number = 0;
   zoom: number = 1; 
 
-  _portWidth: number = 15; 
-  _margin: number = 10; 
 
   _selectedNode: IGraphNode;
   _selectedNodeIndex: number;
   _selectedPortIndex: number;
-  _nodes: IGraphNode[] = [];
-  _edges: IEdge[] = [];
+
+
+  fc: IFlowchart;
 
   showLibrary: boolean = false;
 
   showDialog: {status: boolean, position: number[]} = {status: false, position: [0,0]};
 
-  private _flowchartX;
+  private subscriptions = [];
+  private active_node: IGraphNode;
 
   constructor(private _fs: FlowchartService, 
     private consoleService: ConsoleService, 
     public dialog: MatDialog){}
 
   ngOnInit(){
-    this._flowchartX = this._fs.flowchart.subscribe((fc) => this.update_flowchart(fc) );
+    this.subscriptions.push(this._fs.flowchart$.subscribe((fc) => this.render_flowchart(fc) ));
+    this.subscriptions.push(this._fs.node$.subscribe( (node) => this.active_node = node ));
   }
 
   ngOnDestroy(){
-    this._flowchartX.unsubscribe()
+    this.subscriptions.map(function(s){
+      s.unsubscribe();
+    })
+  }
+  
+  push_flowchart(){
+    this._fs.push_flowchart(this.fc)
   }
 
-  update_flowchart(fc){
-    console.log("Flowchart-Updated-in-Viewer");
+  push_node(){
+    this._fs.push_node(this.active_node)
   }
 
-  reset(){ 
+  render_flowchart(fc: IFlowchart){
+    this.fc = fc;
 
-    if( this._fs.getNodes().length ){
-         this.update();
-    }
-    else{
-      this._selectedNode = undefined;
-      this._selectedNodeIndex = undefined;
-      this._selectedPortIndex = undefined;
-      this._nodes = [];
-      this._edges = [];
-    }
+    this.fc.nodes.map( (node) => node["width"] = FlowchartRenderUtils.node_width(node) );
+    this.fc.edges.map( (edge) => {
+      edge["inputPosition"] = FlowchartRenderUtils.get_port_position( this.fc.nodes[edge.input_address[0]], edge.input_address[1], "pi");
+      edge["outputPosition"] = FlowchartRenderUtils.get_port_position(this.fc.nodes[edge.output_address[0]], edge.output_address[1], "po");
+    })
 
+    console.log("Flowchart updated") 
   }
 
-  editNode(): void{
-    ////this.layoutService.toggleEditor();
-  }
 
-  deleteNode(node_index: number): void{
+  // node utils
+  delete_node(node_id: string): void{
     this._selectedNode = undefined; 
-    ////this.layoutService.hideEditor();
-    this._fs.deleteNode(node_index);
-  }
+    if (this.active_node.id == node_id)   this._fs.push_node(undefined); 
 
-  toggleNode(node: IGraphNode, node_index: number): void{ 
-    if(node.isDisabled()){
-      node.enable();
-    }
-    else{
-      node.disable();
-    }
+    this.fc = FlowchartUtils.delete_node(this.fc, node_id);
   }
 
   addFunctionOutput(node_index){
     this._fs.disconnectNode(node_index);
     
-    let node: IGraphNode = this._nodes[node_index];
+    let node: IGraphNode = this.fc.nodes[node_index];
     node.addFnOutput( this._fs.getCodeGenerator() );
     this._fs.update();
   }
@@ -128,7 +175,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   //  this position of this node is absolute coordinates
   //
   scale($event): void{
-
     $event.preventDefault();
     $event.stopPropagation();
 
@@ -139,7 +185,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
       this.zoom = Number( (value).toPrecision(2) );
       this.updateEdges();
     }
-
   }
 
   lastSaved(): Date{
@@ -174,45 +219,10 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   //
   //
   updateEdges(): void{ 
-    for(let e=0; e< this._edges.length; e++){
-        let edge: IEdge = this._edges[e];
-        let output_position =  this.getPortPosition(edge.output_address[0], edge.output_address[1], "po");
-        let input_position = this.getPortPosition(edge.input_address[0], edge.input_address[1], "pi");
-
-        edge["inputPosition"] = input_position;
-        edge["outputPosition"] = output_position;
-    }
-  }
-
-  update(){
-
-    this._nodes = this._fs.getNodes();
-    this._edges = this._fs.getEdges();
-
-    let m = this._margin; 
-    let pw = this._portWidth;
-    this._nodes.map(function(node){
-
-          let inputs = node.getInputs().length; 
-          let outputs =  node.getOutputs().length;
-          let max = inputs > outputs ? inputs : outputs; 
-
-          let width = m*(max+1) + (max)*pw;
-
-          node["width"] = width;
-    }) 
-
-    this.updateEdges();
-
-    this._selectedNode = this._fs.getSelectedNode();
-    this._selectedNodeIndex = this._fs.getSelectedNodeIndex();
-    this._selectedPortIndex = this._fs.getSelectedPortIndex();
+    
   }
 
   resetData(): void{
-    this._selectedNode = undefined;
-    this._nodes = [];
-    this._edges = [];
   }
 
   //
@@ -242,16 +252,10 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   //
   // Add node and edges
   //
-  addNode($event, type: number): void{
+  add_node($event): void{
     $event.stopPropagation();
-    if(type == undefined){
-      this._fs.addNode();
-    }
-    else{
-      this._fs.addNode(type);
-    }
-
-    this.update();
+    this.fc = FlowchartUtils.add_node(this.fc);
+    this.push_flowchart()
   }
 
   addEdge(outputPortAddress: number[], inputPortAddress: number[]): void{
@@ -268,37 +272,11 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
      this._fs.selectNode(undefined, undefined);
   }
 
-  clickNode($event: Event, nodeIndex: number): void{
-    // select the node
-    $event.stopPropagation();
-    this._fs.selectNode(nodeIndex);
-  }
-
   clickPort($event: Event, nodeIndex: number, portIndex: number): void{
     // select the node
     $event.stopPropagation();
     this._fs.selectNode(nodeIndex, portIndex);
   }
-
-  // clickEdge(): void{
-  //   alert("hello wrold");
-  // }
-
-  // addPort(nodeIndex: number, type: string): void{
-  //   // select the node
-  //   this.clickNode(null, nodeIndex);
-
-  //   // add port 
-  //   if(type == "in"){
-  //       this._nodes[nodeIndex].addInput();
-  //   }
-  //   else if(type == "out"){
-  //       this._nodes[nodeIndex].addOutput();
-  //   }  
-
-  //   this._fs.update();
-  // }
-
 
   //
   //  node dragging
@@ -395,7 +373,8 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
       }
       
 
-      let port_position =  this.getPortPosition(address[0], address[1], type);
+      let port_position = FlowchartRenderUtils.get_port_position(this.fc.nodes[address[0]], address[1], type);
+      console.log(port_position)
 
       this.mouse_pos.start = {x: port_position.x, y: port_position.y };
       this.mouse_pos.current = {x: port_position.x, y: port_position.y };
@@ -475,40 +454,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
 
-  private getPortPosition(nodeIndex: number, portIndex: number, type: string): {x: number, y: number}{
-
-    let x: number;
-    let y: number;
-    let port_size: number = 15;
-
-    let name: string = "n" + nodeIndex + type + portIndex;
-    let el: any = document.getElementById(name);
-
-    if(el == null || this._nodes[nodeIndex] == undefined){
-      return {x: 0, y: 0};
-    }
-
-    let node_pos: number[] = this._nodes[nodeIndex].position;
-
-    let port_pos_x = el.offsetLeft;
-    let port_pos_y = el.offsetTop;
-    let node_width = el.offsetParent.offsetWidth;
-
-    if(type == "pi"){
-      x = node_pos[0];
-      y = node_pos[1] + (port_pos_y + port_size/2);
-    } 
-    else if(type == "po"){
-      x = node_pos[0] + node_width;
-      y = node_pos[1] + (port_pos_y + port_size/2);
-    }
-    else{
-      throw Error("Unknown port type");
-    }
-
-    return {x: x, y: y};
-  }
-
 
   getZoomStyle(): string{
     let value: string = "scale(" + this.zoom + ")";
@@ -523,8 +468,9 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     let output_position, input_position;
 
     try{
-      output_position =  this.getPortPosition(edge.output_address[0], edge.output_address[1], "po");
-      input_position = this.getPortPosition(edge.input_address[0], edge.input_address[1], "pi");
+
+      output_position =  FlowchartRenderUtils.get_port_position(this.fc.nodes[edge.output_address[0]], edge.output_address[1], "po");
+      input_position = FlowchartRenderUtils.get_port_position(this.fc.nodes[edge.input_address[0]], edge.input_address[1], "pi");
       
       edge["inputPosition"] = input_position;
       edge["outputPosition"] = output_position;
@@ -624,8 +570,8 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
     // check no other node has the same name
     let flag: boolean = false;
-    for(let i=0; i < this._nodes.length; i++){
-        if(this._nodes[i].getName() == name){
+    for(let i=0; i < this.fc.nodes.length; i++){
+        if(this.fc.nodes[i].getName() == name){
           this.consoleService.addMessage("Node with this name already exists in the flowchart!");
           flag = true;
           break;
@@ -685,6 +631,14 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
   newfile(): void{
     this._fs.newFile();
+  }
+
+  new_flowchart(): void{
+    this.active_node = undefined;
+    this.fc = FlowchartUtils.new();
+
+    this.push_node();
+    this.push_flowchart();
   }
 
   publishSettings(): void{

@@ -113,7 +113,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			// make function call and assign to variable of same name
 			fn_call = "let " + node.getName() +  "=" + node.getName() + node.getVersion() + "( " + param_values.join(", ") + " );" ;
 
-			if(node.isDisabled()){
+			if(node.enabled){
 				fn_call = "/* " + fn_call + " */";
 			}
 			
@@ -190,7 +190,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				let procedure: IProcedure = node.getProcedure()[line];
 
 				// if procedure is disabled - skip
-				if(procedure.isDisabled()){
+				if(procedure.enabled){
 					continue;
 				}
 
@@ -216,7 +216,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			let code :string = "let " + destination_node.getInputByIndex(destination_port).getName() + "=" + this.getNodeOutputCode(source_node, source_port) + ";";
 
-			if(destination_node.isDisabled() || source_node.isDisabled()){
+			if(destination_node.enabled || source_node.enabled){
 				code = "/* " + code + " */";
 			}
 
@@ -340,7 +340,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				// but parents should have childVars
 				let childVars = nodeVars.map(function(s){ return s; });
 				procedure.getChildren().map(function(child){ 
-					if(!child.isDisabled()){
+					if(!child.enabled){
 						codeArr.push(prodFn(child, childVars, prodFn, prodArr));
 					}
 				});

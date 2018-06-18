@@ -20,7 +20,7 @@ export class EditorComponent implements OnInit, OnDestroy{
   constructor(private _fs: FlowchartService){}
 
   ngOnInit(){ 
-    this._nodeX = this._fs.active_node.subscribe( (node:IGraphNode) => this.update_view(node) );
+  	this._nodeX = this._fs.node$.subscribe( (node:IGraphNode) => this.update_view(node)  );
     this._freeze = this._fs.freeze;
   }
 

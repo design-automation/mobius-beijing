@@ -11,7 +11,7 @@ import {IGraphNode} from '../../../base-classes/node/NodeModule';
   templateUrl: './modulebox.component.html',
   styleUrls: ['./modulebox.component.scss']
 })
-export class ModuleboxComponent extends Viewer implements OnInit{
+export class ModuleboxComponent implements OnInit{
 
   	_moduleList = [];
   	_category: string[] = [];
@@ -26,34 +26,50 @@ export class ModuleboxComponent extends Viewer implements OnInit{
   			ProcedureTypes.LoopContinue
   	];
 
-  	constructor(injector: Injector, 
-  		private layoutService: LayoutService) { 
-  		super(injector, "module-viewer"); 
-	}
+  	private subscriptions = [];
+  	private active_node: IGraphNode;
+
+  	constructor(private _fs: FlowchartService, private layoutService: LayoutService) { }
 
 	ngOnInit(){
-  		this._moduleList = [];
-  		this._node = this.flowchartService.getSelectedNode();
-  		this._procedureArr = this._node.getProcedure();
+		
+		this._moduleList = [];
 
-		let modules = this.flowchartService.getModules();
+		let modules = this._fs.getModules();
 		for(let mod=0; mod < modules.length; mod++){
 			let user_module = modules[mod];
 			this._category.push(user_module["_name"]);
 			this._moduleList[user_module["_name"]] = this._moduleList.concat(ModuleUtils.getFunctions(user_module));
 		}
 
+		this.subscriptions.push(this._fs.node$.subscribe( (node) => {this.active_node = node; this._procedureArr = this.active_node.getProcedure() } ));
 	}
 
+	ngOnDestroy(){
+		this.subscriptions.map(function(s){
+	  		s.unsubscribe();
+		})
+	}
+
+	push_flowchart(){
+		console.warn("Not needed in Module Utils")
+		//this._fs.push_flowchart(this.fc)
+	}
+
+	push_node(){
+		this._fs.push_node(this.active_node)
+	}
+
+
 	reset():void{
-		this._node = undefined;
+		this.active_node = undefined;
 		this._procedureArr = [];
 	}
 
 	update(){
-		this._node = this.flowchartService.getSelectedNode();
-		if(this._node !== undefined){
-			this._procedureArr = this._node.getProcedure();
+		this.active_node = this._fs.getSelectedNode();
+		if(this.active_node !== undefined){
+			this._procedureArr = this.active_node.getProcedure();
 		}
 		else{
 			// do nothing
@@ -66,7 +82,7 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 	//
 	addActionProcedure(fn: {name: string, params: string[], module: string}){
 
-		if(this._node == undefined){
+		if(this.active_node == undefined){
 			alert("Oops.. No Node Selected");
 			return;
 		}
@@ -74,7 +90,7 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 		let prod_data :  {result: string, module: string, function: any, params: string[]} = 
 			{result: "", module: fn.module, function: fn.name, params: fn.params};
 		let prod:IProcedure = ProcedureFactory.getProcedure( ProcedureTypes.Action, prod_data);
-		this.flowchartService.addProcedure(prod);
+		this._fs.addProcedure(prod);
 	}
 
 
@@ -131,30 +147,30 @@ export class ModuleboxComponent extends Viewer implements OnInit{
 			throw Error("Procedure Type invalid");
 		}
 
-		this.flowchartService.addProcedure(prod);
+		this._fs.addProcedure(prod);
 	}
 
 	addPort(type: string): void{
 
       // add port 
       if(type == "in"){
-          this._node.addInput();
+          this.active_node.addInput();
       }
       else if(type == "out"){
-          this._node.addOutput();
+          this.active_node.addOutput();
       }
       else{
         throw Error("Unknown Port Type");
       }  
 
-      this.flowchartService.update();
+      this._fs.update();
     }
 
 
     openModuleHelp($event, category: string): void{
     	$event.stopPropagation();
 
-    	this.flowchartService.switchViewer("help-viewer")
+    	this._fs.switchViewer("help-viewer")
 
     	this.layoutService.showHelp({module: category, name: undefined})
 	}

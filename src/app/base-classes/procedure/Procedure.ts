@@ -33,6 +33,14 @@ export abstract class Procedure implements IProcedure{
 		this._error = false;
 	}	
 
+	get enabled(): boolean{
+		return !this._disabled;
+	}
+
+	set enabled(value: boolean){
+		this._disabled = !value;
+	}
+
 	update(prodData: any, parent: IProcedure): void{
 		this._disabled = prodData._disabled; 
 

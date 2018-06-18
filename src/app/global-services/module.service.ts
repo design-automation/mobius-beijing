@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { IModule } from '../base-classes/code/computation-modules/IModule'
-import { gis_module } from '../geometry-modules/gis_module'
+import {AllModules as ModuleSet} from "../../assets/modules/AllModules";
 
 @Injectable()
-export class ModuleService {
+export abstract class ModuleService {
 
-  private _modules: any[] = [];
+  public static modules: any[] = [];
 
-  constructor() { 
+  constructor() { ModuleService.init() }
+
+  public static init(){
+	let modulearr = Object.keys(ModuleSet).map(function(module_name){ return {_name: module_name, _version: 0.1, _author: "Patrick"}}); 
+
+    let sortFn = function(a, b){
+      return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
+    }
+
+    ModuleService.modules = modulearr.sort( sortFn );
   }
-
 
 }

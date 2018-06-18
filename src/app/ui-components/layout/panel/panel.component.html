@@ -1,8 +1,7 @@
 <div class="header">
 	<div class="title">
 			{{active_viewer}} 
-			<span *ngIf="_selectedNodeName">::</span> 
-			{{_selectedNodeName}}
+			<span *ngIf="active_node">:: {{active_node?.name}}</span> 
 	</div>
 	
 	<div class="btn-group">

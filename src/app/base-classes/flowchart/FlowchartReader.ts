@@ -1,5 +1,5 @@
 import { IFlowchart } from './IFlowchart';
-import { Flowchart } from './Flowchart';
+import { Flowchart, FlowchartUtils } from './Flowchart';
 
 import { IGraphNode, GraphNode, IEdge } from '../node/NodeModule';
 import { FunctionProcedure } from '../procedure/FunctionProcedure';
@@ -66,7 +66,7 @@ export abstract class FlowchartReader{
 	    // add nodes in order to the flowchart
 	    for(let n=0; n < nodes.length; n++){
 	    	let createdNode = nodeMap[nodes[n]["_id"]];
-	    	fc.addNode(createdNode)
+	    	FlowchartUtils.add_node_from_data(fc, createdNode);
 	    }  
 
 	    // add edges

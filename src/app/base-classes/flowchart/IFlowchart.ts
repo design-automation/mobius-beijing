@@ -19,6 +19,9 @@ export interface IFlowchart{
 	description: string;
 	selectedNode: string;
 
+	nodes: IGraphNode[];
+	edges: IEdge[];
+	
 	setSavedTime(date: Date): void;
 	getSavedTime(): Date;
 
@@ -35,17 +38,11 @@ export interface IFlowchart{
 	// icodegenerator
 
 	// get / set
-	addNode(node?: IGraphNode): number;
 	addEdge(outputAddress: number[], inputAddress: number[]): number;
-	deleteNode(nodeIndex: number): number;
-	deleteEdge(edgeIndex: number): number;
-	deleteEdges(edgeIndexArr: number[]): void;
 
 	deletePort(type: string, portIndex: number, nodeIndex: number): void;
 	disconnectPort(type: string, portIndex: number, nodeIndex: number);
-	disconnectNode(nodeIndex: number);
 
-	disconnectEdgesWithNode(nodeIndex: number);
 	disconnectEdgesWithPortIndex(nodeIndex: number, portIndex: number, type: string);
 
 	getNodes(): IGraphNode[];

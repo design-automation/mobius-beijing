@@ -7,8 +7,6 @@
 
 	<div class="container" >
 
-		<!-- @Derek: Modify gutterSize/gutterColor/size -->
-		<!-- https://bertrandg.github.io/angular-split/#/documentation -->
 		<split  direction="horizontal" 
               [gutterSize]="7" 
               [useTransition]="true" gutterColor=white>
@@ -18,10 +16,10 @@
 			        order="1">
 
 						<section>
-							<div (click)="newfile()">New File</div>
+							<div (click)="new_flowchart()">New File</div>
 							<div (click)="openPicker()">Open File
 								<input #fileInput style="display: none;"
-						  		type="file" (change)="loadFile()"/>
+						  		type="file" (change)="loadFile()"/> 
 							</div>
 							<div (click)="save()">Save File</div>
 							<div (click)="publishSettings()">Publish</div>
@@ -29,10 +27,9 @@
 
 
 						<section>
-							<div (click)="addNode($event, undefined)">New Node</div>
+							<div (click)="add_node($event)">New Node</div>
 							<app-node-library></app-node-library>
 						</section>
-						
 				</split-area>
 				
 		
@@ -40,70 +37,57 @@
 					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" (wheel)="scale($event)">
 				    <div class ="action-window">
 				    	
-				    	<!-- <div class="info-container" style="text-align: right; padding: 5px 15px; border-bottom: 1px solid #ddd;">
-				    		
-				    		<div class="info">
-				    			<span class="label">Last Saved </span>
-				    		</div>
-
-				    		<div class="info">
-				    			<span class="value">{{ (lastSaved() | date:'short') || "--" }}</span>
-				    		</div>
-
-				    		<div class="info">
-				    			<span class="action" (click)="loadFromMemory()" matTooltip="Reverts to last point saved with Ctrl+S">
-				    				[Revert] 
-				    			</span>
-				    		</div>
-				    	</div> -->
-				    	
 
 				    	<div class="content-wrapper" (wheel)="scale($event)" 
 				    		style="flex-grow: 1;">
+							
+
 							<!-- div container for the flowchart -->
-							<div class="graph-container" [style.transform]="getZoomStyle()"
-							 	ondragover="return false" 
+							<div class="graph-container" 
 								id="graph-nodes"
+							    [style.transform]="getZoomStyle()"
+								ondragover="return false" 
 								(mousedown)="pan($event)">
 
-								
 								<!-- all nodes --> 
 								<div class="node-container content-wrapper">
-									<!-- one node -->
+									
+									<!-- single  node -->
 									<div  class="node" 
-											*ngFor="let node of _nodes; let node_index = index" 
+											*ngFor="let node of fc.nodes; let node_index = index" 
 											id="n{{node_index}}"
 											[style.left.px]="node.position[0]" 
 											[style.top.px]="node.position[1]">
 
-											<div class="btn-container" *ngIf="node_index == _selectedNodeIndex" >
-												<!-- <div class="btn-group node-btns">
-													<div class="action-button" (click)="addPort(node_index, 'in')">
-														<mat-icon>input</mat-icon>
-													</div>
-													<div class="action-button" (click)="addPort(node_index, 'out')">
-														<mat-icon>add_to_queue</mat-icon>
-													</div>
-												</div> -->
+											<!-- node-controls-->
+											<div class="btn-container" *ngIf="node.id == active_node?.id" >
+												
 												<div class="btn-group port-btns">
-													<div class="action-button" (click)="deleteNode(node_index)" 		
+
+													<!-- delete node -->
+													<div class="action-button" (click)="delete_node(node.id)" 		
 														matTooltip="Delete Node">
 														<mat-icon>delete</mat-icon>
 													</div>
-													<div class="action-button" (click)="toggleNode(node, node_index)"
-														matTooltip="Disable Node">
-														<mat-icon *ngIf='!node.isDisabled()'>check_circle</mat-icon>
-														<mat-icon *ngIf='node.isDisabled()'>highlight_off</mat-icon>
+													
+													<!-- disable / enable node -->
+													<div class="action-button" (click)="node.enabled = !node.enabled; push_flowchart();">
+														<mat-icon>{{ node.enabled ? 'check_circle' : 'highlight_off' }} </mat-icon>
 													</div>
+
+													<!--todo -->
 													<div class="action-button" (click)="saveNode(node_index)" 
 														matTooltip="Save Node To Library"
 														*ngIf="!isSaved(node)">
 														<mat-icon>file_download</mat-icon>
 													</div>
+													
+													<!--todo -->
 													<div class="action-button" (click)="addFunctionOutput(node_index)" 
 														matTooltip="Add functional output" *ngIf="!node.hasFnOutput()">
 														<mat-icon>my_library_add</mat-icon>
 													</div>
+
 												</div>
 											</div>
 
@@ -112,20 +96,19 @@
 											<div class="node-body" 
 												[class.library]="node.getType() !== undefined"
 												[class.error]="node._hasError"
-												[class.disabled] ="node.isDisabled()"
+												[class.disabled] ="node.enabled"
 												[class.function] ="node.hasFnOutput()"
-												(click)="clickNode($event, node_index)"
+												(click)="active_node = node; push_node();"
 												draggable=true  
 												(dragstart)="nodeDragStart($event, node)" 
 												(drag)="nodeDragging($event, node, node_index)" 
 												(dragend)="nodeDragEnd($event, node)">
 												
 												<div class="node-name" 
-														[class.selected]="node_index == _selectedNodeIndex"
-														matTooltip="{{node.getName()}}">
+														[class.selected]="node.id == active_node?.id">
 													    <input matInput
 													    style="margin: 2px; min-width: 50px; max-width: 80px;"
-													    placeholder="Value" value="{{ node.getName() }}"
+													    placeholder="Value" value="{{ node.name }}"
 													    (change)="updateNodeName($event)"/>
 												</div>
 												
@@ -156,7 +139,7 @@
 												<div class="port-container">
 													<div class="port output"
 														*ngFor="let port of node.getOutputs(); let po=index;"
-														id="n{{node_index}}po{{po}}">
+														id="n{{node.id}}po{{po}}">
 
 														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.getName()  | shortname: 10  }}</span>
 
@@ -185,7 +168,7 @@
 								</div>
 
 								<div class="edge-container">
-									<app-graph-edge *ngFor="let edge of _edges" [edge]="edge"></app-graph-edge>
+									<app-graph-edge *ngFor="let edge of fc.edges" [edge]="edge"></app-graph-edge>
 									
 									<!-- temporary edge -->
 									<app-graph-edge 

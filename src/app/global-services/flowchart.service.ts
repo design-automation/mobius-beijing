@@ -1,11 +1,10 @@
 import {Injectable, Input, Output, EventEmitter} from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-
-
 import {IFlowchart, Flowchart, FlowchartReader} from '../base-classes/flowchart/FlowchartModule';
+import {FlowchartUtils, FlowchartConnectionUtils} from '../base-classes/flowchart/Flowchart';
 import {IGraphNode, GraphNode} from '../base-classes/node/NodeModule';
 import {ICodeGenerator, CodeFactory, IModule, ModuleUtils} from "../base-classes/code/CodeModule";
 import {IPort} from "../base-classes/port/PortModule";
@@ -27,42 +26,57 @@ import {FileLoadDialogComponent} from '../ui-components/dialogs/file-load-dialog
 @Injectable()
 export class FlowchartService {
 
-  /*private _ffactory = new FlowchartFactory();
-  private _fc = new FlowchartConverter();*/
+	/*private _ffactory = new FlowchartFactory();
+	private _fc = new FlowchartConverter();*/
 
-  private _user: string = "AKM";
- 
-  private _origData: any;
-  private _flowchart: IFlowchart;
+	private _user: string = "AKM";
 
-  private code_generator: ICodeGenerator = CodeFactory.getCodeGenerator("js");
-  private _moduleSet: IModule[];
-  private _moduleMap: IModule[];
+	private _origData: any;
+	private _flowchart: IFlowchart;
 
-  private _selectedNode: number;
-  private _selectedPort: number;
+	private code_generator: ICodeGenerator = CodeFactory.getCodeGenerator("js");
+	private _moduleSet: IModule[];
+	private _moduleMap: IModule[];
 
-  private _selectedProcedure: IProcedure;
+	private _selectedNode: number;
+	private _selectedPort: number;
+	private _active_node: IGraphNode;
 
-  private _savedNodes: IGraphNode[] = [];
+	private _selectedProcedure: IProcedure;
 
-  private _freeze: boolean = false;
+	private _savedNodes: IGraphNode[] = [];
 
-  private fcX = new Subject<IFlowchart>();
-  private nX = new Subject<IGraphNode>();
+	private _freeze: boolean = false;
 
-  private check(){
-    return this._flowchart != undefined;
-  }
+	// Observable Data sources
+	// fcX.next() <-- to update
+	private fcX = new BehaviorSubject<IFlowchart>(this._flowchart);
+	private nX = new BehaviorSubject<IGraphNode>(this._active_node);
 
-  constructor(private consoleService: ConsoleService, 
-              private mobiusService: MobiusService, 
-              public dialog: MatDialog, private http: HttpClient) { 
-      this.newFile();
-      this.checkSavedNodes();
-      //this.checkSavedFile();
-      //this.autoSave(60*5);
-  };
+	// Observable data streams
+	// flowchart$.subscribe() <-- to update
+	public flowchart$ = this.fcX.asObservable();
+	public node$ = this.nX.asObservable();
+
+	push_flowchart(fc: IFlowchart){
+		this.fcX.next(fc);
+	}
+
+	push_node(node: IGraphNode){
+		this.nX.next(node);
+	}
+
+	private check(){
+		return this._flowchart != undefined;
+	}
+
+
+	constructor(private consoleService: ConsoleService, 
+	          private mobiusService: MobiusService, 
+	          public dialog: MatDialog, private http: HttpClient) { 
+	  	this.newFile();
+	  	this.checkSavedNodes();
+	};
 
   get freeze(){
     return this._freeze;
@@ -71,24 +85,6 @@ export class FlowchartService {
   set freeze(value){
     this._freeze = value;
   }
-
-  get flowchart(): Observable<IFlowchart>{
-    return this.fcX.asObservable();
-  }
-
-  get active_node(): Observable<IGraphNode>{
-    return this.nX.asObservable();
-  }
-
-  set active_node(nodeIndex){
-    this._selectedNode = nodeIndex;
-    this._selectedPort = 0;
-    this._selectedProcedure = undefined;
-
-    this.nX.next(<IGraphNode>this._flowchart.getNodes()[nodeIndex]);
-  }
-
-
 
   getCodeGenerator(): ICodeGenerator{
     return this.code_generator;
@@ -269,6 +265,13 @@ export class FlowchartService {
 
   }
 
+  selectNode(nodeIdx, portIdx){
+    this._selectedNode = nodeIdx;
+    this._selectedPort = portIdx;
+
+    this.nX.next(this._flowchart.nodes[this._selectedNode]);
+  }
+
   getFunction(str): Function{
     return str;
   }
@@ -334,19 +337,14 @@ export class FlowchartService {
     this._selectedNode = undefined;
     this._selectedPort = undefined;
     this._selectedProcedure = undefined;
-    this.update();
 
-    let modulearr = Object.keys(ModuleSet).map(function(module_name){ return {_name: module_name, _version: 0.1, _author: "Patrick"}}); 
+    this.push_flowchart(this._flowchart);
+    this.push_node(undefined);
 
-    let sortFn = function(a, b){
-      return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
-    }
-
-    this.loadModules( modulearr.sort( sortFn ) );
+    this.loadModules( ModuleService.modules );
 
     // print message to console
     this.consoleService.addMessage("New file created.");
-    this.update();
 
     return this._flowchart;
   }
@@ -478,43 +476,6 @@ export class FlowchartService {
     this.update();
   }
 
-
-  //
-  //    add node
-  //
-  addNode(type?: number): void{
-    
-    let new_node: IGraphNode = undefined;
-    let n_data = undefined; 
-
-    if(type !== undefined){
-      n_data = this._savedNodes[type];
-      let default_node_name: string = n_data["_name"] + (this._flowchart.getNodes().length + 1);
-      new_node = new GraphNode(default_node_name, n_data["_id"]);
-      n_data["lib"] = true;
-      new_node.update(n_data);
-    }
-    else{
-      let default_node_name: string = "node" + (this._flowchart.getNodes().length + 1);
-      new_node = new GraphNode(default_node_name, undefined);
-      new_node.addInput(); 
-      new_node.addOutput();
-    }
-
-    this._flowchart.addNode(new_node);
-    this.fcX.next(<IFlowchart>this._flowchart);
-    //this.update();
-
-    this.selectNode(this._flowchart.getNodes().length - 1);
-
-    // print message to console
-    this.consoleService.addMessage("New Node was added");
-
-
-   //
-
-  }
-
   addEdge(outputAddress: number[], inputAddress: number[]):  void{
 
       if(outputAddress[0] == inputAddress[0]){
@@ -534,7 +495,7 @@ export class FlowchartService {
 
   addProcedure(prod: IProcedure): void{
 
-      let node: IGraphNode = this.getSelectedNode();
+      let node: IGraphNode = this.nX.value; //this.getSelectedNode();
       let selectedProcedure: IProcedure = this._selectedProcedure;
 
       this.checkProcedure(prod);
@@ -602,8 +563,7 @@ export class FlowchartService {
   }
 
   disconnectNode(nodeIndex: number): void{
-    this._flowchart.disconnectNode(nodeIndex);
-    this.update();
+    this.fcX.next(FlowchartConnectionUtils.disconnect_node(this._flowchart, nodeIndex));
   }
 
   //
@@ -615,43 +575,11 @@ export class FlowchartService {
     this.update();
   }
 
-  deleteNode(node_index: number): void{
-
-      this._selectedNode = undefined;
-      this._selectedPort = undefined;
-      this._selectedProcedure = undefined;
-
-      this._flowchart.deleteNode(node_index);
-
-      // print message to console
-      this.consoleService.addMessage("Node was deleted");
-
-      this.update();
-
-      // todo: bad bad bad
-      let self = this;
-      setTimeout(function(){
-        self.update();
-      }, 200)
-  }
-
-
   deleteEdge(edgeIndex: number): void{
-    this._flowchart.deleteEdge(edgeIndex);
-
+    FlowchartUtils.delete_edge(this._flowchart, edgeIndex);
+    
     // print message to console
     this.consoleService.addMessage("Edge was deleted");
-  }
-
-  //
-  //  select node
-  //
-  selectNode(nodeIndex: number, portIndex ?:number): void{
-    this._selectedNode = nodeIndex;
-    this._selectedPort = portIndex || 0;
-    this._selectedProcedure = undefined;
-
-    this.nX.next(<IGraphNode>this._flowchart.getNodes()[nodeIndex]);
   }
 
   selectProcedure(prod: IProcedure): void{
@@ -659,6 +587,7 @@ export class FlowchartService {
   }
 
   getSelectedNode(): IGraphNode{
+
 
     if(this._selectedNode == undefined)
       return undefined;
@@ -872,6 +801,24 @@ export class FlowchartService {
     setTimeout(function(){
       self.update("switch viewer: " + viewerType);
     }, 200);
+  }
+
+}
+
+export abstract class ModuleService {
+
+  public static modules: any[] = [];
+
+  constructor() { ModuleService.init() }
+
+  public static init(){
+  let modulearr = Object.keys(ModuleSet).map(function(module_name){ return {_name: module_name, _version: 0.1, _author: "Patrick"}}); 
+
+    let sortFn = function(a, b){
+      return a._name.toLowerCase().localeCompare(b._name.toLowerCase());
+    }
+
+    ModuleService.modules = modulearr.sort( sortFn );
   }
 
 }

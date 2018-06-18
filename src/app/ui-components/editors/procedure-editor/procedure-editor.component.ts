@@ -68,14 +68,21 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 				private _ls: LayoutService) { }
 
 	ngOnInit(){ 
-		this._nodeX = this._fs.active_node.subscribe((node:IGraphNode) => this.update_node(node))
+		this._nodeX = this._fs.node$.subscribe( (node:IGraphNode) => this.update_node(node) )
 	}
 
 	ngOnDestroy(){
-		this._nodeX.unsubsribe();
+		this._nodeX.unsubscribe();
 	}
 
 	update_node(node: IGraphNode): void{
+
+		if(node == undefined){
+			this._node = undefined;
+			console.log("no node");
+			return;
+		}
+
 		this._node = node;
 		this._procedureArr = node.getProcedure();
 		this._variableList = node.getVariableList();

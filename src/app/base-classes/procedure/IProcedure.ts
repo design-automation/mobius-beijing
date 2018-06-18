@@ -23,7 +23,8 @@ export interface IProcedure{
 	hasChildren: boolean; 
 	children: IProcedure[];
 
-	print;
+	print: boolean;
+	enabled: boolean;
 
 	getLevel(): number;
 

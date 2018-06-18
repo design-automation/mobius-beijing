@@ -15,6 +15,7 @@ export class GraphNode implements IGraphNode{
 	private _name: string;
 	private _id: string; 
 	private _version: number = 1; 
+	private _enabled: boolean; 
 
 	private _type: string = undefined;
 
@@ -41,6 +42,38 @@ export class GraphNode implements IGraphNode{
 		this._type = type;
 	}
 
+
+	get name(): string{
+		return this._name;
+	}
+
+	set name(value: string){
+		this._name = value;
+	}
+
+	get id(): string{
+		return this._id;
+	}
+
+	set id(uuid: string) {
+		this._id = uuid;
+	}
+
+	get inputs(): InputPort[]{
+		return this._inputs;
+	}
+
+	get outputs(): OutputPort[]{
+		return this._outputs;
+	}
+
+	get enabled(): boolean{
+		return this._enabled;
+	}
+
+	set enabled(value: boolean){
+		this._enabled = value;
+	}
 	//	
 	//
 	//

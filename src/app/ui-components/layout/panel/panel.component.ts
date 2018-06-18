@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, Injector,
          ViewChild, ViewContainerRef, 
          ComponentFactoryResolver} from '@angular/core';
-         
+ 
+import { FlowchartService } from '../../../global-services/flowchart.service';    
+
 import { LayoutService } from '../../../global-services/layout.service';
 import { Subscription } from 'rxjs/Subscription';
 import { EViewer } from '../../viewers/EViewer';
@@ -14,61 +16,57 @@ import { Viewer } from '../../../base-classes/viz/Viewer';
   templateUrl: './panel.component.html',
   styleUrls: ['./panel.component.scss']
 })
-export class PanelComponent extends Viewer implements OnInit{
+export class PanelComponent implements OnInit{
 
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
   @Input() panel_id: string;
 
   _lsubscription: Subscription;
-  _selectedNodeName: string;
   active_viewer: string;
 
+  active_node;
+  subscriptions = [];
 
-  constructor(injector: Injector, 
-              private layoutService: LayoutService, 
+  constructor(private _fs: FlowchartService, 
+  			  private layoutService: LayoutService, 
               private r: ComponentFactoryResolver) { 
-    super(injector, "Panel Component");
-    this._lsubscription = this.layoutService.getMessage().subscribe(message => { 
-        this.updateView();
-    });
+   
   }
 
   ngOnInit(){
     this.updateView();
+
+    this.subscriptions.push(this._fs.node$.subscribe( (node) => this.active_node = node ));
+    this.subscriptions.push(this.layoutService.getMessage().subscribe(message => { 
+        this.updateView();
+    }));
   }
 
   ngOnDestroy(){
-    this._lsubscription.unsubscribe();
+    this.subscriptions.map(function(s){
+    	s.unsubscribe()
+    })
   }
-
-  reset(): void{
-    this._selectedNodeName = "";
-  }
-
-  update(): void{
-    this._selectedNodeName = this.flowchartService.getSelectedNode().getName();
-  }
+  
 
   updateView(){ 
+	  	let layout = this.layoutService.getView(this.panel_id); 
+	    let pos = this.container.indexOf(layout.view);
 
-  	let layout = this.layoutService.getView(this.panel_id); 
-    let pos = this.container.indexOf(layout.view);
+	    if(this.active_viewer === layout.name){
 
-    if(this.active_viewer === layout.name){
+	    }
+	    else{
 
-    }
-    else{
+	      this.active_viewer = layout.name;
+	      
+	      if(pos === -1){
+	        this.container.insert(layout.view);
+	      }
+	       
+	      this.container.move(layout.view, 0)
 
-      this.active_viewer = layout.name;
-      
-      if(pos === -1){
-        this.container.insert(layout.view);
-      }
-       
-      this.container.move(layout.view, 0)
-
-    }
-
+	    }
   }
 
   // shifts component to main panel

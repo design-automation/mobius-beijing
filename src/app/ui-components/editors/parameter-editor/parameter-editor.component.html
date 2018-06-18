@@ -3,27 +3,21 @@
 	<div class="container">
 		
 		<!-- default -->
-		<div class="default" *ngIf="!isVisible">
-			No node selected
-		</div>
+		<div class="default" *ngIf="!active_node">No node selected</div>
 
 		<!-- main -->
 		<div class="view-container" *ngIf="isVisible">
+			
 			<mat-accordion multi="true" [displayMode]="flat">
 
 				<!-- inputs -->
-				<mat-expansion-panel [disabled]="_inputs.length == 0" [expanded]="true">
+				<mat-expansion-panel [disabled]="active.node.inputs.length == 0" [expanded]="true">
 					
 					<mat-expansion-panel-header>
 						<mat-panel-title>
-						  Inputs ({{ _inputs.length }})
+						  Inputs ({{ active.node.inputs.length }})
 						</mat-panel-title>
-						<mat-panel-description>
-						  <!-- This is a summary of the content -->
-						</mat-panel-description>
 					</mat-expansion-panel-header>
-
-					<!-- <span class="addBtn" (click)="addPort(node_index, 'in')">Add Input</span> -->
 
 					<div class='port input' *ngFor="let inp of _inputs; let i=index">
 						<div class="content">

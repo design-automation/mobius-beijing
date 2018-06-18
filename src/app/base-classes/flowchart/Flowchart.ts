@@ -6,7 +6,7 @@
 //
 
 import {IFlowchart} from './IFlowchart';
-import {IGraphNode, IEdge} from '../node/NodeModule';
+import {IGraphNode, IEdge, GraphNode} from '../node/NodeModule';
 import {ICodeGenerator, IModule} from '../code/CodeModule';
 import {InputPort} from '../port/PortModule';
 
@@ -99,20 +99,18 @@ export class Flowchart implements IFlowchart{
 	get editable(): any{
 		return this._editable;
 	}
-	//
-	//	Maintains the node order for execution
-	//
-	addNode(node?: IGraphNode): number{
 
-		if( node == undefined ){
-			//todo: create new node
-		}
+	get nodes(): IGraphNode[]{
+		return this._nodes;
+	}
 
-		// a new node will have no dependencies - hence push index to end of _nodeTree
-		this._nodes.push(node);
+	get edges(): IEdge[]{
+		return this._edges;
+	}
 
-		return this._nodes.length;
-	};
+	set edges(edges: IEdge[]){
+		this._edges = edges;
+	}
 
 	addEdge(outputAddress: number[], inputAddress: number[]): number{
 
@@ -133,7 +131,7 @@ export class Flowchart implements IFlowchart{
       	}
 
       	if (input.isConnected()){
-	        this.deleteEdges(this.disconnectEdgesWithPortIndex(inputAddress[0], inputAddress[1], "input"));
+	        FlowchartUtils.delete_edges(this, this.disconnectEdgesWithPortIndex(inputAddress[0], inputAddress[1], "input"));
 	    }
 
 		if( this.getNodeByIndex(outputAddress[0]).isDisabled() ||  this.getNodeByIndex(inputAddress[0]).isDisabled() ){
@@ -158,76 +156,6 @@ export class Flowchart implements IFlowchart{
 		return this._edges.length;
 	};
 
-	disconnectEdgesWithNode(node_index: number): number[]{
-	      let splicedEdges: number[] = [];
-	      let edges = this.getEdges();
-	      for(let e=0; e < edges.length; e++){
-	        let edge = edges[e];
-	        if( edge.output_address[0] == node_index){
-	            let port = this.getNodeByIndex(edge.input_address[0]).getInputByIndex(edge.input_address[1]);
-	            port.disconnect();
-	            port.setComputedValue(undefined);
-	            splicedEdges.push(e);
-	        }
-	        else if(edge.input_address[0] == node_index){
-	            let port = this.getNodeByIndex(edge.output_address[0]).getOutputByIndex(edge.output_address[1]);
-	            port.disconnect();
-	            port.setComputedValue(undefined);
-	            splicedEdges.push(e);
-	        }
-	      }
-	      return splicedEdges;
-	}
-
-	deleteNode(nodeIndex: number): number{
-
-		this.disconnectNode(nodeIndex);
-		
-		this._nodes.splice(nodeIndex, 1);
-
-		//this.deleteEdges(this.disconnectEdgesWithNode(nodeIndex));
-
-		for(let e=0; e < this._edges.length; e++){
-
-			let edge = this._edges[e];
-
-			let input_node = edge.input_address[0];
-			let output_node = edge.output_address[0];
-
-			if(input_node == nodeIndex || output_node == nodeIndex){
-				this.deleteEdge(e);
-			}
-
-			if(input_node > nodeIndex){
-				edge.input_address[0] = input_node - 1;
-			}
-
-			if(output_node > nodeIndex){
-				edge.output_address[0] = output_node - 1;
-			}
-
-		}
-
-
-		// todo: check for valid node index
-		// delete this._nodes[nodeIndex];
-
-		return this._nodes.length;
-	}
-
-	deleteEdge(edgeIndex: number): number{
-
-		// todo: check for valid edge index
-		this._edges.splice(edgeIndex, 1);
-
-		return this._edges.length;
-	}
-
-	deleteEdges(edgeArr: number[]): void{
-		this._edges = this._edges.filter(function(edge, index){
-			return ( edgeArr.indexOf(index) == -1 );
-		})
-	}
 
 	disconnectEdgesWithPortIndex(nodeIndex: number, portIndex: number, type: string): number[]{
       let splicedEdges: number[] = [];
@@ -254,40 +182,12 @@ export class Flowchart implements IFlowchart{
       return splicedEdges;
   	}
 
-  	disconnectNode(nodeIndex: number): void{
-  		let _node = this.getNodeByIndex(nodeIndex);
-
-  		_node.getInputs().map(function(input){
-  			if(input.isConnected()){
-	  			input.disconnect();
-	  			input.setComputedValue(undefined);
-  			}
-  		})
-
-  		_node.getOutputs().map(function(output){
-  			output.disconnect();
-  			output.setComputedValue(undefined);
-  		})
-
-  		this.deleteEdges(this.disconnectEdgesWithNode(nodeIndex));
-
-  		// for(let i=0; i < _node.getInputs().length; i++){
-  		// 	this.disconnectPort("input", i, nodeIndex)
-  		// }	
-
-  		// for(let i=0; i < _node.getOutputs().length; i++){
-  		// 	this.disconnectPort("output", i, nodeIndex)
-  		// }
-
-  	}
-
-
   	disconnectPort(type: string, portIndex: number, nodeIndex: number): void{
   		let edges = this._edges;
 
 	    /// disconnect the edges related to this port
 	    let edgesArr: number[] = this.disconnectEdgesWithPortIndex(nodeIndex, portIndex, type); 
-	    this.deleteEdges(edgesArr);
+	    FlowchartUtils.delete_edges(this, edgesArr);
 
 	    /// update indices of edges
 	    /// delete port
@@ -439,41 +339,10 @@ export class Flowchart implements IFlowchart{
 			node.reset();
 
 			if(node.isDisabled()){
-				this.disconnectNode(n);
+				FlowchartConnectionUtils.disconnect_node(this, n);
 			}
 		}
 	}
-
-
-	//
-	// todo: should this happen realtime?
-	//
-	/*private sortNodesByRank(nodes: IGraphNode[]): IGraphNode[]{
-
-		let ranked: any[] = [];
-		let sorted: IGraphNode[] = [];
-
-		for(let i=0; i < nodes.length; i++){
-
-			let node :IGraphNode = nodes[i];
-			let rank :number = node.rank();
-			console.log(node.getName(), rank)
-
-			if( ranked[rank] == undefined){
-				ranked[rank] = [];
-			}
-			ranked[rank].push(node);
-		}
-
-		let all_ranks = Object.keys(ranked).map(function(num){ return parseInt(num); }).sort();
-		for( let r=0; r < all_ranks.length; r++){
-			let rank = all_ranks[r];
-			let nodes_with_rank = ranked[rank];
-			sorted = sorted.concat(nodes_with_rank);
-		}
-
-		return sorted;
-	}*/
 
 	updateDependentInputs(node: IGraphNode, originalRank: number): void{
 
@@ -566,5 +435,159 @@ export class Flowchart implements IFlowchart{
 		// read the nodes and edges and add to the flowchart
 	}
 
+}
+
+
+
+export class FlowchartUtils{
+
+	public static new(): IFlowchart{
+		return new Flowchart("default");
+	}
+
+
+	public static get_new_node_name(flowchart: IFlowchart, prefix?: string): string{
+		let default_node_name: string = prefix + (flowchart.nodes.length + 1);
+		return default_node_name;
+	}
+
+	public static get_node_idx(flowchart: IFlowchart, uuid: string): number{
+		
+		let nodes: IGraphNode[] = flowchart.nodes;
+		let idx: number = undefined;
+		for(let i=0; i< nodes.length; i++){
+			if(nodes[i].id == uuid){
+				idx = i;
+				break;
+			}
+		}
+
+		return idx;
+	}
+
+
+	public static add_node(flowchart: IFlowchart){
+		let default_node_name: string = FlowchartUtils.get_new_node_name(flowchart, "node");
+		let new_node = new GraphNode(default_node_name, undefined);
+		new_node.addInput(); 
+		new_node.addOutput();
+
+		flowchart.nodes.push(new_node);
+
+		return flowchart;
+	}
+
+	public static add_node_from_library(flowchart){
+		// n_data = this._savedNodes[type];
+		// let name:string = n_data["_name"]
+		// new_node = new GraphNode(FlowchartUtils.get_new_node_name(flowchart, n_data["_id"]));
+		// n_data["lib"] = true;
+		// new_node.update(n_data);
+	}
+
+	public static add_node_from_data(flowchart, data){
+		console.log("TODO: Add Node from Data");
+	}
+
+
+	public static delete_node(flowchart: IFlowchart, uuid: string): IFlowchart{
+
+		// get node_index of the uuid
+		let node_index: number = FlowchartUtils.get_node_idx(flowchart, uuid);
+		if (node_index == undefined) throw Error("Node not found");
+
+		// disconnect the node and set all port values to undefined
+		FlowchartConnectionUtils.disconnect_node(flowchart, node_index);
+		flowchart.nodes.splice(node_index, 1);
+
+
+		/*compute redundant edges in the node and delete the edges
+  		let redundant_edges = FlowchartConnectionUtils.edges_with_node(flowchart, node_index);
+  		flowchart = FlowchartUtils.delete_edges(flowchart, redundant_edges);*/
+
+  		// todo: clean this up!
+  		for(let e=0; e < flowchart.edges.length; e++){
+			let edge = flowchart.edges[e];
+
+			let input_node = edge.input_address[0];
+			let output_node = edge.output_address[0];
+
+			if(input_node == node_index || output_node == node_index){
+				FlowchartUtils.delete_edge(flowchart, e);
+			}
+			
+			if(input_node > node_index){
+				edge.input_address[0] = input_node - 1;
+			}
+			
+			if(output_node > node_index){
+				edge.output_address[0] = output_node - 1;
+			}
+
+		}
+
+  		return flowchart;
+	}
+
+	public static delete_edge(flowchart: IFlowchart, edgeIdx: number): IFlowchart{
+		return FlowchartUtils.delete_edges(flowchart, [edgeIdx]);
+	}
+
+	public static delete_edges(flowchart: IFlowchart, edgeIds: number[]): IFlowchart{
+
+		flowchart.edges = flowchart.edges.filter(function(edge, index){
+			return ( edgeIds.indexOf(index) == -1 );
+		})
+
+		return flowchart;
+	}
+
+}
+
+
+export class FlowchartConnectionUtils{
+	
+	public static disconnect_node(flowchart: IFlowchart, idx: number): IFlowchart{
+  		
+		let node = flowchart.getNodeByIndex(idx);
+
+  		node.inputs.map(function(input){
+  			if(input.isConnected()){
+	  			input.disconnect();
+	  			input.setComputedValue(undefined);
+  			}
+  		});
+
+  		node.outputs.map(function(output){
+  			output.disconnect();
+  			output.setComputedValue(undefined);
+  		});
+
+  		return flowchart;
+  	}
+
+
+  	public static edges_with_node(flowchart: IFlowchart, node_index: number){
+		let linked_edges: number[] = [];
+		let edges = flowchart.edges;
+
+		for(let e=0; e < edges.length; e++){
+			let edge = edges[e];
+			if( edge.output_address[0] == node_index){
+			    let port = flowchart.getNodeByIndex(edge.input_address[0]).getInputByIndex(edge.input_address[1]);
+			    port.disconnect();
+			    port.setComputedValue(undefined);
+			    linked_edges.push(e);
+			}
+			else if(edge.input_address[0] == node_index){
+			    let port = flowchart.getNodeByIndex(edge.output_address[0]).getOutputByIndex(edge.output_address[1]);
+			    port.disconnect();
+			    port.setComputedValue(undefined);
+			    linked_edges.push(e);
+			}
+		}
+
+		return linked_edges;
+  	}
 }
 

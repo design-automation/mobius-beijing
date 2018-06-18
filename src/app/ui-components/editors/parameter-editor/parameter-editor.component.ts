@@ -10,21 +10,10 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {ParameterSettingsDialogComponent} from './parameter-settings-dialog.component';
 import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
 
-@Component({
-  selector: 'app-parameter-editor',
-  templateUrl: './parameter-editor.component.html',
-  styleUrls: ['./parameter-editor.component.scss']
-})
-export class ParameterEditorComponent extends Viewer{
 
-    isVisible: boolean = false;
+abstract class PortUtils{
 
-    _node: IGraphNode;
-    _inputs: InputPort[];
-    _outputs: OutputPort[];
-
-    // shift to iport
-    inputPortOpts: InputPortTypes[] = [
+  public static inputPortOpts: InputPortTypes[] = [
         InputPortTypes.Input,
         InputPortTypes.Slider, 
         // InputPortTypes.ColorPicker, 
@@ -32,68 +21,18 @@ export class ParameterEditorComponent extends Viewer{
         InputPortTypes.URL,
         InputPortTypes.Checkbox
         // InputPortTypes.Dropdown
-    ]; 
+  ]; 
 
-    outputPortOpts: OutputPortTypes[] = [
-       // OutputPortTypes.Three, 
-        OutputPortTypes.Text, 
-        OutputPortTypes.Code, 
-        OutputPortTypes.Console, 
-        OutputPortTypes.Cesium
-    ]; 
+  public static outputPortOpts: OutputPortTypes[] = [
+     // OutputPortTypes.Three, 
+      OutputPortTypes.Text, 
+      OutputPortTypes.Code, 
+      OutputPortTypes.Console, 
+      OutputPortTypes.Cesium
+  ]; 
 
-	  constructor(injector: Injector, public dialog: MatDialog){  
-      super(injector, "parameter-editor"); 
-    }
 
-    reset(){ 
-      this._node = undefined;
-      this._inputs = undefined;
-      this._outputs = undefined;
-      this.isVisible = false;
-    }
-
-    portHasFunction(port: InputPort): boolean{
-      let value = port.getValue();
-      if(value && value.port !== undefined && value.port.length == 2){
-        return true;
-      }
-      else{
-        return false;
-      }
-    }
-
-    deletePort(event, type: string, portIndex: number): void{
-      event.stopPropagation();
-      this.flowchartService.deletePort(type, portIndex);
-    } 
-
-    updatePortName($event, port: InputPort|OutputPort): void{
-      let name: string =  $event.srcElement.innerText; 
-
-      // check for validity
-      name = name.replace(/[^\w]/gi, '');
-
-      if(name.trim().length > 0){
-        // put a timeout on this update or something similar to solve jumpiness
-        port.setName(name);
-        this.flowchartService.update();
-      }
-    }
-
-    updateType(type: InputPortTypes|OutputPortTypes, port: InputPort|OutputPort): void{
-        
-        port.setType(type);
-
-        //defaults
-        if(type == InputPortTypes.Slider){
-          port.setOpts({min: 0, max: 100, step: 1});
-          port.setDefaultValue(50);
-        }
-
-    }
-    
-    getInputTypeName(type: InputPortTypes): string{
+  public static getInputTypeName(type: InputPortTypes): string{
       if(type == InputPortTypes.ColorPicker){
         return "Color";
       }
@@ -120,7 +59,7 @@ export class ParameterEditorComponent extends Viewer{
       }
     }
 
-    getOutputTypeName(type: OutputPortTypes): string{
+  public static getOutputTypeName(type: OutputPortTypes): string{
       if(type == OutputPortTypes.Three){
         return "Geometry";
       }
@@ -141,24 +80,73 @@ export class ParameterEditorComponent extends Viewer{
       }
     }
 
-  	//
-  	//	this update runs when there is a message from other viewers that something changed; 
-  	//  beware of updating flowchart here - it will go into an unending loop :/
-  	//
-  	update(): void{
-  		this._node = this.flowchartService.getSelectedNode();
-      if( this._node !== undefined ){
-         this.isVisible = true;
-  		   this._inputs = this._node.getInputs();
-         this._outputs = this._node.getOutputs();
-         this.isVisible = true;
-      }
-      else{
-        this.isVisible = false;
-      }
-  	}
+}
 
 
+@Component({
+  selector: 'app-parameter-editor',
+  templateUrl: './parameter-editor.component.html',
+  styleUrls: ['./parameter-editor.component.scss']
+})
+export class ParameterEditorComponent{
+
+    isVisible: boolean = false;
+
+    _node: IGraphNode;
+
+    private subscriptions = [];
+    private active_node: IGraphNode;
+
+    constructor(private _fs: FlowchartService, public dialog: MatDialog){}
+
+    ngOnInit(){
+      this.subscriptions.push(this._fs.node$.subscribe( (node) => this.active_node = node ));
+    }
+
+    ngOnDestroy(){
+      this.subscriptions.map(function(s){
+        s.unsubscribe();
+      })
+    }
+
+    push_node(){
+      this._fs.push_node(this.active_node)
+    }
+
+    /// other functions
+
+    deletePort(event, type: string, portIndex: number): void{
+      event.stopPropagation();
+      this._fs.deletePort(type, portIndex);
+    } 
+
+    updatePortName($event, port: InputPort|OutputPort): void{
+      let name: string =  $event.srcElement.innerText; 
+
+      // check for validity
+      name = name.replace(/[^\w]/gi, '');
+
+      if(name.trim().length > 0){
+        // put a timeout on this update or something similar to solve jumpiness
+        port.setName(name);
+        this._fs.update();
+      }
+    }
+
+    updateType(type: InputPortTypes|OutputPortTypes, port: InputPort|OutputPort): void{
+        
+        port.setType(type);
+
+        //defaults
+        if(type == InputPortTypes.Slider){
+          port.setOpts({min: 0, max: 100, step: 1});
+          port.setDefaultValue(50);
+        }
+
+    }
+    
+
+    /// setting dialog
     openSettingsDialog(input: InputPort): void{
         let dialogRef = this.dialog.open(ParameterSettingsDialogComponent, {
             height: '400px',
@@ -174,18 +162,32 @@ export class ParameterEditorComponent extends Viewer{
         });
     }
 
+
+    // higher order functions
+
     addFunctionToProcedure(inp: InputPort): void{
 
       // get functional graph node
       let value = inp.getValue().port;
 
       if(value){
-          let fn_node: IGraphNode = this.flowchartService.getNodes()[value[0]];
+          let fn_node: IGraphNode = this._fs.getNodes()[value[0]];
           let prod: IProcedure = ProcedureFactory.getProcedure(ProcedureTypes.Function, {node: fn_node, port: inp});
-          this.flowchartService.addProcedure(prod);
+          this._fs.addProcedure(prod);
 
       }
     }
+
+    portHasFunction(port: InputPort): boolean{
+      let value = port.getValue();
+      if(value && value.port !== undefined && value.port.length == 2){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+
 
 }
 

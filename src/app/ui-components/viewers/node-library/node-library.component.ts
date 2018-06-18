@@ -27,7 +27,7 @@ export class NodeLibraryComponent extends Viewer{
 	}
 
 	addNode($event, type: number): void{
-	    $event.stopPropagation();
+	    /*$event.stopPropagation();
 	    if(type == undefined){
 	      this.flowchartService.addNode();
 	    }
@@ -35,7 +35,7 @@ export class NodeLibraryComponent extends Viewer{
 	      this.flowchartService.addNode(type);
 	    }
 
-	    this.update();
+	    this.update();*/
 	}
 
 	deleteNode($event, node): void{
