@@ -3,7 +3,7 @@
 		<mat-expansion-panel [expanded]="true">
 					<mat-expansion-panel-header>
 						<mat-panel-title>
-						  Procedure ({{_procedureArr.length}})
+						  Procedure ({{active_node?.procedure.length}})
 						</mat-panel-title>
 						<mat-panel-description>
 						  <!-- This is a summary of the content -->
@@ -19,8 +19,8 @@
 						</datalist>
 
 						<tree-root #tree 	
-									[nodes]='_procedureArr' 
-									[options]='_tree_options'  
+									[nodes]='active_node.procedure' 
+									[options]='TREEOPTIONS'  
 									(moveNode)="onMoveNode($event)">
 
 								  <ng-template #treeNodeTemplate 
@@ -32,7 +32,7 @@
 								  			(mouseover)="_activeProcedure = prod">
 
 								  			<div class = "seg1" 
-								  				[class.print]="prod.data.printToConsole()"
+								  				[class.print]="prod.data.print"
 								  				[class.error]="prod.data.getError()" 
 								  				[class.disabled]="prod.data.isDisabled()">
 

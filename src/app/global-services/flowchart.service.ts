@@ -494,62 +494,6 @@ export class FlowchartService {
   }
 
   addProcedure(prod: IProcedure): void{
-
-      let node: IGraphNode = this.nX.value; //this.getSelectedNode();
-      let selectedProcedure: IProcedure = this._selectedProcedure;
-
-      this.checkProcedure(prod);
-
-      if(selectedProcedure){
-        if(selectedProcedure.hasChildren){
-            selectedProcedure.addChild(prod);
-        }
-        else{
-
-           if(selectedProcedure.getParent() && !selectedProcedure.getParent()["virtual"]){
-
-               let parent: IProcedure = selectedProcedure.getParent();
-               let index: number = 0;
-               let allChildren: IProcedure[] = parent.getChildren();
-
-               for(let i=0; i<allChildren.length; i++){
-                   if(allChildren[i] === selectedProcedure){
-                       index = i;
-                       break;
-                   }
-               }
-
-               parent.addChildAtPosition(prod, index + 1);
-
-           }
-           else{
-               let parent: IGraphNode = node;
-               let index: number = 0;
-               let allChildren: IProcedure[] = node.getProcedure();
-
-               for(let i=0; i<allChildren.length; i++){
-                   if(allChildren[i] === selectedProcedure){
-                       index = i;
-                       break;
-                   }
-               }
-
-               node.addProcedureAtPosition(prod, index + 1);
-           }
-
-        }
-      }
-      else{
-        node.addProcedure(prod);
-      }
-
-      if(prod.getType() == "IfElse"){
-          this.selectProcedure(prod.getChildren()[0]);
-      }
-      else{
-        this.selectProcedure(prod);
-      }
-
       this.update("procedure");
   }
 

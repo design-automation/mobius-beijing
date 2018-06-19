@@ -1,11 +1,11 @@
 <div class="viewer" style="position: absolute;">
 	<div class="container">
 		
-		<div class="default" *ngIf='!gs_dummy_data'>
+		<div class="default" *ngIf='port'>
 			No Model Available
 		</div>
 
-		<mobius-cesium [data]="gs_dummy_data" [mode]="mode" 
+		<mobius-cesium [data]="port.value" [mode]="mode" 
 			style="width: 100%;">
 		</mobius-cesium>
 	

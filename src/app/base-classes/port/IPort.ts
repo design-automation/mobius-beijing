@@ -10,11 +10,8 @@ export interface IPort{
 	name;
 	type;
 	id;
+	value;
 
-	getId(): string;
-	getType(): InputPortTypes|OutputPortTypes;
-
-	setType(type: InputPortTypes|OutputPortTypes): void;
 	setOpts(opts: any);
 	getOpts(opts: any);
 
@@ -24,9 +21,6 @@ export interface IPort{
 	enable(): void;
 
 	update(portData: IPort): void;
-
-	getName(): string;
-	setName(name: string): void; 
 
 	setIsFunction(): void;
 	isFunction(): boolean;
@@ -38,8 +32,6 @@ export interface IPort{
 	getDefaultValue(): any;
 	setDefaultValue(value: any): void; 
 	setComputedValue(value: any): void;
-
-	getValue(compress?: boolean): any;
 
 	reset(); 
 }

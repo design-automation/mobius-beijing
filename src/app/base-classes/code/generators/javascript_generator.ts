@@ -77,10 +77,10 @@ export class CodeGeneratorJS extends CodeGenerator{
 			let fn_call: string = "";
 			let param_values: string[] = [];
 
-			let inputs = node.getInputs();
+			let inputs = node.inputs;
 			for(let i=0; i < inputs.length; i++ ){
 				if(inputs[i].isConnected() == true){
-					let input_name:string = inputs[i].getName();
+					let input_name:string = inputs[i].name;
 					if( params ){
 
 						if( executionCode == true){
@@ -96,7 +96,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 					}
 				}
 				else{
-					let val = inputs[i].getValue();
+					let val = inputs[i].value;
 					param_values.push(val);
 				}
 			}
@@ -111,7 +111,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			});
 
 			// make function call and assign to variable of same name
-			fn_call = "let " + node.getName() +  "=" + node.getName() + node.getVersion() + "( " + param_values.join(", ") + " );" ;
+			fn_call = "let " + node.name +  "=" + node.name + node.getVersion() + "( " + param_values.join(", ") + " );" ;
 
 			if(node.enabled){
 				fn_call = "/* " + fn_call + " */";
@@ -124,13 +124,13 @@ export class CodeGeneratorJS extends CodeGenerator{
 			let fn_def: string = "";
 
 			let params :string[] = [];
-			let inputs = node.getInputs();
+			let inputs = node.inputs;
 			for(let i=0; i < inputs.length; i++ ){
-				params.push(inputs[i].getName());
+				params.push(inputs[i].name);
 			}
 
 			// make function
-			fn_def += "function " + node.getName() + node.getVersion() + "( " + params.join(", ") + " )() \n" ;
+			fn_def += "function " + node.name + node.getVersion() + "( " + params.join(", ") + " )() \n" ;
 			
 			return fn_def;
 		}
@@ -143,14 +143,14 @@ export class CodeGeneratorJS extends CodeGenerator{
 			// get params
 			let params :string[] = [];
 			let initializations :string[] = [];
-			let inputs :InputPort[] = node.getInputs();
+			let inputs :InputPort[] = node.inputs;
 			for(let i=0; i < inputs.length; i++ ){
 
 				let inp = inputs[i];
-				nodeVars.push(inp.getName());
+				nodeVars.push(inp.name);
 
 				if( 1/*inp.isConnected() == true*/ ){
-					params.push(inp.getName());
+					params.push(inp.name);
 				}
 				
 				let input_port_code: string = this.generateInputPortCode(inp);
@@ -161,14 +161,14 @@ export class CodeGeneratorJS extends CodeGenerator{
 			}
 
 			// make function
-			fn_code += "function " + node.getName() + node.getVersion() + "( " + params.join(", ") + " ) { \n" ;
+			fn_code += "function " + node.name + node.getVersion() + "( " + params.join(", ") + " ) { \n" ;
 			fn_code += ( initializations.length > 0 ? initializations.join(";\n") + ";\n" : "" );
 			
 			// add outputs 
 			let results :string[]= [], opInits :string[] = [];
-			let outputs : OutputPort[] = node.getOutputs();
+			let outputs : OutputPort[] = node.outputs;
 			for( let o=0; o < outputs.length; o++ ){
-				let oname = outputs[o].getName(); 
+				let oname = outputs[o].name; 
 				nodeVars.push(oname);
 
 				results.push( oname + " : " + oname);
@@ -209,12 +209,12 @@ export class CodeGeneratorJS extends CodeGenerator{
 		}
 
 		getNodeOutputCode(node: IGraphNode, output_idx: number): string{
-			return node.getName() + "." + node.getOutputByIndex(output_idx).getName(); 
+			return node.name + "." + node.getOutputByIndex(output_idx).name; 
 		}
 
 		generateConnectionLine(destination_node: IGraphNode, destination_port: number, source_node: IGraphNode, source_port: number): string{
 
-			let code :string = "let " + destination_node.getInputByIndex(destination_port).getName() + "=" + this.getNodeOutputCode(source_node, source_port) + ";";
+			let code :string = "let " + destination_node.getInputByIndex(destination_port).name + "=" + this.getNodeOutputCode(source_node, source_port) + ";";
 
 			if(destination_node.enabled || source_node.enabled){
 				code = "/* " + code + " */";
@@ -366,7 +366,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			if( port.isConnected() == true ) 
 				return "";
 
-			return "let " + port.getName() + " = " + port.getValue(); 
+			return "let " + port.name + " = " + port.value; 
 		}
 
 		generateOutputPortCode(port: OutputPort): string{
@@ -377,7 +377,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				prepend = "const ";
 			}
 
-			return prepend + port.getName() + " = " + port.getDefaultValue(); 
+			return prepend + port.name + " = " + port.getDefaultValue(); 
 		}
 
 		executeNode(node: IGraphNode, params: any, 
@@ -401,7 +401,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			str +=	this.getNodeCode(node, prodArr) + "\n" + 
 					this.getFunctionCall(node, [], true) + "\n" + 
-					"return " + node.getName() + ";" 
+					"return " + node.name + ";" 
 					//"})();";
 
 			let result: any;

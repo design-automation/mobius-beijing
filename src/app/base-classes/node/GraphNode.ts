@@ -33,6 +33,7 @@ export class GraphNode implements IGraphNode{
 	private _dependencies: any = [];
 	private _dependencyNodes: number[] = [];
 
+	private _active: IProcedure;
 
 	public position: number[] = [0,0];
 
@@ -74,6 +75,31 @@ export class GraphNode implements IGraphNode{
 	set enabled(value: boolean){
 		this._enabled = value;
 	}
+
+	get type(): string{
+		return this._type;
+	}
+
+
+	get procedure(): IProcedure[]{
+		return this._procedure;
+	}
+
+	set procedure(prod: IProcedure[]){
+		this._procedure = prod;
+	}
+
+
+	get active_procedure(): IProcedure{
+		return this._active;
+	}
+
+	set active_procedure(value: IProcedure){
+		this._active = value;
+
+		// todo: validate if value exists
+	}
+
 	//	
 	//
 	//
@@ -99,8 +125,8 @@ export class GraphNode implements IGraphNode{
 	}
 
 	overwrite(node: IGraphNode): number{
-		this._inputs = node.getInputs(); 
-		this._outputs = node.getOutputs();
+		this._inputs = node.inputs; 
+		this._outputs = node.outputs;
 		this._procedure = node.getProcedure();
 		return this._version++;
 	}
@@ -114,8 +140,8 @@ export class GraphNode implements IGraphNode{
 		if(nodeData["lib"] == undefined){
 			// loading from file
 			this._id = nodeData["_id"];
-			this.position = nodeData["position"];
 			this._name = nodeData["_name"];
+			this.position = nodeData["position"];
 		}
 		else{
 			// creating from library
@@ -244,7 +270,7 @@ export class GraphNode implements IGraphNode{
 	}
 
 	addFnOutput( code_generator: ICodeGenerator ): number{
-		let index_output: number = this.addOutput(this.getName() + "_function");
+		let index_output: number = this.addOutput(this.name + "_function");
 		let fnOutput: OutputPort = this.getOutputByIndex(index_output - 1);
 
 		fnOutput.setDefaultValue( this.getFunction(code_generator) );
@@ -376,7 +402,7 @@ export class GraphNode implements IGraphNode{
 		this.getInputs().map(function(i, index){ 
 
 			// if any of the inputs is a web url, get data first
-			if(i.getType() == InputPortTypes.URL){
+			if(i.type == InputPortTypes.URL){
 				live_data_downloads++;
 				let urlString: any = i.getOpts().url;
 				fetch(urlString)
@@ -415,10 +441,10 @@ export class GraphNode implements IGraphNode{
 
 				// converts string to functin
 				let fn_def = Function("return " + codeString)();
-				params[i.getName()] = fn_def;
+				params[i.name] = fn_def;
 			}
 			else{
-				params[i.getName()] = i.getValue(); 
+				params[i.name] = i.value; 
 			}
 
 		});
@@ -439,7 +465,7 @@ export class GraphNode implements IGraphNode{
 			// add results to self node
 			for( let n=0;  n < self._outputs.length; n++ ){
 				let output_port = self._outputs[n];
-				output_port.setComputedValue(result[output_port.name)]);
+				output_port.setComputedValue(result[output_port.name]);
 			}
 
 			self._hasExecuted = true;
@@ -466,7 +492,7 @@ export class GraphNode implements IGraphNode{
 		let final_values :any = {};
 		for(let o=0; o < this._outputs.length; o++ ){
 			let output :OutputPort = this._outputs[o];
-			final_values[output.name] = output.getValue();
+			final_values[output.name] = output.value;
 		}
 
 		return final_values;
@@ -482,7 +508,7 @@ export class GraphNode implements IGraphNode{
 
 		//push names of inputs and outputs
 		this._inputs.map(function(inp){
-			varList.push(inp.name;
+			varList.push(inp.name);
 		});
 
 		this._outputs.map(function(out){

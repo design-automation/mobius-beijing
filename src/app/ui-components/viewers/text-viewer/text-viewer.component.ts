@@ -1,57 +1,76 @@
 import { Component, Injector, OnInit } from '@angular/core';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { IPort } from '../../../base-classes/port/PortModule';
 
 import CircularJSON from 'circular-json';
 import * as js_beautify from 'js-beautify';
 
+import { FlowchartService } from '../../../global-services/flowchart.service';
+
 @Component({
   selector: 'app-text-viewer',
   templateUrl: './text-viewer.component.html',
   styleUrls: ['./text-viewer.component.scss']
 })
-export class TextViewerComponent extends Viewer implements OnInit {
+export class TextViewerComponent implements OnInit {
 
-	_selectedNode: IGraphNode;
-	_selectedPort: IPort;
-
+	private subscriptions = [];
+	private active_node: IGraphNode;
+	private port: IPort;
 	_outResults;
 
-	constructor(injector: Injector){ 
-		super(injector, "Text Viewer", "Displayed geometry with each node.");  
+	constructor(private _fs: FlowchartService){}
+
+	ngOnInit(){
+		this.subscriptions.push(this._fs.node$.subscribe( (node) => { this.active_node = node; this.render_node(node) } ));
 	}
 
-	ngOnInit() {
-		this._outResults = [];
-		this.update();
+	ngOnDestroy(){
+		this.subscriptions.map(function(s){
+	  	s.unsubscribe();
+		})
 	}
 
-	reset(): void{
-		this.update();
-	}
 
-	getPortContent(): string{
+	render_node(node: IGraphNode) :void{
 
-		if(this._selectedPort == undefined){
-			return "";
-		}
-
-		let value = this._selectedPort.getValue();
-		if(typeof(value) == "object"){
-			value = JSON.stringify(value);
-			if(value.length > 397){
-				value = value.substr(0,397) + "...";
-			}
-		}
-
-		return value;
-	}
-
-	getText(output: IPort): string{
 		try{
-			let val = output.getValue();
+			let self = this;
+			this._outResults = node.outputs.map(function(output){
+				let name = output.name;
+				let isJSON = self.isJSON(output);
+				let text = self.getText(output);
+				let value = output.value;
+				let outObj = {name: name, isJSON: isJSON, text: text, value: value}
+				return outObj;
+			})
+		}
+		catch(ex){
+
+		}
+	}
+
+	// getPortContent(port: IPort): string{
+
+	// 	if(port == undefined){
+	// 		return "";
+	// 	}
+
+	// 	let value = port.value;
+	// 	if(typeof(value) == "object"){
+	// 		value = JSON.stringify(value);
+	// 		if(value.length > 397){
+	// 			value = value.substr(0,397) + "...";
+	// 		}
+	// 	}
+
+	// 	return value;
+	// }
+
+	private getText(output: IPort): string{
+		try{
+			let val = output.value;
 
 			if(val){
 				let result = val;
@@ -67,7 +86,7 @@ export class TextViewerComponent extends Viewer implements OnInit {
 					else{
 						let keys = Object.keys(val);
 						result = "<b>JSON Object</b><br>"
-						result += output.getName();
+						result += output.name;
 						result += "<ul>" + keys.map(function(k){
 							let type: string = typeof(val[k]);
 							if (Array.isArray(val[k])){
@@ -100,27 +119,8 @@ export class TextViewerComponent extends Viewer implements OnInit {
 	}
 
 	isJSON(output: IPort): boolean{
-		let val = output.getValue();
+		let val = output.value;
 		return (typeof(val) == "object" && val.toString() == "[object Object]");
 	}
 
-	update() :void{
-		try{
-			this._selectedNode = this.flowchartService.getSelectedNode();	
-			this._selectedPort = this.flowchartService.getSelectedPort();
-
-			let self = this;
-			this._outResults = this._selectedNode.getOutputs().map(function(output){
-				let name = output.getName();
-				let isJSON = self.isJSON(output);
-				let text = self.getText(output);
-				let value = output.getValue();
-				let outObj = {name: name, isJSON: isJSON, text: text, value: value}
-				return outObj;
-			})
-		}
-		catch(ex){
-
-		}
-	}
 }

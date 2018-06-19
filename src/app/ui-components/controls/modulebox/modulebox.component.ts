@@ -4,6 +4,7 @@ import {LayoutService} from '../../../global-services/layout.service';
 import {ModuleUtils} from "../../../base-classes/code/CodeModule";
 import {Viewer} from '../../../base-classes/viz/Viewer';
 import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
+import {NodeUtils} from '../../../base-classes/node/NodeUtils';
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
 
 @Component({
@@ -13,12 +14,7 @@ import {IGraphNode} from '../../../base-classes/node/NodeModule';
 })
 export class ModuleboxComponent implements OnInit{
 
-  	_moduleList = [];
-  	_category: string[] = [];
-  	_node: IGraphNode;
-  	_procedureArr: IProcedure[] = [];
-
-  	procedureTypes: ProcedureTypes[] = [
+  	readonly procedureTypes: ProcedureTypes[] = [
   			ProcedureTypes.Data, 
   			ProcedureTypes.IfElseControl,
   			ProcedureTypes.ForLoopControl, 
@@ -28,6 +24,9 @@ export class ModuleboxComponent implements OnInit{
 
   	private subscriptions = [];
   	private active_node: IGraphNode;
+  	_moduleList = [];
+  	_category: string[] = [];
+
 
   	constructor(private _fs: FlowchartService, private layoutService: LayoutService) { }
 
@@ -42,38 +41,13 @@ export class ModuleboxComponent implements OnInit{
 			this._moduleList[user_module["_name"]] = this._moduleList.concat(ModuleUtils.getFunctions(user_module));
 		}
 
-		this.subscriptions.push(this._fs.node$.subscribe( (node) => {this.active_node = node; this._procedureArr = this.active_node.getProcedure() } ));
+		this.subscriptions.push(this._fs.node$.subscribe( (node) => this.active_node = node ));
 	}
 
 	ngOnDestroy(){
 		this.subscriptions.map(function(s){
 	  		s.unsubscribe();
 		})
-	}
-
-	push_flowchart(){
-		console.warn("Not needed in Module Utils")
-		//this._fs.push_flowchart(this.fc)
-	}
-
-	push_node(){
-		this._fs.push_node(this.active_node)
-	}
-
-
-	reset():void{
-		this.active_node = undefined;
-		this._procedureArr = [];
-	}
-
-	update(){
-		this.active_node = this._fs.getSelectedNode();
-		if(this.active_node !== undefined){
-			this._procedureArr = this.active_node.getProcedure();
-		}
-		else{
-			// do nothing
-		}
 	}
 
 
@@ -126,7 +100,7 @@ export class ModuleboxComponent implements OnInit{
 		let prod:IProcedure;
 
 		if( type == ProcedureTypes.Data){
-			let default_variable_name: string = "var" + this._procedureArr.length;
+			let default_variable_name: string = "var" + this.active_node.procedure.length;
 			let prod_data: {result: string, value: string} = {result: default_variable_name, value: "undefined"};
 			prod = ProcedureFactory.getProcedure( ProcedureTypes.Data, prod_data );
 		}
@@ -147,7 +121,7 @@ export class ModuleboxComponent implements OnInit{
 			throw Error("Procedure Type invalid");
 		}
 
-		this._fs.addProcedure(prod);
+		NodeUtils.add_procedure(this.active_node, prod);
 	}
 
 	addPort(type: string): void{

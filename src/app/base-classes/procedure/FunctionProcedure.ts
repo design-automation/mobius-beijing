@@ -50,7 +50,7 @@ export class FunctionProcedure extends Procedure{
 	}
 
 	getFunctionName(): string{
-		return this.port ? this.port.getName() : "";		
+		return this.port ? this.port.name : "";		
 	}
 
 	updateParams(): string[]{
@@ -64,7 +64,7 @@ export class FunctionProcedure extends Procedure{
 		let outputs = this.node.getOutputs().filter(function(o){
 			return !o.isFunction();
 		}).map(function(output){
-			return output.getName();
+			return output.name;
 		});
 		return outputs;
 	}	

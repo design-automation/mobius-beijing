@@ -1,8 +1,8 @@
-<div class="default" *ngIf="_selectedNode === undefined">
+<div class="default" *ngIf="!active_node">
 	No Node Selected
 </div>
 
-<div class="container" *ngIf="_selectedNode != undefined">
+<div class="container" *ngIf="active_node">
 	<!-- <h3>Selected Node: {{_selectedNode.getName()}}</h3>
 	<hr> -->
 	<mat-accordion multi="true" [displayMode]="flat">

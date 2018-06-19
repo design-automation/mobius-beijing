@@ -12,6 +12,9 @@ export interface IGraphNode{
 	outputs: OutputPort[];
 
 	enabled: boolean;
+	procedure: IProcedure[];
+
+	active_procedure: IProcedure;
 
 	// prototype
 	getName(): string; 

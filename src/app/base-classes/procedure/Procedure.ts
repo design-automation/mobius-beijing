@@ -131,11 +131,11 @@ export abstract class Procedure implements IProcedure{
 		}
 	}
 
-	getParent(): IProcedure{
+	get parent(): IProcedure{
 		return this._parent;
 	}
 
-	setParent(parent: IProcedure): void{
+	set parent(parent: IProcedure){
 		if(parent && (parent["_level"]!==undefined)){
 			this._level = parent["_level"] + 1;
 		}
@@ -158,40 +158,20 @@ export abstract class Procedure implements IProcedure{
 		
 	}	
 
-	addChild(child: IProcedure): void{
-		if( this.hasChildren ){
-			this.children.push(child);
-			child.setParent(this);
-		}
-		else{
-			throw Error("Cannot add child to this procedure");
-		}
+	addChild(child: IProcedure): IProcedure{
+		return ProcedureUtils.add_child(this, child);
 	}
 
-	addChildFromData(child: IProcedure): void{
-		if( this.hasChildren ){
-			this.children.push(child);
-			child.setParent(this);
-		}
-		else{
-			throw Error("Cannot add child to this procedure");
-		}
+	addChildFromData(child: IProcedure): IProcedure{
+		return ProcedureUtils.add_child_from_data(this, child);
 	}
 
-	addChildAtPosition(child: IProcedure, index: number): void{
-		this.children.splice(index, 0, child);
-		child.setParent(this);
+	addChildAtPosition(child: IProcedure, index: number): IProcedure{
+		return ProcedureUtils.add_child_at_position(this, child, index);		
 	}
 
-	deleteChild(procedure: IProcedure): void{
-		this.children = this.children.filter(function(child: IProcedure){ 
-			if(child === procedure){
-				return false; 
-			}
-			else{
-				return true;
-			}
-		});
+	deleteChild(procedure: IProcedure): IProcedure{
+		return ProcedureUtils.delete_child(this, procedure);
 	}
 
 	getLeftComponent(): IComponent{
@@ -215,3 +195,45 @@ export abstract class Procedure implements IProcedure{
 	}
 
 }
+
+export abstract class ProcedureUtils{
+
+	public static add_child(procedure: IProcedure, child: IProcedure): IProcedure{
+		if( procedure.hasChildren ){
+			procedure.children.push(child);
+			child.parent = procedure;
+		}
+		else{
+			throw Error("Cannot add child to this procedure");
+		}
+		
+		return procedure;
+	}
+
+	public static add_child_from_data(procedure: IProcedure, child: IProcedure): IProcedure{
+		if( procedure.hasChildren ){
+			procedure.children.push(child);
+			child.parent = procedure;
+		}
+		else{
+			throw Error("Cannot add child to this procedure");
+		}
+
+		return procedure;
+	}
+
+	public static add_child_at_position(procedure: IProcedure, child: IProcedure, index: number): IProcedure{
+		procedure.children.splice(index, 0, child);
+		child.parent = procedure;
+
+		return procedure;
+	}
+
+	public static delete_child(procedure: IProcedure, remove: IProcedure): IProcedure{
+		procedure.children = procedure.children.filter(function(child: IProcedure){ 
+			return !(child === remove)
+		});
+
+		return procedure;
+	}
+} 

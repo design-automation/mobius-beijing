@@ -44,14 +44,13 @@ export interface IProcedure{
 	getError(): void;
 
 	hasParent(): boolean;
-	setParent(parent: IProcedure): void;
-	getParent(): IProcedure;
+	parent;
 
 	getChildren(): IProcedure[];
-	addChild(procedure: IProcedure): void;
-	addChildFromData(child: IProcedure): void;
-	addChildAtPosition(procedure: IProcedure, index: number): void;
-	deleteChild(procedure: IProcedure): void;
+	addChild(procedure: IProcedure): IProcedure;
+	addChildFromData(child: IProcedure): IProcedure;
+	addChildAtPosition(procedure: IProcedure, index: number): IProcedure;
+	deleteChild(procedure: IProcedure): IProcedure;
 
 	getLeftComponent(): IComponent;
 	setLeftComponent(expression: IComponent): void;

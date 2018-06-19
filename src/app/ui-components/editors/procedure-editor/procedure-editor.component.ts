@@ -19,6 +19,9 @@ export enum KEY_CODE {
   PASTE = 86 
 }
 
+abstract class ProcedureOptions{
+	
+}
 
 /*
  *	Displays the drag-drop procedure for a node
@@ -37,7 +40,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
 	// ----- Tree Initialization
 	@ViewChild('tree') tree;
-	_tree_options = {
+	readonly TREEOPTIONS = {
 	  allowDrag: function(element){
 	  	if(element.data._type == ProcedureTypes.IfControl || element.data._type == ProcedureTypes.ElseControl){
 	  		return false;
@@ -56,34 +59,38 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	};
 
 
+
 	// ----- Private Variables
-	private _nodeX;
-  	_node: IGraphNode;  // node displayed
+    private subscriptions = [];
+    private active_node: IGraphNode;
   	_activeProcedure;			// procedure in focus
   	_procedureArr: IProcedure[] = [];
   	_variableList: string[];
   	copiedProd: IProcedure;
 
-	constructor(private _fs: FlowchartService, 
-				private _ls: LayoutService) { }
+    constructor(private _fs: FlowchartService, 
+                private _ls: LayoutService){}
 
-	ngOnInit(){ 
-		this._nodeX = this._fs.node$.subscribe( (node:IGraphNode) => this.update_node(node) )
-	}
+    ngOnInit(){
+      this.subscriptions.push(this._fs.node$.subscribe( (node) => {
+       		this.active_node = node;
+      }));
+    }
 
-	ngOnDestroy(){
-		this._nodeX.unsubscribe();
-	}
+    ngOnDestroy(){
+      this.subscriptions.map(function(s){
+        s.unsubscribe();
+      })
+    }
 
 	update_node(node: IGraphNode): void{
 
 		if(node == undefined){
-			this._node = undefined;
-			console.log("no node");
+			this.active_node = undefined;
 			return;
 		}
 
-		this._node = node;
+		this.active_node = node;
 		this._procedureArr = node.getProcedure();
 		this._variableList = node.getVariableList();
 
@@ -93,7 +100,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	// update(message: string){
 	// 	if(message == "procedure"){
 	// 		this.tree.treeModel.update();
-	// 		this._variableList = this._node.getVariableList();
+	// 		this._variableList = this.active_node.getVariableList();
 	// 		this._activeProcedure = this._fs.getSelectedProcedure();
 	// 	}
 	// 	else{
@@ -102,8 +109,8 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	// }	
 
 	/*setProperties(): void{
-		this._node = this._fs.getSelectedNode();
-		this._procedureArr = this._node.getProcedure();	
+		this.active_node = this._fs.getSelectedNode();
+		this._procedureArr = this.active_node.getProcedure();	
 
 		// if procedure is selected, add it
 		let selectedProd = this._fs.getSelectedProcedure();
@@ -123,7 +130,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
 		this.tree.treeModel.setFocusedNode(this._activeProcedure )
 
-		this._variableList = this._node.getVariableList();
+		this._variableList = this.active_node.getVariableList();
 
 		for(let i=0; i < this._procedureArr.length; i++){
 			let prod = this._procedureArr[i];
@@ -176,7 +183,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 		let to_procedure: IProcedure = $event.to.parent;
 		let moved_position: number = $event.to.index;
 
-		moved_procedure.setParent(to_procedure);
+		moved_procedure.parent = (to_procedure);
 
 	}
 
@@ -194,7 +201,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 			this.updateFunctionProd(prod.data);
 		}
 
-		this._variableList = this._node.getVariableList();
+		this._variableList = this.active_node.getVariableList();
 
 	}
 
@@ -240,8 +247,8 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
 		let parent = node.parent;
 		if(parent.data.virtual){
-			this._node.deleteProcedure(node.data);
-			this._procedureArr = this._node.getProcedure();
+			this.active_node.deleteProcedure(node.data);
+			this._procedureArr = this.active_node.getProcedure();
 		}
 		else{
 			parent.data.deleteChild(node.data);
@@ -285,7 +292,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 			}
 
 			if(parent.hasChildren){
-				this.copiedProd.setParent(parent);
+				this.copiedProd.parent = (parent);
 				parent.addChildAtPosition(this.copiedProd, 0);
 			}
 			else{
@@ -293,7 +300,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 				let grandparent = node.parent;
 				// in the top level
 				if(grandparent.data.virtual){
-					this._node.addProcedureAtPosition(this.copiedProd, pos+1);
+					this.active_node.addProcedureAtPosition(this.copiedProd, pos+1);
 				}
 				else{
 					grandparent.data.addChildAtPosition(this.copiedProd, pos+1);
@@ -302,7 +309,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 				//grandparent.addChildAtPosition(this.copiedProd, pos)
 			}
 
-			this._procedureArr = this._node.getProcedure();
+			this._procedureArr = this.active_node.getProcedure();
 			this.tree.treeModel.update();
 			this.copiedProd = ProcedureFactory.getProcedureFromData(this.copiedProd, undefined);
 

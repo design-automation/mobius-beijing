@@ -99,14 +99,14 @@ export class PublishSettingsComponent extends Viewer{
 
       if(name.trim().length > 0){
         // put a timeout on this update or something similar to solve jumpiness
-        port.setName(name);
+        port.name = name;
         this.flowchartService.update();
       }
   }
 
   updateType(type: InputPortTypes|OutputPortTypes, port: InputPort|OutputPort): void{
         
-        port.setType(type);
+        port.type = (type);
 
         //defaults
         if(type == InputPortTypes.Slider){

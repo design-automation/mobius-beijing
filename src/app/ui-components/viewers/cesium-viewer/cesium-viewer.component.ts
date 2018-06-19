@@ -1,53 +1,35 @@
 import { Component, Injector, OnInit, Input } from '@angular/core';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IPort } from '../../../base-classes/port/PortModule';
+import { IGraphNode } from '../../../base-classes/node/NodeModule';
 
 import * as gs from 'gs-json';
+
+import { FlowchartService } from '../../../global-services/flowchart.service';
 
 @Component({
   selector: 'app-cesium-viewer',
   templateUrl: './cesium-viewer.component.html',
   styleUrls: ['./cesium-viewer.component.scss']
 })
-export class CesiumViewerComponent extends Viewer implements OnInit{
+export class CesiumViewerComponent implements OnInit{
 
   @Input() mode: string;
 
-	_port: IPort;
-	gs_dummy_data: any = undefined; 
+	port: IPort;
+  private subscriptions = [];
 
-	constructor(injector: Injector){ 
-		super(injector, "Cesium Viewer", "Displays geometry with each node in cesium viewer");  
-	}
+  constructor(private _fs: FlowchartService){}
 
-	reset(){ 
-    this.gs_dummy_data = undefined;
-	}
+  ngOnInit(){
+    this.subscriptions.push(this._fs.node$.subscribe( (node) => this.port = node.outputs[0] ));
+  }
 
-	ngOnInit(){
-    this.update();
-	}	
-
-	update() :void{
-      try{
-        this._port = this.flowchartService.getSelectedPort();
-        if(this._port){
-
-          let portValue = this._port.getValue();
-          if(portValue){
-            this.gs_dummy_data = portValue;
-          }
-          else{
-            this.gs_dummy_data = undefined;
-          }
-        }
-      }
-      catch(ex){
-        this.gs_dummy_data = undefined;
-      }
-
-	}
+  ngOnDestroy(){
+    this.subscriptions.map(function(s){
+      s.unsubscribe();
+    })
+  }
 
 }
 
