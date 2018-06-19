@@ -8,6 +8,15 @@
 		<mobius-cesium [data]="gs_dummy_data" [mode]="mode" 
 			style="width: 100%;">
 		</mobius-cesium>
+
+
+		<button 
+		    class="btn--save"
+		    style=""
+		    *ngIf="gs_dummy_data"
+			(click)="save_geojson()">
+			Save GeoJSON
+		</button>
 	
 	</div>
 </div>

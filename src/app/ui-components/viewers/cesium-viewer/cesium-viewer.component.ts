@@ -50,5 +50,33 @@ export class CesiumViewerComponent extends Viewer implements OnInit{
 
 	}
 
+
+  // save the geojson
+  save_geojson(): void{
+    let fileString = JSON.stringify(this.gs_dummy_data);
+    let blob = new Blob([fileString], {type: 'application/json'});
+    FileUtils.downloadContent(blob, "output.geojson");
+  }
+
 }
 
+
+
+abstract class FileUtils{
+  public static downloadContent(blob, filename) {
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 0)
+    }
+  }
+}
