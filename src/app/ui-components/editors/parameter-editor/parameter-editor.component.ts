@@ -13,53 +13,49 @@ import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classe
 
 abstract class PortUtils{
 
-  public static inputPortOpts: InputPortTypes[] = [
-        InputPortTypes.Input,
-        InputPortTypes.Slider, 
-        // InputPortTypes.ColorPicker, 
-        InputPortTypes.FilePicker,
-        InputPortTypes.URL,
-        InputPortTypes.Checkbox
-        // InputPortTypes.Dropdown
-  ]; 
-
-  public static outputPortOpts: OutputPortTypes[] = [
-     // OutputPortTypes.Three, 
-      OutputPortTypes.Text, 
-      OutputPortTypes.Code, 
-      OutputPortTypes.Console, 
-      OutputPortTypes.Cesium
-  ]; 
 
 
-  public static getInputTypeName(type: InputPortTypes): string{
-      if(type == InputPortTypes.ColorPicker){
-        return "Color";
-      }
-      else if(type == InputPortTypes.Input){
-        return "Simple Input";
-      }
-      else if(type == InputPortTypes.Dropdown){
-        return "Dropdown";
-      }
-      else if(type == InputPortTypes.FilePicker){
-        return "File";
-      }
-      else if(type == InputPortTypes.Slider){
-        return "Slider";
-      }
-      else if(type == InputPortTypes.URL){
-        return "WebURL";
-      }
-      else if(type == InputPortTypes.Checkbox){
-        return "Checkbox";
-      }
-      else{
-        return "Not Identifiable"
-      }
-    }
+}
 
-  public static getOutputTypeName(type: OutputPortTypes): string{
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({name: 'port_name'})
+export class ShortNamePipe implements PipeTransform {
+  transform(type: InputPortTypes|OutputPortTypes): string {
+      
+  }
+
+  private static getInputTypeName(type: InputPortTypes): string{
+      let str_rep = undefined;
+      switch(type){
+        case InputPortTypes.ColorPicker:
+          str_rep = "Color"
+          break;
+        case InputPortTypes.Dropdown:
+          str_rep = "Dropdown"
+          break;
+        case InputPortTypes.Input:
+          str_rep = "SimpleInput"
+          break;
+        case InputPortTypes.FilePicker:
+          str_rep = "File"
+          break;
+        case InputPortTypes.Slider:
+          str_rep = "Slider"
+          break;
+        case InputPortTypes.URL:
+          str_rep = "WebURL"
+          break;
+        case InputPortTypes.Checkbox:
+          str_rep = "Checkbox"
+          break;
+        default:
+          str_rep = "Not Identifiable"
+      }
+
+      return str_rep;
+  }
+
+  private static getOutputTypeName(type: OutputPortTypes): string{
       if(type == OutputPortTypes.Three){
         return "Geometry";
       }
@@ -78,7 +74,7 @@ abstract class PortUtils{
       else{
         return "Not Identifiable"
       }
-    }
+  }
 
 }
 
@@ -89,6 +85,25 @@ abstract class PortUtils{
   styleUrls: ['./parameter-editor.component.scss']
 })
 export class ParameterEditorComponent{
+
+    public static inputPortOpts: InputPortTypes[] = [
+      InputPortTypes.Input,
+      InputPortTypes.Slider, 
+      InputPortTypes.FilePicker,
+      InputPortTypes.URL,
+      InputPortTypes.Checkbox
+      // InputPortTypes.ColorPicker, 
+      // InputPortTypes.Dropdown
+    ]; 
+
+    public static outputPortOpts: OutputPortTypes[] = [
+      OutputPortTypes.Text, 
+      OutputPortTypes.Code, 
+      OutputPortTypes.Console, 
+      OutputPortTypes.Cesium
+      // OutputPortTypes.Three, 
+    ]; 
+
 
     isVisible: boolean = false;
 
@@ -152,7 +167,7 @@ export class ParameterEditorComponent{
             height: '400px',
             width: '600px',          
             data: { 
-                    inputPortTypes: this.inputPortOpts,
+                    inputPortTypes: PortUtils.inputPortOpts,
                     input: input
                   }
         });
@@ -164,7 +179,6 @@ export class ParameterEditorComponent{
 
 
     // higher order functions
-
     addFunctionToProcedure(inp: InputPort): void{
 
       // get functional graph node
