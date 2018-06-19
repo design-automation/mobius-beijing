@@ -439,7 +439,7 @@ export class GraphNode implements IGraphNode{
 			// add results to self node
 			for( let n=0;  n < self._outputs.length; n++ ){
 				let output_port = self._outputs[n];
-				output_port.setComputedValue(result[output_port.getName()]);
+				output_port.setComputedValue(result[output_port.name)]);
 			}
 
 			self._hasExecuted = true;
@@ -466,7 +466,7 @@ export class GraphNode implements IGraphNode{
 		let final_values :any = {};
 		for(let o=0; o < this._outputs.length; o++ ){
 			let output :OutputPort = this._outputs[o];
-			final_values[output.getName()] = output.getValue();
+			final_values[output.name] = output.getValue();
 		}
 
 		return final_values;
@@ -482,11 +482,11 @@ export class GraphNode implements IGraphNode{
 
 		//push names of inputs and outputs
 		this._inputs.map(function(inp){
-			varList.push(inp.getName());
+			varList.push(inp.name;
 		});
 
 		this._outputs.map(function(out){
-			varList.push(out.getName());
+			varList.push(out.name);
 		});
 
 		// push names of left components in procedure
@@ -513,3 +513,4 @@ export class GraphNode implements IGraphNode{
 		let node_code: string = this.getFunction(code_generator);
 	}
 }
+

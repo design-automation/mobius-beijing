@@ -57,33 +57,116 @@ export abstract class Port implements IPort{
 		// this._computed = portData["_computed"];
 	}	
 
-
-	// ---- Getters and Settings
-	// TODO: Convert to get/set methods
-	getId(): string{
+	get id(): string{
 		return this._id;
 	}
 
-	getName(): string{
+	set id(value: string){
+		this._id = value;
+	}
+
+	get name(): string{
 		return this._name;
 	}
 
-	setName(name: string): void{
-		this._name = name;
+	set name(value: string){
+	    //   // check for validity
+	    //   name = name.replace(/[^\w]/gi, '');
+
+	    //   if(name.trim().length > 0){
+	    //     // put a timeout on this update or something similar to solve jumpiness
+	    //     port.setName(name);
+	    //     this._fs.update();
+	    //   }
+		this._name = value;
 	}
 
-
-
-	getType(): InputPortTypes|OutputPortTypes{
+	get type(){
 		return this._type;
 	}
 
-	setType(type: InputPortTypes|OutputPortTypes): void{
-		this._default = undefined;
-		this._computed = undefined;
-		this._type = type;
+	set type(value){
+		this._type = value;
+	
+		if(value == InputPortTypes.Slider){
+          this.setOpts({min: 0, max: 100, step: 1});
+          this.setDefaultValue(50);
+        }
 	}
 
+	get value(): any{
+		return this.getValue();
+	}
+
+	set value(value: any){
+		this.setComputedValue(value);
+	}
+
+
+	// ------------ Port Values Functions 
+	_executionAddr: string = undefined;
+	getValue(): any{
+
+		let final;  
+
+		if(this._executionAddr !== undefined){
+			return this._executionAddr;
+		}
+		else{
+			if (this._computed !== undefined){
+				final = this._computed;
+			}
+			else{
+				final = this._default;
+			}
+		}
+		
+		return final;
+	}
+
+	setComputedValue(value: any): void{
+
+		if (value == undefined)	return;
+
+		switch(this._type){
+			case InputPortTypes.FilePicker:
+			case InputPortTypes.URL:
+				this._computed = FileUtils.add_file_to_memory(value, this._id);
+				break;
+
+			default:
+				this._computed = value;
+		}
+
+		this._hasComputed = true;
+
+	}
+
+	reset(): void{
+		this.setComputedValue(undefined);
+	}
+
+
+	//--- Default Values
+	getDefaultValue(): any{
+		//console.log(`Get default`);
+		return this._default;
+	}
+
+	// Todo: Is this redundant?	
+	setDefaultValue(value: any): void{
+		//console.log(`Set default called with ${value}`);
+		this._default = value;
+
+		if(value !== undefined){
+			this._hasDefault = true;
+		}
+	}
+
+
+
+	// ---- Getters and Settings
+	// TODO: Convert to get/set methods
 	setOpts(opts: any): void{
 		
 	}
@@ -128,65 +211,6 @@ export abstract class Port implements IPort{
 		this._connected = false;
 	}
 
-
-	// ------------ Port Values Functions 
-	_executionAddr: string = undefined;
-	getValue(): any{
-
-		let final;  
-
-		if(this._executionAddr !== undefined){
-			return this._executionAddr;
-		}
-		else{
-			if (this._computed !== undefined){
-				final = this._computed;
-			}
-			else{
-				final = this._default;
-			}
-		}
-		
-		return final;
-	}
-
-	reset(): void{
-		this.setComputedValue(undefined);
-	}
-
-	setComputedValue(value: any): void{
-
-		if (value == undefined)	return;
-
-		switch(this._type){
-			case InputPortTypes.FilePicker:
-			case InputPortTypes.URL:
-				this._computed = FileUtils.add_file_to_memory(value, this._id);
-				break;
-
-			default:
-				this._computed = value;
-		}
-
-		this._hasComputed = true;
-
-	}
-
-	//--- Default Values
-	getDefaultValue(): any{
-		//console.log(`Get default`);
-		return this._default;
-	}
-
-	// Todo: Is this redundant?	
-	setDefaultValue(value: any): void{
-		//console.log(`Set default called with ${value}`);
-		this._default = value;
-
-		if(value !== undefined){
-			this._hasDefault = true;
-		}
-	}
 
 }
 

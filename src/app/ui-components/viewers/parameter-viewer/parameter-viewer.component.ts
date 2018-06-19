@@ -5,48 +5,42 @@ import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule';
 
-import {MobiusService} from '../../../global-services/mobius.service';
-
-import 'rxjs/add/operator/map'
+import { MobiusService } from '../../../global-services/mobius.service';
+import { FlowchartService } from '../../../global-services/flowchart.service';
 
 @Component({
   selector: 'app-parameter-viewer',
   templateUrl: './parameter-viewer.component.html',
   styleUrls: ['./parameter-viewer.component.scss']
 })
-export class ParameterViewerComponent extends Viewer {
+export class ParameterViewerComponent{
     
     @Input() globals: boolean;
-    _editable;
-
-	  _node: IGraphNode;
-	  _inputs: InputPort[]|any;
-    isVisible: boolean = false;
-
-    InputPortTypes = InputPortTypes;
-
     @ViewChild('cesium_param_container') el:ElementRef;
 
-  	constructor(injector: Injector, 
-                  private http: HttpClient, private mobiusService: MobiusService){  
-        super(injector, "parameter-viewer"); 
-     }
+    private subscriptions = [];
+    private active_node: IGraphNode;
+    _editable;
+    InputPortTypes = InputPortTypes;
 
-  	ngOnInit() {
-      this.update();
-  	}
+    constructor(private _fs: FlowchartService, 
+                private _ms: MobiusService, 
+                private http: HttpClient){}
 
-    reset(): void{
-      this._node = undefined; 
-      this._inputs = [];
-      this._editable = this.flowchartService.getFlowchart().editable;;
-
-      if(this.globals){
-        this._inputs = this.flowchartService.getFlowchart().globals;
-      }
-
+    ngOnInit(){
+      this.subscriptions.push(this._fs.node$.subscribe( (node) => {
+        this.active_node = node;
+      }));
     }
 
+    ngOnDestroy(){
+      this.subscriptions.map(function(s){
+        s.unsubscribe();
+      })
+    }
+
+
+    // todo: refactor and remove
     updateURL($event, input){
       let value;
       if($event.srcElement){
@@ -58,76 +52,6 @@ export class ParameterViewerComponent extends Viewer {
       }
     }
 
-    updateComputedValue($event, input, value?: any): void{
-
-      // for input
-      if($event.srcElement){
-        value = $event.srcElement.value;
-        value = value.trim();
-        if(value.length == 0){
-          input.setComputedValue(undefined);
-          return;
-        }
-      }
-
-      input.setComputedValue(value);
-      this.flowchartService.update();
-    }
-
-    getValue(port :InputPort): any{
-
-        if(port.getType() == InputPortTypes.Checkbox){
-          return port.getValue() || false;
-        }
-        else{
-          return (port.getValue() || " ");
-        }
-
-    }
-  	//
-  	//	this update runs when there is a message from other viewers that something changed; 
-  	//  beware of updating flowchart here - it will go into an unending loop :/
-  	//
-  	update(): void{
-
-      this._editable = this.flowchartService.getFlowchart().editable;
-
-      if(this.globals){
-        this._inputs = this.flowchartService.getFlowchart().globals;
-        return;
-      }
-
-  		this._node = this.flowchartService.getSelectedNode();
-      if(this._node != undefined){
-         this._inputs = this._node.getInputs().filter(function(inp: InputPort){
-           return !inp.isConnected();
-         });
-         this.isVisible = true;
-      }
-      else{
-        this.isVisible = false;
-      }
-  	}
-    
-
-    //
-    //
-    //
-    executeFlowchart($event): void{
-
-        $event.stopPropagation();
-
-        this.mobiusService.processing = true;
-
-        let fs = this.flowchartService;
-        setTimeout(function(){
-          fs.execute();
-        }, 400)
-
-    }
-
-    //
-    //
     //
     processing = {value: false};
     handleFileInput($event, input){
@@ -143,8 +67,8 @@ export class ParameterViewerComponent extends Viewer {
 
       if(run_file){
         var reader = new FileReader();
-        let fs = this.flowchartService;
-        let ms = this.mobiusService;
+        let fs = this._fs;
+        let ms = this._ms;
         ms.processing = true;
         reader.onload = (function(reader)
         {
@@ -179,19 +103,16 @@ export class ParameterViewerComponent extends Viewer {
     }
 
 
-    //
-    // Web URL
-    // 
-    getDataFromURL($event, input){
+    executeFlowchart($event): void{
 
-      let urlString: any = input.getOpts().url;
+        $event.stopPropagation();
 
-      this.http.get(urlString)
-        .subscribe(data => {
-             console.log(data);
-             input.setDefaultValue(JSON.stringify(data))
-        }
-      );
+        this._ms.processing = true;
+
+        let fs = this._fs;
+        setTimeout(function(){
+          fs.execute();
+        }, 400)
 
     }
 

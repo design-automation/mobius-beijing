@@ -1,98 +1,102 @@
 <div class="viewer" [class.globals-viewer]="globals">
 
-	<div class="container" id="param-container-cesium"  #cesium_param_container>
+	<div class="container" id="param-container-cesium" #cesium_param_container>
 
 		<div class="default" 
-			*ngIf='!globals && (_inputs == undefined || _inputs.length == 0)'>
+			*ngIf='!globals && !active_node'>
 			No node selected 
 		</div>
  
+ 		<!-- Description in Mobius-Viewer-Mode-->
 		<div class="param-in-viewer" *ngIf="globals">
 			<h3 class="flo_title">{{flowchartService.getFlowchart().name | simplename }}</h3>
 			<div [innerHTML]="flowchartService.getFlowchart().description"></div>
 			<h4 *ngIf="_editable && _inputs.length">Parameters</h4>
 		</div>
 
-		<div class="p-container">
+		
+		<div class="p-container" *ngIf="active_node">
+			
 			<div class='paramater-container single-param-container'
-				 *ngFor="let inp of _inputs" >
-				<div class="param-name">
-					{{ inp.getName() }}
-				</div>
+				 *ngFor="let inp of active_node.inputs" >
 
-				<!-- if input type == Input -->
-				<div class="param-value" *ngIf="inp.getType() == InputPortTypes.Input">
-					<form  class='content'>
-						<mat-form-field>
+				<div class="param-name">{{ inp.name }}</div>
+
+				<div class="param-value" [ngSwitch]="inp.type">
+					
+
+					<!-- if input type == Input -->
+					<div *ngSwitchCase="InputPortTypes.Input">
+						<form  class='content'>
+							<mat-form-field>
+								<textarea 
+									name="inp.name_{{inp.id}}" 
+									matInput 
+									matTextareaAutosize 
+									matAutosizeMinRows="1"
+			            			matAutosizeMaxRows="5" 
+			            			[(ngModel)]="inp.value">
+			            		</textarea>
+							</mat-form-field>
+						</form>
+					</div> 
+
+					<!-- if input type == Slider -->
+					<div *ngSwitchCase="InputPortTypes.Slider">
+
+						<mat-form-field class="curr-value">
 							<textarea matInput 
+								name="inp.name_{{inp.id}}" 
 								matTextareaAutosize 
 								matAutosizeMinRows="1"
 		            			matAutosizeMaxRows="5" 
-		            			(change)="updateComputedValue($event, inp)"
-		            			value="{{ getValue(inp) }}">
+		            			[(ngModel)]="inp.value">
 		            		</textarea>
 						</mat-form-field>
-					</form>
-				</div> 
+						
+						<div class="slider-container" *ngIf="el.nativeElement.offsetWidth > 200">
+							<span class='content'>{{inp.getOpts().min}}</span>
+							<mat-slider min="{{inp.getOpts().min}}" 
+										max="{{inp.getOpts().max}}" 
+										step="{{inp.getOpts().step}}" 
+										[thumb-label]="true"
+										[(ngModel)]="inp.value"></mat-slider>
+							<span class='content'>{{inp.getOpts().max}}</span>
+						</div>
 
-				<!-- if input type == Slider -->
-				<div class="param-value" 
-					*ngIf="inp.getType() == InputPortTypes.Slider">
-					<mat-form-field class="curr-value">
-						<textarea matInput 
-							matTextareaAutosize 
-							matAutosizeMinRows="1"
-	            			matAutosizeMaxRows="5" 
-	            			(change)="updateComputedValue($event, inp)"
-	            			value="{{ getValue(inp) }}">
-	            		</textarea>
-					</mat-form-field>
-					<div class="slider-container" *ngIf="el.nativeElement.offsetWidth > 200">
-						<span class='content'>{{inp.getOpts().min}}</span>
-						<mat-slider min="{{inp.getOpts().min}}" 
-									max="{{inp.getOpts().max}}" 
-									step="{{inp.getOpts().step}}" 
-									[thumb-label]="true"
-									#val
-									[(ngModel)]="val.value"
-									(change)="updateComputedValue($event, inp, val.value)"
-									value="{{ getValue(inp) }}"></mat-slider>
-						<span class='content'>{{inp.getOpts().max}}</span>
 					</div>
+
+					<!-- if input type == FilePicker -->
+					<div *ngSwitchCase="InputPortTypes.FilePicker" class="file-picker">
+						<input type="file" id="file" (change)="handleFileInput($event, inp)">
+						<span *ngIf='inp._hasDefault && !inp._hasComputed'>(has default)</span>
+						<span *ngIf='inp._hasComputed'>(file loaded)</span>
+					</div>
+
+					<!-- if input type == URL -->
+					<div *ngSwitchCase="InputPortTypes.URL">
+						<small><input type="text" value="{{inp.getOpts().url}}" (change)="updateURL($event, inp)"></small>
+						<span *ngIf='inp._hasComputed'>(has data)</span>
+					</div>
+		 
+					<!-- if input type == Checkbox -->
+					<div *ngSwitchCase="InputPortTypes.Checkbox">
+							<mat-checkbox name="inp.name_{{inp.id}}" [(ngModel)]="inp.value"></mat-checkbox>
+					</div>
+
 				</div>
 
-				<!-- if input type == FilePicker -->
-				<div class="param-value file-picker" 
-					*ngIf="inp.getType() == InputPortTypes.FilePicker">
-					<input type="file" id="file" (change)="handleFileInput($event, inp)">
-					<span *ngIf='inp._hasDefault && !inp._hasComputed'>(has default)</span>
-					<span *ngIf='inp._hasComputed'>(file loaded)</span>
-				</div>
-
-				<!-- if input type == URL -->
-				<div class="param-value" 
-					*ngIf="inp.getType() == InputPortTypes.URL">
-					<small><input type="text" value="{{inp.getOpts().url}}" (change)="updateURL($event, inp)"></small>
-					<span *ngIf='inp.getValue()'>(has data)</span>
-				</div>
-	 
-				<!-- if input type == Checkbox -->
-				<div class="param-value" 
-					*ngIf="inp.getType() == InputPortTypes.Checkbox">
-					<mat-checkbox #val (change)="updateComputedValue($event, inp, val.checked)" 
-					[checked]="inp.getValue()"></mat-checkbox>
-				</div>
 			</div>
 		</div>
+		
 
+		<!-- Execute Button -->
 		<button id="execute" 
 			*ngIf="!globals || _editable"
 			mat-raised-button 
 			color="accent" 
-			[disabled]='processing.value'
 			(click)="executeFlowchart($event)">
-			<span *ngIf='!processing.value'>Execute Flowchart</span>
-			<span *ngIf='processing.value'>Processing...</span>
+			<span>Execute Flowchart</span>
 		</button> 	
 	
 	</div>

@@ -7,6 +7,9 @@ export interface IPort{
 	_hasComputed: boolean;
 	_executionAddr: string;
 
+	name;
+	type;
+	id;
 
 	getId(): string;
 	getType(): InputPortTypes|OutputPortTypes;

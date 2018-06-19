@@ -118,7 +118,7 @@
 													<div class="port input" 
 														*ngFor="let port of node.getInputs(); let pi=index"  
 														id="n{{node_index}}pi{{pi}}"
-														[class.hidden]="port.getType() != 'Input'">
+														[class.hidden]="port.type != 'Input'">
 
 														<div class="port-grip" 
 															draggable=true
@@ -130,7 +130,7 @@
 															(drop)="portDrop($event, port, [node_index, pi])">
 														</div>
 
-														<span class="port-name">{{ port.getName() | shortname: 10 }}</span>
+														<span class="port-name">{{ port.name | shortname: 10 }}</span>
 													</div>
 
 												</div>
@@ -141,7 +141,7 @@
 														*ngFor="let port of node.getOutputs(); let po=index;"
 														id="n{{node.id}}po{{po}}">
 
-														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.getName()  | shortname: 10  }}</span>
+														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.name  | shortname: 10  }}</span>
 
 														<div class="port-grip" 
 															draggable=true
