@@ -12376,14 +12376,14 @@ var EViewer;
 /***/ "./src/app/ui-components/viewers/cesium-viewer/cesium-viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"viewer\" style=\"position: absolute;\">\r\n\t<div class=\"container\">\r\n\t\t\r\n\t\t<div class=\"default\" *ngIf='!gs_dummy_data'>\r\n\t\t\tNo Model Available\r\n\t\t</div>\r\n\r\n\t\t<mobius-cesium [data]=\"gs_dummy_data\" [mode]=\"mode\" \r\n\t\t\tstyle=\"width: 100%;\">\r\n\t\t</mobius-cesium>\r\n\t\r\n\t</div>\r\n</div>"
+module.exports = "<div class=\"viewer\" style=\"position: absolute;\">\r\n\t<div class=\"container\">\r\n\t\t\r\n\t\t<div class=\"default\" *ngIf='!gs_dummy_data'>\r\n\t\t\tNo Model Available\r\n\t\t</div>\r\n\r\n\t\t<mobius-cesium [data]=\"gs_dummy_data\" [mode]=\"mode\" \r\n\t\t\tstyle=\"width: 100%;\">\r\n\t\t</mobius-cesium>\r\n\r\n\r\n\t\t<button \r\n\t\t    class=\"btn--save\"\r\n\t\t    style=\"\"\r\n\t\t    *ngIf=\"gs_dummy_data\"\r\n\t\t\t(click)=\"save_geojson()\">\r\n\t\t\tSave GeoJSON\r\n\t\t</button>\r\n\t\r\n\t</div>\r\n</div>"
 
 /***/ }),
 
 /***/ "./src/app/ui-components/viewers/cesium-viewer/cesium-viewer.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.viewer {\n  height: 100%;\n  width: 100%; }\n\n.viewer .container {\n    height: 100%;\n    width: 100%; }\n\n.viewer .container .default {\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      color: #222;\n      background-color: rgba(255, 255, 255, 0.3);\n      z-index: 100; }\n\n.viewer .container #app-geometry-viewer {\n      height: 100%;\n      width: 100%; }\n\n.viewer .container #app-geometry-viewer canvas {\n        height: 100% !important;\n        width: 100% !important; }\n"
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.viewer {\n  height: 100%;\n  width: 100%; }\n\n.viewer .container {\n    height: 100%;\n    width: 100%; }\n\n.viewer .container .default {\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      color: #222;\n      background-color: rgba(255, 255, 255, 0.3);\n      z-index: 100; }\n\n.viewer .container #app-geometry-viewer {\n      height: 100%;\n      width: 100%; }\n\n.viewer .container #app-geometry-viewer canvas {\n        height: 100% !important;\n        width: 100% !important; }\n\nbutton.btn--save {\n  position: absolute;\n  right: 30px;\n  bottom: 100px;\n  width: 150px;\n  height: 45px;\n  background-color: rgba(0, 0, 0, 0.8);\n  color: white;\n  border: none;\n  cursor: pointer; }\n"
 
 /***/ }),
 
@@ -12434,6 +12434,12 @@ let CesiumViewerComponent = class CesiumViewerComponent extends __WEBPACK_IMPORT
             this.gs_dummy_data = undefined;
         }
     }
+    // save the geojson
+    save_geojson() {
+        let fileString = JSON.stringify(this.gs_dummy_data);
+        let blob = new Blob([fileString], { type: 'application/json' });
+        FileUtils.downloadContent(blob, "output.geojson");
+    }
 };
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["E" /* Input */])(),
@@ -12448,6 +12454,25 @@ CesiumViewerComponent = __decorate([
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Injector */]])
 ], CesiumViewerComponent);
 
+class FileUtils {
+    static downloadContent(blob, filename) {
+        if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
+        }
+        else {
+            const a = document.createElement('a');
+            document.body.appendChild(a);
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = filename;
+            a.click();
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 0);
+        }
+    }
+}
 
 
 /***/ }),
