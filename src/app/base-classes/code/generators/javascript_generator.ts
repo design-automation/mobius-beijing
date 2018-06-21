@@ -186,11 +186,11 @@ export class CodeGeneratorJS extends CodeGenerator{
 			fn_code += ( opInits.length > 0 ? "\n" + opInits.join(";\n") + ";\n" : ""); 
 
 			// add procedure
-			for( let line=0; line <  node.getProcedure().length; line ++ ){
-				let procedure: IProcedure = node.getProcedure()[line];
+			for( let line=0; line <  node.procedure.length; line ++ ){
+				let procedure: IProcedure = node.procedure[line];
 
 				// if procedure is disabled - skip
-				if(procedure.enabled){
+				if(!procedure.enabled){
 					continue;
 				}
 
@@ -268,7 +268,6 @@ export class CodeGeneratorJS extends CodeGenerator{
 				if(procedure.print){
 					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.getLeftComponent().expression + "\', " + procedure.getLeftComponent().expression + ");\n";
 				}
-
 			}
 			else if(prod_type == ProcedureTypes.LoopContinue || prod_type == ProcedureTypes.LoopBreak){
 				code = procedure.getLeftComponent().expression + ";";

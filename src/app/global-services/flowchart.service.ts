@@ -600,23 +600,6 @@ export class FlowchartService {
             else{
               let keys = Object.keys(value);
               variable_value = "<em>JSON Object with properties: (" + keys.toString() + ")</em>";;
-              // variable_value += "<ul>" + keys.map(function(k){
-              //   let type: string = typeof(variable_value[k]);
-              //   if (Array.isArray(variable_value[k])){
-              //     type = "<em>array(" + variable_value[k].length + " items)</em>"
-              //   }
-              //   else if(type == "string"){
-              //     type = "\"" + variable_value[k] + "\"";
-              //   }
-              //   else if(type == "number"){
-              //     type = variable_value[k];
-              //   }
-              //   else if(type == "object"){
-              //     type = "<em>" + type + "</em>";
-              //   }
-
-              //   return "<li>" + k + " :: "+  type + "</li>";
-              // }).join("") + "</ul>";
             }
           }
 
@@ -637,7 +620,8 @@ export class FlowchartService {
           
           this.consoleService.addMessage("Flowchart was successfully executed.");
           
-          
+          ///console.log(this._flowchart);
+          ///this.push_flowchart(this._flowchart);
       }
       catch(ex){
         

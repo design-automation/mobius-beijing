@@ -360,7 +360,6 @@ export class Flowchart implements IFlowchart{
 			let outputPort = node.getOutputByIndex(edge.output_address[1]);
 			let inputPort = inputNode.getInputByIndex(edge.input_address[1]);
 
-
 			let outVal = outputPort.getValue();
 			if(outVal && outVal.constructor.name == "Model"){
 				let modelData: string = outVal.toJSON();
@@ -426,10 +425,13 @@ export class Flowchart implements IFlowchart{
 						}
 
 						if(flag){
-							console.log(`${node.getName()} executing...`);
+							let time1 = (new Date()).getTime();
 							node.execute(code_generator, modules, print, gld);
 							this.updateDependentInputs(node, index); 
 							executed.push(index);
+							let time2 = (new Date()).getTime();
+							let time_taken = (time2 - time1)/1000;
+							console.log(`${node.name} executed in ${time_taken}s`);
 						}
 
 					}

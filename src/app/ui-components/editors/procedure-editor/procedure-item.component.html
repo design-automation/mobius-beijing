@@ -11,8 +11,9 @@
 	<div *ngIf="prod.getType() == 'Data'"> 
 		<div class='procedure-item'>
 			<input matInput class="tree-input" [style.width.ch]="prod.getLeftComponent().expression.length + 4" 
-			[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
-			(change)="updateProcedure($event, prod, 'left')" spellcheck="false" list="variable-suggestions" >
+			[(ngModel)]="prod.getLeftComponent().expression" 
+			required spellcheck="false" 
+			list="variable-suggestions" >
 
 			<span class="equal">=</span>
 

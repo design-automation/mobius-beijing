@@ -49,6 +49,10 @@ export class ModuleboxComponent implements OnInit{
 		})
 	}
 
+	push_node(){
+		this._fs.push_node(this.active_node);
+	}
+
 
 	//
 	//
@@ -120,7 +124,7 @@ export class ModuleboxComponent implements OnInit{
 			throw Error("Procedure Type invalid");
 		}
 
-		NodeUtils.add_procedure(this.active_node, prod);
+		this.active_node = NodeUtils.add_procedure(this.active_node, prod);
 	}
 
 	addPort(type: string): void{

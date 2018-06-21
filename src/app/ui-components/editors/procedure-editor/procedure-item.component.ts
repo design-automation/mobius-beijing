@@ -22,4 +22,8 @@ export class ProcedureItemComponent implements OnInit, OnDestroy{
 
 	}
 
+	updateProcedure($event, prod, comp){
+		console.log("prod updated");
+	}
+
 }
