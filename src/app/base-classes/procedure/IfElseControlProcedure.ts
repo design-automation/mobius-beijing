@@ -45,12 +45,13 @@ export class IfElseControlProcedure extends Procedure{
 
 	}
 
-	addChild(prod: IProcedure): void{
+	addChild(prod: IProcedure): IProcedure{
 		if(this.getType() == ProcedureTypes.IfElseControl){
 			alert("Cannot add child to this");
+			return undefined;
 		}
 		else{
-			super.addChild(prod);
+			return super.addChild(prod);
 		}
 	}
 

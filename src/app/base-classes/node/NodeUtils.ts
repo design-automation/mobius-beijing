@@ -41,7 +41,6 @@ export abstract class NodeUtils{
 	public static add_procedure(node: IGraphNode, procedure: IProcedure): IGraphNode{
       
       let active_procedure: IProcedure = node.active_procedure;
-
       // TODO: Validate procedure
       // this.checkProcedure(prod);
 
@@ -85,7 +84,8 @@ export abstract class NodeUtils{
 	        }
       }
       else{
-      	node = NodeUtils.add_procedure(node, procedure)
+      	//node = NodeUtils.add_procedure(node, procedure)
+      	  node.procedure.push(procedure);
       }
 
 

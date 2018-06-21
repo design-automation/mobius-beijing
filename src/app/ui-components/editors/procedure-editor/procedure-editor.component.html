@@ -18,7 +18,12 @@
 						    <option *ngFor='let v of _variableList' value="{{v}}"></option>
 						</datalist>
 
-						<tree-root #tree 	
+						<ul>
+							<li *ngFor="let a of active_node.procedure">
+							{{a}}
+							</li>
+						</ul>
+						<tree-root *ngIf='false' #tree 	
 									[nodes]='active_node.procedure' 
 									[options]='TREEOPTIONS'  
 									(moveNode)="onMoveNode($event)">

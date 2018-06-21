@@ -34,7 +34,7 @@ export class CesiumViewerComponent implements OnInit{
 
   // save the geojson
   save_geojson(): void{
-    let fileString = JSON.stringify(this.gs_dummy_data);
+    let fileString = JSON.stringify(this.port.value);
     let blob = new Blob([fileString], {type: 'application/json'});
     FileUtils.downloadContent(blob, "output.geojson");
   }
