@@ -390,15 +390,56 @@ export class Flowchart implements IFlowchart{
 			gld.push({name: prop, value: value});
 		}
 
-		
-
 		// sort nodes 
 		let all_nodes = this.getNodes();
 		let sortOrder: number[] = this.getNodeOrder();
 
+		let executed = [];
+		while(executed.length < all_nodes.length){
+			for(let index=0; index < all_nodes.length; index++){
+
+				let node = all_nodes[index];
+				if(executed.indexOf(index) > -1){
+					//do nothing
+				}
+				else{
+
+					// check if all inputs have valid inputs
+					// if yes, execute add to executed
+					// if no, set flag to true 
+					// check status of the node; don't rerun
+					if( node.isDisabled() || node.hasFnOutput() ){
+						// do nothing
+						executed.push(index);
+					}
+					else{
+
+						let flag = true;
+						let inputs = node.getInputs();
+						for(let i=0; i < inputs.length; i++){
+							let inp = inputs[i];
+
+							if(inp.getValue() && inp.getValue()["port"] && !inp.isFunction()){
+								flag = false;
+								break;
+							}
+						}
+
+						if(flag){
+							console.log(`${node.getName()} executing...`);
+							node.execute(code_generator, modules, print, gld);
+							this.updateDependentInputs(node, index); 
+							executed.push(index);
+						}
+
+					}
+				}
+			} 
+		}
+
 		// execute each node
 		// provide input to next 
-		let timeStarted	:number = (new Date()).getTime();
+		/*let timeStarted	:number = (new Date()).getTime();
 		for( let nc=0; nc < sortOrder.length; nc++ ){
 
 			let originalRank = sortOrder[nc];
@@ -409,12 +450,15 @@ export class Flowchart implements IFlowchart{
 				continue;
 			}
 
+			console.log(`${node.getName()} executing...`);
+			console.log(node);
+
 			node.execute(code_generator, modules, print, gld);
 
 			this.updateDependentInputs(node, originalRank); 
 
 			//todo: print time taken
-		}
+		}*/
 
 
 
