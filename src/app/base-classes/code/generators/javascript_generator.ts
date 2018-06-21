@@ -233,7 +233,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			if(result){
 				var_name = result[1];
-				console.log(var_name, nodeVars);
+				// console.log(var_name, nodeVars);
 			}
 			else{
 				// do nothing
