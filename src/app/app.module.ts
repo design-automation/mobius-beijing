@@ -23,6 +23,8 @@ import { FlowchartControlsComponent } from './ui-components/controls/flowchart-c
 import { MenuComponent } from './ui-components/controls/main-menu/menu.component';
 
 import { ProcedureEditorComponent } from './ui-components/editors/procedure-editor/procedure-editor.component';
+import { ProcedureItemComponent } from './ui-components/editors/procedure-editor/procedure-item.component';
+
 import { ParameterEditorComponent } from './ui-components/editors/parameter-editor/parameter-editor.component';
 import { ParameterSettingsDialogComponent } from './ui-components/editors/parameter-editor/parameter-settings-dialog.component';
 import { FlowchartViewerComponent } from './ui-components/editors/flowchart-viewer/flowchart-viewer.component';
@@ -84,6 +86,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FlowchartControlsComponent,
     ModuleViewerComponent,
     ProcedureEditorComponent,
+    ProcedureItemComponent,
     ParameterViewerComponent,
     ParameterEditorComponent,
     ModuleboxComponent,

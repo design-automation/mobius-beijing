@@ -1,0 +1,25 @@
+.seg2{
+	display: none;
+}
+
+.children{
+	padding-left: 15px;
+}
+
+.full-container{
+
+	padding: 4px; 
+	//border: 1px solid lightgray;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: sans-serif;
+
+	&::hover{
+		background-color: gray;
+	}
+}
+
+
+input{
+	border-bottom: 3px dashed;
+}

@@ -27,7 +27,6 @@ export class ModuleboxComponent implements OnInit{
   	_moduleList = [];
   	_category: string[] = [];
 
-
   	constructor(private _fs: FlowchartService, private layoutService: LayoutService) { }
 
 	ngOnInit(){
