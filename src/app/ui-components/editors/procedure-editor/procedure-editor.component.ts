@@ -38,33 +38,10 @@ abstract class ProcedureOptions{
 })
 export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
-	// ----- Tree Initialization
-	@ViewChild('tree') tree;
-	readonly TREEOPTIONS = {
-	  allowDrag: function(element){
-	  	if(element.data._type == ProcedureTypes.IfControl || element.data._type == ProcedureTypes.ElseControl){
-	  		return false;
-	  	}
-	  	else{
-	  		return true;
-	  	}
-	 },
-	  allowDrop:  (element, { parent, index }) => {
-	    return (	parent.data._type !== ProcedureTypes.IfElseControl 
-	    			&& parent.data._type !== ProcedureTypes.Data 
-	    			&& parent.data._type !== ProcedureTypes.Action 
-	    			&& parent.data._type !== ProcedureTypes.LoopBreak 
-	    			&& parent.data._type !== ProcedureTypes.LoopContinue )
-	  }
-	};
-
-
-
 	// ----- Private Variables
     private subscriptions = [];
     private active_node: IGraphNode;
-  	_activeProcedure;			// procedure in focus
-  	_procedureArr: IProcedure[] = [];
+  	private active_procedure: IProcedure;			// procedure in focus
   	_variableList: string[];
   	copiedProd: IProcedure;
 
@@ -82,70 +59,6 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
         s.unsubscribe();
       })
     }
-
-	update_node(node: IGraphNode): void{
-
-		if(node == undefined){
-			this.active_node = undefined;
-			return;
-		}
-
-		this.active_node = node;
-		this._procedureArr = node.getProcedure();
-		this._variableList = node.getVariableList();
-
-		this.tree.treeModel.update();
-	}
-
-	// update(message: string){
-	// 	if(message == "procedure"){
-	// 		this.tree.treeModel.update();
-	// 		this._variableList = this.active_node.getVariableList();
-	// 		this._activeProcedure = this._fs.getSelectedProcedure();
-	// 	}
-	// 	else{
-	// 		this.setProperties();
-	// 	}
-	// }	
-
-	/*setProperties(): void{
-		this.active_node = this._fs.getSelectedNode();
-		this._procedureArr = this.active_node.getProcedure();	
-
-		// if procedure is selected, add it
-		let selectedProd = this._fs.getSelectedProcedure();
-
-		if(selectedProd){
-			this._activeProcedure = selectedProd;
-			
-		}
-		else{
-			if(this._procedureArr.length>1){
-				this._activeProcedure = this._procedureArr[0];
-			}
-			else{
-				// do nothing
-			}
-		}
-
-		this.tree.treeModel.setFocusedNode(this._activeProcedure )
-
-		this._variableList = this.active_node.getVariableList();
-
-		for(let i=0; i < this._procedureArr.length; i++){
-			let prod = this._procedureArr[i];
-			if(prod.getType() == ProcedureTypes.Function){
-				this.updateFunctionProd(prod);
-			}
-		}
-
-	}*/
-	
-
-	
-	getString(type: ProcedureTypes): string{
-		return type.toString()
-	}
 
 	//
 	// Procedure Functions 
@@ -173,6 +86,10 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 		}
 	}
 
+	onSelect($event): void{
+		this.active_procedure = $event.id;
+	}
+
 
 	//
 	//
@@ -187,41 +104,6 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
 	}
 
-	//
-	//	procedure update
-	//
-	updateProcedure($event: Event, prod: any, property: string){
-
-		// todo: change this string attachment!
-		if(property == 'left' && prod.data._type !== "If"){
-			prod.data.getLeftComponent().expression = prod.data.getLeftComponent().expression.replace(/[^\w\[\]]/gi, '');
-		}
-
-		if(property == 'right' && prod.data._type == "Function"){
-			this.updateFunctionProd(prod.data);
-		}
-
-		this._variableList = this.active_node.getVariableList();
-
-	}
-
-	// helper function
-	updateFunctionProd(prod: any){
-		let rightC = prod.getRightComponent();
-		let reqParams = prod.updateParams().length;
-
-
-		if(rightC.params.length > reqParams){
-			rightC.params = rightC.params.slice(0, reqParams);
-		}
-
-		let paramStr = rightC.params.join(",");
-		let expr: string = prod.getFunctionName() + "(" + paramStr + ")" + "." + rightC.category;
-		rightC.expression = expr;
-	}
-
-
-
 	// ---- Cut / Copy / Paste Functions
 	@HostListener('window:keyup', ['$event'])
 		keyEvent(event: KeyboardEvent) {
@@ -232,27 +114,24 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); return;	};
 
 			if (ctrlDown && key == KEY_CODE.CUT) {
-				this.copyProcedure(event, this._activeProcedure, false);
+				this.copyProcedure(event, this.active_procedure, false);
 			}
 			else if(ctrlDown && key == KEY_CODE.COPY) {
-				this.copyProcedure(event, this._activeProcedure, true);
+				this.copyProcedure(event, this.active_procedure, true);
 			}
 			else if(ctrlDown && key == KEY_CODE.PASTE){
-				this.pasteProcedure(event, this._activeProcedure);
+				this.pasteProcedure(event, this.active_procedure);
 			}
 		}
 
 
 	deleteProcedure(node): void{
-
 		let parent = node.parent;
 		if(parent.data.virtual){
 			this.active_node.deleteProcedure(node.data);
-			this._procedureArr = this.active_node.getProcedure();
 		}
 		else{
 			parent.data.deleteChild(node.data);
-			this.tree.treeModel.update();
 		}
 	}
 	
@@ -309,8 +188,6 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 				//grandparent.addChildAtPosition(this.copiedProd, pos)
 			}
 
-			this._procedureArr = this.active_node.getProcedure();
-			this.tree.treeModel.update();
 			this.copiedProd = ProcedureFactory.getProcedureFromData(this.copiedProd, undefined);
 
 		}

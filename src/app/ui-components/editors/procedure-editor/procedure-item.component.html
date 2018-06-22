@@ -1,5 +1,5 @@
 <div class = "full-container" 
-	(click)="_activeProcedure = prod">
+	(click)="onSelect($event)">
 	<!-- (mouseover)="_activeProcedure = prod" -->
 
 	<div class = "seg1" 
@@ -135,15 +135,9 @@
 			{{prod.getLeftComponent().expression}}
 		</div>
 	</div>
-
 </div>
 
-
-
-
-
 <div class="seg2 copy_paste_actions"></div>
-
 <div class = "seg2">
 	<div class="seg2btncontainer">
 

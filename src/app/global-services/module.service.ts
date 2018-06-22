@@ -8,6 +8,10 @@ export abstract class ModuleService {
 
   constructor() { ModuleService.init() }
 
+  get modules(){
+  	return ModuleService.modules;
+  }
+
   public static init(){
 	let modulearr = Object.keys(ModuleSet).map(function(module_name){ return {_name: module_name, _version: 0.1, _author: "Patrick"}}); 
 

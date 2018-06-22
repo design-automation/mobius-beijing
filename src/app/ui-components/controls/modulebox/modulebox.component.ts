@@ -49,13 +49,6 @@ export class ModuleboxComponent implements OnInit{
 		})
 	}
 
-	push_node(){
-		this._fs.push_node(this.active_node);
-	}
-
-
-	//
-	//
 	//
 	addActionProcedure(fn: {name: string, params: string[], module: string}){
 
@@ -67,7 +60,7 @@ export class ModuleboxComponent implements OnInit{
 		let prod_data :  {result: string, module: string, function: any, params: string[]} = 
 			{result: "", module: fn.module, function: fn.name, params: fn.params};
 		let prod:IProcedure = ProcedureFactory.getProcedure( ProcedureTypes.Action, prod_data);
-		this._fs.addProcedure(prod);
+		this.active_node = NodeUtils.add_procedure(this.active_node, prod);
 	}
 
 

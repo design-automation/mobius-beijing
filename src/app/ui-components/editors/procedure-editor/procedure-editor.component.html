@@ -11,8 +11,13 @@
 					</mat-expansion-panel-header>
 
 					<div class="prod-container" style="padding: 15px;">
-						<app-procedure-item *ngFor="let p of active_node?.procedure" [prod]="p">			
-						</app-procedure-item>
+						<ng-container *ngFor="let p of active_node?.procedure">
+							<app-procedure-item 
+								[class.selected]="p?.id == active_procedure?.id"
+								[prod]="p" 
+								(select)="onSelect($event)">	
+							</app-procedure-item>
+						</ng-container>
 					</div>
 							
 		</mat-expansion-panel>
