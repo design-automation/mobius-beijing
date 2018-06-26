@@ -1,11 +1,12 @@
- $padding: 40px;
+@import url(http://allfont.net/allfont.css?fonts=agency-fb);
+$padding: 40px;
 
 .tinted-image{
     background: 
     /* top, transparent red, faked with gradient */ 
     linear-gradient(
       rgba(0,0,0, 0.6), 
-      rgba(0, 0, 0, 0.3)
+      rgba(0, 0, 0, 0.2)
     ),
     /* bottom, image */
     url(../../../../assets/img/mobius-cesium-1.JPG);
@@ -40,6 +41,8 @@
     font-weight: 600;
 
     color: #f7f7f7;
+    font-family: 'Agency FB', arial;
+    letter-spacing: 5px;
 }
 
 .container__element--subheader{
@@ -48,7 +51,8 @@
     font-weight: 300;
     padding-top: 15px; 
     padding-bottom: 15px;
-    color: #f7f7f7
+    color: #f7f7f7;
+    font-family: 'Agency FB', arial;
 }
 
 
