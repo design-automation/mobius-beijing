@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ElementRef ,NgModule} from '@angular/core';
+import { Component, OnInit, Injector, ElementRef ,NgModule} from "@angular/core";
 import {DataSubscriber} from "../data/DataSubscriber";
 import { DataService } from "../data/data.service";
 import {ViewerComponent} from "../viewer/viewer.component";
@@ -22,6 +22,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
   private _ExtrudeMin: number;
   private _HeightChart: boolean;
   private _Invert: boolean;
+  private _ColorInvert: boolean;
   private _Scale: number;
   private _Filter: any[];
   private _HideNum: any[];
@@ -52,6 +53,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     this._ColorKey = this.dataArr["ColorKey"];
     this._ColorMax = this.dataArr["ColorMax"];
     this._ColorMin = this.dataArr["ColorMin"];
+    this._ColorInvert = this.dataArr["ColorInvert"];
     this._ExtrudeProperty = this.dataArr["ExtrudeProperty"];
     this._ExtrudeKey = this.dataArr["ExtrudeKey"];
     this._ExtrudeMax = this.dataArr["ExtrudeMax"];
@@ -147,6 +149,11 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
   public changeopp() {
     this._Invert =! this._Invert;
     this.dataArr["Invert"] = this._Invert;
+    this.dataService.set_ViData(this.dataArr);
+  }
+  public changeColorInvert() {
+    this._ColorInvert =! this._ColorInvert;
+    this.dataArr["ColorInvert"] = this._ColorInvert;
     this.dataService.set_ViData(this.dataArr);
   }
 
@@ -251,7 +258,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     this._HideValue = _HeightHide;
   }
 
-  public Changerelation(_RelaHide: any,id: number) {
+  public Changerelation(_RelaHide: any, id: number) {
     const index = this._HideNum.indexOf(id);
     const HeightHide = this._Filter[index].HeightHide;
     this._Filter[index].RelaHide = _RelaHide;
@@ -277,7 +284,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     if(_RelaHide==="1"||_RelaHide === 1) {this._Filter[index].textHide = this._Filter[index].HideMax;}
   }
 
-  public ChangeCategory(categary: string,id: number,type: number) {
+  public ChangeCategory(categary: string, id: number, type: number) {
     const index = this._HideNum.indexOf(id);
     if(type === 1) {
       this._Filter[index].CategaryHide = categary;
@@ -287,7 +294,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  public Changetext(value: string,id: number) {
+  public Changetext(value: string, id: number) {
     const index = this._HideNum.indexOf(id);
     this._Filter[index].textHide = value;
   }

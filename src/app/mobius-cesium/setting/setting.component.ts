@@ -111,30 +111,44 @@ export class SettingComponent extends DataSubscriber implements OnInit {
         }
 
         if(_Filter.length === 0||_CheckHide === false) {
-          if(typeof(_ColorText[0]) === "number") {
-            self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
-          } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-          if(_HeightChart === false) {
-            entity.polyline = undefined;
-            entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
-                                                              _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
+          if(_ColorKey !== "None") {
+            if(typeof(_ColorText[0]) === "number") {
+              self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+            } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+          } else {entity.polygon.material = Cesium.Color.WHITE;}
+          if(_ExtrudeKey !== "None") {
+            if(_HeightChart === false) {
+              entity.polyline = undefined;
+              entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                                                                _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
+            } else {
+              entity.polygon.extrudedHeight =0;
+              const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+              const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
+                                    (entity.polygon.hierarchy.getValue().positions).radius/100),10);
+              const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                      cartesianToCartographic(center).longitude).toFixed(10);
+              const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                      latitude).toFixed(10);
+              entity.polyline = new Cesium.PolylineGraphics({
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString,latitudeString,0,longitudeString,
+                        latitudeString,self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                        _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
+                width:radius,
+                material:entity.polygon.material,
+                show:true,
+              });
+            }
           } else {
-            entity.polygon.extrudedHeight =0;
-            const center = self.dataService.getpoly_center()[i];
-            entity.polyline = new Cesium.PolylineGraphics({
-              positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],
-                    self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,_ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
-              width:center[2],
-              material:entity.polygon.material,
-              show:true,
-            });
+            entity.polyline = undefined;
+            entity.polygon.extrudedHeight = 0;
           }
         }
       }
     });
   }
 
-  public Hide(_Filter: any[],entity,_HeightChart: boolean): boolean {
+  public Hide(_Filter: any[], entity, _HeightChart: boolean): boolean {
     let _CheckHide: boolean = false;
     for(const filter of _Filter) {
       const value = entity.properties[filter.HeightHide]._value;
@@ -175,7 +189,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  public ExtrudeHeight(value: number,_ExtrudeMax: number,_ExtrudeMin: number,_Invert: boolean): number {
+  public ExtrudeHeight(value: number, _ExtrudeMax: number, _ExtrudeMin: number, _Invert: boolean): number {
     let diff: number;
     if(_ExtrudeMin < 0) {diff = Math.abs(_ExtrudeMin);} else {diff = 0;}
     if(value > _ExtrudeMax) {value = _ExtrudeMax;}
@@ -188,7 +202,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  public colorByNum(entity,max: number,min: number,_ColorKey: string,_ChromaScale: any) {
+  public colorByNum(entity, max: number, min: number, _ColorKey: string, _ChromaScale: any) {
     if(entity.properties[_ColorKey] !== undefined) {
       const texts = entity.properties[_ColorKey]._value;
       const rgb = _ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
@@ -197,7 +211,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  public  colorByCat(entity,_ColorText: any[],_ColorKey: string,_ChromaScale: any) {
+  public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
     if(entity.properties[_ColorKey] !== undefined) {
       let initial: boolean = false;
       for(let j = 0;j < _ColorText.length; j++) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector, ElementRef } from "@angular/core";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {SettingComponent} from "../setting/setting.component";
-import * as d3 from "d3-array";
+// import * as d3 from "d3-array";
 import * as chroma from "chroma-js";
 
 @Component({
@@ -16,7 +16,6 @@ export class ViewerComponent extends DataSubscriber {
   private viewer: any;
   private selectEntity: any=null;
   private material: object;
-  private poly_center: any[];
   private _Colorbar: any[];
   private texts: any[];
   private _Cattexts: any[];
@@ -31,6 +30,7 @@ export class ViewerComponent extends DataSubscriber {
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
     this.myElement = myElement;
+    this.dataService.set_imageryViewModels();
   }
 
   public ngOnInit() {
@@ -61,138 +61,37 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public LoadData(data: JSON) {
-    if(document.getElementsByClassName("cesium-viewer").length!==0) {
+    if(document.getElementsByClassName("cesium-viewer").length !== 0) {
       document.getElementsByClassName("cesium-viewer")[0].remove();
     }
-    const imageryViewModels = [];
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Stamen Toner",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-     tooltip : "A high contrast black and white map.\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/toner/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Stamen Toner(Lite)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-     tooltip : "A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/toner-lite/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Terrain(Standard)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-     tooltip : "A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/terrain/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Terrain(Background)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-     tooltip : "A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/terrain-background/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Open\u00adStreet\u00adMap",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/openStreetMap.png"),
-     tooltip : "OpenStreetMap (OSM) is a collaborative project to create a free editable \
-             map of the world.\nhttp://www.openstreetmap.org",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://a.tile.openstreetmap.org/",
-         });
-     },
-    }));
-
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Earth at Night",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/earthAtNight.png"),
-     tooltip : "The lights of cities and villages trace the outlines of civilization \
-                 in this global view of the Earth at night as seen by NASA/NOAA\'s Suomi NPP satellite.",
-     creationFunction : function() {
-         return new Cesium.IonImageryProvider({ assetId: 3812 });
-     },
-    }));
-
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Natural Earth\u00a0II",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
-     tooltip : "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
-     creationFunction : function() {
-         return Cesium.createTileMapServiceImageryProvider({
-             url : Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
-         });
-     },
-    }));
-
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Blue Marble",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/blueMarble.png"),
-     tooltip : "Blue Marble Next Generation July, 2004 imagery from NASA.",
-     creationFunction : function() {
-         return new Cesium.IonImageryProvider({ assetId: 3845 });
-     },
-    }));
 
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox:false,
-      imageryProviderViewModels : imageryViewModels,
-      selectedImageryProviderViewModel : imageryViewModels[0],
+      imageryProviderViewModels : this.dataService.get_imageryViewModels(),
+      selectedImageryProviderViewModel : this.dataService.get_imageryViewModels()[0],
       timeline: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
       animation:false,
+      shadows : false,
+      // baseLayerPicker : false,
+      // shouldAnimate : true,
     });
+    // viewer.scene.globe.enableLighting = true;
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+
     if(this.data !== undefined) {
       this.viewer = viewer;
       this.dataService.setViewer(this.viewer);
       this.data = data;
-      this.poly_center = [];
       const promise = Cesium.GeoJsonDataSource.load(this.data);
-      const self = this;
+      viewer.dataSources.add(promise);
       const _HeightKey: any[] = [];
 
       promise.then(function(dataSource) {
-        viewer.dataSources.add(dataSource);
         const entities = dataSource.entities.values;
-        for (const entity of entities) {
-          let poly_center = [];
-          if(entity.polygon !== undefined) {
-            entity.polygon.outlineColor = Cesium.Color.Black;
-            const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-            const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
-                                  (entity.polygon.hierarchy.getValue().positions).radius/100),10);
-            const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
-                                    cartesianToCartographic(center).longitude).toFixed(10);
-            const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
-                                    latitude).toFixed(10);
-            poly_center = [longitudeString,latitudeString,radius];
-            self.poly_center.push(poly_center);
-          }
-          if(entity.billboard !== undefined) {
-            entity.billboard = undefined;
-            entity.point = new Cesium.PointGraphics({
-              color: Cesium.Color.BLUE,
-              pixelSize: 10,
-            });
-          }
-        }
+        const self = this;
         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
-        self.dataService.setpoly_center(self.poly_center);
       });
 
       this.dataService.setcesiumpromise(promise);
@@ -214,6 +113,38 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
       this.Colortext();
     }
+    /*this.viewer = viewer;
+    var dataSource = Cesium.CzmlDataSource.load(this.data);
+    viewer.dataSources.add(dataSource);
+    dataSource.then(function(dataSource) {
+      const entities = dataSource.entities.values;
+    });
+    viewer.zoomTo(dataSource);*/
+    /*Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjMtOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
+
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+    terrainProvider : new Cesium.CesiumTerrainProvider({
+        url: Cesium.IonResource.fromAssetId(5118)
+    })
+    });
+*/
+    /*var viewer = new Cesium.Viewer('cesiumContainer', {
+      // terrainProvider : Cesium.createWorldTerrain(),
+      // baseLayerPicker : false,
+      shouldAnimate : true,
+      infoBox:false,
+      imageryProviderViewModels : imageryViewModels,
+      selectedImageryProviderViewModel : imageryViewModels[0],
+      timeline: false,
+      fullscreenButton:false,
+      // automaticallyTrackDataSourceClocks:false,
+      animation:false,
+    });
+
+    viewer.dataSources.add(Cesium.CzmlDataSource.load(this.data)).then(function(ds) {
+      viewer.trackedEntity = ds.entities.getById('path');
+    });*/
+    
   }
 
   public Colortext() {
@@ -227,7 +158,7 @@ export class ViewerComponent extends DataSubscriber {
       const texts = this.dataArr["ColorText"].sort();
       const _Max: number = this.dataArr["ColorMax"];
       const _Min: number = this.dataArr["ColorMin"];
-      if(this.mode === "viewer"){
+      if(this.mode === "viewer") {
         this._ColorKey = this.dataArr["ColorKey"];
         this._ExtrudeKey = this.dataArr["ExtrudeKey"];
       }
@@ -396,7 +327,7 @@ export class ViewerComponent extends DataSubscriber {
     }
   }
 
-  public  colorByCat(entity,_ColorText: any[],_ColorKey: string,_ChromaScale: any) {
+  public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
     if(entity.properties[_ColorKey] !== undefined) {
       let initial: boolean = false;
       for(let j = 0;j<_ColorText.length; j++) {
@@ -434,6 +365,32 @@ export class ViewerComponent extends DataSubscriber {
           }
         }
       }
+    }
+  }
+    // save the geojson
+  save_geojson(): void{
+    let fileString = JSON.stringify(this.data);
+    let blob = new Blob([fileString], {type: 'application/json'});
+    FileUtils.downloadContent(blob, "output.geojson");
+  }
+}
+
+
+abstract class FileUtils{
+  public static downloadContent(blob, filename) {
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 0)
     }
   }
 }

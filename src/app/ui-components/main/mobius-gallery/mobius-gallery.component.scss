@@ -1,4 +1,15 @@
-$padding: 40px;
+ $padding: 40px;
+
+.tinted-image{
+    background: 
+    /* top, transparent red, faked with gradient */ 
+    linear-gradient(
+      rgba(0,0,0, 0.6), 
+      rgba(0, 0, 0, 0.3)
+    ),
+    /* bottom, image */
+    url(../../../../assets/img/mobius-cesium-1.JPG);
+}
 
 
 .container{
@@ -11,6 +22,8 @@ $padding: 40px;
     display: flex;
     flex-direction: column;
 
+    @extend .tinted-image;
+
 }
 
 
@@ -19,27 +32,23 @@ $padding: 40px;
 }
 
 .container__element--header{
-    padding-top: 150px;
+    padding-top: 70px;
     padding-bottom: 15px;
-
-    background: linear-gradient(
-          rgba(#F76BE5, 0.25),
-          rgba(#181717, 0.95)
-        ), url(../../../../assets/img/mobius-cesium-1.JPG);
 
     font-size: 48px;
     line-height: 64px;
     font-weight: 600;
-    color: lightsteelblue;
+
+    color: #f7f7f7;
 }
 
 .container__element--subheader{
     font-size: 26px;
     line-height: 32px;
     font-weight: 300;
-    padding-top: 60px; 
-    padding-bottom: 30px;
-    color: #222;
+    padding-top: 15px; 
+    padding-bottom: 15px;
+    color: #f7f7f7
 }
 
 
@@ -73,8 +82,7 @@ $padding: 40px;
 
         font-size: 16px;
         line-height: 24px;
-        color: #000;
-        font-weight: 300;
+        //font-weight: 300;
         overflow: hidden;
         border-radius: 4px;
         vertical-align: middle;
@@ -83,8 +91,11 @@ $padding: 40px;
         word-wrap: break-word;
         word-break: break-word;
 
-        border: 1px solid #bbb; 
+        border: 1px solid #222; 
         border-radius: 2px;
+
+        background-color: rgba(0,0,0,0.6);
+        color: #f7f7f7;
 
         a{
             display: block;
@@ -106,7 +117,7 @@ $padding: 40px;
         }
 
         &:hover{
-            border-color: #222;
+            border-color: #f7f7f7;
         }
     }
 

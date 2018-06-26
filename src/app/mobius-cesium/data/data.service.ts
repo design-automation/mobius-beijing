@@ -12,12 +12,12 @@ export class DataService {
   private cesiumpromise: any;
   private hideElementArr: any[];
   private _HideNum: any[];
-  private poly_center: any[];
   private mode: string;
   private _ViData: object;
   private _PuData: object;
   private _index: number;
   private _Filter: any[];
+  private _imageryViewModels: any[] = [];
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -69,12 +69,6 @@ export class DataService {
   public get_HideNum(): any[] {
     return this._HideNum;
   }
-  public getpoly_center(): any[] {
-    return this.poly_center;
-  }
-  public setpoly_center(poly_center): void {
-    this.poly_center = poly_center;
-  }
   public getmode(): string {
     return this.mode;
   }
@@ -83,6 +77,92 @@ export class DataService {
   }
   public set_index(_index): void {
     this._index = _index;
+  }
+  public set_imageryViewModels() :void{
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Stamen Toner",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
+     tooltip : "A high contrast black and white map.\nhttp://www.maps.stamen.com/",
+     creationFunction : function() {
+         return Cesium.createOpenStreetMapImageryProvider({
+             url : "https://stamen-tiles.a.ssl.fastly.net/toner/",
+         });
+     },
+    }));
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Stamen Toner(Lite)",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
+     tooltip : "A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/",
+     creationFunction : function() {
+         return Cesium.createOpenStreetMapImageryProvider({
+             url : "https://stamen-tiles.a.ssl.fastly.net/toner-lite/",
+         });
+     },
+    }));
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Terrain(Standard)",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
+     tooltip : "A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/",
+     creationFunction : function() {
+         return Cesium.createOpenStreetMapImageryProvider({
+             url : "https://stamen-tiles.a.ssl.fastly.net/terrain/",
+         });
+     },
+    }));
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Terrain(Background)",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
+     tooltip : "A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/",
+     creationFunction : function() {
+         return Cesium.createOpenStreetMapImageryProvider({
+             url : "https://stamen-tiles.a.ssl.fastly.net/terrain-background/",
+         });
+     },
+    }));
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Open\u00adStreet\u00adMap",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/openStreetMap.png"),
+     tooltip : "OpenStreetMap (OSM) is a collaborative project to create a free editable \
+             map of the world.\nhttp://www.openstreetmap.org",
+     creationFunction : function() {
+         return Cesium.createOpenStreetMapImageryProvider({
+             url : "https://a.tile.openstreetmap.org/",
+         });
+     },
+    }));
+
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Earth at Night",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/earthAtNight.png"),
+     tooltip : "The lights of cities and villages trace the outlines of civilization \
+                 in this global view of the Earth at night as seen by NASA/NOAA\'s Suomi NPP satellite.",
+     creationFunction : function() {
+         return new Cesium.IonImageryProvider({ assetId: 3812 });
+     },
+    }));
+
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Natural Earth\u00a0II",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
+     tooltip : "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
+     creationFunction : function() {
+         return Cesium.createTileMapServiceImageryProvider({
+             url : Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
+         });
+     },
+    }));
+
+    this._imageryViewModels.push(new Cesium.ProviderViewModel({
+     name : "Blue Marble",
+     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/blueMarble.png"),
+     tooltip : "Blue Marble Next Generation July, 2004 imagery from NASA.",
+     creationFunction : function() {
+         return new Cesium.IonImageryProvider({ assetId: 3845 });
+     },
+    }));
+  }
+  public get_imageryViewModels(): any[] {
+    return this._imageryViewModels;
   }
 
   public getValue(model: JSON) {
@@ -104,6 +184,7 @@ export class DataService {
       const promise = this.cesiumpromise;
       const _Heighttexts: any[] = [];
       const _Colortexts: any[] = [];
+      const self = this;
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for (const entity of entities) {
@@ -122,6 +203,16 @@ export class DataService {
                 _Colortexts.push(entity.properties[_ColorValue]._value);}
               }
             }
+          }
+          if(entity.polygon !== undefined) {
+            entity.polygon.outlineColor = Cesium.Color.Black;
+          }
+          if(entity.billboard !== undefined) {
+            entity.billboard = undefined;
+            entity.point = new Cesium.PointGraphics({
+              color: Cesium.Color.BLUE,
+              pixelSize: 10,
+            });
           }
         }
       });
@@ -200,6 +291,7 @@ export class DataService {
       const promise = this.cesiumpromise;
       const _Heighttexts = [];
       const _Colortexts = [];
+      const self = this;
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for (const entity of entities) {
@@ -218,6 +310,16 @@ export class DataService {
                 _Colortexts.push(entity.properties[_ColorValue]._value);}
               }
             }
+          }
+          if(entity.polygon !== undefined) {
+            entity.polygon.outlineColor = Cesium.Color.Black;
+          }
+          if(entity.billboard !== undefined) {
+            entity.billboard = undefined;
+            entity.point = new Cesium.PointGraphics({
+              color: Cesium.Color.BLUE,
+              pixelSize: 10,
+            });
           }
         }
       });
@@ -271,7 +373,7 @@ export class DataService {
     }
 
   }
-   public  Initial(_HideValue: string): any[] {
+  public  Initial(_HideValue: string): any[] {
     const texts=[];
     const promise = this.getcesiumpromise();
     const self = this;

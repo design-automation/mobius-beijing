@@ -31,6 +31,8 @@ $default-height: 2*$text-height;
 	color: #395D73;
 }
 
+
+
 .viewer{
 	font-family: sans-serif;
 	display: flex; 
@@ -47,9 +49,9 @@ $default-height: 2*$text-height;
 
 	&.globals-viewer{
 		padding: 0px;
-		background-color: rgba(20, 20, 20, 0.5);
+		background-color: rgba(20, 20, 20, 0.9);
 		border-left: 1px solid gray;
-		color: #ddd;
+		color: #D3D3D3;
 	}
 
 	.container{
