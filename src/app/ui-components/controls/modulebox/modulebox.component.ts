@@ -1,8 +1,9 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {FlowchartService} from '../../../global-services/flowchart.service';
 import {LayoutService} from '../../../global-services/layout.service';
+import {ModuleService} from '../../../global-services/module.service';
+
 import {ModuleUtils} from "../../../base-classes/code/CodeModule";
-import {Viewer} from '../../../base-classes/viz/Viewer';
 import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
 import {NodeUtils} from '../../../base-classes/node/NodeUtils';
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
@@ -27,13 +28,15 @@ export class ModuleboxComponent implements OnInit{
   	_moduleList = [];
   	_category: string[] = [];
 
-  	constructor(private _fs: FlowchartService, private layoutService: LayoutService) { }
+  	constructor(private _fs: FlowchartService, 
+  				private _ms: ModuleService,
+  				private layoutService: LayoutService) { }
 
 	ngOnInit(){
 		
 		this._moduleList = [];
 
-		let modules = this._fs.getModules();
+		let modules = this._ms.modules;
 		for(let mod=0; mod < modules.length; mod++){
 			let user_module = modules[mod];
 			this._category.push(user_module["_name"]);
@@ -133,14 +136,14 @@ export class ModuleboxComponent implements OnInit{
         throw Error("Unknown Port Type");
       }  
 
-      this._fs.update();
+      //this._fs.update();
     }
 
 
     openModuleHelp($event, category: string): void{
     	$event.stopPropagation();
 
-    	this._fs.switchViewer("help-viewer")
+    	//this._fs.switchViewer("help-viewer")
 
     	this.layoutService.showHelp({module: category, name: undefined})
 	}

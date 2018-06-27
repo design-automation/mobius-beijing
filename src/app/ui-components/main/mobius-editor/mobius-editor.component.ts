@@ -23,16 +23,16 @@ export class MobiusEditorComponent implements OnInit {
 
     constructor(private layoutService: LayoutService, 
     			private flowchartService: FlowchartService, 
-    			private mobiusService: MobiusService){ 
+    			private _mb: MobiusService){ 
 
     	let browser: string = this.checkBrowser();
     	if(browser == "Chrome"){
     		this.layout = layoutService.getAssets(); 
     		this.toggle = layoutService.toggleMode;
     		this.supported = true;
-    		this.processing = mobiusService.processing;
+    		this.processing = _mb.processing;
     		let self = this;
-    		mobiusService.stateChangedEmitter().subscribe({
+    		_mb.stateChangedEmitter().subscribe({
     			next(value){ self.processing = value; },
     			error(message){ }
     		})
@@ -64,7 +64,7 @@ export class MobiusEditorComponent implements OnInit {
     		window.onbeforeunload = undefined;
     	}
 
-    	this.flowchartService.loadFile(this.filepath);
+        this._mb.load_file(this.filepath)
     }
 
     checkBrowser(): string { 

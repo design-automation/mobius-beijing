@@ -1,12 +1,12 @@
 import { Component, Injector, ElementRef, ViewChild, Input } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, InputPortTypes } from '../../../base-classes/port/PortModule';
 
 import { MobiusService } from '../../../global-services/mobius.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
+import { ExecuteService } from '../../../global-services/execute.service';
 
 @Component({
   selector: 'app-parameter-viewer',
@@ -25,6 +25,7 @@ export class ParameterViewerComponent{
 
     constructor(private _fs: FlowchartService, 
                 private _ms: MobiusService, 
+                private _ex: ExecuteService,
                 private http: HttpClient){}
 
     ngOnInit(){
@@ -87,7 +88,6 @@ export class ParameterViewerComponent{
                 //fs.freeze = false;
                 input.setComputedValue(contents);
                 ms.processing = false;
-                fs.update();
             }
         })(reader);
 
@@ -109,9 +109,9 @@ export class ParameterViewerComponent{
 
         this._ms.processing = true;
 
-        let fs = this._fs;
+        let ex = this._ex;
         setTimeout(function(){
-          fs.execute();
+          ex.execute();
         }, 400)
 
     }

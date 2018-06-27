@@ -7,6 +7,7 @@ import { Observable } from "rxjs/Rx";
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 import { LayoutService } from '../../../global-services/layout.service';
+import { MobiusService } from '../../../global-services/mobius.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 
 
@@ -43,8 +44,12 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 	router; sub;
 	filepath: string;
 
-	constructor(private _router: ActivatedRoute, private http: HttpClient,
-		private layoutService: LayoutService, private flowchartService: FlowchartService) {
+	constructor(private _router: ActivatedRoute, 
+				private http: HttpClient,
+				private layoutService: LayoutService, 
+				private _mb: MobiusService, 
+				private flowchartService: FlowchartService) {
+		
 		this.router = _router;
 
 		let browser: string = this.checkBrowser();
@@ -62,7 +67,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		this.sub = this.router.params.subscribe(params => {
 		   this.filepath = this.getFlowchart(params.id);
-		   this.flowchartService.loadFile(this.filepath);
+		   this._mb.load_file(this.filepath);
 		});
 
 		this.slider_state = 'slide_in';

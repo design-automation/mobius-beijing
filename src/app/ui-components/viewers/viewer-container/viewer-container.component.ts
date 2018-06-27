@@ -2,8 +2,6 @@ import { Component, OnInit, Injector, Input,
 		 ViewChild, ViewContainerRef, 
 		 ComponentFactoryResolver } from '@angular/core';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
-
 import {GeometryViewerComponent} from '../geometry-viewer/geometry-viewer.component';
 import {CesiumViewerComponent} from '../cesium-viewer/cesium-viewer.component';
 import {TextViewerComponent} from '../text-viewer/text-viewer.component';

@@ -8,8 +8,6 @@ import { LayoutService } from '../../../global-services/layout.service';
 import { Subscription } from 'rxjs/Subscription';
 import { EViewer } from '../../viewers/EViewer';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
-
 
 @Component({
   selector: 'app-panel',
@@ -28,7 +26,7 @@ export class PanelComponent implements OnInit{
   subscriptions = [];
 
   constructor(private _fs: FlowchartService, 
-  			  private layoutService: LayoutService, 
+  			      private layoutService: LayoutService, 
               private r: ComponentFactoryResolver) { 
    
   }

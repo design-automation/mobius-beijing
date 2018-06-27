@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FlowchartService } from '../../../global-services/flowchart.service'; 
+import { ModuleService } from '../../../global-services/module.service'; 
+
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer} from '@angular/platform-browser';
 
@@ -20,14 +22,16 @@ export class HelpViewerComponent implements OnInit {
   fnObj: {module: string, name: string};
 
   //modules/_group_.html
-  constructor(private sanitizer: DomSanitizer, private flowchartService: FlowchartService) { 
+  constructor(private sanitizer: DomSanitizer, 
+      private flowchartService: FlowchartService, 
+      private _ms: ModuleService) { 
   		this.sanitizer = sanitizer;
       try{
-        let mods = this.flowchartService.getModules().map(function(m){
+        let mods = ModuleService.modules.map(function(m){
             return m["_name"].toLowerCase();
         });
 
-        this._loadedModules = this.flowchartService.getModules();
+        this._loadedModules = ModuleService.modules;
         this.helpAvailable = true;
       }
       catch(ex){

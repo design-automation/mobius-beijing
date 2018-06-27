@@ -1,6 +1,5 @@
 import { Component, OnInit, Injector, Inject } from '@angular/core';
-import { Viewer } from '../../../base-classes/viz/Viewer';
-import { FlowchartService } from '../../../global-services/flowchart.service';
+import { NodeLibraryService } from '../../../global-services/node-library.service';
 
 import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
 
@@ -9,21 +8,14 @@ import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeMod
   templateUrl: './node-library.component.html',
   styleUrls: ['./node-library.component.scss']
 })
-export class NodeLibraryComponent extends Viewer{
+export class NodeLibraryComponent{
 
 	_savedNodes: IGraphNode[]; 
 
-	constructor(injector: Injector){  
-		super(injector, "Node Library");  
-		this._savedNodes = this.flowchartService.getSavedNodes();
-	}
+	constructor(){}
 
 	reset(): void{
-		this._savedNodes = this.flowchartService.getSavedNodes();
-	}
-
-	update(){ 
-		this._savedNodes = this.flowchartService.getSavedNodes();
+		this._savedNodes = NodeLibraryService.nodes;
 	}
 
 	addNode($event, type: number): void{
@@ -40,11 +32,11 @@ export class NodeLibraryComponent extends Viewer{
 
 	deleteNode($event, node): void{
 		$event.stopPropagation();
-		this.flowchartService.clearLibrary(node["_id"]);
+		NodeLibraryService.delete_library_node(node["_id"])
 	}
 
 	clearLibrary(){
-		this.flowchartService.clearLibrary();
+		NodeLibraryService.delete_library_node()
 	}
 
 	downloadLibrary(){

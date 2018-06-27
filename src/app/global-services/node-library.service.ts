@@ -4,14 +4,26 @@ import { AllModules as ModuleSet } from "../../assets/modules/AllModules";
 import * as CircularJSON from 'circular-json';
 import {MOBIUS} from './mobius.constants';
 
+import {ConsoleService} from "./console.service";
+import {IGraphNode, GraphNode} from '../base-classes/node/NodeModule';
+
+
 @Injectable()
 export abstract class NodeLibraryService {
 
-  public static saved_nodes: any[] = [];
+  private static saved_nodes: any[] = [];
 
-  constructor() { this.checkSavedNodes();  }
+  public static get nodes(): any[]{
+    return NodeLibraryService.saved_nodes;
+  }
 
-  checkSavedNodes(): void{ 
+  set saved_nodes(nodes: any[]){
+    NodeLibraryService.saved_nodes = nodes;
+  }
+
+  constructor(private _cs: ConsoleService) { NodeLibraryService.update_nodes();  }
+
+  public static update_nodes(): void{ 
 
     NodeLibraryService.saved_nodes = [];
     
@@ -26,10 +38,13 @@ export abstract class NodeLibraryService {
         let n_data = nodeData[n];
         NodeLibraryService.saved_nodes.push(n_data);
     }
-
   }
 
-  clearLibrary(nodeID ?: string): void{
+  /*
+   * Deletes all nodes in the libray if node nodeID is passed
+   * Deletes single node from the libray is a nodeID is passed
+   */
+  public static delete_library_node(nodeID?: string): void{
 
     let nav: any = navigator;
     let myStorage = window.localStorage;
@@ -37,48 +52,46 @@ export abstract class NodeLibraryService {
     let property = MOBIUS.PROPERTY.NODE;
 
     if(nodeID == undefined){
-      let storageString = myStorage.removeItem(property);
-      this.consoleService.addMessage("Node Library was cleared.");
+        let storageString = myStorage.removeItem(property);
+        //this.consoleService.addMessage("Node Library was cleared.");
     }
     else{
-      this._savedNodes = this._savedNodes.filter(function(node){
-         return node["_id"] != nodeID;
-      });
-      
-      if(this._savedNodes.length == 0){
-        myStorage.removeItem(property);
-      }
-      else{
-        let nodesStorage = CircularJSON.stringify({ n: this._savedNodes });
-        myStorage.setItem(property, nodesStorage);
-      }
-      this.consoleService.addMessage("Node from library was deleted.");
+
+        NodeLibraryService.saved_nodes = NodeLibraryService.saved_nodes.filter(function(node){
+           return node["_id"] != nodeID;
+        });
+        
+        if(NodeLibraryService.saved_nodes.length == 0){
+          myStorage.removeItem(property);
+        }
+        else{
+          let nodesStorage = CircularJSON.stringify({ n: NodeLibraryService.saved_nodes });
+          myStorage.setItem(property, nodesStorage);
+        }
+        //this.consoleService.addMessage("Node from library was deleted.");
     }
 
-    this.getNodes().map(function(node){
 
-      if(nodeID === undefined){
-        node.removeType();
-      }
-      else if(node.getType() == nodeID){
-        node.removeType();
-      }
+    // TODO: remove node type from flowchart
+    // this.getNodes().map(function(node){
 
-    })
+    //     if(nodeID === undefined){
+    //       node.removeType();
+    //     }
+    //     else if(node.getType() == nodeID){
+    //       node.removeType();
+    //     }
+
+    // })
 
     // print message to console
-    this.switchViewer("console-viewer");
-    this.checkSavedNodes();
-    this.update();
+    //this.switchViewer("console-viewer");
+    NodeLibraryService.update_nodes();
   }
 
 
 
-  saveNode(node: IGraphNode|number): void{
-
-    if( typeof node == "number"){
-      node = this._flowchart.getNodeByIndex(node);
-    }
+  save_library_node(node: IGraphNode): void{
 
     // todo: check if overwrite
     if( node.getType() !== undefined ){
@@ -106,9 +119,9 @@ export abstract class NodeLibraryService {
           if(node_in_lib["_name"] === node.getName()){
             message = "Node with this name already exists in the library. Either delete existing\
             node from the library or rename your node and try again.";
-            this.consoleService.addMessage(message);
+            //this.consoleService.addMessage(message);
             // this.layoutService.showConsole();
-            this.switchViewer("console-viewer");
+            //this.switchViewer("console-viewer");
             return;
           }
       }
@@ -120,18 +133,18 @@ export abstract class NodeLibraryService {
         message = "Bravo! Node saved. Now you have " + (nodes.length) + " node(s) in the library!";
         node.saved();
 
-        this.consoleService.addMessage(message);
+        //this.consoleService.addMessage(message);
         // this.layoutService.showConsole();
-        this.switchViewer("console-viewer");
-        this.checkSavedNodes();
-        this.update();
+        //this.switchViewer("console-viewer");
+        NodeLibraryService.update_nodes();
+        //this.update();
       }
       catch(ex){
-        this.consoleService.addMessage("Oops. Something went wrong while saving this node.\
-                                        Post the error message to the dev team on our Slack channel.", EConsoleMessageType.Error);
-        this.consoleService.addMessage(ex, EConsoleMessageType.Error);
+        //this.consoleService.addMessage("Oops. Something went wrong while saving this node.\
+                                       // Post the error message to the dev team on our Slack channel.", EConsoleMessageType.Error);
+        //this.consoleService.addMessage(ex, EConsoleMessageType.Error);
         // this.layoutService.showConsole();
-        this.switchViewer("console-viewer");
+        //this.switchViewer("console-viewer");
       }
 
     }

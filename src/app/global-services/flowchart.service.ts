@@ -11,13 +11,11 @@ import {IPort} from "../base-classes/port/PortModule";
 import {IProcedure} from "../base-classes/procedure/IProcedure";
 
 import {ConsoleService, EConsoleMessageType} from "./console.service";
-import {MobiusService} from "./mobius.service";
 import {ModuleService} from "./module.service";
 
 //import {LayoutService} from "./layout.service";
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-
 
 @Injectable()
 export class FlowchartService {
@@ -41,7 +39,6 @@ export class FlowchartService {
 
 
 	constructor(private consoleService: ConsoleService, 
-	          private mobiusService: MobiusService, 
 	          public dialog: MatDialog, private http: HttpClient) { 
 	};
 
@@ -53,7 +50,20 @@ export class FlowchartService {
     this.nX.next(node);
   }
 
+  get flowchart(): IFlowchart{
+    return this.fcX.getValue();
+  }
+
+  //
+  //
+  //
+  new_flowchart(user: string): void{
+    let fc: IFlowchart = new Flowchart(user);
+    this.push_flowchart(fc);
+  }
+
   getCodeGenerator(): ICodeGenerator{
+    console.log("shouldn't")
     return this.code_generator;
   }
 
@@ -70,8 +80,6 @@ export class FlowchartService {
       catch(ex){
         this.consoleService.addMessage(ex, EConsoleMessageType.Error);
       }
-
-      this.update();
   }
 
   disconnectPort(type: string, portIndex: number, nodeIndex: number): void{
@@ -83,7 +91,7 @@ export class FlowchartService {
   }
 
   deletePort(type: string, portIndex: number): void{
-    this._flowchart.deletePort(type, portIndex, this._selectedNode);
+    //this._flowchart.deletePort(type, portIndex, this._selectedNode);
   }
 
   deleteEdge(edgeIndex: number): void{

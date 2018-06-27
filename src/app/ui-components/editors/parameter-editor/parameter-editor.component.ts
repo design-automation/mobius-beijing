@@ -5,7 +5,6 @@ import { NodeUtils } from '../../../base-classes/node/NodeUtils';
 
 import { InputPort, OutputPort, InputPortTypes, OutputPortTypes } from '../../../base-classes/port/PortModule';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
@@ -81,10 +80,8 @@ export class ParameterEditorComponent{
       let value = inp.getValue().port;
 
       if(value){
-          let fn_node: IGraphNode = this._fs.getNodes()[value[0]];
-          let prod: IProcedure = ProcedureFactory.getProcedure(ProcedureTypes.Function, {node: fn_node, port: inp});
-          this._fs.addProcedure(prod);
-
+          let prod: IProcedure = ProcedureFactory.getProcedure(ProcedureTypes.Function, {node: this.active_node, port: inp});
+          NodeUtils.add_procedure(this.active_node, prod);
       }
     }
 

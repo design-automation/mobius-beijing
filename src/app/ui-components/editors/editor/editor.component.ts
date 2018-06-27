@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { FlowchartService } from '../../../global-services/flowchart.service';
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 
 @Component({
@@ -21,7 +20,6 @@ export class EditorComponent implements OnInit, OnDestroy{
 
   ngOnInit(){ 
   	this._nodeX = this._fs.node$.subscribe( (node:IGraphNode) => this.update_view(node)  );
-    this._freeze = this._fs.freeze;
   }
 
   ngOnDestroy(){
@@ -29,7 +27,6 @@ export class EditorComponent implements OnInit, OnDestroy{
   }
 
   update_view(node:IGraphNode){
-    this._freeze = this._fs.freeze;
     this.isVisible = node == undefined ? false : true; 
   }
 

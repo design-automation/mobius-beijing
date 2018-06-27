@@ -6,7 +6,6 @@ import { NgModel } from '@angular/forms';
 
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
 import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
-import {Viewer} from '../../../base-classes/viz/Viewer';
 
 import {FlowchartService} from '../../../global-services/flowchart.service';
 import {LayoutService} from '../../../global-services/layout.service';

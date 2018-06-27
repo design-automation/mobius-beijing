@@ -15,10 +15,10 @@ import { FlowchartService } from './global-services/flowchart.service';
 import { ConsoleService } from './global-services/console.service';
 import { LayoutService } from './global-services/layout.service'; 
 import { MobiusService } from './global-services/mobius.service'; 
+import { ModuleService } from './global-services/module.service'; 
 import { CodeService } from './global-services/code.service'; 
+import { ExecuteService } from './global-services/execute.service'; 
 
-/*import { ModuleService } from './global-services/module.service';
-*/
 import { FlowchartControlsComponent } from './ui-components/controls/flowchart-controls/flowchart-controls.component';
 import { MenuComponent } from './ui-components/controls/main-menu/menu.component';
 
@@ -149,11 +149,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MobiusCesium,
     NgxJsonViewerModule,
   ],
-  providers: [FlowchartService, 
+  providers: [
+              FlowchartService, 
               LayoutService, 
               ConsoleService, 
               MobiusService,
-              CodeService],
+              ExecuteService, 
+              ModuleService
+            ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

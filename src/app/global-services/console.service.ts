@@ -8,16 +8,27 @@ export enum EConsoleMessageType{
 	General = "general"
 }
 
+export enum LogLevel {
+  All = 0,
+  Debug = 1,
+  Info = 2,
+  Warn = 3,
+  Error = 4,
+  Fatal = 5,
+  Off = 6
+}
+
 @Injectable()
 export class ConsoleService {
 
 	_messages;
+	level: LogLevel = LogLevel.All;
+	logWithDate: boolean = true;
 
 	constructor() {
 		this._messages = [];
 	}
 
-	// 
 	// message handling between components
 	// 
 	private subject = new Subject<any>();
@@ -49,6 +60,11 @@ export class ConsoleService {
 	clearConsole(): void{
 		this._messages = [];
 		this.sendMessage();
+	}
+
+
+	log(msg: any){
+		console.log(new Date() + ": " + JSON.stringify(msg));
 	}
 
 }

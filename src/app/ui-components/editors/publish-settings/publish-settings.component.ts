@@ -1,22 +1,26 @@
 import { Component, Injector, Inject } from '@angular/core';
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { FlowchartService } from '../../../global-services/flowchart.service';
+import { MobiusService } from '../../../global-services/mobius.service';
+
+import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort, InputPortTypes, OutputPortTypes } from '../../../base-classes/port/PortModule';
-import {ParameterSettingsDialogComponent} from '../parameter-editor/parameter-settings-dialog.component';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { ParameterSettingsDialogComponent } from '../parameter-editor/parameter-settings-dialog.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-publish-settings',
   templateUrl: './publish-settings.component.html',
   styleUrls: ['./publish-settings.component.scss']
 })
-export class PublishSettingsComponent extends Viewer{
+export class PublishSettingsComponent{
 
   _flowchart;
-
   _globals;
   _nodes;
-  
+  private subscriptions = [];
+  private active_node: IGraphNode;
+
+
   inputPortOpts: InputPortTypes[] = [
         InputPortTypes.Input,
         InputPortTypes.Slider, 
@@ -25,17 +29,25 @@ export class PublishSettingsComponent extends Viewer{
         InputPortTypes.Checkbox
     ]; 
 
-  constructor(injector: Injector, 
-      public dialogRef: MatDialogRef<PublishSettingsComponent>, 
-      @Inject(MAT_DIALOG_DATA) public data: any, 
-      public dialog: MatDialog) { 
-     super(injector, "publish-settings"); 
+  constructor(private _fs: FlowchartService,
+              private _mb: MobiusService,  
+              public dialogRef: MatDialogRef<PublishSettingsComponent>, 
+              @Inject(MAT_DIALOG_DATA) public data: any, 
+              public dialog: MatDialog) { }
+
+
+  ngOnInit(){
+    this.subscriptions.push(this._fs.flowchart$.subscribe( (fw) => {
+        this._flowchart = fw;
+        this._globals = this._flowchart.globals;
+        this._nodes = this._flowchart.node;
+    }));
   }
 
-  ngOnInit() {
-  	this._globals = this.flowchartService.getFlowchart().globals;
-    this._flowchart = this.flowchartService.getFlowchart();
-    this._nodes = this._flowchart.getNodes();
+  ngOnDestroy(){
+    this.subscriptions.map(function(s){
+      s.unsubscribe();
+    })
   }
 
   addGlobal(): void{
@@ -100,7 +112,6 @@ export class PublishSettingsComponent extends Viewer{
       if(name.trim().length > 0){
         // put a timeout on this update or something similar to solve jumpiness
         port.name = name;
-        this.flowchartService.update();
       }
   }
 
@@ -116,8 +127,8 @@ export class PublishSettingsComponent extends Viewer{
 
   }
 
-  save(value: boolean): void{
-    this.flowchartService.saveFile(value);
+  save(): void{
+    this._mb.save_file(this._flowchart);
   }
 
 }

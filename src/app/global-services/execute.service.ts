@@ -1,7 +1,23 @@
 import { Injectable, Input, Output, EventEmitter } from '@angular/core';
 
+import {ConsoleService, EConsoleMessageType} from "./console.service";
+import {MobiusService} from "./mobius.service";
+import {ModuleService} from "./module.service";
+import {FlowchartService} from "./flowchart.service";
+
+import {IFlowchart} from '../base-classes/flowchart/FlowchartModule';
+import {ICodeGenerator} from "../base-classes/code/CodeModule";
+
+
 @Injectable()
-export abstract class ExecuteService {
+export class ExecuteService {
+
+    constructor(private _fs: FlowchartService, 
+                private _cs: ConsoleService, 
+                private _mb: MobiusService,
+                private _ms: ModuleService){
+
+    }
 
     private static consoleMessages = [];
 
@@ -34,47 +50,50 @@ export abstract class ExecuteService {
         ExecuteService.consoleMessages.push(consoleHTML);
     }
   
-    execute(): any{
+    public execute(): any{
+
+        let flowchart: IFlowchart = this._fs.flowchart;
+        let code_generator: ICodeGenerator = this._mb.code_generator;
+
 
         let consoleMessages: string[] = [ "<div class='console-heading'>Printed Values</div>" ];
 
-        //
-        //  generates an HTML version of the values
-        //
-
+        // get flowchart from _fs
+        // get code_generator from _mb
 
         try{
-            this._flowchart.execute(this.code_generator, this._moduleMap, printFunction);
+            
+            flowchart.execute(code_generator, ModuleService.modules, ExecuteService.printFunction);
             
             if(consoleMessages.length > 1){
-              this.consoleService.addMessage( consoleMessages.join(""), EConsoleMessageType.Print );
+              this._cs.addMessage( consoleMessages.join(""), EConsoleMessageType.Print );
             }
-            consoleMessages = null;
-            printFunction = null;
+
+            this._cs.addMessage("Flowchart was successfully executed.");
             
-            this.consoleService.addMessage("Flowchart was successfully executed.");
-            
-            ///console.log(this._flowchart);
-            ///this.push_flowchart(this._flowchart);
+            ///console.log(this._fs);
+            ///this.push_fs(this._fs);
         }
         catch(ex){
+
+            this._cs.log(ex);
           
             if(consoleMessages.length > 1){
-              this.consoleService.addMessage( consoleMessages.join(""), EConsoleMessageType.Print );
+              this._cs.addMessage( consoleMessages.join(""), EConsoleMessageType.Print );
             }
+            
             consoleMessages = null;
-            printFunction = null;
 
             let errorMessage: string = "<div class='error'>" + ex + "</div>";
-            this.consoleService.addMessage( errorMessage, EConsoleMessageType.Error );
+            this._cs.addMessage( errorMessage, EConsoleMessageType.Error );
 
             // this.layoutService.showConsole();
-            this.switchViewer("console-viewer");
+            // this.switchViewer("console-viewer");
         }
 
-        this.mobiusService.processing = false;
+        this._mb.processing = false;
 
-        this.update();
+        // this.update();
     }
 
 }

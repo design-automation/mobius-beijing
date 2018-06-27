@@ -10,9 +10,10 @@ import { FlowchartUtils } from '../../../base-classes/flowchart/Flowchart';
 import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
-import { Viewer } from '../../../base-classes/viz/Viewer';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 import { ConsoleService } from '../../../global-services/console.service';
+import { MobiusService } from '../../../global-services/mobius.service';
+
 
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMenuModule} from '@angular/material/menu';
@@ -30,7 +31,6 @@ abstract class  FlowchartRenderUtils{
     let width = FlowchartRenderUtils._margin*(max+1) + (max)*FlowchartRenderUtils._portWidth;
     return width;
   }
-
 
   public static get_port_position(node: IGraphNode, portIndex: number, portType: string): {x: number, y: number}{
 
@@ -65,8 +65,6 @@ abstract class  FlowchartRenderUtils{
 
     return {x: x, y: y};
   }
-
-
 }
 
 
@@ -99,6 +97,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   private active_node: IGraphNode;
 
   constructor(private _fs: FlowchartService, 
+    private _mb: MobiusService,
     private consoleService: ConsoleService, 
     public dialog: MatDialog){}
 
@@ -147,7 +146,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     
     let node: IGraphNode = this.fc.nodes[node_index];
     node.addFnOutput( this._fs.getCodeGenerator() );
-    this._fs.update();
   }
 
   //
@@ -185,11 +183,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
       this.zoom = Number( (value).toPrecision(2) );
       this.updateEdges();
     }
-  }
-
-  lastSaved(): Date{
-    let date: Date = this._fs.getLastSaved();
-    return date;
   }
 
   startPan($event): void{
@@ -232,8 +225,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     if(node == undefined){
       return false;
     }
-
-    return this._fs.isSelected(node);
   }
 
   isPortSelected(nodeIndex:number, portIndex: number){
@@ -269,13 +260,11 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   //
   deselect($event){
      $event.stopPropagation();
-     this._fs.selectNode(undefined, undefined);
   }
 
   clickPort($event: Event, nodeIndex: number, portIndex: number): void{
     // select the node
     $event.stopPropagation();
-    this._fs.selectNode(nodeIndex, portIndex);
   }
 
   //
@@ -571,7 +560,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     // check no other node has the same name
     let flag: boolean = false;
     for(let i=0; i < this.fc.nodes.length; i++){
-        if(this.fc.nodes[i].getName() == name){
+        if(this.fc.nodes[i].name == name){
           this.consoleService.addMessage("Node with this name already exists in the flowchart!");
           flag = true;
           break;
@@ -579,17 +568,15 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     }
 
     if(!flag){
-      this._selectedNode.setName(name);
-      this._fs.update();
+      this._selectedNode.name = name;
     }
     else{
-      $event.target.value = this._selectedNode.getName();
+      $event.target.value = this._selectedNode.name;
     }
 
   }
 
   saveNode(node: IGraphNode): void{
-    this._fs.saveNode(node);
   }
 
 
@@ -603,15 +590,15 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     el.click();
   }
 
-  loadFile(url ?:string): void{
+  load_file(url ?:string): void{
     let file = this.fileInput.nativeElement.files[0];
     if (file) {
         var reader = new FileReader();
         reader.readAsText(file, "UTF-8");
-        let fs = this._fs;
+        let mb = this._mb;
         reader.onload = function (evt) {
-          let fileString: string = evt.target["result"];
-          fs.loadFile(fileString);
+            let fileString: string = evt.target["result"];
+            mb.load_file(fileString);
         }
         reader.onerror = function (evt) {
             console.log("Error reading file");
@@ -620,18 +607,16 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     // this._fs.loadFile(url);
   }
 
-  loadFromMemory(): void{
-    this._fs.checkSavedFile();
-  }
-
   save(value: boolean): void{
-    this._fs.saveFile(value);
+    this._mb.save_file( this._fs.flowchart );
+    // this._.saveFile(value);
     //this.layoutService.showConsole();
   }
 
-  newfile(): void{
-    this._fs.newFile();
+  new_file(): void{
+    this._mb.new_file();
   }
+
 
   new_flowchart(): void{
     this.active_node = undefined;
@@ -645,13 +630,12 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     let dialogRef = this.dialog.open(PublishSettingsComponent, {
             height: '500px',
             width: '450px',          
-            data: { 
-                  }
+            data: {}
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
+    dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+    });
 
   }
 
