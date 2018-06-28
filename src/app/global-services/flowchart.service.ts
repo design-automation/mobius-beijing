@@ -683,7 +683,10 @@ export class FlowchartService {
           let variable_name: string = varName;
           let variable_value: string = value; 
 
-          if(Array.isArray(value)){
+          if(variable_value == null){
+            variable_value = "null";
+          }  
+          else if(Array.isArray(value)){
              variable_value = "<em>Array(" + value.length + " items)</em>"; //"[" + variable_value + "]";
           }
           else if(typeof value == 'string'){
