@@ -3473,7 +3473,10 @@ let FlowchartService = class FlowchartService {
             let consoleHTML = "";
             let variable_name = varName;
             let variable_value = value;
-            if (Array.isArray(value)) {
+            if (variable_value == null) {
+                variable_value = "null";
+            }
+            else if (Array.isArray(value)) {
                 variable_value = "<em>Array(" + value.length + " items)</em>"; //"[" + variable_value + "]";
             }
             else if (typeof value == 'string') {
@@ -9394,7 +9397,7 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
                     for (let j = 0; j < texts.length; j++) {
                         _ColorKey = [];
                         _ColorKey.text = texts[j];
-                        _ColorKey.color = _ChromaScale(j / texts.length);
+                        _ColorKey.color = _ChromaScale(1 - (j / texts.length)); //_ChromaScale(j/texts.length);
                         this._Cattexts.push(_ColorKey);
                     }
                 }
@@ -9555,7 +9558,7 @@ let ViewerComponent = class ViewerComponent extends __WEBPACK_IMPORTED_MODULE_1_
             let initial = false;
             for (let j = 0; j < _ColorText.length; j++) {
                 if (entity.properties[_ColorKey]._value === _ColorText[j]) {
-                    const rgb = _ChromaScale((j / _ColorText.length).toFixed(2));
+                    const rgb = _ChromaScale(1 - (j / _ColorText.length)); // _ChromaScale((j/_ColorText.length).toFixed(2));
                     entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
                     initial = true;
                 }
