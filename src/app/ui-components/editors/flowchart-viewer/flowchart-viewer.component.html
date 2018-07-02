@@ -34,7 +34,8 @@
 				
 		
 				<split-area order="2" [size]="70"
-					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" (wheel)="scale($event)">
+					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" 
+					(wheel)="scale($event)">
 				    <div class ="action-window">
 				    	
 
@@ -151,7 +152,7 @@
 														<input matInput
 													    [(ngModel)]="port.name"
 													    [class.isFunction]="port.isFunction()"
-													    style="margin: 2px; min-width: 50px; max-width: 80px;"
+													    style="margin: 2px; min-width: 50px; max-width: 80px; text-align: right;"
 													    placeholder="Output Port Name" value="{{ port.name }}"/>
 
 														<div class="port-grip" 
