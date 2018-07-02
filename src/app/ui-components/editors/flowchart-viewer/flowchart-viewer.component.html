@@ -96,7 +96,7 @@
 											<div class="node-body" 
 												[class.library]="node.getType() !== undefined"
 												[class.error]="node._hasError"
-												[class.disabled] ="node.enabled"
+												[class.disabled] ="node.enabled" 
 												[class.function] ="node.hasFnOutput()"
 												(click)="active_node = node; push_node();"
 												draggable=true  
@@ -107,15 +107,16 @@
 												<div class="node-name" 
 														[class.selected]="node.id == active_node?.id">
 													    <input matInput
+													    [(ngModel)]="node.name"
 													    style="margin: 2px; min-width: 50px; max-width: 80px;"
-													    placeholder="Value" value="{{ node.name }}"/>
+													    placeholder="Node Name" value="{{ node.name }}"/>
 												</div>
 												
 												<!--inputs -->
 												<div class="port-container">
 													
 													<div class="port input" 
-														*ngFor="let port of node.getInputs(); let pi=index"  
+														*ngFor="let port of node.inputs; let pi=index"  
 														id="n{{node_index}}pi{{pi}}"
 														[class.hidden]="port.type != 'Input'">
 
@@ -129,7 +130,12 @@
 															(drop)="portDrop($event, port, [node_index, pi])">
 														</div>
 
-														<span class="port-name">{{ port.name | shortname: 10 }}</span>
+														<input matInput
+													    [(ngModel)]="port.name"
+													    style="margin: 2px; min-width: 50px; max-width: 80px;"
+													    placeholder="Input Port Name" value="{{ port.name }}"/>
+
+														<!-- <span class="port-name">{{ port.name | shortname: 10 }}</span> -->
 													</div>
 
 												</div>
@@ -140,7 +146,13 @@
 														*ngFor="let port of node.getOutputs(); let po=index;"
 														id="n{{node.id}}po{{po}}">
 
-														<span class="port-name" [class.isFunction]="port.isFunction()">{{port.name  | shortname: 10  }}</span>
+														<!-- <span class="port-name" [class.isFunction]="port.isFunction()">{{port.name  | shortname: 10  }}</span> -->
+
+														<input matInput
+													    [(ngModel)]="port.name"
+													    [class.isFunction]="port.isFunction()"
+													    style="margin: 2px; min-width: 50px; max-width: 80px;"
+													    placeholder="Output Port Name" value="{{ port.name }}"/>
 
 														<div class="port-grip" 
 															draggable=true
