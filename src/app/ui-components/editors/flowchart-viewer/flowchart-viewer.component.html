@@ -14,22 +14,7 @@
 				<split-area class="sidebar"
 					[size]="30"
 			        order="1">
-
-						<section>
-							<div (click)="new_flowchart()">New File</div>
-							<div (click)="openPicker()">Open File
-								<input #fileInput style="display: none;"
-						  		type="file" (change)="loadFile()"/> 
-							</div>
-							<div (click)="save()">Save File</div>
-							<div (click)="publishSettings()">Publish</div>
-						</section>
-
-
-						<section>
-							<div (click)="add_node($event)">New Node</div>
-							<app-node-library></app-node-library>
-						</section>
+					<app-flowchart-controls></app-flowchart-controls>
 				</split-area>
 				
 		

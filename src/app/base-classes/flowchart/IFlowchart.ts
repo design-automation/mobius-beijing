@@ -29,39 +29,6 @@ export interface IFlowchart{
 	getAuthor(): string; 
 	getSummary(): string;
 
-	globals();
-	globals(arr);
-
-	editable();
-	editable(val);
-
-	// icodegenerator
-
-	// get / set
-	addEdge(outputAddress: number[], inputAddress: number[]): number;
-
-	deletePort(type: string, portIndex: number, nodeIndex: number): void;
-	disconnectPort(type: string, portIndex: number, nodeIndex: number);
-
-	disconnectEdgesWithPortIndex(nodeIndex: number, portIndex: number, type: string);
-
-	getNodes(): IGraphNode[];
-	getEdges(): IEdge[];
-	getNodeByIndex(index: number): IGraphNode;
-	getEdgeByIndex(index: number): IEdge;
-
-	getNodeOrder(): number[];
-
-
-	//reset 
-	reset(): void;
-
-	// output related
-	execute(code_generator: ICodeGenerator, moduleSet: IModule[], print: Function): boolean;
-	
-
-	// read / write
-	save(): void;
-	readFromJSON(file: string): void;
-
+	globals;
+	editable;
 };

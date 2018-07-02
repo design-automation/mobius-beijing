@@ -4,7 +4,7 @@ import { MobiusService } from '../../../global-services/mobius.service';
 
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort, InputPortTypes, OutputPortTypes } from '../../../base-classes/port/PortModule';
-import { ParameterSettingsDialogComponent } from '../parameter-editor/parameter-settings-dialog.component';
+import { ParameterSettingsDialogComponent } from '../../editors/parameter-editor/parameter-settings-dialog.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
@@ -67,7 +67,7 @@ export class PublishSettingsComponent{
         return "Dropdown";
       }
       else if(type == InputPortTypes.FilePicker){
-        return "File";
+        return "Hello";
       }
       else if(type == InputPortTypes.Slider){
         return "Slider";

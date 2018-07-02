@@ -1,20 +1,15 @@
-<!--- Not in use -->
-<div class="viewer">
-	
-	<div class="header">
-		
-		<div class="title">Flowchart Controls</div>
-		<div class="buttons">
-			<button (click)="newfile()">New File</button>
-			<button type="submit" (click)="loadFile()">Load File</button>
-			<button (click)="execute()">Run Code</button>
-			<button (click)="save()">Save Flowchart</button>
-		</div>
-
+<section>
+	<div (click)="new_flowchart()">New File</div>
+	<div (click)="open_picker()">Open File
+		<input #fileInput style="display: none;"
+  		type="file" (change)="loadFile()"/> 
 	</div>
+	<div (click)="save_file()">Save File</div>
+	<div (click)="publish_settings()">Publish</div>
+</section>
 
-	<div class="container">
-		
-	</div>
 
-</div>
+<section>
+	<div (click)="add_node($event)">New Node</div>
+	<app-node-library></app-node-library>
+</section>

@@ -12,57 +12,20 @@ export abstract class CodeGenerator implements ICodeGenerator{
 	private _language: string; 
 	private _modules: IModule[];
 
-	constructor(language: string){ 
-		this._language = language;
-	};
+	constructor(language: string){  this._language = language; };
 
-	setModules(modules: IModule[]){
-		this._modules = modules;
-	}
+	setModules(modules: IModule[]){  this._modules = modules; };
 
-	getLanguage(): string{
-		return this._language; 
-	}
+	getLanguage(): string{  return this._language; };
 
-	// takes a flowchart and generates some code string 
-	display_code(flowchart:IFlowchart) :string{
-		throw Error("Not implemented");
-	};
-
-	executeNode(node: IGraphNode, params: any, Modules: IModule[], print: Function, globals ?: any): any{
-		throw Error("Not implemented");
-	};
-
-	getFunctionCall(node: IGraphNode, params?: any): string{
-		throw Error("Not implemented");
-	};
-
-	getDefinition(node: IGraphNode): string{
-		throw Error("Not implemented");
-	};
-	
-	getNodeCode(node: IGraphNode): string{
-		throw Error("Not implemented");
-	};
-
-	getNodeOutputCode(node: IGraphNode, output_idx: number): string{
-		throw Error("Not implemented");
-	};
-
-	generateConnectionLine(destination_node: IGraphNode, destination_port: number, source_node: IGraphNode, source_port: number): string{
-		throw Error("Not implemented");
-	};
-
-	generateProcedureCode(procedure: IProcedure): string{
-		throw Error("Not implemented");
-	};
-
-	generateInputPortCode(port: InputPort): string{
-		throw Error("Not implemented");
-	};
-
-	generateOutputPortCode(port: OutputPort): string{
-		throw Error("Not implemented");
-	};
-
+	get_code_display(flowchart: IFlowchart) :string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_node_def(node: IGraphNode): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_function_call(node: IGraphNode, params?: any): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_node(node: IGraphNode, prodArr?: number, withoutFnOutput?: boolean): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_node_io(node: IGraphNode, output_idx: number): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_connection_line(input_node: IGraphNode, input_port: number, output_node: IGraphNode, output_port: number): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_procedure(procedure: IProcedure): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_port_input(port: InputPort): string{ throw Error("Not Implemented: CodeGenerator") };
+	get_code_port_output(port: OutputPort): string{ throw Error("Not Implemented: CodeGenerator") };
+	execute_node(node: IGraphNode, params: any, Modules: IModule, print: Function, globals?: any): any{ throw Error("Not Implemented: CodeGenerator") };
 }

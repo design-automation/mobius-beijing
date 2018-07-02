@@ -23,7 +23,7 @@ export class CodeViewerComponent implements OnInit, OnDestroy{
 	ngOnInit(){
 		this.subscriptions.push( 	
 			this._fs.flowchart$.subscribe((fc) => 
-				this._codeString = js_beautify.js_beautify(this._cs.generator.display_code(fc)) ) 
+				this._codeString = js_beautify.js_beautify(this._cs.generator.get_code_display(fc)) ) 
 		);
 	}
 

@@ -1,5 +1,6 @@
 import { IFlowchart } from './IFlowchart';
-import { Flowchart, FlowchartUtils } from './Flowchart';
+import { Flowchart } from './Flowchart';
+import { FlowchartUtils } from './FlowchartUtils';
 
 import { IGraphNode, GraphNode, IEdge } from '../node/NodeModule';
 import { FunctionProcedure } from '../procedure/FunctionProcedure';
@@ -60,7 +61,7 @@ export abstract class FlowchartReader{
 	      let node: IGraphNode = new GraphNode(n_data["name"], n_data["type"]);
 	      node.update(n_data, nodeMap);
 
-	      nodeMap[node.getId()] = node;
+	      nodeMap[node.id] = node;
 	    }
 
 	    // add nodes in order to the flowchart
@@ -78,7 +79,7 @@ export abstract class FlowchartReader{
 	    	let valid_input: boolean = (in_node  >= 0 && in_node < nodes.length);
 	    	let valid_output: boolean = (out_node  >= 0 && out_node < nodes.length);
 	    	if( valid_input && valid_output ){
-	    		fc.addEdge(e_data.output_address, e_data.input_address);
+	    		FlowchartUtils.add_edge(fc, e_data.output_address, e_data.input_address);
 	    	}
 	    	else{
 
@@ -86,7 +87,7 @@ export abstract class FlowchartReader{
 	    }
 
 	    if(fc.selectedNode == undefined){
-	    	fc.selectedNode = fc.getNodes()[0].getId();
+	    	fc.selectedNode = fc.nodes[0].id;
 	    }
 
 	    return fc;

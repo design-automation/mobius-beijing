@@ -46,24 +46,17 @@ export class MobiusService {
       this._code_gen = cg;
   }
 
+  get user(): string{
+    return this._user;
+  }
+
+  set user(username: string){
+    this._user = username;
+  }
+
   stateChangedEmitter() {
     return this.stateChanged;
   }
-
-
-  //
-  new_file(): void{
-
-    let flowchart = this._fs.new_flowchart(this._user);
-    this._code_gen = CodeFactory.getCodeGenerator("js");
-    this._ms.load_modules();
-
-    this.$log.log("New file created.");
-
-    // print message to console
-    //this.consoleService.addMessage("New file created.");
-  }
-
 
   load_file(fileString: string): void{
 
@@ -135,10 +128,7 @@ export class MobiusService {
           //this.switchViewer("console-viewer");
         }
       }
-
-
   }
-
 
   openFileLoadDialog(): void{
 
@@ -170,33 +160,5 @@ export class MobiusService {
       // this.newFile();
     }
   }
-
-  //
-  //  saves a flowchart
-  //
-  save_file(flowchart: IFlowchart): void{
-    let file = {};
-    let fileString: string;
-
-    file["language"] = "js";
-    file["modules"] = [];
-
-    let newFlowchart: IFlowchart = FlowchartReader.readFlowchartFromData(flowchart);
-    file["flowchart"] = newFlowchart;
-    fileString = CircularJSON.stringify(file);
-
-    let fname: string = 'Scene' + (new Date()).getTime() + ".mob";
-    if(flowchart.name){
-      fname = flowchart.name;
-      if(!fname.endsWith(".mob")){
-        fname = fname + ".mob";
-      }
-    }
-    
-    FileService.downloadAsJSON(fileString, fname);
-
-  }
-
-
 
 }

@@ -437,7 +437,7 @@ export class GraphNode implements IGraphNode{
 			}
 			else if(i.isFunction()){
 				let oNode: IGraphNode = i.getFnValue();
-				let codeString: string = code_generator.getNodeCode(oNode);
+				let codeString: string = code_generator.get_code_node(oNode);
 
 				// converts string to functin
 				let fn_def = Function("return " + codeString)();
@@ -453,14 +453,14 @@ export class GraphNode implements IGraphNode{
 	    function outputProcessing(){
 			self.getOutputs().map(function(o){
 				if(o.isFunction()){
-					let node_code: string =  code_generator.getNodeCode(self, undefined, true);
+					let node_code: string =  code_generator.get_code_node(self, undefined, true);
 					o.setDefaultValue( node_code );
 				}
 			});
 
 
 			// use code generator to execute code
-			let result: any  = code_generator.executeNode(self, params, modules, print, globals);
+			let result: any  = code_generator.execute_node(self, params, modules, print, globals);
 
 			// add results to self node
 			for( let n=0;  n < self._outputs.length; n++ ){
@@ -531,7 +531,7 @@ export class GraphNode implements IGraphNode{
 	}
 
 	getFunction(code_generator: ICodeGenerator): string{
-		let node_code: string =  code_generator.getNodeCode(this);
+		let node_code: string =  code_generator.get_code_node(this);
 		return node_code;
 	}
 

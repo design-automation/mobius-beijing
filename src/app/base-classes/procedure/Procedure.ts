@@ -207,7 +207,7 @@ export abstract class Procedure implements IProcedure{
 	}
 
 	getCodeString(code_generator: ICodeGenerator): string{
-		return code_generator.generateProcedureCode(this);
+		return code_generator.get_code_procedure(this);
 	}
 
 }

@@ -3,8 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import {IFlowchart, Flowchart, FlowchartReader} from '../base-classes/flowchart/FlowchartModule';
-import {FlowchartUtils, FlowchartConnectionUtils} from '../base-classes/flowchart/Flowchart';
+import {IFlowchart, Flowchart, FlowchartReader, FlowchartUtils, FlowchartConnectionUtils} from '../base-classes/flowchart/FlowchartModule';
 import {IGraphNode, GraphNode} from '../base-classes/node/NodeModule';
 import {ICodeGenerator, CodeFactory, IModule, ModuleUtils} from "../base-classes/code/CodeModule";
 import {IPort} from "../base-classes/port/PortModule";
@@ -74,7 +73,7 @@ export class FlowchartService {
       }
 
       try{
-        this._flowchart.addEdge(outputAddress, inputAddress);
+         this.fcX.next(FlowchartUtils.add_edge(this._flowchart, outputAddress, inputAddress));
         this.consoleService.addMessage("New Edge was added");
       }
       catch(ex){
@@ -83,7 +82,7 @@ export class FlowchartService {
   }
 
   disconnectPort(type: string, portIndex: number, nodeIndex: number): void{
-    this._flowchart.disconnectPort(type, portIndex, nodeIndex)
+    this.fcX.next(FlowchartUtils.disconnect_port(this._flowchart, type, portIndex, nodeIndex));
   }
 
   disconnectNode(nodeIndex: number): void{

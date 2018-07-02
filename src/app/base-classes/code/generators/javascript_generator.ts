@@ -1,7 +1,7 @@
 import { CodeGenerator } from '../CodeGenerator';
 import { IModule } from "../CodeModule";
  
-import { IFlowchart } from "../../flowchart/FlowchartModule";
+import { IFlowchart, FlowchartUtils, FlowchartConnectionUtils } from "../../flowchart/FlowchartModule";
 import { IGraphNode, IEdge } from "../../node/NodeModule";
 import { IProcedure, ProcedureTypes, IComponent } from "../../procedure/ProcedureModule";
 import { InputPort, OutputPort } from "../../port/PortModule";
@@ -15,28 +15,26 @@ export class CodeGeneratorJS extends CodeGenerator{
 		//
 		//	gets the display code for the flowchart
 		//
-		display_code(flow: IFlowchart){
+		get_code_display(flowchart: IFlowchart){
 
 			let fn_calls :string[]= [];
 			let code_defs: string[] = [];
 			let connector_lines: any = [];
 			let code_block: string = "";
 
-			let nodeOrder: number[] = flow.getNodeOrder();
-			let all_nodes: IGraphNode[] = flow.getNodes();
-			let all_edges: IEdge[] = flow.getEdges();
+			let nodeOrder: number[] = FlowchartUtils.get_node_order(flowchart);
+			let all_nodes: IGraphNode[] = flowchart.nodes;
+			let all_edges: IEdge[] = flowchart.edges;
 
 			// connector lines
 			for(let c=0; c < all_edges.length; c++){
 
 				let edge: IEdge = all_edges[c];
-				let input_node: IGraphNode = flow.getNodeByIndex(edge.input_address[0]);
-				let output_node: IGraphNode = flow.getNodeByIndex(edge.output_address[0]);
-
-
+				let input_node: IGraphNode = flowchart.nodes[edge.input_address[0]];
+				let output_node: IGraphNode = flowchart.nodes[edge.output_address[0]];
 
 				// create line assigning values
-				let code = this.generateConnectionLine(input_node, edge.input_address[1], 
+				let code = this.get_code_connection_line(input_node, edge.input_address[1], 
 														output_node, edge.output_address[1]);
 
 				if(connector_lines[edge.input_address[0]] == undefined){
@@ -45,35 +43,25 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 				connector_lines[edge.input_address[0]].push(code);
 			}
-
-			// get all the codes of the different functions and the function calls 
 			
 			for(let c=0; c < nodeOrder.length; c++){
 				// check inputs connected to outputs
 				var nodeIndex = nodeOrder[c];
 				var node = all_nodes[nodeIndex];
-				code_defs.push(this.getNodeCode(node, undefined, true));
+				code_defs.push(this.get_code_node(node, undefined, true));
 
 				if(connector_lines[nodeIndex] !== undefined){
 					fn_calls.push(connector_lines[nodeIndex].join("\n"));
 				}
 
-				fn_calls.push( this.getFunctionCall(node) );
+				fn_calls.push( this.get_code_function_call(node) );
 			}
 
 			code_block = code_defs.join(";\n\n") + "\n" + fn_calls.join("\n");
-
-			// check if code works by uncommenting this line
-			// eval(code_block);
-			
 			return code_block;
 		}
 
-
-		//
-		//
-		//
-		getFunctionCall(node: IGraphNode, params?: any, executionCode?: boolean): string{
+		get_code_function_call(node: IGraphNode, params?: any, executionCode?: boolean): string{
 			let fn_call: string = "";
 			let param_values: string[] = [];
 
@@ -120,7 +108,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return fn_call;
 		}
 
-		getDefinition(node: IGraphNode): string{
+		get_code_node_def(node: IGraphNode): string{
 			let fn_def: string = "";
 
 			let params :string[] = [];
@@ -135,7 +123,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return fn_def;
 		}
 
-		getNodeCode(node: IGraphNode, prodArr?: number, withoutFnOutput?: boolean): string{ 	
+		get_code_node(node: IGraphNode, prodArr?: number, withoutFnOutput?: boolean): string{ 	
 			let nodeVars: string[] = [];
 			let fn_code :string = "";
 
@@ -153,7 +141,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 					params.push(inp.name);
 				}
 				
-				let input_port_code: string = this.generateInputPortCode(inp);
+				let input_port_code: string = this.get_code_port_input(inp);
 				if(input_port_code !== ""){
 					//initializations.push( input_port_code );
 				}
@@ -177,7 +165,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 					// do nothing
 				}
 				else{
-					opInits.push( this.generateOutputPortCode(outputs[o]) )
+					opInits.push( this.get_code_port_output(outputs[o]) )
 				}
 
 			}
@@ -195,7 +183,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				}
 
 				// if(prodArr)	fn_code += "\n" + "prodArr.push(" + procedure["id"] + ")";
-				fn_code += "\n" +  this.generateProcedureCode(procedure, nodeVars, undefined, prodArr); 
+				fn_code += "\n" +  this.get_code_procedure(procedure, nodeVars, undefined, prodArr); 
 
 			}
 
@@ -208,13 +196,14 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return fn_code;
 		}
 
-		getNodeOutputCode(node: IGraphNode, output_idx: number): string{
+		get_code_node_io(node: IGraphNode, output_idx: number): string{
 			return node.name + "." + node.getOutputByIndex(output_idx).name; 
 		}
 
-		generateConnectionLine(destination_node: IGraphNode, destination_port: number, source_node: IGraphNode, source_port: number): string{
+		get_code_connection_line(destination_node: IGraphNode, destination_port: number, source_node: IGraphNode, source_port: number): string{
 
-			let code :string = "let " + destination_node.getInputByIndex(destination_port).name + "=" + this.getNodeOutputCode(source_node, source_port) + ";";
+			let code :string = "let " + destination_node.inputs[destination_port].name + "="
+								+ this.get_code_node_io(source_node, source_port) + ";";
 
 			if(destination_node.enabled || source_node.enabled){
 				code = "/* " + code + " */";
@@ -242,14 +231,14 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return (nodeVars.indexOf( var_name ) > -1);
 		}
 
-		generateProcedureCode(procedure: IProcedure, nodeVars: string[]=[], prodFn ?: any, prodArr?: number){
+		get_code_procedure(procedure: IProcedure, nodeVars: string[]=[], prodFn ?: any, prodArr?: number){
 
 			// change based on type
 			let code: string; 
 			let prod_type = procedure.getType();
 
 			if(prodFn == undefined){
-			 	prodFn = this.generateProcedureCode;
+			 	prodFn = this.get_code_procedure;
 			}
 
 			if(prod_type == ProcedureTypes.Data || prod_type == ProcedureTypes.Function){
@@ -357,18 +346,17 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return code;
 		}
 
-
 		//
 		//	required for code generation
 		//
-		generateInputPortCode(port: InputPort): string{
+		get_code_port_input(port: InputPort): string{
 			if( port.isConnected() == true ) 
 				return "";
 
 			return "let " + port.name + " = " + port.value; 
 		}
 
-		generateOutputPortCode(port: OutputPort): string{
+		get_code_port_output(port: OutputPort): string{
 
 			let prepend: string = "let ";
 
@@ -379,18 +367,10 @@ export class CodeGeneratorJS extends CodeGenerator{
 			return prepend + port.name + " = " + port.getDefaultValue(); 
 		}
 
-		executeNode(node: IGraphNode, params: any, 
-							__Mobius__Modules__: IModule[], 
-							print: Function, globals?: any): any{
+		execute_node(node: IGraphNode, params: any, __Mobius__Modules__: IModule[], print: Function, globals?: any): any{
 
-			//let prodArr: number[] = [];
 			let prodArr: number = 1;
-
-			window["__MOBIUS_MODULES__"] = __Mobius__Modules__;
-			window["__MOBIUS_PRINT__"] = print;
-
-
-			let str: string = "" //"(function(){";
+			let str: string = "";
 
 			if(globals){
 				for(let g=0; g < globals.length; g++){
@@ -398,29 +378,21 @@ export class CodeGeneratorJS extends CodeGenerator{
 	 			}
 			}
 
-			str +=	this.getNodeCode(node, prodArr) + "\n" + 
-					this.getFunctionCall(node, [], true) + "\n" + 
+			str +=	this.get_code_node(node, prodArr) + "\n" + 
+					this.get_code_function_call(node, [], true) + "\n" + 
 					"return " + node.name + ";" 
-					//"})();";
 
 			let result: any;
 
 			try{
-				//console.log("script execution started: ", str.length);
-				// result =  Function('return ' + str )(); 
-				//console.log(str);
-				result = (new Function('params', str))(params);
-				//result = eval(str);
-				//console.log("script execution finsihed");
+				result = (new Function('params', '__MOBIUS_MODULES__', '__MOBIUS_PRINT__', str))(params, __Mobius__Modules__, print);
 			}
 			catch(ex){
 
 				console.log(`Execution Error: ${ex}`)
 				node.hasError();
 
-				// Unexpected Identifier
-				// Unexpected token
-				let prodWithError: number = prodArr;//.pop(); 
+				let prodWithError: number = prodArr;
 
 				let markError = function(prod: IProcedure, id: number){
 					if(prod["id"] && id && prod["id"] == id){
@@ -463,15 +435,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 				}
 				throw error;
 			}
-			
 
-			prodArr = null; 
-			print = null; 
-			delete window["__MOBIUS_MODULES__"];
-			delete window["__MOBIUS_PRINT__"];
-
-
-			return result;//result;// return result of the node
+			return result;
 		}
 
 };

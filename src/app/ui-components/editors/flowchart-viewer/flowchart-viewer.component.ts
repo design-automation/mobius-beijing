@@ -6,21 +6,13 @@ import { Component,
 import { NgClass } from '@angular/common';
 
 import { IFlowchart } from '../../../base-classes/flowchart/IFlowchart';
-import { FlowchartUtils } from '../../../base-classes/flowchart/Flowchart';
+import { FlowchartUtils } from '../../../base-classes/flowchart/FlowchartUtils';
 import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
 import { FlowchartService } from '../../../global-services/flowchart.service';
 import { ConsoleService } from '../../../global-services/console.service';
 import { MobiusService } from '../../../global-services/mobius.service';
-
-
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatMenuModule} from '@angular/material/menu';
-
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {PublishSettingsComponent} from '../publish-settings/publish-settings.component';
-
 
 abstract class  FlowchartRenderUtils{
   private static _portWidth: number = 15; 
@@ -98,8 +90,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
   constructor(private _fs: FlowchartService, 
     private _mb: MobiusService,
-    private consoleService: ConsoleService, 
-    public dialog: MatDialog){}
+    private consoleService: ConsoleService){}
 
   ngOnInit(){
     this.subscriptions.push(this._fs.flowchart$.subscribe((fc) => this.render_flowchart(fc) ));
@@ -549,95 +540,9 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
 
-  updateNodeName($event): void{
-    let name: string =  $event.target.value.trim(); 
-    name = name.replace(/[^\w\[\]]/gi, '');
-
-    if(name.length == 0){
-      return;
-    }
-
-    // check no other node has the same name
-    let flag: boolean = false;
-    for(let i=0; i < this.fc.nodes.length; i++){
-        if(this.fc.nodes[i].name == name){
-          this.consoleService.addMessage("Node with this name already exists in the flowchart!");
-          flag = true;
-          break;
-        }
-    }
-
-    if(!flag){
-      this._selectedNode.name = name;
-    }
-    else{
-      $event.target.value = this._selectedNode.name;
-    }
-
-  }
-
   saveNode(node: IGraphNode): void{
   }
 
-
-
-  //
-  //
-  
-  @ViewChild('fileInput') fileInput: ElementRef;
-  openPicker(): void{
-    let el: HTMLElement = this.fileInput.nativeElement as HTMLElement;
-    el.click();
-  }
-
-  load_file(url ?:string): void{
-    let file = this.fileInput.nativeElement.files[0];
-    if (file) {
-        var reader = new FileReader();
-        reader.readAsText(file, "UTF-8");
-        let mb = this._mb;
-        reader.onload = function (evt) {
-            let fileString: string = evt.target["result"];
-            mb.load_file(fileString);
-        }
-        reader.onerror = function (evt) {
-            console.log("Error reading file");
-        }
-    }
-    // this._fs.loadFile(url);
-  }
-
-  save(value: boolean): void{
-    this._mb.save_file( this._fs.flowchart );
-    // this._.saveFile(value);
-    //this.layoutService.showConsole();
-  }
-
-  new_file(): void{
-    this._mb.new_file();
-  }
-
-
-  new_flowchart(): void{
-    this.active_node = undefined;
-    this.fc = FlowchartUtils.new();
-
-    this.push_node();
-    this.push_flowchart();
-  }
-
-  publishSettings(): void{
-    let dialogRef = this.dialog.open(PublishSettingsComponent, {
-            height: '500px',
-            width: '450px',          
-            data: {}
-        });
-
-    dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-    });
-
-  }
 
 }
 

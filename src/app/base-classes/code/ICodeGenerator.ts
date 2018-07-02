@@ -10,28 +10,22 @@ import { InputPort, OutputPort } from "../port/PortModule";
 import { IModule } from "./computation-modules/IModule";
 
 export interface ICodeGenerator{
+	getLanguage(): string;
+	setModules(modules: IModule[]): void;
 
-		// gets the language in which the code is generated
-		getLanguage(): string;
-		setModules(modules: IModule[]): void;
+	get_code_display(flowchart: IFlowchart) :string;
 
-		// takes a flowchart and generates some code string 
-		display_code(flowchart: IFlowchart) :string;
+	get_code_node_def(node: IGraphNode): string;
+	get_code_function_call(node: IGraphNode, params?: any): string;
 
-		// various functions to generate different parts of the code
-		getDefinition(node: IGraphNode): string;
-		getFunctionCall(node: IGraphNode, params?: any): string;
+	get_code_node(node: IGraphNode, prodArr?: number, withoutFnOutput?: boolean): string;
+	get_code_node_io(node: IGraphNode, output_idx: number): string;
 
-		getNodeCode(node: IGraphNode, prodArr?: number, withoutFnOutput?: boolean): string;
-		getNodeOutputCode(node: IGraphNode, output_idx: number): string;
+	get_code_connection_line(input_node: IGraphNode, input_port: number, output_node: IGraphNode, output_port: number): string;
+	get_code_procedure(procedure: IProcedure): string;
 
-		generateConnectionLine(input_node: IGraphNode, input_port: number, output_node: IGraphNode, output_port: number): string;
-		generateProcedureCode(procedure: IProcedure): string;
+	get_code_port_input(port: InputPort): string;
+	get_code_port_output(port: OutputPort): string;
 
-		generateInputPortCode(port: InputPort): string;
-		generateOutputPortCode(port: OutputPort): string;
-
-		// takes a node and executes the code
-		executeNode(node: IGraphNode, params: any, Modules: IModule, print: Function, globals?: any): any;
-
+	execute_node(node: IGraphNode, params: any, Modules: IModule, print: Function, globals?: any): any;
 };

@@ -11,9 +11,6 @@ export class CodeFactory{
 		if(language == "js"){
 			return new CodeGeneratorJS();
 		}
-		/*else if(language == "py"){
-			return new CodeGeneratorPY();
-		}*/
 		else
 			throw Error("Unknown language");
 
