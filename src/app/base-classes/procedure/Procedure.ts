@@ -1,9 +1,13 @@
+import {IdGenerator} from '../misc/GUID';
+
 import {IProcedure} from "./IProcedure";
 import {ProcedureTypes} from "./ProcedureTypes";
 import {IComponent} from "./IComponent";
 import {ICodeGenerator} from "../code/CodeModule";
 
 export abstract class Procedure implements IProcedure{
+
+	private _id: string; 
 
 	private _error: boolean;
 
@@ -23,6 +27,8 @@ export abstract class Procedure implements IProcedure{
 	public children: IProcedure[] = []; 
 
 	constructor(type: ProcedureTypes, hasChildren: boolean){
+		this._id = IdGenerator.getId();
+
 		this._type = type; 
 		this._level = 0;
 
@@ -41,7 +47,17 @@ export abstract class Procedure implements IProcedure{
 		this._disabled = !value;
 	}
 
+	get id(): string{
+		return this._id;
+	}
+
+	set id(value: string){
+		console.warn("Id of procedure being set manually");
+		this._id = value;
+	}
+
 	update(prodData: any, parent: IProcedure): void{
+		this._id = prodData._id;
 		this._disabled = prodData._disabled; 
 
 		// todo: be careful

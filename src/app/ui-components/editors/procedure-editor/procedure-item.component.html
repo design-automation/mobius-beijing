@@ -1,197 +1,204 @@
 <div class = "full-container" 
-	(click)="onSelect($event)">
+    draggable=true>
 	<!-- (mouseover)="_activeProcedure = prod" -->
-
 	<div class = "seg1" 
 		[class.print]="prod.print"
 		[class.error]="prod.getError()" 
-		[class.disabled]="prod.isDisabled()">
+		[class.disabled]="prod.isDisabled()"
+		[class.selected] = "prod?.id == active_procedure?.id"
+		(click)="onSelect($event, prod)">
 
-	<!-- template for data -->
-	<div *ngIf="prod.getType() == 'Data'"> 
-		<div class='procedure-item'>
-			<input matInput class="tree-input" [style.width.ch]="prod.getLeftComponent().expression.length + 4" 
-			[(ngModel)]="prod.getLeftComponent().expression" 
-			required spellcheck="false" 
-			list="variable-suggestions" >
+		<!-- template for data -->
+		<div *ngIf="prod.getType() == 'Data'"> 
+			<div class='procedure-item'>
+				<input matInput class="tree-input" [style.width.ch]="prod.getLeftComponent().expression.length + 4" 
+				[(ngModel)]="prod.getLeftComponent().expression" 
+				required spellcheck="false" 
+				list="variable-suggestions">
 
-			<span class="equal">=</span>
+				<span class="equal">=</span>
 
-			<input matInput class="tree-input" [style.width.ch]="prod.getRightComponent().expression.length + 4" 
-			[(ngModel)]="prod.getRightComponent().expression" #ctrl="ngModel" required
-			(change)="updateProcedure($event, prod, 'right')" spellcheck="false" list="variable-suggestions">
+				<input matInput class="tree-input" [style.width.ch]="prod.getRightComponent().expression.length + 4" 
+				[(ngModel)]="prod.getRightComponent().expression" #ctrl="ngModel" required
+				(change)="updateProcedure($event, prod, 'right')" spellcheck="false" list="variable-suggestions">
 
+			</div>
 		</div>
-	</div>
 
-	<!-- template for a function call -->
-	<div *ngIf="prod.getType() == 'Function'">
-		<div class='procedure-item'>
-			
-			<input matInput class="tree-input" [style.width.ch]="prod.getLeftComponent().expression.length + 4" 
-				[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
-				(change)="updateProcedure($event, prod, 'left')" spellcheck="false" list="variable-suggestions">
+		<!-- template for a function call -->
+		<div *ngIf="prod.getType() == 'Function'">
+			<div class='procedure-item'>
+				
+				<input matInput class="tree-input" [style.width.ch]="prod.getLeftComponent().expression.length + 4" 
+					[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
+					(change)="updateProcedure($event, prod, 'left')" spellcheck="false" list="variable-suggestions">
 
-			<span class="equal">=</span>
+				<span class="equal">=</span>
 
-			<span class="module">{{ prod.getFunctionName()}}</span>
-			
-			(<span *ngIf="prod.getRightComponent().params.length > 0">
-				<div class="param-container" *ngFor="let p of prod.updateParams();let i=index;">
-					<input matInput class="tree-input" 
-					 [(ngModel)]="prod.getRightComponent().params[i]" #ctrl="ngModel"
-					 [style.width.ch]="prod.getRightComponent().params[i] ? (prod.getRightComponent().params[i].length + 5) : 10" 
-					 (change)="updateProcedure($event, prod, 'right')"
-					 required
-					 list="variable-suggestions">
-
-					 <span *ngIf="i < prod.updateParams().length - 1"> , </span>
-				</div>
-			</span>)
-			:::&nbsp;&nbsp;&nbsp;
-			<select (change)="updateProcedure($event, prod, 'right')" [(ngModel)]="prod.getRightComponent().category" #ctrl="ngModel">
-         	    <option *ngFor="let otp of prod.getOutputs()" [value]="otp">{{otp}}</option>
-            </select> 
-
-		</div>
-	</div>
-
-	<div *ngIf="prod.getType() == 'IfElse'">
-		<div class='procedure-item'>
-			<span>if-else</span>
-		</div>
-	</div>
-
-	<div *ngIf="prod.getType() == 'If'">
-		<div class='procedure-item'>
-		 <span>if</span> ( <input matInput class="tree-input" 
-		 					[style.width.ch]="prod.getLeftComponent().expression.length + 4"  
-		 					[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
-			(change)="updateProcedure($event, prod, 'left')" spellcheck="false"> )
-		</div>
-	</div>
-
-	<div *ngIf="prod.getType() == 'Else'">
-		<div class='procedure-item'>
-		 <span>else</span>
-		</div>
-	</div>
-
-	<div *ngIf="prod.getType() == 'For Loop'">
-		<div class='procedure-item'>
-			<span>for each (</span> 
-
-			<input matInput class="tree-input" 
-				[style.width.ch]="prod.getLeftComponent().expression.length + 4" 
-					[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required (change)="updateProcedure($event, prod, 'left')" spellcheck="false">
-
-			<span style="margin: 0px 10px;">in</span>  
-
-			<input matInput class="tree-input" 
-					[style.width.ch]="prod.getRightComponent().expression.length + 4" 
-						[(ngModel)]="prod.getRightComponent().expression" #ctrl="ngModel" 
-						required (change)="updateProcedure($event, prod, 'right')" spellcheck="false" list="variable-suggestions"> 
-			)
-		</div>
-	</div>
-
-	<div *ngIf="prod.getType() == 'Action'">
-		<div class='procedure-item'>
-			
-			<input matInput class="tree-input" 
-				[style.width.ch]="prod.getLeftComponent().expression.length + 4" 
-				[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
-				(change)="updateProcedure($event, prod, 'left')" spellcheck="false" list="variable-suggestions">
-			
-
-			<span class="equal">=</span>
-
-			<span class="module">{{prod.getRightComponent().module.replace("_",  ".")}}</span>
-			.
-
-			  <span class="function">{{prod.getRightComponent().fn_name}}</span> 
-
-			( <span *ngIf="prod.getRightComponent().params.length>0">
-					<div class="param-container" 
-						*ngFor="let p of prod.getRightComponent().params; let i=index">
-						
+				<span class="module">{{ prod.getFunctionName()}}</span>
+				
+				(<span *ngIf="prod.getRightComponent().params.length > 0">
+					<div class="param-container" *ngFor="let p of prod.updateParams();let i=index;">
 						<input matInput class="tree-input" 
-						 [style.width.ch]="prod.getRightComponent().params[i].value.length + 4" 
-						 [(ngModel)]="prod.getRightComponent().params[i].value"
-						 #ctrl="ngModel" 
+						 [(ngModel)]="prod.getRightComponent().params[i]" #ctrl="ngModel"
+						 [style.width.ch]="prod.getRightComponent().params[i] ? (prod.getRightComponent().params[i].length + 5) : 10" 
+						 (change)="updateProcedure($event, prod, 'right')"
 						 required
-						 (change)="updateProcedure($event, prod, 'right')" spellcheck="false" 
 						 list="variable-suggestions">
 
-						<span *ngIf='i<prod.getRightComponent().params.length-1'>,</span>
-					</div> 
-				</span>	)
+						 <span *ngIf="i < prod.updateParams().length - 1"> , </span>
+					</div>
+				</span>)
+				:::&nbsp;&nbsp;&nbsp;
+				<select (change)="updateProcedure($event, prod, 'right')" [(ngModel)]="prod.getRightComponent().category" #ctrl="ngModel">
+	         	    <option *ngFor="let otp of prod.getOutputs()" [value]="otp">{{otp}}</option>
+	            </select> 
+
+			</div>
+		</div>
+
+		<div *ngIf="prod.getType() == 'IfElse'">
+			<div class='procedure-item'>
+				<span>if-else</span>
+			</div>
+		</div>
+
+		<div *ngIf="prod.getType() == 'If'">
+			<div class='procedure-item'>
+			 <span>if</span> ( <input matInput class="tree-input" 
+			 					[style.width.ch]="prod.getLeftComponent().expression.length + 4"  
+			 					[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
+				(change)="updateProcedure($event, prod, 'left')" spellcheck="false"> )
+			</div>
+		</div>
+
+		<div *ngIf="prod.getType() == 'Else'">
+			<div class='procedure-item'>
+			 <span>else</span>
+			</div>
+		</div>
+
+		<div *ngIf="prod.getType() == 'For Loop'">
+			<div class='procedure-item'>
+				<span>for each (</span> 
+
+				<input matInput class="tree-input" 
+					[style.width.ch]="prod.getLeftComponent().expression.length + 4" 
+						[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required (change)="updateProcedure($event, prod, 'left')" spellcheck="false">
+
+				<span style="margin: 0px 10px;">in</span>  
+
+				<input matInput class="tree-input" 
+						[style.width.ch]="prod.getRightComponent().expression.length + 4" 
+							[(ngModel)]="prod.getRightComponent().expression" #ctrl="ngModel" 
+							required (change)="updateProcedure($event, prod, 'right')" spellcheck="false" list="variable-suggestions"> 
+				)
+			</div>
+		</div>
+
+		<div *ngIf="prod.getType() == 'Action'">
+			<div class='procedure-item'>
+				
+				<input matInput class="tree-input" 
+					[style.width.ch]="prod.getLeftComponent().expression.length + 4" 
+					[(ngModel)]="prod.getLeftComponent().expression" #ctrl="ngModel" required
+					(change)="updateProcedure($event, prod, 'left')" spellcheck="false" list="variable-suggestions">
+				
+
+				<span class="equal">=</span>
+
+				<span class="module">{{prod.getRightComponent().module.replace("_",  ".")}}</span>
+				.
+
+				  <span class="function">{{prod.getRightComponent().fn_name}}</span> 
+
+				( <span *ngIf="prod.getRightComponent().params.length>0">
+						<div class="param-container" 
+							*ngFor="let p of prod.getRightComponent().params; let i=index">
+							
+							<input matInput class="tree-input" 
+							 [style.width.ch]="prod.getRightComponent().params[i].value.length + 4" 
+							 [(ngModel)]="prod.getRightComponent().params[i].value"
+							 #ctrl="ngModel" 
+							 required
+							 (change)="updateProcedure($event, prod, 'right')" spellcheck="false" 
+							 list="variable-suggestions">
+
+							<span *ngIf='i<prod.getRightComponent().params.length-1'>,</span>
+						</div> 
+					</span>	)
+				
+			</div>
+		</div>
+
+		<div *ngIf="prod.getType() == 'Loop Break' || prod.getType() == 'Loop Continue'">
+			<div class='procedure-item'>
+				{{prod.getLeftComponent().expression}}
+			</div>
+		</div>
+	</div>
+
+	<div class="seg2 copy_paste_actions"></div>
+	<div class = "seg2">
+		<div class="seg2btncontainer">
+
+			<div>
+				<!-- cut copy paste -->
+				<button mat-button 
+					*ngIf="prod.getType() != 'Else' && prod.getType() != 'If'"
+					(click)="copyProcedure($event, prod, false)"
+					matTooltip="Cut Procedure Line" tabindex="-1">
+					<mat-icon>content_cut</mat-icon>
+				</button>
+				<button mat-button 
+					*ngIf="prod.getType() != 'Else' && prod.getType() != 'If'"
+					(click)="copyProcedure($event, prod, true)"
+					matTooltip="Copy Procedure Line" tabindex="-1">
+					<mat-icon>content_copy</mat-icon>
+				</button>
+				<button mat-button 
+				 	*ngIf="copiedProd && prod.getType() != 'IfElse'" 
+					(click)="pasteProcedure($event, prod)"
+					matTooltip="Paste Procedure" tabindex="-1">
+					<mat-icon>content_paste</mat-icon>
+				</button>
+			</div>
 			
-		</div>
-	</div>
+			<div *ngIf="prod.getType() != 'Else' && prod.getType() != 'If'">
+				<!-- other actions -->
+				<button mat-button 
+				    *ngIf="prod.getType() =='Action'"
+					(click)="openHelp($event, prod)" tabindex="-1">
+					<mat-icon>help_outline</mat-icon>
+				</button>
 
-	<div *ngIf="prod.getType() == 'Loop Break' || prod.getType() == 'Loop Continue'">
-		<div class='procedure-item'>
-			{{prod.getLeftComponent().expression}}
+			   	<button mat-button
+			   		(click)="togglePrint(prod.data)" 
+			   		matTooltip="Print value to console"
+			   		*ngIf="prod.getType() =='Action' || prod.getType() =='Data'" tabindex="-1">
+		    		<mat-icon>print</mat-icon>
+			    </button>
+				
+				<button mat-button (click)="toggle(prod.data)" matTooltip="Enable/Disable Line" tabindex="-1">
+		    		<mat-icon>check_circle</mat-icon>
+			    </button>
+		        
+		        <button mat-button (click)="deleteProcedure(prod)" matTooltip="Delete Line" tabindex="-1">
+		    		<mat-icon>delete</mat-icon>
+			    </button>
+			    <!-- <button (click)="disableProcedure(prod, $event)">Disable</button>
+			    <button (click)="go($event)">Copy</button> -->
+			</div>
 		</div>
-	</div>
-</div>
-
-<div class="seg2 copy_paste_actions"></div>
-<div class = "seg2">
-	<div class="seg2btncontainer">
-
-		<div>
-			<!-- cut copy paste -->
-			<button mat-button 
-				*ngIf="prod.getType() != 'Else' && prod.getType() != 'If'"
-				(click)="copyProcedure($event, prod, false)"
-				matTooltip="Cut Procedure Line" tabindex="-1">
-				<mat-icon>content_cut</mat-icon>
-			</button>
-			<button mat-button 
-				*ngIf="prod.getType() != 'Else' && prod.getType() != 'If'"
-				(click)="copyProcedure($event, prod, true)"
-				matTooltip="Copy Procedure Line" tabindex="-1">
-				<mat-icon>content_copy</mat-icon>
-			</button>
-			<button mat-button 
-			 	*ngIf="copiedProd && prod.getType() != 'IfElse'" 
-				(click)="pasteProcedure($event, prod)"
-				matTooltip="Paste Procedure" tabindex="-1">
-				<mat-icon>content_paste</mat-icon>
-			</button>
-		</div>
-		
-		<div *ngIf="prod.getType() != 'Else' && prod.getType() != 'If'">
-			<!-- other actions -->
-			<button mat-button 
-			    *ngIf="prod.getType() =='Action'"
-				(click)="openHelp($event, prod)" tabindex="-1">
-				<mat-icon>help_outline</mat-icon>
-			</button>
-
-		   	<button mat-button
-		   		(click)="togglePrint(prod.data)" 
-		   		matTooltip="Print value to console"
-		   		*ngIf="prod.getType() =='Action' || prod.getType() =='Data'" tabindex="-1">
-	    		<mat-icon>print</mat-icon>
-		    </button>
-			
-			<button mat-button (click)="toggle(prod.data)" matTooltip="Enable/Disable Line" tabindex="-1">
-	    		<mat-icon>check_circle</mat-icon>
-		    </button>
-	        
-	        <button mat-button (click)="deleteProcedure(prod)" matTooltip="Delete Line" tabindex="-1">
-	    		<mat-icon>delete</mat-icon>
-		    </button>
-		    <!-- <button (click)="disableProcedure(prod, $event)">Disable</button>
-		    <button (click)="go($event)">Copy</button> -->
-		</div>
-	</div>
 </div>
 
 
 <div class="children" *ngIf="prod.children.length > 0">
-	<app-procedure-item *ngFor="let child of prod.children" [prod]="child"></app-procedure-item>
+	<app-procedure-item 
+		*ngFor="let child of prod.children" 
+		[prod]="child"
+		[active_procedure]="active_procedure"
+		[level]="level+1"
+		(select)="onSelect($event, child)">
+	</app-procedure-item>
 </div>

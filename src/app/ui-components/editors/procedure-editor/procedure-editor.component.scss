@@ -1,23 +1,5 @@
 @import '~scss/globals';
 
-.procedure-item{
-	font-family: 'Ubuntu Mono', monospace;
-	span.module{
-		color: $pcolor2 !important;
-		font-weight: bold;
-	}
-
-	span.function{
-		color: $pcolor4 !important;
-		font-weight: bold;
-
-	}
-	span.equal{
-		text-align: center;
-		width: 15px;
-	}
-}
-
 .seg1{
 	&.disabled{
 		opacity: 0.4;

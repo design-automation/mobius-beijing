@@ -49,6 +49,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
     ngOnInit(){
       this.subscriptions.push(this._fs.node$.subscribe( (node) => {
+      		console.log("selected node updated");
        		this.active_node = node;
       }));
     }
@@ -86,7 +87,9 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	}
 
 	onSelect($event): void{
-		this.active_procedure = $event.id;
+		if( !($event instanceof Event) ){
+			this.active_procedure = $event;
+		}
 	}
 
 

@@ -5,21 +5,21 @@
 						<mat-panel-title>
 						  Procedure ({{active_node?.procedure.length}})
 						</mat-panel-title>
-						<mat-panel-description>
-						  <!-- This is a summary of the content -->
-						</mat-panel-description>
 					</mat-expansion-panel-header>
+
+					{{active_prodcedure?.id}}
 
 					<div class="prod-container" style="padding: 15px;">
 						<ng-container *ngFor="let p of active_node?.procedure">
 							<app-procedure-item 
-								[class.selected]="p?.id == active_procedure?.id"
 								[prod]="p" 
+								[active_procedure]="active_procedure"
+								[level]="0"
 								(select)="onSelect($event)">	
 							</app-procedure-item>
 						</ng-container>
 					</div>
 							
-		</mat-expansion-panel>
+		</mat-expansion-panel> 
 	</mat-accordion>
 </div>

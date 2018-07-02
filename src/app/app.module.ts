@@ -155,7 +155,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
               ConsoleService, 
               MobiusService,
               ExecuteService, 
-              ModuleService
+              ModuleService,
+              CodeService
             ],
   bootstrap: [AppComponent]
 })

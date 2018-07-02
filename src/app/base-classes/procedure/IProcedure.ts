@@ -22,6 +22,7 @@ export interface IProcedure{
 
 	hasChildren: boolean; 
 	children: IProcedure[];
+	id;
 
 	print: boolean;
 	enabled: boolean;
