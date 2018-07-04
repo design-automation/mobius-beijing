@@ -27,6 +27,9 @@ export interface IProcedure{
 	print: boolean;
 	enabled: boolean;
 
+	left; 
+	right;
+
 	getLevel(): number;
 
 	getType(): ProcedureTypes; 

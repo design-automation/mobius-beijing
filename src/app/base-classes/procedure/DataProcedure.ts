@@ -9,7 +9,7 @@ export class DataProcedure extends Procedure{
 		super(ProcedureTypes.Data, false); 
 
 		if(data == undefined){
-			data = {result: undefined, value: undefined}
+			data = {result: "variable_name", value: "value"}
 		}
 
 		let left: IComponent = { expression: data.result, 

@@ -1,5 +1,4 @@
 import {IdGenerator} from '../misc/GUID';
-
 import {IProcedure} from "./IProcedure";
 import {ProcedureTypes} from "./ProcedureTypes";
 import {IComponent} from "./IComponent";
@@ -54,6 +53,30 @@ export abstract class Procedure implements IProcedure{
 	set id(value: string){
 		console.warn("Id of procedure being set manually");
 		this._id = value;
+	}
+
+	get type(): ProcedureTypes{
+		return this._type;
+	}
+
+	set type(value: ProcedureTypes){
+		this._type = value;
+	}
+
+	get left(){
+		return this._leftComponent;
+	}
+
+	set left(value: any){
+		this._leftComponent = value;
+	}
+
+	get right(){
+		return this._rightComponent;
+	}
+
+	set right(value: any){
+		this._rightComponent = value;
 	}
 
 	update(prodData: any, parent: IProcedure): void{

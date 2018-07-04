@@ -309,7 +309,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 					statement = "if (" + procedure.getLeftComponent().expression + "){"
 				}
 				else if(prod_type == ProcedureTypes.ElseControl){
-					statement = "else{";
+					statement = "else {";
 					code = "prodArr = (\'" + procedure["id"] + "\');\n" + code; 
 				}
 				else if(prod_type == ProcedureTypes.ForLoopControl){
@@ -319,6 +319,12 @@ export class CodeGeneratorJS extends CodeGenerator{
 						nodeVars.push( procedure.getLeftComponent().expression );
 					}
 				
+				}
+				else if(prod_type == ProcedureTypes.WhileControl){
+					statement = `while(${procedure.getRightComponent().expression}){`;
+					if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.getLeftComponent().expression) == false ){
+						nodeVars.push( procedure.getLeftComponent().expression );
+					}	
 				}
 				codeArr.push(statement);
 

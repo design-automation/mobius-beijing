@@ -3,16 +3,16 @@ import {IComponent} from "./IComponent";
 import {Procedure} from "./Procedure";
 import {IProcedure} from "./IProcedure";
 
-export class ForLoopControlProcedure extends Procedure{
+export class IfControlProcedure extends Procedure{
 
-	constructor(data ?: {variable: string, array_name: string}){
-		super(ProcedureTypes.ForLoopControl, true);
+	constructor(data ?: {condition: string}){
+		super(ProcedureTypes.IfControl, true);
 
 		if(data == undefined){
-			data = {variable: "variable_name", array_name: "array_name"}
+			data = {condition: "conditional_expression"}
 		}
 
-		let left: IComponent = { expression: data.variable, 
+		let left: IComponent = { expression: undefined, 
 								 isAction: false, 
 								 module: undefined, 
 								 category: undefined, 
@@ -20,7 +20,7 @@ export class ForLoopControlProcedure extends Procedure{
 								 params: undefined
 								}
 		let right: IComponent = {
-							     expression: data.array_name, 
+							     expression: data.condition, 
 								 isAction: false, 
 								 module: undefined, 
 								 category: undefined, 

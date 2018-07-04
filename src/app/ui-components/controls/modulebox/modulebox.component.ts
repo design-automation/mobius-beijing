@@ -18,11 +18,14 @@ import {PortTypes} from '../../../base-classes/port/PortModule';
 export class ModuleboxComponent implements OnInit{
 
   	readonly procedureTypes: ProcedureTypes[] = [
-  			ProcedureTypes.Data, 
-  			ProcedureTypes.IfElseControl,
-  			ProcedureTypes.ForLoopControl, 
-  			ProcedureTypes.LoopBreak, 
-  			ProcedureTypes.LoopContinue
+		ProcedureTypes.Data, 
+		ProcedureTypes.ForLoopControl,
+		ProcedureTypes.WhileControl,
+		ProcedureTypes.IfControl,
+		ProcedureTypes.ElseControl, 
+		ProcedureTypes.ElseIfControl,
+		ProcedureTypes.LoopBreak, 
+		ProcedureTypes.LoopContinue
   	];
 
   	private subscriptions = [];
@@ -73,23 +76,44 @@ export class ModuleboxComponent implements OnInit{
 
 		let value:string = "";
 
-		if(type == ProcedureTypes.Data){
-			value = "variable"
-		}
-		else if(type == ProcedureTypes.Action){
-			value = "function"
-		}
-		else if(type == ProcedureTypes.IfElseControl){
-			value = "if-else"
-		}
-		else if(type == ProcedureTypes.ForLoopControl){
-			value = "loop"	
-		}
-		else if(type == ProcedureTypes.LoopBreak){
-			value = "loop break"	
-		}
-		else if(type == ProcedureTypes.LoopContinue){
-			value = "loop continue"	
+		switch(type){
+
+			case ProcedureTypes.Data: 
+				value = "Variable";
+				break;
+
+			case ProcedureTypes.Action: 
+				value = "Function";
+				break;
+
+			case ProcedureTypes.IfControl: 
+				value = "If";
+				break;
+
+			case ProcedureTypes.ElseControl: 
+				value = "Else";
+				break;
+
+			case ProcedureTypes.ElseIfControl: 
+				value = "Else-If";
+				break;
+
+			case ProcedureTypes.ForLoopControl: 
+				value = "For-loop";
+				break;
+
+			case ProcedureTypes.WhileControl: 
+				value = "While-loop";
+				break;
+
+			case ProcedureTypes.LoopBreak: 
+				value = "Break";
+				break;
+
+			case ProcedureTypes.LoopContinue: 
+				value = "Continue";
+				break;
+
 		}
 
 		return value;
@@ -98,31 +122,53 @@ export class ModuleboxComponent implements OnInit{
 	addProcedure($event, type: ProcedureTypes): void{
 
 		$event.stopPropagation();
+		
 		let prod:IProcedure;
+		let prod_data; 
 
-		if( type == ProcedureTypes.Data){
-			let default_variable_name: string = "var" + this.active_node.procedure.length;
-			let prod_data: {result: string, value: string} = {result: default_variable_name, value: "undefined"};
-			prod = ProcedureFactory.getProcedure( ProcedureTypes.Data, prod_data );
-		}
-		else if (type == ProcedureTypes.IfElseControl){
-			let prod_data : {if_condition: string, el_condition: string} = {if_condition: "undefined", el_condition: "undefined"};
-			prod = ProcedureFactory.getProcedure( ProcedureTypes.IfElseControl, prod_data);
-		}
-		else if(type == ProcedureTypes.ForLoopControl){
-			let prod_data :  {variable: string, array_name: string} = {variable: "i", array_name: "[]"};
-			prod = ProcedureFactory.getProcedure( ProcedureTypes.ForLoopControl, prod_data);
-		}
-		else if(type == ProcedureTypes.LoopBreak || type == ProcedureTypes.LoopContinue){
-			prod = ProcedureFactory.getProcedure( type );
-		}
-		else if(type == ProcedureTypes.Action){
-		}
-		else{
-			throw Error("Procedure Type invalid");
-		}
+/*		switch(type){
 
-		this.active_node = NodeUtils.add_procedure(this.active_node, prod);
+			case ProcedureTypes.Data: 
+				let default_variable_name: string = "var" + this.active_node.procedure.length;
+				prod_data = {result: default_variable_name, value: "undefined"};
+				prod = ProcedureFactory.getProcedure( ProcedureTypes.Data, prod_data );
+				break;
+
+			case ProcedureTypes.Action: 
+				// do nothing
+				break;
+
+			case ProcedureTypes.IfControl: 
+				prod = ProcedureFactory.getProcedure( ProcedureTypes.IfElseControl );
+				break;
+
+			case ProcedureTypes.ElseControl: 
+				prod = ProcedureFactory.getProcedure( ProcedureTypes.ElseControl );
+				break;
+
+			case ProcedureTypes.ElseIfControl: 
+				prod = ProcedureFactory.getProcedure( ProcedureTypes.ElseIfControl );
+				break;
+
+			case ProcedureTypes.ForLoopControl: 
+				prod_data = {variable: "i", array_name: "[]"};
+				prod = ProcedureFactory.getProcedure( ProcedureTypes.ForLoopControl, prod_data);
+				break;
+
+			case ProcedureTypes.WhileControl: 
+				prod = ProcedureFactory.getProcedure( ProcedureTypes.WhileControl );
+				break;
+
+			case ProcedureTypes.LoopBreak: 
+			case ProcedureTypes.LoopContinue: 
+				prod = ProcedureFactory.getProcedure( type );
+				break;
+
+			default:
+				throw Error("Procedure Type invalid");
+		}
+*/
+		this.active_node = NodeUtils.add_procedure(this.active_node, ProcedureFactory.getProcedure(type));
 	}
 
 	addPort(type: string): void{
