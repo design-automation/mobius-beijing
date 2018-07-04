@@ -37,8 +37,9 @@ export class FunctionProcedure extends Procedure{
 									params: this.node && this.node.inputs ? [this.node.inputs.map(function(inp){ return " "; })] : []
 								}
 
-		super.setLeftComponent(left);
-		super.setRightComponent(right);
+		super.left = (left);
+		super.right = (right);
+
 	}
 
 	getNode(): IGraphNode{

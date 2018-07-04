@@ -1,14 +1,14 @@
 import {InputPort, OutputPort, InputPortTypes, PortTypes} from "../port/PortModule";
 import {IGraphNode} from "./IGraphNode";
 import {IProcedure, ProcedureTypes} from "../procedure/ProcedureModule";
-import {ProcedureUtils} from '../procedure/Procedure';
+import {ProcedureUtils} from '../procedure/ProcedureUtils';
 import {ICodeGenerator, IModule} from "../code/CodeModule";
 
 export abstract class NodeUtils{
 
 	public static add_port(node: IGraphNode, type: PortTypes, name?: string): IGraphNode{
 		console.log(type);
-		let default_name = type.toString().substring(0, 2) + node[`${type}s`].length; 
+		let default_name = type.toString().substring(0, 3) + node[`${type}s`].length; 
 
 		if( name !== undefined ){
 			default_name = name;
@@ -63,69 +63,81 @@ export abstract class NodeUtils{
 
 	public static add_procedure(node: IGraphNode, procedure: IProcedure): IGraphNode{
       
-      let active_procedure: IProcedure = node.active_procedure;
-      // TODO: Validate procedure
-      // this.checkProcedure(prod);
+		let active_procedure: IProcedure = node.active_procedure;
+		// TODO: Validate procedure
+		// this.checkProcedure(prod);
 
-      if(active_procedure){
-	        if(active_procedure.hasChildren){
-	        	active_procedure = ProcedureUtils.add_child(active_procedure, procedure);
-	        }
-	        else{
+		if(active_procedure){
+		    if(active_procedure.hasChildren){
+		    	active_procedure = ProcedureUtils.add_child(active_procedure, procedure);
+		    }
+		    else{
 
-	           if(active_procedure.parent && !active_procedure.parent["virtual"]){
+		       if(active_procedure.parent && !active_procedure.parent["virtual"]){
 
-	               let parent: IProcedure = active_procedure.parent;
-	               let index: number = 0;
-	               let allChildren: IProcedure[] = parent.getChildren();
+		           let parent: IProcedure = active_procedure.parent;
+		           let index: number = 0;
+		           let allChildren: IProcedure[] = parent.children;
 
-	               for(let i=0; i<allChildren.length; i++){
-	                   if(allChildren[i] === active_procedure){
-	                       index = i;
-	                       break;
-	                   }
-	               }
+		           for(let i=0; i<allChildren.length; i++){
+		               if(allChildren[i] === active_procedure){
+		                   index = i;
+		                   break;
+		               }
+		           }
 
-	               parent = ProcedureUtils.add_child_at_position(parent, procedure, index + 1)
-	           }
-	           else{
+		           parent = ProcedureUtils.add_child_at_position(parent, procedure, index + 1)
+		       }
+		       else{
 
-	               let parent: IGraphNode = node;
-	               let index: number = 0;
-	               let allChildren: IProcedure[] = node.procedure;
+		           let parent: IGraphNode = node;
+		           let index: number = 0;
+		           let allChildren: IProcedure[] = node.procedure;
 
-	               for(let i=0; i<allChildren.length; i++){
-	                   if(allChildren[i] === active_procedure){
-	                       index = i;
-	                       break;
-	                   }
-	               }
+		           for(let i=0; i<allChildren.length; i++){
+		               if(allChildren[i] === active_procedure){
+		                   index = i;
+		                   break;
+		               }
+		           }
 
-	               node = NodeUtils.add_procedure_at_position(node, procedure, index + 1);
-	           }
+		           node = NodeUtils.add_procedure_at_position(node, procedure, index + 1);
+		       }
 
-	        }
-      }
-      else{
-      	//node = NodeUtils.add_procedure(node, procedure)
-      	  node.procedure.push(procedure);
-      }
+		    }
+		}
+		else{
+			node.procedure.push(procedure);
+		}
 
-
-      // update active procedure for the node
-      if(procedure.getType() == "IfElse"){
-      	  node.active_procedure = procedure.getChildren()[0]
-      }
-      else{
-      	  node.active_procedure = procedure;
-      }
-
+      	node.active_procedure = procedure;
 		return node;
 	}
 
 	public static add_procedure_at_position(node: IGraphNode, procedure: IProcedure, index: number): IGraphNode{
 		node.type = undefined;
 		node.procedure.splice(index, 0, procedure);
+		return node;
+	}
+
+	public static delete_procedure(node): IGraphNode{
+
+		if(!node.active_procedure){
+			console.warn("Delete procedure called without active");
+			return;
+		}
+
+		let index: number = 0;
+		let prodArr: IProcedure[] = node.active_procedure.parent ? node.active_procedure.parent.children : node.procedure;
+		for (const prod of prodArr){
+			if (prod.id == node.active_procedure.id){
+				prodArr.splice(index, 1);
+				node.active_procedure = index < prodArr.length ? prodArr[index] : undefined;
+				break;
+			}
+			index++;
+		}
+
 		return node;
 	}
 
@@ -147,11 +159,11 @@ export abstract class NodeUtils{
 
 		// push names of left components in procedure
 		node.procedure.map(function(prod){
-			let type = prod.getType();
+			let type = prod.type;
 			if( type == ProcedureTypes.Data || 
 				type == ProcedureTypes.ForLoopControl || 
 				type == ProcedureTypes.Action){
-				let var_name: string = prod.getLeftComponent().expression;
+				let var_name: string = prod.left.expression;
 				if(var_name && var_name.length > 0){
 					varList.push(var_name);
 				};

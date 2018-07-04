@@ -5,7 +5,7 @@ import {IComponent} from "./IComponent";
 
 export class IfElseControlProcedure extends Procedure{
 
-	constructor(title: ProcedureTypes.IfElseControl|ProcedureTypes.IfControl|ProcedureTypes.ElseControl, 
+/*	constructor(title: ProcedureTypes.IfElseControl|ProcedureTypes.IfControl|ProcedureTypes.ElseControl, 
 		data ?: {if_condition: string, el_condition: string}){
 		
 		super(title, true);
@@ -65,6 +65,6 @@ export class IfElseControlProcedure extends Procedure{
 		if(prodData._rightComponent){
 			this._rightComponent.expression = prodData._rightComponent.expression;
 		}
-	}
+	}*/
 
 }

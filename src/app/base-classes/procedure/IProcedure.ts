@@ -22,7 +22,9 @@ export interface IProcedure{
 
 	hasChildren: boolean; 
 	children: IProcedure[];
+	parent: IProcedure;
 	id;
+	type;
 
 	print: boolean;
 	enabled: boolean;
@@ -30,38 +32,9 @@ export interface IProcedure{
 	left; 
 	right;
 
-	getLevel(): number;
-
-	getType(): ProcedureTypes; 
-
-	update(prodData: any, parent: IProcedure): void;
-	reset(): void;
-
-	isSelected(): boolean; 
-	select(): void;
-	unselect(): void;
-	isDisabled(): boolean; 
-	enable(): void;
-	disable(): void;
-
-	setError(value: boolean): void;
-	getError(): void;
-
-	hasParent(): boolean;
-	parent;
-
-	getChildren(): IProcedure[];
-	addChild(procedure: IProcedure): IProcedure;
-	addChildFromData(child: IProcedure): IProcedure;
-	addChildAtPosition(procedure: IProcedure, index: number): IProcedure;
-	deleteChild(procedure: IProcedure): IProcedure;
-
-	getLeftComponent(): IComponent;
-	setLeftComponent(expression: IComponent): void;
-	getRightComponent(): IComponent;
-	setRightComponent(expression: IComponent): void;
-
-	getCodeString(code_generator: ICodeGenerator): string;
+	error; 
+	reset();
+	update(prodData: any, parent: IProcedure);
 }
 
 

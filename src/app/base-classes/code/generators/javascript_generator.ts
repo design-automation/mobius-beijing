@@ -235,7 +235,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			// change based on type
 			let code: string; 
-			let prod_type = procedure.getType();
+			let prod_type = procedure.type;
 
 			if(prodFn == undefined){
 			 	prodFn = this.get_code_procedure;
@@ -244,26 +244,26 @@ export class CodeGeneratorJS extends CodeGenerator{
 			if(prod_type == ProcedureTypes.Data || prod_type == ProcedureTypes.Function){
 				let init: string;
 
-				if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.getLeftComponent().expression) == false ){
+				if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.left.expression) == false ){
 					init = "let ";
-					nodeVars.push( procedure.getLeftComponent().expression );
+					nodeVars.push( procedure.left.expression );
 				}
 				else{
 					init = "";
 				}
 
-				code =  init + procedure.getLeftComponent().expression + " = " + procedure.getRightComponent().expression + ";";
+				code =  init + procedure.left.expression + " = " + procedure.right.expression + ";";
 
 				if(procedure.print){
-					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.getLeftComponent().expression + "\', " + procedure.getLeftComponent().expression + ");\n";
+					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.left.expression + "\', " + procedure.left.expression + ");\n";
 				}
 			}
 			else if(prod_type == ProcedureTypes.LoopContinue || prod_type == ProcedureTypes.LoopBreak){
-				code = procedure.getLeftComponent().expression + ";";
+				code = procedure.left.expression + ";";
 			}
 			else if(prod_type == ProcedureTypes.Action){
 				let paramList :string[]= [];
-				let params  = procedure.getRightComponent().params;
+				let params  = procedure.right.params;
 				for( let p=0; p < params.length; p++){
 					let param = params[p];
 					if(param.value !== undefined){
@@ -274,26 +274,26 @@ export class CodeGeneratorJS extends CodeGenerator{
 					}
 				}
 
-				let right :IComponent = procedure.getRightComponent();
+				let right :IComponent = procedure.right;
 
 				let init: string;
-				if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.getLeftComponent().expression) == false ){
+				if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.left.expression) == false ){
 					init = "let ";
-					nodeVars.push( procedure.getLeftComponent().expression );
+					nodeVars.push( procedure.left.expression );
 				}
 				else{
 					init = "";
 				}
 
 
-				code = init + procedure.getLeftComponent().expression 
+				code = init + procedure.left.expression 
 						+ " = " 
 						+ "__MOBIUS_MODULES__."
 						+ right.module.trim()
 						+ "." + right.fn_name + "( " + paramList.join(",") + " );\n";
 
 				if(procedure.print){
-					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.getLeftComponent().expression + "\', " + procedure.getLeftComponent().expression + ");\n";
+					code = code + "\n" + "__MOBIUS_PRINT__(" + "\'" + procedure.left.expression + "\', " + procedure.left.expression + ");\n";
 				}
 
 			}
@@ -306,24 +306,24 @@ export class CodeGeneratorJS extends CodeGenerator{
 					statement = "// if-else";
 				}
 				else if(prod_type == ProcedureTypes.IfControl){
-					statement = "if (" + procedure.getLeftComponent().expression + "){"
+					statement = "if (" + procedure.left.expression + "){"
 				}
 				else if(prod_type == ProcedureTypes.ElseControl){
 					statement = "else {";
 					code = "prodArr = (\'" + procedure["id"] + "\');\n" + code; 
 				}
 				else if(prod_type == ProcedureTypes.ForLoopControl){
-					statement = "for ( let " + procedure.getLeftComponent().expression + " of " + procedure.getRightComponent().expression + "){"
+					statement = "for ( let " + procedure.left.expression + " of " + procedure.right.expression + "){"
 					
-					if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.getLeftComponent().expression) == false ){
-						nodeVars.push( procedure.getLeftComponent().expression );
+					if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.left.expression) == false ){
+						nodeVars.push( procedure.left.expression );
 					}
 				
 				}
 				else if(prod_type == ProcedureTypes.WhileControl){
-					statement = `while(${procedure.getRightComponent().expression}){`;
-					if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.getLeftComponent().expression) == false ){
-						nodeVars.push( procedure.getLeftComponent().expression );
+					statement = `while(${procedure.right.expression}){`;
+					if( CodeGeneratorJS.existsInNodeVars(nodeVars, procedure.left.expression) == false ){
+						nodeVars.push( procedure.left.expression );
 					}	
 				}
 				codeArr.push(statement);
@@ -333,8 +333,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 				// children will have nodeVars from parents 
 				// but parents should have childVars
 				let childVars = nodeVars.map(function(s){ return s; });
-				procedure.getChildren().map(function(child){ 
-					if(!child.enabled){
+				procedure.children.map(function(child){ 
+					if(child.enabled){
 						codeArr.push(prodFn(child, childVars, prodFn, prodArr));
 					}
 				});
@@ -402,7 +402,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 				let markError = function(prod: IProcedure, id: number){
 					if(prod["id"] && id && prod["id"] == id){
-						prod.setError(true);
+						prod.error = (true);
 					}
 
 					if(prod.hasChildren){
@@ -417,7 +417,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 					node.procedure.map(function(prod: IProcedure){
 
 						if(prod["id"] == prodWithError){
-							prod.setError(true);
+							prod.error = (true);
 						}
 
 						if(prod.hasChildren){

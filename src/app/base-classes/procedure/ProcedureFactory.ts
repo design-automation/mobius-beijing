@@ -32,7 +32,6 @@ export class ProcedureFactory{
 
 			case ProcedureTypes.IfElseControl:
 				console.warn("Discontinued: IfElse");
-				return new IfElseControlProcedure(data);
 
 			case ProcedureTypes.IfControl:
 				return new IfControlProcedure(data);
@@ -59,16 +58,8 @@ export class ProcedureFactory{
 	static getProcedureFromData(procedureData: any, parent: IProcedure): IProcedure{
 		
 		let procedure: IProcedure;
-
 		
-		if(procedureData["_type"] == ProcedureTypes.IfControl){
-			procedure = new IfElseControlProcedure( ProcedureTypes.IfControl)
-		}
-		else if (procedureData["_type"] == ProcedureTypes.ElseControl){
-			procedure = new IfElseControlProcedure( ProcedureTypes.ElseControl)
-		}
-		else if(procedureData["_type"] == "Function"){
-			//todo: do something!! 
+		if(procedureData["_type"] == "Function"){
 			procedure = new FunctionProcedure({node: procedureData["node"], port: procedureData["port"]});
 		}
 		else{
@@ -80,7 +71,7 @@ export class ProcedureFactory{
 		if(procedureData.children !== undefined){
 			for(let child=0; child < procedureData.children.length; child++){
 				let childProd :IProcedure = procedureData.children[child];
-				procedure.addChildFromData(ProcedureFactory.getProcedureFromData(childProd, procedure));
+				procedure.children.push(ProcedureFactory.getProcedureFromData(childProd, procedure));
 			}
 		}
 		return procedure;

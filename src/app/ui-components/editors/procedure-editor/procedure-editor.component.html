@@ -11,7 +11,7 @@
 						<ng-container *ngFor="let p of active_node?.procedure">
 							<app-procedure-item 
 								[prod]="p" 
-								[active_procedure]="active_procedure"
+								[active_procedure]="active_node?.active_procedure"
 								[level]="0"
 								(select)="onSelect($event)">	
 							</app-procedure-item>

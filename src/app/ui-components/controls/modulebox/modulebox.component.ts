@@ -125,49 +125,6 @@ export class ModuleboxComponent implements OnInit{
 		
 		let prod:IProcedure;
 		let prod_data; 
-
-/*		switch(type){
-
-			case ProcedureTypes.Data: 
-				let default_variable_name: string = "var" + this.active_node.procedure.length;
-				prod_data = {result: default_variable_name, value: "undefined"};
-				prod = ProcedureFactory.getProcedure( ProcedureTypes.Data, prod_data );
-				break;
-
-			case ProcedureTypes.Action: 
-				// do nothing
-				break;
-
-			case ProcedureTypes.IfControl: 
-				prod = ProcedureFactory.getProcedure( ProcedureTypes.IfElseControl );
-				break;
-
-			case ProcedureTypes.ElseControl: 
-				prod = ProcedureFactory.getProcedure( ProcedureTypes.ElseControl );
-				break;
-
-			case ProcedureTypes.ElseIfControl: 
-				prod = ProcedureFactory.getProcedure( ProcedureTypes.ElseIfControl );
-				break;
-
-			case ProcedureTypes.ForLoopControl: 
-				prod_data = {variable: "i", array_name: "[]"};
-				prod = ProcedureFactory.getProcedure( ProcedureTypes.ForLoopControl, prod_data);
-				break;
-
-			case ProcedureTypes.WhileControl: 
-				prod = ProcedureFactory.getProcedure( ProcedureTypes.WhileControl );
-				break;
-
-			case ProcedureTypes.LoopBreak: 
-			case ProcedureTypes.LoopContinue: 
-				prod = ProcedureFactory.getProcedure( type );
-				break;
-
-			default:
-				throw Error("Procedure Type invalid");
-		}
-*/
 		this.active_node = NodeUtils.add_procedure(this.active_node, ProcedureFactory.getProcedure(type));
 	}
 

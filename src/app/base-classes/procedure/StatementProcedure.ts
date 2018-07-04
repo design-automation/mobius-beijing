@@ -24,8 +24,9 @@ export class StatementProcedure extends Procedure{
 								 params: undefined
 								}
 
-		super.setLeftComponent(left);
-		super.setRightComponent(undefined);
+		super.left = (left);
+		super.right = (undefined);
+
 	}
 
 	update(prodData: any, parent: IProcedure): void{

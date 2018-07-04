@@ -27,8 +27,9 @@ export class IfControlProcedure extends Procedure{
 								 fn_name: undefined,
 								 params: undefined
 								}
-		super.setLeftComponent(left);
-		super.setRightComponent(right);
+		super.left = (left);
+		super.right = (right);
+
 
 	}
 

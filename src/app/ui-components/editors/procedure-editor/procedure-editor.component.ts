@@ -15,7 +15,12 @@ import {ModuleUtils} from "../../../base-classes/code/CodeModule";
 export enum KEY_CODE {
   CUT = 88,
   COPY = 67, 
-  PASTE = 86 
+  PASTE = 86,
+  LEFT = 37,
+  UP = 38,
+  RIGHT = 39,
+  DOWN = 40,
+  DELETE = 46
 }
 
 abstract class ProcedureOptions{
@@ -40,7 +45,6 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	// ----- Private Variables
     private subscriptions = [];
     private active_node: IGraphNode;
-  	private active_procedure: IProcedure;			// procedure in focus
   	_variableList: string[];
   	copiedProd: IProcedure;
 
@@ -78,17 +82,12 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 	}
 
 	toggle(prod: IProcedure): void{
-		if (prod.isDisabled()){
-			prod.enable();
-		}
-		else{
-			prod.disable();
-		}
+		prod.enabled = !prod.enabled;
 	}
 
 	onSelect($event): void{
 		if( !($event instanceof Event) ){
-			this.active_procedure = $event;
+			this.active_node.active_procedure = $event;
 		}
 	}
 
@@ -112,92 +111,58 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
 			var key = event.keyCode
 			var ctrlDown = event.ctrlKey || event.metaKey // Makey support
+			var shiftDown = event.shiftKey;
 
-			if(ctrlDown && (event.srcElement.className.indexOf("input") > -1)){	event.stopPropagation(); return;	};
+			if((event.srcElement.className.indexOf("input") > -1)){	
+				event.stopPropagation(); 
+				return;	
+			};
 
-			if (ctrlDown && key == KEY_CODE.CUT) {
-				this.copyProcedure(event, this.active_procedure, false);
-			}
-			else if(ctrlDown && key == KEY_CODE.COPY) {
-				this.copyProcedure(event, this.active_procedure, true);
-			}
-			else if(ctrlDown && key == KEY_CODE.PASTE){
-				this.pasteProcedure(event, this.active_procedure);
-			}
-		}
+			if(ctrlDown){
+				switch (key){
+					case KEY_CODE.CUT:
+						this.copiedProd = ProcedureUtils.copy_procedure(this.active_node.active_procedure);
+						this.delete_procedure();
+					case KEY_CODE.COPY:
+						this.copiedProd = ProcedureUtils.copy_procedure(this.active_node.active_procedure);
+						break;
+					case KEY_CODE.PASTE:
+						let parent: IProcedure = this.active_node.active_procedure.parent;
+						if(parent){
+							ProcedureUtils.add_child(parent, this.copiedProd);
+						}
+						else{
+							NodeUtils.add_procedure(this.active_node, this.copiedProd);
+						}
+						this.copiedProd = ProcedureUtils.copy_procedure(this.copiedProd);
+						break;
 
-
-	deleteProcedure(node): void{
-		// TODO: 
-		/*let parent = node.parent;
-		if(parent.data.virtual){
-			NodeUtils.delete_procedure(this.active_node, node.data)
-		}
-		else{
-			parent.data.deleteChild(node.data);
-		}*/
-	}
-	
-	copyProcedure($event, node, copy: boolean): void{
-		try{
-			let prod: IProcedure = node.data;
-
-			// check for "If" or "Else" type
-			if(prod.getType() == "If" || prod.getType() == "Else"){
-				return;
-			}
-
-			this.copiedProd = ProcedureFactory.getProcedureFromData(prod, undefined);
-
-			if(copy){
-				// do nothing
-			}else{
-				this.deleteProcedure(node)
-			}
-		}
-		catch(ex){
-			console.error("Error copying procedure");
-			this.copiedProd = undefined;
-		}
-	}
-
-	pasteProcedure($event, node, pos?: number): void{
-		try{
-			if(!this.copiedProd){
-				return;
-			}
-
-			let parent: IProcedure = node.data;
-
-			if(parent.getType() == "IfElse"){
-				return;
-			}
-
-			if(parent.hasChildren){
-				this.copiedProd.parent = (parent);
-				parent.addChildAtPosition(this.copiedProd, 0);
-			}
-			else{
-				let pos = node.index;
-				let grandparent = node.parent;
-				// in the top level
-				if(grandparent.data.virtual){
-					//this.active_node.addProcedureAtPosition(this.copiedProd, pos+1);
 				}
-				else{
-					grandparent.data.addChildAtPosition(this.copiedProd, pos+1);
-				}
-
-				//grandparent.addChildAtPosition(this.copiedProd, pos)
 			}
+			else if(shiftDown){
+				switch (key){
+					case KEY_CODE.LEFT:
+						//this.copyProcedure(event, this.active_node.active_procedure, false);
+						break;
+					case KEY_CODE.RIGHT:
+						//this.copyProcedure(event, this.active_node.active_procedure, true);
+						break;
+					case KEY_CODE.DOWN:
+						break;
+					case KEY_CODE.UP:
+						break;
+				}
+			}
+			else if(key == KEY_CODE.DELETE){
+				this.delete_procedure()
+ 			}
 
-			this.copiedProd = ProcedureFactory.getProcedureFromData(this.copiedProd, undefined);
+ 			console.log(key)
+		}
 
-		}
-		catch(ex){
-			console.error("Error pasting procedure");
-			this.copiedProd = undefined;
-		}
+
+	delete_procedure(): void{
+		NodeUtils.delete_procedure(this.active_node)
 	}
 
 }

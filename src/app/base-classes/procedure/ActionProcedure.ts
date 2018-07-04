@@ -28,10 +28,10 @@ export class ActionProcedure extends Procedure{
 								}
 
 		if(data.result !== undefined){
-			super.setLeftComponent(left);
+			super.left = (left);
 		}
 
-		super.setRightComponent(right);
+		super.right = (right);
 	}
 
 
