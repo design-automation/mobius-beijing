@@ -37,12 +37,12 @@ export class GraphNode implements IGraphNode{
 
 	public position: number[] = [0,0];
 
-	constructor(name: string, type?: string){
+	constructor(data?: any){
 		this._id = IdGenerator.getId();
-		this._name = name;
-		this._type = type;
+		if(data){
+			this.update_properties(data);
+		}
 	}
-
 
 	get name(): string{
 		return this._name;
@@ -64,8 +64,16 @@ export class GraphNode implements IGraphNode{
 		return this._inputs;
 	}
 
+	set inputs(values: InputPort[]){
+		this._inputs = values;
+	}
+
 	get outputs(): OutputPort[]{
 		return this._outputs;
+	}
+
+	set outputs(values: OutputPort[]){
+		this._outputs = values;
 	}
 
 	get enabled(): boolean{
@@ -80,6 +88,9 @@ export class GraphNode implements IGraphNode{
 		return this._type;
 	}
 
+	set type(value: string){
+		this._type = value;
+	}
 
 	get procedure(): IProcedure[]{
 		return this._procedure;
@@ -100,43 +111,32 @@ export class GraphNode implements IGraphNode{
 		// todo: validate if value exists
 	}
 
-	//	
-	//
-	//
-	getName(): string{ 
-		return this._name; 
-	};
-
-	setName(name: string): void{
-		this._name = name; 
+	get version(): number{
+		return this._version; 
 	}
 
-	getId(): string { 
-		return this._id; 
-	};
-
-	getVersion(): number{
-		return this._version;
+	set version(value: number){
+		this._version = value;
 	}
 
-	
-	getType(): string{
-		return this._type;
+	get hasExecuted(): boolean{
+		return this._hasExecuted; 
 	}
 
-	overwrite(node: IGraphNode): number{
-		this._inputs = node.inputs; 
-		this._outputs = node.outputs;
-		this._procedure = node.getProcedure();
-		return this._version++;
+	set hasExecuted(value: boolean){
+		this._hasExecuted = value;
 	}
 
-	saved(): void{
-		this._type = this._id;
+	get hasError(): boolean{
+		return this._hasError; 
 	}
 
-	update(nodeData: IGraphNode, nodeMap?: any): void{
+	set hasError(value: boolean){
+		this._hasError = value;
+	}
 
+
+	update_properties(nodeData: IGraphNode, nodeMap?: any): void{
 		if(nodeData["lib"] == undefined){
 			// loading from file
 			this._id = nodeData["_id"];
@@ -196,6 +196,7 @@ export class GraphNode implements IGraphNode{
 				}
 			}
 		}
+
 		function checkAndReplaceChildren(procedure){
 			if(procedure["_type"] == "Function"){
 				// update with the actual node
@@ -223,149 +224,6 @@ export class GraphNode implements IGraphNode{
 
 			this._procedure.push(procedure);
 		}
-
-	}
-
-	removeType(): void{
-		this._type = undefined;
-	}
-
-	//
-	//
-	//
-	addInput(name?: string): number{
-
-		let default_name = /*this._name + */"in" + this.inputPortCounter; 
-
-		if( name !== undefined ){
-			default_name = name;
-		}
-
-		let inp = new InputPort(default_name);
-		this._inputs.push(inp);
-
-		this.portCounter++;
-		this.inputPortCounter++;
-		this.removeType();
-		
-		return this._inputs.length;
-	}
-
-	addOutput(name?: string): number{ 
-
-		let default_name = /*this._name +*/ "out" + this.outputPortCounter; 
-
-		if(name !== undefined){
-			default_name = name;
-		}
-
-		let oup = new OutputPort(default_name);
-		this._outputs.push(oup);
-		
-		this.portCounter++;
-		this.outputPortCounter++;
-		this.removeType();
-		
-		return this._outputs.length; 
-	}
-
-	addFnOutput( code_generator: ICodeGenerator ): number{
-		let index_output: number = this.addOutput(this.name + "_function");
-		let fnOutput: OutputPort = this.getOutputByIndex(index_output - 1);
-
-		fnOutput.setDefaultValue( this.getFunction(code_generator) );
-
-		fnOutput.setIsFunction();
-
-		return this._outputs.length; 
-	}
-
-	hasFnOutput(): boolean{
-		return this._outputs.filter(function(o){
-			return o.isFunction();
-		}).length > 0;
-	}
-
-	deleteInput(input_port_index: number): number{
-		this._inputs.splice(input_port_index, 1);
-		this.removeType();
-		//delete this._inputs[input_port_index];
-		return this._inputs.length; 
-	}
-
-	deleteOutput(output_port_index: number): number{ 
-		this._outputs.splice(output_port_index, 1);
-		this.removeType();
-		//delete this._outputs[output_port_index];
-		return this._outputs.length; 
-	}
-
-	getInputs(): InputPort[]{
-		return this._inputs;
-	}
-
-	getOutputs(): OutputPort[]{
-		return this._outputs;
-	}
-
-	getInputByIndex(input_port_index: number): InputPort{
-		return this._inputs[input_port_index];
-	}
-
-	getOutputByIndex(output_port_index: number): OutputPort{
-		return this._outputs[output_port_index];
-	}
-
-	getProcedure(): IProcedure[]{
-		return this._procedure;
-	}
-
-	addProcedure(prod: IProcedure): void{
-		this.removeType();
-		this._procedure.push(prod);
-	}
-
-	addProcedureAtPosition(prod: IProcedure, index: number): void{
-		this.removeType();
-		this._procedure.splice(index, 0, prod);
-	}
-
-	deleteProcedure(prod: IProcedure): void{
-		this.removeType();
-		this._procedure = this._procedure.filter(function(child: IProcedure){ 
-			if(child === prod){
-				return false; 
-			}
-			else{
-				return true;
-			}
-		});
-	}
-
-	deleteProcedureAtPosition(index: number): void{
-		this.removeType();
-		this._procedure.splice(index, 1);
-	}
-
-
-	//
-	//
-	//
-	isDisabled(): boolean{
-		return this._isDisabled;
-	}
-
-	enable(): void{
-		this._isDisabled = false; 
-	}
-
-	disable(): void{
-		this._isDisabled = true;
-	}
-
-
-	hasExecuted(): boolean{
-		return this._hasExecuted; 
 	}
 
 	reset(): boolean{
@@ -382,161 +240,6 @@ export class GraphNode implements IGraphNode{
 
 		return (this._hasExecuted == false); 
 	}
-
-	hasError(): void{
-		this._hasError = true; 
-	}
-
-	//
-	//
-	//
-	execute(code_generator: ICodeGenerator, modules: IModule[], print: Function, globals?: any): void{
-
-		let window_params: string[] = [];
-
-		let params: any[] = [];
-		let self = this;
-
-		let live_data_downloads = 0;
-
-		this.getInputs().map(function(i, index){ 
-
-			// if any of the inputs is a web url, get data first
-			if(i.type == InputPortTypes.URL){
-				live_data_downloads++;
-				let urlString: any = i.getOpts().url;
-				fetch(urlString)
-				.then((res) => res.text())
-				.then((out) => {
-					let val = out;
-
-					try{
-						val = JSON.parse(out);
-					}
-					catch(ex){
-
-					}
-
-					i.setComputedValue(val);
-					// file processing
-					/*let file_name: string = "MOBIUS_FILES_" + self._id + "I" + index;
-					window[file_name] = i.getValue();
-					params[i.getName()] = "window[" + file_name + "]";
-					window_params.push("window[" + file_name + "]");
-					i._executionAddr =  "window['" + file_name + "']";;*/
-
-					live_data_downloads--;
-
-					// when last of all data has downloaded
-					if(live_data_downloads == 0){
-						outputProcessing();
-					}
-
-				})
-				.catch(err => { alert("Oops...Error fetching data from URL."); throw err; });
-			}
-			else if(i.isFunction()){
-				let oNode: IGraphNode = i.getFnValue();
-				let codeString: string = code_generator.get_code_node(oNode);
-
-				// converts string to functin
-				let fn_def = Function("return " + codeString)();
-				params[i.name] = fn_def;
-			}
-			else{
-				params[i.name] = i.value; 
-			}
-
-		});
-
-		// this code runs only after live_data_downloads = 0;
-	    function outputProcessing(){
-			self.getOutputs().map(function(o){
-				if(o.isFunction()){
-					let node_code: string =  code_generator.get_code_node(self, undefined, true);
-					o.setDefaultValue( node_code );
-				}
-			});
-
-
-			// use code generator to execute code
-			let result: any  = code_generator.execute_node(self, params, modules, print, globals);
-
-			// add results to self node
-			for( let n=0;  n < self._outputs.length; n++ ){
-				let output_port = self._outputs[n];
-				output_port.setComputedValue(result[output_port.name]);
-			}
-
-			self._hasExecuted = true;
-
-			// delete all files stored in window reference
-			window_params.map(function(filename){
-				delete window[filename];
-			})
-
-			//self.getInputs().map( i => i._executionAddr = undefined );
-
-
-
-	    }
-
-
-	    if(live_data_downloads == 0){
-	    	outputProcessing();
-	    }
-
-	}
-
-	getResult():any{
-		let final_values :any = {};
-		for(let o=0; o < this._outputs.length; o++ ){
-			let output :OutputPort = this._outputs[o];
-			final_values[output.name] = output.value;
-		}
-
-		return final_values;
-	}
-
-
-	getVariableList(): string[]{
-
-		let varList: string[] = [];
-
-		//push undefined
-		varList.push("undefined");
-
-		//push names of inputs and outputs
-		this._inputs.map(function(inp){
-			varList.push(inp.name);
-		});
-
-		this._outputs.map(function(out){
-			varList.push(out.name);
-		});
-
-		// push names of left components in procedure
-		this._procedure.map(function(prod){
-			let type = prod.getType();
-			if(type == ProcedureTypes.Data || type == ProcedureTypes.ForLoopControl || 
-				type ==ProcedureTypes.Action){
-				let var_name: string = prod.getLeftComponent().expression;
-				if(var_name && var_name.length > 0){
-					varList.push(var_name);
-				};
-			}
-		});
-
-		return varList;
-	}
-
-	getFunction(code_generator: ICodeGenerator): string{
-		let node_code: string =  code_generator.get_code_node(this);
-		return node_code;
-	}
-
-	addFunctionToProcedure(code_generator: ICodeGenerator): void{
-		let node_code: string = this.getFunction(code_generator);
-	}
+	
 }
 

@@ -19,15 +19,6 @@ export class NodeLibraryComponent{
 	}
 
 	addNode($event, type: number): void{
-	    /*$event.stopPropagation();
-	    if(type == undefined){
-	      this.flowchartService.addNode();
-	    }
-	    else{
-	      this.flowchartService.addNode(type);
-	    }
-
-	    this.update();*/
 	}
 
 	deleteNode($event, node): void{

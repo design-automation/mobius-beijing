@@ -9,85 +9,34 @@ import { ProcedureTypes } from '../procedure/ProcedureTypes';
 export abstract class FlowchartReader{
 
 
-	static readFlowchartFromData(data: IFlowchart): IFlowchart{
-
-		let extra_data; 
-		if(data["name"] && data["description"]){
-			extra_data = data;
-		}
+	static read_flowchart_from_data(data: IFlowchart): IFlowchart{
 
 	    // recreate the flowchart from data
-	    let fc: IFlowchart = new Flowchart(data["author"], extra_data);
-	    fc.setSavedTime(data["_lastSaved"]);
+	    let fc: IFlowchart = new Flowchart(data); 
 
-	    let nodes: IGraphNode[] = data["_nodes"];
-	    let edges: IEdge[] = data["_edges"];
+	    let nodes_data: IGraphNode[] = data["_nodes"];
+	    let edges_data: IEdge[] = data["_edges"];
 
-	    let nodeMap = [];
-
-	    let higherOrderFn = [];
-	    let normalNodes = [];
-
-	    // split nodesS
-	    for(let index=0; index < nodes.length; index++ ){
-	      let n_data = nodes[index];
-
-	      // check from outputs 
-	      let outputs = n_data["_outputs"];
-	      let flag: boolean = false;
-	      for(let oIdx=0; oIdx < outputs.length; oIdx++){
-	      	let oData = outputs[oIdx];
-
-	      	// if output is function	
-	      	if ( oData["_isFunction"] ){
-		      higherOrderFn.push(n_data);
-		      flag = true;
-		      break;
-	      	}
-
-	      }
-
-	      if(!flag){
-	      	normalNodes.push(n_data);
-	      }
-
-
-	    } 
-
-	    // create nodes - higher order first
-	    let orderedNodes = higherOrderFn.concat(normalNodes);
-	    for(let index=0; index < orderedNodes.length; index++ ){
-	      let n_data = orderedNodes[index];
-	      let node: IGraphNode = new GraphNode(n_data["name"], n_data["type"]);
-	      node.update(n_data, nodeMap);
-
-	      nodeMap[node.id] = node;
+	    /// adding all nodes
+	    let all_nodes: IGraphNode[] = [];
+	    for(let node_data of nodes_data){	
+	    	FlowchartUtils.add_node_from_data(fc, node_data);
 	    }
 
-	    // add nodes in order to the flowchart
-	    for(let n=0; n < nodes.length; n++){
-	    	let createdNode = nodeMap[nodes[n]["_id"]];
-	    	FlowchartUtils.add_node_from_data(fc, createdNode);
-	    }  
-
-	    // add edges
-	    for(let index in edges){
-	    	let e_data :IEdge = edges[index];
+	    /// adding all edges
+	    for(let e_data of edges_data){
 	    	let in_node = e_data.input_address[0];
 	    	let out_node = e_data.output_address[0];
 	    	
-	    	let valid_input: boolean = (in_node  >= 0 && in_node < nodes.length);
-	    	let valid_output: boolean = (out_node  >= 0 && out_node < nodes.length);
+	    	let valid_input: boolean = (in_node  >= 0 && in_node < all_nodes.length);
+	    	let valid_output: boolean = (out_node  >= 0 && out_node < all_nodes.length);
+
 	    	if( valid_input && valid_output ){
 	    		FlowchartUtils.add_edge(fc, e_data.output_address, e_data.input_address);
 	    	}
 	    	else{
-
+	    		console.warn(`Skipped creating edge between ${in_node} and ${out_node}`)
 	    	}
-	    }
-
-	    if(fc.selectedNode == undefined){
-	    	fc.selectedNode = fc.nodes[0].id;
 	    }
 
 	    return fc;

@@ -11,9 +11,7 @@
               [gutterSize]="7" 
               [useTransition]="true" gutterColor=white>
 
-				<split-area class="sidebar"
-					[size]="30"
-			        order="1">
+				<split-area class="sidebar" [size]="30" order="1">
 					<app-flowchart-controls></app-flowchart-controls>
 				</split-area>
 				
@@ -27,7 +25,6 @@
 				    	<div class="content-wrapper" (wheel)="scale($event)" 
 				    		style="flex-grow: 1;">
 							
-
 							<!-- div container for the flowchart -->
 							<div class="graph-container" 
 								id="graph-nodes"
@@ -40,7 +37,7 @@
 									
 									<!-- single  node -->
 									<div  class="node" 
-											*ngFor="let node of fc.nodes; let node_index = index" 
+											*ngFor="let node of fc?.nodes; let node_index = index" 
 											id="n{{node_index}}"
 											[style.left.px]="node.position[0]" 
 											[style.top.px]="node.position[1]">
@@ -68,22 +65,15 @@
 														<mat-icon>file_download</mat-icon>
 													</div>
 													
-													<!--todo -->
-													<div class="action-button" (click)="addFunctionOutput(node_index)" 
-														matTooltip="Add functional output" *ngIf="!node.hasFnOutput()">
-														<mat-icon>my_library_add</mat-icon>
-													</div>
-
 												</div>
 											</div>
 
 											
 											<!-- node body -->
 											<div class="node-body" 
-												[class.library]="node.getType() !== undefined"
+												[class.library]="node.type !== undefined"
 												[class.error]="node._hasError"
 												[class.disabled] ="node.enabled" 
-												[class.function] ="node.hasFnOutput()"
 												(click)="active_node = node; push_node();"
 												draggable=true  
 												(dragstart)="nodeDragStart($event, node)" 
@@ -108,8 +98,7 @@
 
 														<div class="port-grip" 
 															draggable=true
-															[class.connected]="port.isConnected()" 
-															[class.isFunction]="port.isFunction()" 		
+															[class.connected]="port.isConnected" 
 															(dragstart)="portDragStart($event, port, [node_index, pi])" 
 															(drag)="portDragging($event, port)" 
 															(dragend)="portDragEnd($event, port)"
@@ -129,7 +118,7 @@
 												<!-- outputs -->
 												<div class="port-container">
 													<div class="port output"
-														*ngFor="let port of node.getOutputs(); let po=index;"
+														*ngFor="let port of node.outputs; let po=index;"
 														id="n{{node.id}}po{{po}}">
 
 														<!-- <span class="port-name" [class.isFunction]="port.isFunction()">{{port.name  | shortname: 10  }}</span> -->
@@ -143,8 +132,7 @@
 														<div class="port-grip" 
 															draggable=true
 															[class.selected]="isPortSelected(node_index, po)"
-															[class.connected]="port.isConnected()" 
-															[class.isFunction]="port.isFunction()" 
+															[class.connected]="port.isConnected" 
 															(click)="clickPort($event, node_index, po)"
 															(dragstart)="portDragStart($event, port, [node_index, po])" 
 															(drag)="portDragging($event, port)" 
@@ -165,7 +153,7 @@
 								</div>
 
 								<div class="edge-container">
-									<app-graph-edge *ngFor="let edge of fc.edges" [edge]="edge"></app-graph-edge>
+									<app-graph-edge *ngFor="let edge of fc?.edges" [edge]="edge"></app-graph-edge>
 									
 									<!-- temporary edge -->
 									<app-graph-edge 

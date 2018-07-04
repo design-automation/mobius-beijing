@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, Input } from '@angular/core';
 
-import { IPort } from '../../../base-classes/port/PortModule';
+import { OutputPort } from '../../../base-classes/port/PortModule';
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 
 import * as gs from 'gs-json';
@@ -16,7 +16,7 @@ export class CesiumViewerComponent implements OnInit{
 
   @Input() mode: string;
 
-	port: IPort;
+	port: OutputPort;
   private subscriptions = [];
 
   constructor(private _fs: FlowchartService){}

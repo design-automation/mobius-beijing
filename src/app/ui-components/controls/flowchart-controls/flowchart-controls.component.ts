@@ -33,9 +33,9 @@ export class FlowchartControlsComponent implements OnInit{
               private _ms: ModuleService,
               private $log: ConsoleService,
               private _fs: FlowchartService, 
-              private dialog: MatDialogRef<PublishSettingsComponent>) { }
+              private dialog: MatDialog) { }
 
-  ngOnInit(){ }
+  ngOnInit(){ this.new_file(); }
 
   @ViewChild('fileInput') fileInput: ElementRef;
   open_picker(): void{
@@ -52,6 +52,7 @@ export class FlowchartControlsComponent implements OnInit{
 
   new_flowchart(): void{
     this._fs.new_flowchart(this._mb.user);
+    this.$log.log("Created new flowchart.");
   }
 
   load_file(url?: string): void{
@@ -62,7 +63,7 @@ export class FlowchartControlsComponent implements OnInit{
         let mb = this._mb;
         reader.onload = function (evt) {
             let fileString: string = evt.target["result"];
-            mb.load_file(fileString);
+            mb.load_file_from_string(fileString);
         }
         reader.onerror = function (evt) {
             console.log("Error reading file");
@@ -79,7 +80,7 @@ export class FlowchartControlsComponent implements OnInit{
     file["language"] = "js";
     file["modules"] = [];
 
-    let newFlowchart: IFlowchart = FlowchartReader.readFlowchartFromData(flowchart);
+    let newFlowchart: IFlowchart = FlowchartReader.read_flowchart_from_data(flowchart);
     file["flowchart"] = newFlowchart;
     fileString = CircularJSON.stringify(file);
 
@@ -106,4 +107,9 @@ export class FlowchartControlsComponent implements OnInit{
     });
 
   }
+
+  add_node(): void{
+    this._fs.push_flowchart(FlowchartUtils.add_node(this._fs.flowchart));
+  }
+
 }

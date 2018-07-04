@@ -34,11 +34,6 @@ export class InputPort extends Port{
 		return this.opts;
 	}
 
-	disconnect(): void{
-		this._isFunction = false;
-		super.disconnect();
-	}
-
 	getFnValue(): IGraphNode{
 		return this._fnValue;
 	}

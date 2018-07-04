@@ -34,7 +34,7 @@ export class FunctionProcedure extends Procedure{
 									module: undefined, 
 									category: undefined,
 									fn_name: undefined,
-									params: this.node && this.node.getInputs ? [this.node.getInputs().map(function(inp){ return " "; })] : []
+									params: this.node && this.node.inputs ? [this.node.inputs.map(function(inp){ return " "; })] : []
 								}
 
 		super.setLeftComponent(left);
@@ -54,14 +54,14 @@ export class FunctionProcedure extends Procedure{
 	}
 
 	updateParams(): string[]{
-		let inp_range = this.node.getInputs().map(function(inp){
+		let inp_range = this.node.inputs.map(function(inp){
 			return " ";
 		})
 		return inp_range;
 	}
 
 	getOutputs(): string[]{
-		let outputs = this.node.getOutputs().filter(function(o){
+		let outputs = this.node.outputs.filter(function(o){
 			return !o.isFunction();
 		}).map(function(output){
 			return output.name;

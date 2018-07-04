@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
-import { IPort } from '../../../base-classes/port/PortModule';
+import { IPort, OutputPort } from '../../../base-classes/port/PortModule';
 
 import CircularJSON from 'circular-json';
 import * as js_beautify from 'js-beautify';
@@ -51,24 +51,7 @@ export class TextViewerComponent implements OnInit {
 		}
 	}
 
-	// getPortContent(port: IPort): string{
-
-	// 	if(port == undefined){
-	// 		return "";
-	// 	}
-
-	// 	let value = port.value;
-	// 	if(typeof(value) == "object"){
-	// 		value = JSON.stringify(value);
-	// 		if(value.length > 397){
-	// 			value = value.substr(0,397) + "...";
-	// 		}
-	// 	}
-
-	// 	return value;
-	// }
-
-	private getText(output: IPort): string{
+	private getText(output: OutputPort): string{
 		try{
 			let val = output.value;
 
@@ -118,7 +101,7 @@ export class TextViewerComponent implements OnInit {
 		}
 	}
 
-	isJSON(output: IPort): boolean{
+	isJSON(output: OutputPort): boolean{
 		let val = output.value;
 		return (typeof(val) == "object" && val.toString() == "[object Object]");
 	}

@@ -67,7 +67,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		this.sub = this.router.params.subscribe(params => {
 		   this.filepath = this.getFlowchart(params.id);
-		   this._mb.load_file(this.filepath);
+		   this._mb.load_file_from_url(this.filepath);
 		});
 
 		this.slider_state = 'slide_in';

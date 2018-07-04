@@ -4,8 +4,8 @@ import { Component,
 
 import { NgModel } from '@angular/forms';
 
-import {IGraphNode} from '../../../base-classes/node/NodeModule';
-import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
+import {IGraphNode, NodeUtils} from '../../../base-classes/node/NodeModule';
+import {IProcedure, ProcedureFactory, ProcedureTypes, ProcedureUtils} from '../../../base-classes/procedure/ProcedureModule';
 
 import {FlowchartService} from '../../../global-services/flowchart.service';
 import {LayoutService} from '../../../global-services/layout.service';
@@ -128,13 +128,14 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 
 
 	deleteProcedure(node): void{
-		let parent = node.parent;
+		// TODO: 
+		/*let parent = node.parent;
 		if(parent.data.virtual){
-			this.active_node.deleteProcedure(node.data);
+			NodeUtils.delete_procedure(this.active_node, node.data)
 		}
 		else{
 			parent.data.deleteChild(node.data);
-		}
+		}*/
 	}
 	
 	copyProcedure($event, node, copy: boolean): void{
@@ -181,7 +182,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 				let grandparent = node.parent;
 				// in the top level
 				if(grandparent.data.virtual){
-					this.active_node.addProcedureAtPosition(this.copiedProd, pos+1);
+					//this.active_node.addProcedureAtPosition(this.copiedProd, pos+1);
 				}
 				else{
 					grandparent.data.addChildAtPosition(this.copiedProd, pos+1);

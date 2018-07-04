@@ -1,15 +1,16 @@
 <section>
-	<div (click)="new_flowchart()">New File</div>
-	<div (click)="open_picker()">Open File
+	<div class="focus" (click)="new_file()">New File</div>
+	<div class="focus" (click)="open_picker()">Open File
 		<input #fileInput style="display: none;"
-  		type="file" (change)="loadFile()"/> 
+  		type="file" (change)="load_file()"/> 
 	</div>
-	<div (click)="save_file()">Save File</div>
-	<div (click)="publish_settings()">Publish</div>
+	<div class="focus" (click)="save_file()">Save File</div>
+	<div class="focus" (click)="publish_settings()">Publish</div>
 </section>
 
+<br><br><br>
 
 <section>
-	<div (click)="add_node($event)">New Node</div>
+	<div class="focus" (click)="add_node($event)">New Node</div>
 	<app-node-library></app-node-library>
 </section>

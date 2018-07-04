@@ -59,6 +59,7 @@ export class FlowchartService {
   new_flowchart(user: string): void{
     let fc: IFlowchart = new Flowchart(user);
     this.push_flowchart(fc);
+    this.push_node(undefined);
   }
 
   getCodeGenerator(): ICodeGenerator{

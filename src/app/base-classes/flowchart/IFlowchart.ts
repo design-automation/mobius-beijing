@@ -14,21 +14,15 @@ import {IModule} from "../code/CodeModule";
 
 
 export interface IFlowchart{
-
 	name: string;
+	author: string; 
+	summary: string;
 	description: string;
-	selectedNode: string;
+	selected_node: number;
+	
+	globals;
+	editable;
 
 	nodes: IGraphNode[];
 	edges: IEdge[];
-	
-	setSavedTime(date: Date): void;
-	getSavedTime(): Date;
-
-	// gets the author of the flowchart
-	getAuthor(): string; 
-	getSummary(): string;
-
-	globals;
-	editable;
 };

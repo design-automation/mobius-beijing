@@ -53,7 +53,6 @@ export abstract class NodeLibraryService {
 
     if(nodeID == undefined){
         let storageString = myStorage.removeItem(property);
-        //this.consoleService.addMessage("Node Library was cleared.");
     }
     else{
 
@@ -68,24 +67,8 @@ export abstract class NodeLibraryService {
           let nodesStorage = CircularJSON.stringify({ n: NodeLibraryService.saved_nodes });
           myStorage.setItem(property, nodesStorage);
         }
-        //this.consoleService.addMessage("Node from library was deleted.");
     }
 
-
-    // TODO: remove node type from flowchart
-    // this.getNodes().map(function(node){
-
-    //     if(nodeID === undefined){
-    //       node.removeType();
-    //     }
-    //     else if(node.getType() == nodeID){
-    //       node.removeType();
-    //     }
-
-    // })
-
-    // print message to console
-    //this.switchViewer("console-viewer");
     NodeLibraryService.update_nodes();
   }
 
@@ -94,7 +77,7 @@ export abstract class NodeLibraryService {
   save_library_node(node: IGraphNode): void{
 
     // todo: check if overwrite
-    if( node.getType() !== undefined ){
+    if( node.type !== undefined ){
       console.error("This node was already in the library and shouldn't have invoked this function.");
     }
     else{
@@ -116,7 +99,7 @@ export abstract class NodeLibraryService {
       for(let i=0; i < nodes.length; i++){
 
           let node_in_lib: IGraphNode = nodes[i];
-          if(node_in_lib["_name"] === node.getName()){
+          if(node_in_lib["_name"] === node.name){
             message = "Node with this name already exists in the library. Either delete existing\
             node from the library or rename your node and try again.";
             //this.consoleService.addMessage(message);
@@ -131,7 +114,7 @@ export abstract class NodeLibraryService {
         nodesStorage.n.push(node);
         myStorage.setItem( property, CircularJSON.stringify(nodesStorage) );
         message = "Bravo! Node saved. Now you have " + (nodes.length) + " node(s) in the library!";
-        node.saved();
+        node.type = node.id;
 
         //this.consoleService.addMessage(message);
         // this.layoutService.showConsole();

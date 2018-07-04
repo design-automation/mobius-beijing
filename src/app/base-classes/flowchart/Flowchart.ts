@@ -13,66 +13,85 @@ import * as gs from 'gs-json';
 
 export class Flowchart implements IFlowchart{
 
-	public name: string;
-	public description: string;
-	public selectedNode: string;
-
+	private _name: string;
+	private _description: string;
 	private _author: string; 
+	private _selected: number;
+	private _summary: string; 
 
 	private _nodes: IGraphNode[] = [];
 	private _edges: IEdge[] = [];
 
 	private _sortOrder: number[];
-	private _selected: number;
-
-	private _lastSaved: Date;
 
 	private _globals = [];
 	private _visibleNode;
 
 	private _editable;
 
-	//
-	//	constructor needs 2 arguments  - username and icodegenerator
-	//
-	constructor(username: string, data?: any){ 
-		this._author = username; 
-		this.name = String((new Date()).getTime()) + ".mob";
-		this.description = "Lorem ipsum proident nisi dolor ut minim in in non consectetur ut ut.";
-		this.selectedNode = undefined;
-		this._globals = [];
+	constructor(data?: any){ 
+		this._name = "new_mobius_flowchart";
+		this._description = "Nulla sed consequat ea est laboris ut commodo pariatur do laborum ut dolore veniam adipisicing anim.";
+		this._author = "new_author";
 		this._editable = true;
-
+		this._globals = [];
+		this._nodes = [];
+		this._edges = [];
+		
 		if(data){
-			this.name = data["name"];
-			this.description = data["description"];
-			this.selectedNode = data["selectedNode"];
-
-			this._globals = data["_globals"].map(function(in_data){
-				let inputPort = new InputPort(in_data["_name"]);
-				inputPort.update(in_data);
-				return inputPort;
-			});
+			this._name = data["name"];
+			this._description = data["description"];
+			this._author = data["author"];
 			this._editable = data["_editable"] == undefined ? true : data["_editable"];
+
+			if(data["_globals"]){
+				this._globals = data["_globals"].map(function(in_data){
+					let input_port = new InputPort(in_data["_name"]);
+					input_port.update(in_data);
+					return input_port;
+				});
+			}
 		}
 	};
 
-	setSavedTime(date: Date){
-		this._lastSaved = date;
+	get name(): string{
+		return this._name;
 	}
 
-	getSavedTime(): Date{
-		return this._lastSaved;
+	set name(value: string){
+		this._name = value;
 	}
 
-	//	gets author of the flowchart
-	getAuthor(): string{
+	get author(): string{
 		return this._author;
 	}
 
-	//	Summary of flowchart
-	getSummary(): string{
-		return "This is a flowchart, with " + this._nodes.length + " nodes, written by " + this._author;
+	set author(value: string){
+		this._author = value;
+	}
+
+	get description(): string{
+		return this._description;
+	}
+
+	set description(value: string){
+		this._description = value;
+	}
+
+	get summary(): string{
+		return this._summary;
+	}
+
+	set summary(value: string){
+		this._summary = value;
+	}
+
+	get selected_node(): number{
+		return this._selected;
+	}
+
+	set selected_node(index: number){
+		this._selected = index;
 	}
 
 	get globals(): any{
@@ -84,6 +103,7 @@ export class Flowchart implements IFlowchart{
 	}
 
 	set visibleNode(id: number){
+		console.log("why is this called?")
 		this._visibleNode = this._nodes[id];
 	}
 
@@ -111,7 +131,4 @@ export class Flowchart implements IFlowchart{
 		this._edges = edges;
 	}
 
-
 }
-
-

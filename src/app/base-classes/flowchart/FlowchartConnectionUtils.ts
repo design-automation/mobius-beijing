@@ -11,15 +11,15 @@ export class FlowchartConnectionUtils{
 		let node = flowchart.nodes[idx];
 
   		node.inputs.map(function(input){
-  			if(input.isConnected()){
-	  			input.disconnect();
-	  			input.setComputedValue(undefined);
+  			if(input.isConnected){
+	  			input.isConnected = false;
+	  			input.value = undefined;
   			}
   		});
 
   		node.outputs.map(function(output){
-  			output.disconnect();
-  			output.setComputedValue(undefined);
+  			output.isConnected = false;
+  			output.value = undefined;
   		});
 
   		return flowchart;
@@ -33,15 +33,15 @@ export class FlowchartConnectionUtils{
 		for(let e=0; e < edges.length; e++){
 			let edge = edges[e];
 			if( edge.output_address[0] == node_index){
-			    let port = flowchart.nodes[edge.input_address[0]].getInputByIndex(edge.input_address[1]);
-			    port.disconnect();
-			    port.setComputedValue(undefined);
+			    let port = flowchart.nodes[edge.input_address[0]].inputs[edge.input_address[1]];
+			    port.isConnected = false;
+			    port.value = undefined;
 			    linked_edges.push(e);
 			}
 			else if(edge.input_address[0] == node_index){
-			    let port = flowchart.nodes[edge.output_address[0]].getOutputByIndex(edge.output_address[1]);
-			    port.disconnect();
-			    port.setComputedValue(undefined);
+			    let port = flowchart.nodes[edge.output_address[0]].outputs[edge.output_address[1]];
+			    port.isConnected = false;
+			    port.value = undefined;
 			    linked_edges.push(e);
 			}
 		}

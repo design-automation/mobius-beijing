@@ -113,12 +113,13 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
   render_flowchart(fc: IFlowchart){
     this.fc = fc;
-
-    this.fc.nodes.map( (node) => node["width"] = FlowchartRenderUtils.node_width(node) );
-    this.fc.edges.map( (edge) => {
-      edge["inputPosition"] = FlowchartRenderUtils.get_port_position( this.fc.nodes[edge.input_address[0]], edge.input_address[1], "pi");
-      edge["outputPosition"] = FlowchartRenderUtils.get_port_position(this.fc.nodes[edge.output_address[0]], edge.output_address[1], "po");
-    })
+    if(fc){
+      this.fc.nodes.map( (node) => node["width"] = FlowchartRenderUtils.node_width(node) );
+      this.fc.edges.map( (edge) => {
+        edge["inputPosition"] = FlowchartRenderUtils.get_port_position( this.fc.nodes[edge.input_address[0]], edge.input_address[1], "pi");
+        edge["outputPosition"] = FlowchartRenderUtils.get_port_position(this.fc.nodes[edge.output_address[0]], edge.output_address[1], "po");
+      })
+    }
 
     console.log("Flowchart updated") 
   }
@@ -130,13 +131,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     if (this.active_node.id == node_id)   this._fs.push_node(undefined); 
 
     this.fc = FlowchartUtils.delete_node(this.fc, node_id);
-  }
-
-  addFunctionOutput(node_index){
-    this._fs.disconnectNode(node_index);
-    
-    let node: IGraphNode = this.fc.nodes[node_index];
-    node.addFnOutput( this._fs.getCodeGenerator() );
   }
 
   //
@@ -223,7 +217,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
   isSaved(node: IGraphNode): boolean{
-    if(node.getType() === undefined){
+    if(node.type === undefined){
       return false;
     }
     else{

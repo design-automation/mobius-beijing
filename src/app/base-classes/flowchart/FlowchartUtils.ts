@@ -2,9 +2,9 @@ import { IFlowchart } from './IFlowchart';
 import { Flowchart } from './Flowchart';
 import { FlowchartConnectionUtils } from './FlowchartConnectionUtils';
 
-import { IGraphNode, IEdge, GraphNode } from '../node/NodeModule';
+import { IGraphNode, IEdge, GraphNode, NodeUtils } from '../node/NodeModule';
 import { ICodeGenerator, IModule } from '../code/CodeModule';
-import { InputPort } from '../port/PortModule';
+import { InputPort, PortTypes } from '../port/PortModule';
 
 export class FlowchartUtils{	
 
@@ -32,10 +32,10 @@ export class FlowchartUtils{
 
 
 	public static add_node(flowchart: IFlowchart){
-		let default_node_name: string = FlowchartUtils.get_new_node_name(flowchart, "node");
-		let new_node = new GraphNode(default_node_name, undefined);
-		new_node.addInput(); 
-		new_node.addOutput();
+		let new_node = new GraphNode();
+		new_node.name = FlowchartUtils.get_new_node_name(flowchart, "node");
+		NodeUtils.add_port(new_node, PortTypes.Input); 
+		NodeUtils.add_port(new_node, PortTypes.Output);
 
 		flowchart.nodes.push(new_node);
 
@@ -110,8 +110,6 @@ export class FlowchartUtils{
 						   outputAddress: number[], inputAddress: number[]): IFlowchart{
 
 		if(outputAddress.length !== 2 || inputAddress.length !== 2){
-			console.log("inputAddress", inputAddress);
-			console.log("outputAddress", outputAddress);
 			throw Error("Invalid arguments for edge");
 		}
 
@@ -119,26 +117,24 @@ export class FlowchartUtils{
      	let iNode = flowchart.nodes[inputAddress[0]];
 
      	// dont remove previous edges for outputs
-		let output = oNode.getOutputByIndex(outputAddress[1]);
-		let input = iNode.getInputByIndex(inputAddress[1]);
-		if( iNode.hasFnOutput() || ( oNode.hasFnOutput() && !output.isFunction() ) ){
-          throw Error("Non-functional inputs/outputs of higher-order nodes cannot be connected");
-      	}
+		let output = oNode.outputs[outputAddress[1]];
+		let input = iNode.inputs[inputAddress[1]];
 
-      	if (input.isConnected()){
-	        FlowchartUtils.delete_edges(flowchart, FlowchartUtils.disconnect_edges_with_port_idx(flowchart, 
-	        						inputAddress[0], inputAddress[1], "input"));
+      	if (input.isConnected){
+	        FlowchartUtils.delete_edges(flowchart, 
+	        							FlowchartUtils.disconnect_edges_with_port_idx(flowchart, 
+	        							inputAddress[0], inputAddress[1], "input"));
 	    }
 
-		if( flowchart.nodes[outputAddress[0]].isDisabled() ||  flowchart.nodes[inputAddress[0]].isDisabled() ){
-			console.log("Cannot connect to disabled nodes");
+		if( !flowchart.nodes[outputAddress[0]].enabled ||  !flowchart.nodes[inputAddress[0]].enabled ){
+			console.warn("Cannot connect to disabled nodes");
 		}
 		else{
 			let edge: IEdge = { output_address: outputAddress, input_address: inputAddress };
 
-			input.setComputedValue({port: outputAddress});
-		    output.connect();
-		    input.connect();
+			input.value = {port: outputAddress};
+		    output.isConnected = true;
+		    input.isConnected = true;
 			
 			if(output.isFunction()){
         		input.setIsFunction();
@@ -201,14 +197,14 @@ export class FlowchartUtils{
         // if type == "input"
         if( type == "input" && edge.input_address[0] == nodeIndex && edge.input_address[1] == portIndex ){
             let port = flowchart.nodes[edge.output_address[0]].outputs[edge.output_address[1]];
-            port.disconnect();
-            port.setComputedValue(undefined);
+            port.isConnected = false;
+            port.value = undefined;
             splicedEdges.push(e);
         }
         else if( type == "output" && edge.output_address[0] == nodeIndex && edge.output_address[1] == portIndex ){
             let port = flowchart.nodes[edge.input_address[0]].inputs[edge.input_address[1]];
-            port.disconnect();
-            port.setComputedValue(undefined);
+            port.isConnected = false;
+            port.value = undefined;
             splicedEdges.push(e);
         }
       }
@@ -219,21 +215,8 @@ export class FlowchartUtils{
 
 
 	public static delete_port(flowchart: IFlowchart, type: string, portIndex: number, nodeIndex: number): void{
-	    
 	    FlowchartUtils.disconnect_port(flowchart, type, portIndex, nodeIndex);
-
-		let _node = flowchart.nodes[nodeIndex];
-
-		if(type == "input"){
-			_node.deleteInput(portIndex);
-		}
-		else if(type == "output"){
-			_node.deleteOutput(portIndex);
-		}
-		else{
-			throw Error("Unknown port type");
-		}
-
+		NodeUtils.delete_port_by_index(flowchart.nodes[nodeIndex], type, portIndex)
 	}
 
 	//todo: provide a more efficient sort
@@ -318,7 +301,7 @@ export class FlowchartUtils{
 			let node: IGraphNode = flowchart.nodes[n];
 			node.reset();
 
-			if(node.isDisabled()){
+			if(!node.enabled){
 				FlowchartConnectionUtils.disconnect_node(flowchart, n);
 			}
 		}
@@ -337,8 +320,8 @@ export class FlowchartUtils{
 
 			// set computed value of port
 			// should this be from within the node?
-			let outputPort = node.getOutputByIndex(edge.output_address[1]);
-			let inputPort = inputNode.getInputByIndex(edge.input_address[1]);
+			let outputPort = node.outputs[edge.output_address[1]];
+			let inputPort = inputNode.inputs[edge.input_address[1]];
 
 			let outVal = outputPort.getValue();
 			if(outVal && outVal.constructor.name == "Model"){
@@ -348,7 +331,7 @@ export class FlowchartUtils{
 				// inputPort.setComputedValue( model );
 			}
 			else{
-				inputPort.setComputedValue( JSON.parse(JSON.stringify(outVal)) );
+				inputPort.value = JSON.parse(JSON.stringify(outVal));
 			}
 
 		}
@@ -357,7 +340,7 @@ export class FlowchartUtils{
 	//
 	//	executes the flowchart
 	//
-	execute(flowchart: IFlowchart, code_generator: ICodeGenerator, modules: IModule[], print: Function) :any{
+	public static execute(flowchart: IFlowchart, code_generator: ICodeGenerator, modules: IModule[], print: Function) :any{
 
 		// set all nodes to status not executed
 		// future: cache results and set status based on changes
@@ -388,7 +371,7 @@ export class FlowchartUtils{
 					// if yes, execute add to executed
 					// if no, set flag to true 
 					// check status of the node; don't rerun
-					if( node.isDisabled() || node.hasFnOutput() ){
+					if( !node.enabled ){
 						// do nothing
 						executed.push(index);
 					}
@@ -407,7 +390,7 @@ export class FlowchartUtils{
 
 						if(flag){
 							let time1 = (new Date()).getTime();
-							node.execute(code_generator, modules, print, gld);
+							NodeUtils.execute_node(node, code_generator, modules, print, gld);
 							FlowchartUtils.update_dependent_inputs(flowchart, node, index); 
 							executed.push(index);
 							let time2 = (new Date()).getTime();
@@ -424,8 +407,8 @@ export class FlowchartUtils{
 	}
 
 
-	save(): string{  throw Error("Not implemented"); }
+	public static save(): string{  throw Error("Not implemented"); }
 
-	read_from_json(filename: string): void{ /*TODO*/	}
+	public static read_from_json(filename: string): void{ /*TODO*/	}
 
 }

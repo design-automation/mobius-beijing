@@ -67,7 +67,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 			let inputs = node.inputs;
 			for(let i=0; i < inputs.length; i++ ){
-				if(inputs[i].isConnected() == true){
+				if(inputs[i].isConnected == true){
 					let input_name:string = inputs[i].name;
 					if( params ){
 
@@ -99,7 +99,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			});
 
 			// make function call and assign to variable of same name
-			fn_call = "let " + node.name +  "=" + node.name + node.getVersion() + "( " + param_values.join(", ") + " );" ;
+			fn_call = "let " + node.name +  "=" + node.name + node.version + "( " + param_values.join(", ") + " );" ;
 
 			if(node.enabled){
 				fn_call = "/* " + fn_call + " */";
@@ -118,7 +118,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			}
 
 			// make function
-			fn_def += "function " + node.name + node.getVersion() + "( " + params.join(", ") + " )() \n" ;
+			fn_def += "function " + node.name + node.version + "( " + params.join(", ") + " )() \n" ;
 			
 			return fn_def;
 		}
@@ -149,7 +149,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			}
 
 			// make function
-			fn_code += "function " + node.name + node.getVersion() + "( " + params.join(", ") + " ) { \n" ;
+			fn_code += "function " + node.name + node.version + "( " + params.join(", ") + " ) { \n" ;
 			fn_code += ( initializations.length > 0 ? initializations.join(";\n") + ";\n" : "" );
 			
 			// add outputs 
@@ -197,7 +197,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 		}
 
 		get_code_node_io(node: IGraphNode, output_idx: number): string{
-			return node.name + "." + node.getOutputByIndex(output_idx).name; 
+			return node.name + "." + node.outputs[output_idx].name; 
 		}
 
 		get_code_connection_line(destination_node: IGraphNode, destination_port: number, source_node: IGraphNode, source_port: number): string{
@@ -350,7 +350,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 		//	required for code generation
 		//
 		get_code_port_input(port: InputPort): string{
-			if( port.isConnected() == true ) 
+			if( port.isConnected == true ) 
 				return "";
 
 			return "let " + port.name + " = " + port.value; 
@@ -390,7 +390,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			catch(ex){
 
 				console.log(`Execution Error: ${ex}`)
-				node.hasError();
+				node.hasError = true;
 
 				let prodWithError: number = prodArr;
 
@@ -408,7 +408,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				}
 				
 				if(prodWithError){
-					node.getProcedure().map(function(prod: IProcedure){
+					node.procedure.map(function(prod: IProcedure){
 
 						if(prod["id"] == prodWithError){
 							prod.setError(true);

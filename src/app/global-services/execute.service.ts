@@ -5,7 +5,7 @@ import {MobiusService} from "./mobius.service";
 import {ModuleService} from "./module.service";
 import {FlowchartService} from "./flowchart.service";
 
-import {IFlowchart} from '../base-classes/flowchart/FlowchartModule';
+import {IFlowchart, FlowchartUtils} from '../base-classes/flowchart/FlowchartModule';
 import {ICodeGenerator} from "../base-classes/code/CodeModule";
 
 
@@ -63,7 +63,7 @@ export class ExecuteService {
 
         try{
             
-            flowchart.execute(code_generator, ModuleService.modules, ExecuteService.printFunction);
+            FlowchartUtils.execute(flowchart, code_generator, ModuleService.modules, ExecuteService.printFunction);
             
             if(consoleMessages.length > 1){
               this._cs.addMessage( consoleMessages.join(""), EConsoleMessageType.Print );

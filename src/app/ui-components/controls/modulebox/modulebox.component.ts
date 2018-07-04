@@ -7,6 +7,8 @@ import {ModuleUtils} from "../../../base-classes/code/CodeModule";
 import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
 import {NodeUtils} from '../../../base-classes/node/NodeUtils';
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
+import {PortTypes} from '../../../base-classes/port/PortModule';
+
 
 @Component({
   selector: 'app-modulebox',
@@ -124,27 +126,12 @@ export class ModuleboxComponent implements OnInit{
 	}
 
 	addPort(type: string): void{
-
-      // add port 
-      if(type == "in"){
-          this.active_node.addInput();
-      }
-      else if(type == "out"){
-          this.active_node.addOutput();
-      }
-      else{
-        throw Error("Unknown Port Type");
-      }  
-
-      //this._fs.update();
+	  NodeUtils.add_port(this.active_node, PortTypes.Input, undefined);
     }
 
 
     openModuleHelp($event, category: string): void{
     	$event.stopPropagation();
-
-    	//this._fs.switchViewer("help-viewer")
-
     	this.layoutService.showHelp({module: category, name: undefined})
 	}
 

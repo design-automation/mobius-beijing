@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 
-import { IPort } from '../../../base-classes/port/PortModule';
+import { OutputPort } from '../../../base-classes/port/PortModule';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 
 import * as gs from 'gs-json';
@@ -12,7 +12,7 @@ import * as gs from 'gs-json';
 })
 export class GeometryViewerComponent implements OnInit{
 
-	_port: IPort;
+	_port: OutputPort;
 	gs_dummy_data: any;
 
   private subscriptions = [];

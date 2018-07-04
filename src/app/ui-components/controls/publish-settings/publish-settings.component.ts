@@ -79,7 +79,7 @@ export class PublishSettingsComponent{
         return "Checkbox";
       }
       else{
-        return "Not Identifiable"
+        return "Not Identifiable";
       }
   }
 
@@ -128,7 +128,7 @@ export class PublishSettingsComponent{
   }
 
   save(): void{
-    this._mb.save_file(this._flowchart);
+    //this._mb.save_file(this._flowchart);
   }
 
 }

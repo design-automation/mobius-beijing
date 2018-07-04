@@ -70,14 +70,6 @@ export abstract class Port implements IPort{
 	}
 
 	set name(value: string){
-	    //   // check for validity
-	    //   name = name.replace(/[^\w]/gi, '');
-
-	    //   if(name.trim().length > 0){
-	    //     // put a timeout on this update or something similar to solve jumpiness
-	    //     port.setName(name);
-	    //     this._fs.update();
-	    //   }
 		this._name = value;
 	}
 
@@ -124,7 +116,7 @@ export abstract class Port implements IPort{
 		return final;
 	}
 
-	setComputedValue(value: any): void{
+	private setComputedValue(value: any): void{
 
 		if (value == undefined)	return;
 
@@ -199,18 +191,21 @@ export abstract class Port implements IPort{
 		this._disabled = false;
 	}	
 
-	isConnected(): boolean{
+	get enabled(): boolean{
+		return !this._disabled;
+	}
+
+	set enabled(value: boolean){
+		this._disabled = !value;
+	}
+
+	get isConnected(): boolean{
 		return this._connected;
 	}
 
-	connect(): void{
-		this._connected = true;
+	set isConnected(value: boolean){
+		this._connected = value;
 	}
-
-	disconnect(): void{
-		this._connected = false;
-	}
-
 
 }
 

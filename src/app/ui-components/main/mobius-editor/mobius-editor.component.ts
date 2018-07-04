@@ -64,7 +64,6 @@ export class MobiusEditorComponent implements OnInit {
     		window.onbeforeunload = undefined;
     	}
 
-        this._mb.load_file(this.filepath)
     }
 
     checkBrowser(): string { 
