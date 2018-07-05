@@ -64,27 +64,6 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
       })
     }
 
-	//
-	// Procedure Functions 
-	//
-	openHelp($event, prod): void{
-		$event.stopPropagation();
-
-		if(prod.data._type == "Action"){
-			let fn = prod.data.getRightComponent().expression.split(".");
-			fn = { module: fn[0], name: fn[1] };
-			this._ls.showHelp(fn);
-		}
-	}
-
-	togglePrint(prod: IProcedure): void{
-		prod.print = !prod.print;
-	}
-
-	toggle(prod: IProcedure): void{
-		prod.enabled = !prod.enabled;
-	}
-
 	onSelect($event): void{
 		if( !($event instanceof Event) ){
 			this.active_node.active_procedure = $event;
@@ -140,16 +119,69 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 				}
 			}
 			else if(shiftDown){
+				let child: IProcedure = this.active_node.active_procedure
+				let parent: IProcedure|IGraphNode = child.parent;
+				
+				let position: number;
+				let procedure_above: IProcedure;
+				let procedure_below: IProcedure;
+				if(parent == undefined){
+					position = NodeUtils.get_child_position(this.active_node, child);
+					procedure_above = this.active_node.children[position - 1];
+					procedure_below = this.active_node.children[position + 1]
+				}
+				else{
+					position = ProcedureUtils.get_child_position(parent, child);
+					procedure_above = parent.children[position - 1];
+					procedure_below = parent.children[position + 1]
+				}
+
 				switch (key){
 					case KEY_CODE.LEFT:
-						//this.copyProcedure(event, this.active_node.active_procedure, false);
+						if(!this.active_node.active_procedure.parent){ /*do nothing*/ }
+						else{
+							let grandparent: IProcedure = parent.parent;
+							if(grandparent){
+								ProcedureUtils.shift_level_up(this.active_node.active_procedure);
+							}
+							else{
+								ProcedureUtils.delete_child(parent, child);
+								let position: number = NodeUtils.get_child_position(this.active_node, parent);
+								NodeUtils.add_procedure_at_position(this.active_node, child, position+1);
+							}
+						}
 						break;
+
 					case KEY_CODE.RIGHT:
-						//this.copyProcedure(event, this.active_node.active_procedure, true);
+						if(position-1 < 0) return;
+						
+						if(procedure_above.hasChildren == false) return;
+						ProcedureUtils.add_child(procedure_above, child);
+
+						if(parent == undefined){
+							NodeUtils.delete_procedure(child);
+						}
+						else{
+							ProcedureUtils.delete_child(parent, child);
+						}
 						break;
+
 					case KEY_CODE.DOWN:
-						break;
+						if(procedure_below){
+							this.onSelect(procedure_below);
+						}
+						else{
+
+						}
+
 					case KEY_CODE.UP:
+						console.log("up", procedure_above);
+						if(procedure_above){
+							this.onSelect(procedure_above);
+						}
+						else{
+							
+						}
 						break;
 				}
 			}

@@ -14,6 +14,32 @@ export abstract class ProcedureUtils{
 		return n;
 	}
 
+	public static shift_level_up(procedure: IProcedure): IProcedure{
+		if(!procedure || !procedure.parent) throw Error("No procedure to shift up");
+
+		let parent: IProcedure = procedure.parent;
+		let grandparent: IProcedure = parent.parent;
+
+		if(!grandparent) return undefined;
+
+		ProcedureUtils.delete_child(parent, procedure);
+		ProcedureUtils.add_child_at_position( grandparent, procedure, ProcedureUtils.get_child_position(grandparent, parent) + 1 );
+
+		return procedure;
+	}
+
+	public static get_child_position(parent: IProcedure, child: IProcedure): number{
+		let index: number = 0;
+		for(const prod of parent.children){
+			if (prod.id === child.id){
+				return index;
+			}
+			index++;
+		}
+
+		return -1;
+	}
+
 	public static add_child(procedure: IProcedure, child: IProcedure): IProcedure{
 		if( procedure.hasChildren ){
 			procedure.children.push(child);

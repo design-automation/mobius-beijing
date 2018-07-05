@@ -13,6 +13,7 @@ export interface IGraphNode{
 	inputs: InputPort[];
 	outputs: OutputPort[];
 	procedure: IProcedure[];
+	children: IProcedure[];
 	active_procedure: IProcedure;
 
 	enabled: boolean;

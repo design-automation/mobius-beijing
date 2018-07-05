@@ -135,6 +135,14 @@ export class GraphNode implements IGraphNode{
 		this._hasError = value;
 	}
 
+	get children(): IProcedure[]{
+		return this._procedure;
+	}
+
+	set children(values: IProcedure[]){
+		this._procedure = values;
+	}
+
 
 	update_properties(nodeData: IGraphNode, nodeMap?: any): void{
 

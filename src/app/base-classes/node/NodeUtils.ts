@@ -131,7 +131,20 @@ export abstract class NodeUtils{
 	public static add_procedure_at_position(node: IGraphNode, procedure: IProcedure, index: number): IGraphNode{
 		node.type = undefined;
 		node.procedure.splice(index, 0, procedure);
+		procedure.parent = undefined;
 		return node;
+	}
+
+	public static get_child_position(node: IGraphNode, procedure: IProcedure): number{
+		let index: number = 0;
+		for(const prod of node.procedure){
+			if (prod.id === procedure.id){
+				return index;
+			}
+			index++;
+		}
+
+		return -1;
 	}
 
 	public static delete_procedure(node): IGraphNode{
