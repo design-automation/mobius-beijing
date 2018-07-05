@@ -64,7 +64,8 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
       })
     }
 
-	onSelect($event): void{
+	onAction($event, procedure, type): void{
+		console.log($event, procedure, type);
 		if( !($event instanceof Event) ){
 			this.active_node.active_procedure = $event;
 		}
@@ -153,22 +154,24 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 						break;
 
 					case KEY_CODE.RIGHT:
+						console.log(procedure_above);
 						if(position-1 < 0) return;
 						
 						if(procedure_above.hasChildren == false) return;
-						ProcedureUtils.add_child(procedure_above, child);
 
 						if(parent == undefined){
-							NodeUtils.delete_procedure(child);
+							this.active_node = NodeUtils.delete_procedure(child);
 						}
 						else{
-							ProcedureUtils.delete_child(parent, child);
+							parent = ProcedureUtils.delete_child(parent, child);
 						}
+
+						//ProcedureUtils.add_child(procedure_above, child);
 						break;
 
 					case KEY_CODE.DOWN:
 						if(procedure_below){
-							this.onSelect(procedure_below);
+							//this.onSelect(procedure_below);
 						}
 						else{
 
@@ -177,7 +180,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 					case KEY_CODE.UP:
 						console.log("up", procedure_above);
 						if(procedure_above){
-							this.onSelect(procedure_above);
+							//this.onSelect(procedure_above);
 						}
 						else{
 							
@@ -188,10 +191,7 @@ export class ProcedureEditorComponent implements OnInit, OnDestroy{
 			else if(key == KEY_CODE.DELETE){
 				this.delete_procedure()
  			}
-
- 			console.log(key)
 		}
-
 
 	delete_procedure(): void{
 		NodeUtils.delete_procedure(this.active_node)

@@ -6,7 +6,7 @@
 		[class.error]="prod.error" 
 		[class.disabled]="!prod.enabled"
 		[class.selected] = "prod.id == active_procedure?.id"
-		(click)="onSelect($event, prod)">
+		(click)="onAction($event, prod, 'select')">
 
 		<!-- template for data -->
 		<div *ngIf="prod.type == 'Data'"> 
@@ -27,13 +27,19 @@
 			</div>
 		</div>
 		
-		<div *ngIf="prod.type == 'If' || prod.type == 'Else' || prod.type == 'ElseIf'">
+		<div *ngIf="prod.type == 'If' || prod.type == 'ElseIf'">
 			<div class='procedure-item'>
 			 <span>{{prod.type}} :::</span> 
 			 <input matInput class="tree-input" 
 				[style.width.ch]="prod.right.expression.length + 4"  
 				[(ngModel)]="prod.right.expression"
 				required spellcheck="false">
+			</div>
+		</div>
+
+		<div *ngIf="prod.type == 'Else'">
+			<div class='procedure-item'>
+			 <span>{{prod.type}}</span> 
 			</div>
 		</div>
 		
@@ -119,15 +125,18 @@
 			<div>
 				<!-- cut copy paste -->
 				<button mat-button 
-					matTooltip="Cut Procedure Line" tabindex="-1">
+					matTooltip="Cut Procedure Line" tabindex="-1"
+					(click)="onAction($event, prod, 'cut')">
 					<mat-icon>content_cut</mat-icon>
 				</button>
 				<button mat-button 
-					matTooltip="Copy Procedure Line" tabindex="-1">
+					matTooltip="Copy Procedure Line" tabindex="-1"
+					(click)="onAction($event, prod, 'copy')">
 					<mat-icon>content_copy</mat-icon>
 				</button>
 				<button mat-button 
-					matTooltip="Paste Procedure" tabindex="-1">
+					matTooltip="Paste Procedure" tabindex="-1"
+					(click)="onAction($event, prod, 'paste')">
 					<mat-icon>content_paste</mat-icon>
 				</button>
 			</div>
@@ -136,7 +145,7 @@
 				<!-- other actions -->
 				<button mat-button 
 				    *ngIf="prod.type =='Action'"
-					(click)="openHelp($event, prod)" tabindex="-1">
+					(click)="onAction($event, prod, 'help')" tabindex="-1">
 					<mat-icon>help_outline</mat-icon>
 				</button>
 
@@ -147,11 +156,15 @@
 		    		<mat-icon>print</mat-icon>
 			    </button>
 				
-				<button mat-button (click)="prod.enabled = !prod.enabled" matTooltip="Enable/Disable Line" tabindex="-1">
+				<button mat-button 
+					(click)="prod.enabled = !prod.enabled" 
+					matTooltip="Enable/Disable Line" tabindex="-1">
 		    		<mat-icon>check_circle</mat-icon>
 			    </button>
 		        
-		        <button mat-button matTooltip="Delete Line" tabindex="-1">
+		        <button mat-button matTooltip="Delete Line" 
+		        	tabindex="-1"
+		       		(click)="onAction($event, prod, 'delete')">
 		    		<mat-icon>delete</mat-icon>
 			    </button>
 			    <!-- <button (click)="disableProcedure(prod, $event)">Disable</button>
@@ -168,6 +181,6 @@
 		[prod]="child"
 		[active_procedure]="active_procedure"
 		[level]="level+1"
-		(select)="onSelect($event, child)">
+		(action)="onAction($event)">
 	</app-procedure-item>
 </div>

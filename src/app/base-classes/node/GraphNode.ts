@@ -1,6 +1,6 @@
 import {IdGenerator} from '../misc/GUID';
 
-import {IProcedure, ProcedureFactory, ProcedureTypes} from "../procedure/ProcedureModule";
+import {IProcedure, ProcedureFactory, ProcedureTypes, ProcedureUtils} from "../procedure/ProcedureModule";
 import {InputPort, OutputPort, InputPortTypes} from "../port/PortModule";
 import {ICodeGenerator, IModule} from "../code/CodeModule";
 
@@ -146,19 +146,10 @@ export class GraphNode implements IGraphNode{
 
 	update_properties(nodeData: IGraphNode, nodeMap?: any): void{
 
-		this.position = [0, 0]
-
-		if(nodeData["lib"] == undefined){
-			// loading from file
-			this._id = nodeData["_id"];
-			this._name = nodeData["_name"];
-			this.position = nodeData["position"];
-		}
+		this._name = nodeData["_name"];
+		this._position = nodeData["_position"] || [0, 0];
 
 		// map direct properties
-		this.portCounter = nodeData["portCounter"];
-		this.inputPortCounter = nodeData["inputPortCounter"];
-		this.outputPortCounter = nodeData["outputPortCounter"];
 		this._isDisabled = nodeData["_isDisabled"];
 
 
@@ -182,53 +173,9 @@ export class GraphNode implements IGraphNode{
 			this._outputs.push(output);
 		}
 
-		// replace node function
-		let self = this;
-		let replace = function (prodD){
-			let node_id = prodD["node"]["_id"];
-			let actual_node = nodeMap[node_id];
-			console.log("replace");
-			if(actual_node){
-				prodD["node"] = actual_node;
-			}
-			else{
-				throw Error("Higher order not found");
-			}
-
-			let portId = prodD["port"]["_id"];
-			for(let i=0; i < self._inputs.length; i++){
-				if(self._inputs[i]["_id"] == portId){
-					prodD["port"] = self._inputs[i]; 
-				}
-			}
-		}
-
-		function checkAndReplaceChildren(procedure){
-			if(procedure["_type"] == "Function"){
-				// update with the actual node
-				replace(procedure);
-			}
-			else{
-				if(procedure.children && procedure["children"].length){
-					for(let i=0; i < procedure["children"].length; i++){
-						let childData = procedure["children"][i];
-						checkAndReplaceChildren(childData);
-					}
-				}
-			}
-		}
-		
 		// add procedure
-		let procedureArr: IProcedure[] = nodeData["_procedure"];
-		for( let prodIndex in procedureArr ){
-
-			let prodD = procedureArr[prodIndex];
-			let procedure: IProcedure;
-			
-			checkAndReplaceChildren(prodD);				
-			procedure = ProcedureFactory.getProcedureFromData(prodD, undefined);
-
-			this._procedure.push(procedure);
+		for( let p_data of nodeData["_procedure"] ){
+			this._procedure.push(ProcedureUtils.copy_procedure(p_data));
 		}
 	}
 

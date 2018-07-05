@@ -32,8 +32,6 @@ export abstract class Procedure implements IProcedure{
 		this._level = 0;
 
 		this.hasChildren = hasChildren;
-		
-		this.hasChildren = this.hasChildren;
 		this._children = this._children;
 		this._error = false;
 	}	

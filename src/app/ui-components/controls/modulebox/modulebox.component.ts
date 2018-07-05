@@ -126,9 +126,7 @@ export class ModuleboxComponent implements OnInit{
 	}
 
 	addProcedure($event, type: ProcedureTypes): void{
-
 		$event.stopPropagation();
-		
 		let prod:IProcedure;
 		let prod_data; 
 		this.active_node = NodeUtils.add_procedure(this.active_node, ProcedureFactory.getProcedure(type));

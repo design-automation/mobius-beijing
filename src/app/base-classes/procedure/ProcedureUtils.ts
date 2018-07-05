@@ -1,12 +1,14 @@
 import {IProcedure} from "./IProcedure";
 import {ProcedureFactory} from "./ProcedureFactory";
+import {Procedure} from "./Procedure";
 
 export abstract class ProcedureUtils{
 
 	public static copy_procedure(procedure: IProcedure): IProcedure{
 		if(!procedure) return;		
 
-		let n: IProcedure = ProcedureFactory.getProcedure(procedure.type);
+		let n: IProcedure = ProcedureFactory.getProcedure(procedure.type || procedure["_type"]);
+
 		//todo: bad programming!
 		let id = n.id;
 		n.update(procedure, procedure.parent);

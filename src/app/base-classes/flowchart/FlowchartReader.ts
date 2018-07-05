@@ -2,7 +2,7 @@ import { IFlowchart } from './IFlowchart';
 import { Flowchart } from './Flowchart';
 import { FlowchartUtils } from './FlowchartUtils';
 
-import { IGraphNode, GraphNode, IEdge } from '../node/NodeModule';
+import { IGraphNode, GraphNode, IEdge, NodeUtils } from '../node/NodeModule';
 import { FunctionProcedure } from '../procedure/FunctionProcedure';
 import { ProcedureTypes } from '../procedure/ProcedureTypes';
 
@@ -20,7 +20,9 @@ export abstract class FlowchartReader{
 	    /// adding all nodes
 	    let all_nodes: IGraphNode[] = [];
 	    for(let node_data of nodes_data){	
-	    	FlowchartUtils.add_node_from_data(fc, node_data);
+	    	let n: IGraphNode = NodeUtils.copy_node(node_data);
+	    	fc.nodes.push(n);
+	    	//FlowchartUtils.add_node_from_data(fc, node_data);
 	    }
 
 	    /// adding all edges

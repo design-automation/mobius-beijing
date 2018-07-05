@@ -82,12 +82,13 @@ export class MobiusService {
           this._ms.load_modules();
 
           let flowchart: IFlowchart = FlowchartReader.read_flowchart_from_data(data["flowchart"]);
+          console.log(flowchart)
           this._fs.push_flowchart(flowchart);
           // TODO: select a node
           
         }
         catch(err){
-          this.$log.log("Error loading file from string");
+          this.$log.log(`Error loading file from string: ${err}`);
         }
   }
 

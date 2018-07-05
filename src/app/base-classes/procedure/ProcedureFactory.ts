@@ -51,7 +51,7 @@ export class ProcedureFactory{
 
 
 			default: 
-				throw Error("Invalid control");
+				throw Error(`Invalid Procedure Type: ${type}`);
 
 		}
 

@@ -49,7 +49,10 @@ export class FlowchartUtils{
 		// new_node.update(n_data);
 	}
 
-	public static add_node_from_data(flowchart, data){ console.log("TODO: Add Node from Data") };
+	public static add_node_from_data(flowchart, data){ 
+		
+		
+	};
 
 
 	public static delete_node(flowchart: IFlowchart, uuid: string): IFlowchart{

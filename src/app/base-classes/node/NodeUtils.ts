@@ -86,38 +86,15 @@ export abstract class NodeUtils{
 		    	active_procedure = ProcedureUtils.add_child(active_procedure, procedure);
 		    }
 		    else{
-
-		       if(active_procedure.parent && !active_procedure.parent["virtual"]){
-
+		       if(active_procedure.parent){
 		           let parent: IProcedure = active_procedure.parent;
-		           let index: number = 0;
-		           let allChildren: IProcedure[] = parent.children;
-
-		           for(let i=0; i<allChildren.length; i++){
-		               if(allChildren[i] === active_procedure){
-		                   index = i;
-		                   break;
-		               }
-		           }
-
-		           parent = ProcedureUtils.add_child_at_position(parent, procedure, index + 1)
+		           let position: number = ProcedureUtils.get_child_position(parent, active_procedure);
+		           ProcedureUtils.add_child_at_position(parent, procedure, position+1);
 		       }
 		       else{
-
-		           let parent: IGraphNode = node;
-		           let index: number = 0;
-		           let allChildren: IProcedure[] = node.procedure;
-
-		           for(let i=0; i<allChildren.length; i++){
-		               if(allChildren[i] === active_procedure){
-		                   index = i;
-		                   break;
-		               }
-		           }
-
-		           node = NodeUtils.add_procedure_at_position(node, procedure, index + 1);
+		       	   let position: number = NodeUtils.get_child_position(node, active_procedure);
+		           NodeUtils.add_procedure_at_position(node, procedure, position + 1);
 		       }
-
 		    }
 		}
 		else{
