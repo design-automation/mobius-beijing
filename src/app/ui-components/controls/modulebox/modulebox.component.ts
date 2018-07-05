@@ -25,7 +25,8 @@ export class ModuleboxComponent implements OnInit{
 		ProcedureTypes.ElseControl, 
 		ProcedureTypes.ElseIfControl,
 		ProcedureTypes.LoopBreak, 
-		ProcedureTypes.LoopContinue
+		ProcedureTypes.LoopContinue,
+		ProcedureTypes.Comment
   	];
 
   	private subscriptions = [];
@@ -113,6 +114,11 @@ export class ModuleboxComponent implements OnInit{
 			case ProcedureTypes.LoopContinue: 
 				value = "Continue";
 				break;
+
+			case ProcedureTypes.Comment: 
+				value = "Comment";
+				break;
+
 
 		}
 

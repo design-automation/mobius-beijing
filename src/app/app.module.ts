@@ -18,6 +18,7 @@ import { MobiusService } from './global-services/mobius.service';
 import { ModuleService } from './global-services/module.service'; 
 import { CodeService } from './global-services/code.service'; 
 import { ExecuteService } from './global-services/execute.service'; 
+import { NodeLibraryService } from './global-services/node-library.service'; 
 
 import { FlowchartControlsComponent } from './ui-components/controls/flowchart-controls/flowchart-controls.component';
 import { MenuComponent } from './ui-components/controls/main-menu/menu.component';
@@ -59,21 +60,19 @@ import { MobiusGalleryComponent } from './ui-components/main/mobius-gallery/mobi
 
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
+import { ShortNamePipe } from './pipes/short-name.pipe';
+import { SimpleNamePipe } from './pipes/simple-name.pipe';
+import { PortTypePipe } from './pipes/port-type-name.pipe';
+
+import { PublishSettingsComponent } from './ui-components/controls/publish-settings/publish-settings.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 const appRoutes: Routes = [
   { path: 'editor', component: MobiusEditorComponent },
   { path: 'gallery', component: MobiusGalleryComponent },
   { path: 'viewer/:id',      component: MobiusViewerComponent },
   { path: '**', component: MobiusEditorComponent }
 ];
-
-
-import { ShortNamePipe } from './pipes/short-name.pipe';
-import { SimpleNamePipe } from './pipes/simple-name.pipe';
-import { PortTypePipe } from './pipes/port-type-name.pipe';
-
-import { PublishSettingsComponent } from './ui-components/controls/publish-settings/publish-settings.component';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -123,7 +122,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ViewerContainerComponent,
     FlowchartViewerComponent,
     EditorComponent,
-    //
     GeometryViewerComponent,
     CesiumViewerComponent,
     TextViewerComponent,
@@ -156,7 +154,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
               MobiusService,
               ExecuteService, 
               ModuleService,
-              CodeService
+              CodeService, 
+              NodeLibraryService
             ],
   bootstrap: [AppComponent]
 })

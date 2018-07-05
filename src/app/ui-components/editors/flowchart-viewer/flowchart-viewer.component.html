@@ -1,8 +1,3 @@
-<!-- <mat-expansion-panel class='viewer' 
-		[expanded]="panelOpenState">
-  	<mat-expansion-panel-header>
-	    <mat-panel-title class='header'> -->
-
 <div class="viewer">
 
 	<div class="container" >
@@ -47,6 +42,12 @@
 												
 												<div class="btn-group port-btns">
 
+													<!-- copy node -->
+													<div class="action-button" (click)="duplicate_node()" 		
+														matTooltip="Copy Node">
+														<mat-icon>copy</mat-icon>
+													</div>
+
 													<!-- delete node -->
 													<div class="action-button" (click)="delete_node(node.id)" 		
 														matTooltip="Delete Node">
@@ -59,9 +60,9 @@
 													</div>
 
 													<!--todo -->
-													<div class="action-button" (click)="saveNode(node_index)" 
+													<div class="action-button" (click)="save_node_to_library()" 
 														matTooltip="Save Node To Library"
-														*ngIf="!isSaved(node)">
+														*ngIf="node.type == undefined">
 														<mat-icon>file_download</mat-icon>
 													</div>
 													

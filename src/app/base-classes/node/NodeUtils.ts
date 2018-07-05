@@ -1,11 +1,25 @@
 import {InputPort, OutputPort, InputPortTypes, PortTypes} from "../port/PortModule";
 import {IGraphNode} from "./IGraphNode";
+import {GraphNode} from "./GraphNode";
 import {IProcedure, ProcedureTypes} from "../procedure/ProcedureModule";
 import {ProcedureUtils} from '../procedure/ProcedureUtils';
 import {ICodeGenerator, IModule} from "../code/CodeModule";
 
 export abstract class NodeUtils{
 
+	public static copy_node(node: IGraphNode): IGraphNode{
+
+		let n: IGraphNode = new GraphNode();
+
+		let id = n.id;
+		n.update_properties(node);
+		n.name = node.name +  Math.floor(Math.random()*100);
+		n.id = id;
+		n.position  = [ Math.floor(Math.random()*100), Math.floor(Math.random()*100) ];
+
+		return n;
+	}	
+ 
 	public static add_port(node: IGraphNode, type: PortTypes, name?: string): IGraphNode{
 		console.log(type);
 		let default_name = type.toString().substring(0, 3) + node[`${type}s`].length; 

@@ -9,5 +9,6 @@ export enum ProcedureTypes{
 	ForLoopControl = "For Loop",
 	Function = "Function",
 	LoopBreak = "Loop Break",
-	LoopContinue = "Loop Continue"
+	LoopContinue = "Loop Continue",
+	Comment = "Comment"
 }

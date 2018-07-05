@@ -15,6 +15,9 @@ export class StatementProcedure extends Procedure{
 		else if(type == ProcedureTypes.LoopContinue){
 			exp = "continue";
 		}
+		else if(type == ProcedureTypes.Comment){
+			exp = "Comment: Add notes";
+		}
 
 		let left: IComponent = { expression: exp, 
 								 isAction: false, 

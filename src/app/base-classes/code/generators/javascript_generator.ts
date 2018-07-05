@@ -326,6 +326,9 @@ export class CodeGeneratorJS extends CodeGenerator{
 						nodeVars.push( procedure.left.expression );
 					}	
 				}
+				else if(prod_type == ProcedureTypes.Comment){
+					statement = `\/*${procedure.left.expression}*\/`;
+				}
 				codeArr.push(statement);
 
 

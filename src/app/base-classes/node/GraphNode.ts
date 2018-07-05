@@ -137,17 +137,15 @@ export class GraphNode implements IGraphNode{
 
 
 	update_properties(nodeData: IGraphNode, nodeMap?: any): void{
+
+		this.position = [0, 0]
+
 		if(nodeData["lib"] == undefined){
 			// loading from file
 			this._id = nodeData["_id"];
 			this._name = nodeData["_name"];
 			this.position = nodeData["position"];
 		}
-		else{
-			// creating from library
-			this.position = [0,0];
-		}
-
 
 		// map direct properties
 		this.portCounter = nodeData["portCounter"];

@@ -9,7 +9,7 @@ import {IGraphNode, GraphNode} from '../base-classes/node/NodeModule';
 
 
 @Injectable()
-export abstract class NodeLibraryService {
+export class NodeLibraryService {
 
   private static saved_nodes: any[] = [];
 
@@ -74,7 +74,7 @@ export abstract class NodeLibraryService {
 
 
 
-  save_library_node(node: IGraphNode): void{
+  public static save_library_node(node: IGraphNode): void{
 
     // todo: check if overwrite
     if( node.type !== undefined ){
@@ -123,11 +123,8 @@ export abstract class NodeLibraryService {
         //this.update();
       }
       catch(ex){
-        //this.consoleService.addMessage("Oops. Something went wrong while saving this node.\
-                                       // Post the error message to the dev team on our Slack channel.", EConsoleMessageType.Error);
-        //this.consoleService.addMessage(ex, EConsoleMessageType.Error);
-        // this.layoutService.showConsole();
-        //this.switchViewer("console-viewer");
+      
+        console.error("Error saving node")
       }
 
     }

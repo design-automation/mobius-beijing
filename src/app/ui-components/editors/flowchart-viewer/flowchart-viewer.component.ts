@@ -7,12 +7,13 @@ import { NgClass } from '@angular/common';
 
 import { IFlowchart } from '../../../base-classes/flowchart/IFlowchart';
 import { FlowchartUtils } from '../../../base-classes/flowchart/FlowchartUtils';
-import { IGraphNode, IEdge, GraphNode } from '../../../base-classes/node/NodeModule';
+import { IGraphNode, IEdge, GraphNode, NodeUtils } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
 import { FlowchartService } from '../../../global-services/flowchart.service';
 import { ConsoleService } from '../../../global-services/console.service';
 import { MobiusService } from '../../../global-services/mobius.service';
+import { NodeLibraryService } from '../../../global-services/node-library.service';
 
 abstract class  FlowchartRenderUtils{
   private static _portWidth: number = 15; 
@@ -90,7 +91,8 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
   constructor(private _fs: FlowchartService, 
     private _mb: MobiusService,
-    private consoleService: ConsoleService){}
+    private consoleService: ConsoleService, 
+    private _ns: NodeLibraryService){}
 
   ngOnInit(){
     this.subscriptions.push(this._fs.flowchart$.subscribe((fc) => this.render_flowchart(fc) ));
@@ -125,6 +127,11 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
 
+  duplicate_node(): void{
+    this._fs.flowchart.nodes.push(NodeUtils.copy_node(this.active_node));
+    console.log(this._fs.flowchart.nodes.length);
+  }
+
   // node utils
   delete_node(node_id: string): void{
     this._selectedNode = undefined; 
@@ -132,6 +139,11 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
     this.fc = FlowchartUtils.delete_node(this.fc, node_id);
   }
+
+  save_node_to_library(): void{
+      NodeLibraryService.save_library_node(this.active_node);
+  }
+
 
   //
   //
@@ -214,15 +226,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
   isPortSelected(nodeIndex:number, portIndex: number){
     return (nodeIndex == this._selectedNodeIndex && portIndex == this._selectedPortIndex)
-  }
-
-  isSaved(node: IGraphNode): boolean{
-    if(node.type === undefined){
-      return false;
-    }
-    else{
-      return true;
-    }
   }
 
   //
@@ -534,8 +537,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
 
-  saveNode(node: IGraphNode): void{
-  }
 
 
 }

@@ -28,6 +28,7 @@ export class ProcedureFactory{
 
 			case ProcedureTypes.LoopBreak:
 			case ProcedureTypes.LoopContinue:
+			case ProcedureTypes.Comment:
 				return new StatementProcedure(type);
 
 			case ProcedureTypes.IfElseControl:
@@ -47,6 +48,7 @@ export class ProcedureFactory{
 
 			case ProcedureTypes.WhileControl:
 				return new WhileControlProcedure();
+
 
 			default: 
 				throw Error("Invalid control");

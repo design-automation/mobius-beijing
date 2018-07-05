@@ -30,7 +30,6 @@ export class FlowchartUtils{
 		return idx;
 	}
 
-
 	public static add_node(flowchart: IFlowchart){
 		let new_node = new GraphNode();
 		new_node.name = FlowchartUtils.get_new_node_name(flowchart, "node");
@@ -106,8 +105,7 @@ export class FlowchartUtils{
 	}
 
 
-	public static add_edge(flowchart: IFlowchart, 
-						   outputAddress: number[], inputAddress: number[]): IFlowchart{
+	public static add_edge(flowchart: IFlowchart, outputAddress: number[], inputAddress: number[]): IFlowchart{
 
 		if(outputAddress.length !== 2 || inputAddress.length !== 2){
 			throw Error("Invalid arguments for edge");
@@ -186,7 +184,6 @@ export class FlowchartUtils{
 	    return flowchart;
   	}
 
-
 	public static disconnect_edges_with_port_idx(flowchart: IFlowchart, nodeIndex: number, portIndex: number, type: string): number[]{
       let splicedEdges: number[] = [];
       let edges = flowchart.edges;
@@ -211,8 +208,6 @@ export class FlowchartUtils{
 
       return splicedEdges;
   	}
-
-
 
 	public static delete_port(flowchart: IFlowchart, type: string, portIndex: number, nodeIndex: number): void{
 	    FlowchartUtils.disconnect_port(flowchart, type, portIndex, nodeIndex);
