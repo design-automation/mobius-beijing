@@ -36,6 +36,8 @@ export class GraphNode implements IGraphNode{
 
 	public position: number[] = [0,0];
 
+	private _time;
+
 	constructor(data?: any){
 		this._id = IdGenerator.getId();
 		if(data){
@@ -142,6 +144,14 @@ export class GraphNode implements IGraphNode{
 		this._procedure = values;
 	}
 
+	get time_taken(): number{
+		return this._time;
+	}
+
+	set time_taken(value: number){
+		this._time = value;
+	}
+
 
 	update_properties(nodeData: IGraphNode, nodeMap?: any): void{
 
@@ -189,6 +199,8 @@ export class GraphNode implements IGraphNode{
 		this._outputs.map(function(output){
 			output.reset();
 		});
+
+		this.time_taken = undefined;
 
 		return (this._hasExecuted == false); 
 	}

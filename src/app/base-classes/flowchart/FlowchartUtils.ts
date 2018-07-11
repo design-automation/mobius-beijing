@@ -303,6 +303,7 @@ export class FlowchartUtils{
 							executed.push(index);
 							let time2 = (new Date()).getTime();
 							let time_taken = (time2 - time1)/1000;
+							node.time_taken = time_taken;
 							console.log(`${node.name} executed in ${time_taken}s`);
 						}
 

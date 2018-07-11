@@ -19,6 +19,7 @@ export interface IGraphNode{
 	enabled: boolean;
 	hasExecuted: boolean;
 	hasError: boolean;
+	time_taken: number;
 
 	update_properties(data: any);
 	reset();

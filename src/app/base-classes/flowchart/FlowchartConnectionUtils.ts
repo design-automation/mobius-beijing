@@ -16,20 +16,20 @@ export class FlowchartConnectionUtils{
 	//	Resets all ports, connected to the edges, connected to the node
 	//
 	public static disconnect_node(flowchart: IFlowchart, idx: number): IFlowchart{
-  		
-		let node = flowchart.nodes[idx];
+		  let node = flowchart.nodes[idx];
 
   		node.inputs.map(function(input){
-  			if(input.isConnected){
 	  			input.isConnected = false;
-	  			input.value = undefined;
-  			}
+	  			input.value = " ";
   		});
 
   		node.outputs.map(function(output){
-  			output.isConnected = false;
-  			output.value = undefined;
+    			output.isConnected = false;
+    			output.value = " ";
   		});
+
+      let edges: number[] = FlowchartConnectionUtils.edges_with_node(flowchart, idx);
+      flowchart.edges = flowchart.edges.filter( (edge, index) => edges.indexOf(index) == -1 );
 
   		return flowchart;
   	}

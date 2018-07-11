@@ -39,10 +39,10 @@ export class Flowchart implements IFlowchart{
 		this._edges = [];
 		
 		if(data){
-			this._name = data["name"];
-			this._description = data["description"];
-			this._author = data["author"];
-			this._editable = data["_editable"] == undefined ? true : data["_editable"];
+			this._name = data["_name"];
+			this._description = data["_description"];
+			this._author = data["_author"];
+			this._editable = data["_editable"];
 
 			if(data["_globals"]){
 				this._globals = data["_globals"].map(function(in_data){

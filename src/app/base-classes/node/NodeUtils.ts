@@ -26,6 +26,9 @@ export abstract class NodeUtils{
 			n.name = node.name +  Math.floor(Math.random()*100);
 			n.id = id;
 			n.position  = [ Math.floor(Math.random()*100), Math.floor(Math.random()*100) ];
+
+			n.inputs.map((inp) => inp.value = ' ');
+			n.outputs.map((out) => out.value = ' ');
 		}
 
 		return n;
@@ -62,7 +65,7 @@ export abstract class NodeUtils{
 		if ( port instanceof InputPort ){
 			prop = "inputs";
 		}
-		else if(port instanceof OutputPort ){
+		else if( (port instanceof OutputPort) ){
 			prop = "outputs";
 		}
 		else{

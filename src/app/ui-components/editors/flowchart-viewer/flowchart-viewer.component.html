@@ -18,7 +18,9 @@
 					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" 
 					(wheel)="scale($event)">
 					
-					<div id="flowchart__name">{{fc.name || "No flowchart"}}</div>
+					<div id="flowchart__name">
+						{{fc.name || "No flowchart"}} with {{fc.nodes.length}} nodes and {{fc.edges.length}} edges
+					</div>
 
 				    <div class ="action-window">
 
@@ -65,9 +67,10 @@
 													</div>
 
 													<!--todo -->
-													<div class="action-button" (click)="save_node_to_library()" 
+													<div class="action-button" 
+														(click)="save_node_to_library()" 
 														matTooltip="Save Node To Library"
-														*ngIf="node.type == undefined">
+														*ngIf="false && node.type == undefined">
 														<mat-icon>file_download</mat-icon>
 													</div>
 													
@@ -120,6 +123,8 @@
 													</div>
 
 												</div>
+
+												<span style="margin: 0 auto;" *ngIf='node.time_taken'>Time: {{node.time_taken}}s</span>
 
 												<!-- outputs -->
 												<div class="port-container">

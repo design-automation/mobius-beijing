@@ -4,7 +4,9 @@ import { Component,
 		 OnInit, OnDestroy,
 		 ViewChild, HostListener} from '@angular/core';
 
-import {IProcedure, ProcedureFactory, ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
+import {IProcedure, ProcedureFactory, 
+		ProcedureTypes} from '../../../base-classes/procedure/ProcedureModule';
+import {NodeUtils} from '../../../base-classes/node/NodeModule';
 
 @Component({
   selector: 'app-procedure-item',

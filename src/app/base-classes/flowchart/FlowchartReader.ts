@@ -26,6 +26,8 @@ export abstract class FlowchartReader{
 	    	//FlowchartUtils.add_node_from_data(fc, node_data);
 	    }
 
+	    console.log(data)
+
 	    /// adding all edges
 	    for(let e_data of edges_data){
 	    	let in_node = e_data.input_address[0];

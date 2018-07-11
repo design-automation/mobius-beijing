@@ -76,7 +76,9 @@ export class FlowchartService {
     let fc: IFlowchart = new Flowchart();
     // get author from MobiusService
     fc.author = this._mb.user;
-    
+
+    this.update_modules();
+
     this.push_flowchart(fc);
     this.push_node(undefined);
 
@@ -141,7 +143,7 @@ export class FlowchartService {
   }
 
   disconnectNode(nodeIndex: number): void{
-    this.fcX.next(FlowchartConnectionUtils.disconnect_node(this._flowchart, nodeIndex));
+    //this.fcX.next();
   }
 
   deletePort(type: string, portIndex: number): void{

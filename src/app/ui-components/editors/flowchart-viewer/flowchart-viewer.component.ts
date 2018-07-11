@@ -7,6 +7,7 @@ import { NgClass } from '@angular/common';
 
 import { IFlowchart } from '../../../base-classes/flowchart/IFlowchart';
 import { FlowchartUtils } from '../../../base-classes/flowchart/FlowchartUtils';
+import { FlowchartConnectionUtils } from '../../../base-classes/flowchart/FlowchartConnectionUtils';
 import { IGraphNode, IEdge, GraphNode, NodeUtils } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort } from '../../../base-classes/port/PortModule';
 
@@ -30,7 +31,7 @@ abstract class  FlowchartRenderUtils{
     let el: any = document.getElementById(name);
 
     if(el == undefined) throw Error(`Element with ID ${name} not found`);
-    else console.log(`Element with ID ${name} was found`)
+    //else console.log(`Element with ID ${name} was found`)
 
     return el;
   }  
@@ -67,8 +68,6 @@ abstract class  FlowchartRenderUtils{
     else{
       throw Error("Unknown port type");
     }
-
-    console.log(node.name, portIndex, portType, {x: x, y: y});
 
     return {x: x, y: y};
   }
@@ -126,16 +125,14 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
   render_flowchart(){
-    let fc = this.fc;
-    if(fc){
+    if(this.fc){
       this.fc.nodes.map( (node) => node["width"] = FlowchartRenderUtils.node_width(node) );
       this.fc.edges.map( (edge) => {
         edge["inputPosition"] = FlowchartRenderUtils.get_port_position( this.fc.nodes[edge.input_address[0]], edge.input_address[1], "pi");
         edge["outputPosition"] = FlowchartRenderUtils.get_port_position(this.fc.nodes[edge.output_address[0]], edge.output_address[1], "po");
       })
-    }
-
-    this.$log.log("Flowchart was updated");
+    }  
+    //this.$log.log("Flowchart was re-rendered");
   }
 
 
@@ -304,7 +301,9 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
         this.shakeCount++;
 
         if(this.shakeCount == 8){
-           this._fs.disconnectNode(nodeIndex);
+            this.$log.log(`Disconnecting node ${node.name}`);
+            this.fc = FlowchartConnectionUtils.disconnect_node(this.fc, nodeIndex);
+            this.push_flowchart();
         }
 
       }
@@ -438,7 +437,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
         this._endPort = undefined;
       }
 
-      this.render_flowchart(this._fs.flowchart);
+      this.render_flowchart();
   }
 
 

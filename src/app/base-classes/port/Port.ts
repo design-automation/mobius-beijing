@@ -51,7 +51,7 @@ export abstract class Port implements IPort{
 		this.opts = portData["opts"];
 
 		// todo: assign computed also??
-		this._computed = portData["_computed"];
+		//this._computed = portData["_computed"];
 	}	
 
 	get id(): string{
@@ -88,6 +88,7 @@ export abstract class Port implements IPort{
 	}
 
 	set value(value: any){
+		console.log(`Setting value of Port: ${this.name} as ${value}`);
 		this.setComputedValue(value);
 	}
 
@@ -132,7 +133,7 @@ export abstract class Port implements IPort{
 	}
 
 	reset(): void{
-		this.setComputedValue(undefined);
+		this.value = " ";
 	}
 
 
