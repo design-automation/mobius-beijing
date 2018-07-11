@@ -24,8 +24,6 @@ export abstract class Port implements IPort{
 	public _hasDefault: boolean;
 	public _hasComputed: boolean;
 
-	protected _isFunction: boolean = false;
-
 	constructor(name: string){ 
 		this._id =  IdGenerator.getId();
 		this._name = name;
@@ -50,7 +48,6 @@ export abstract class Port implements IPort{
 		
 		this._disabled = portData["_disabled"];
 		this._default = portData["_default"];
-		this._isFunction = portData["_isFunction"];
 		this.opts = portData["opts"];
 
 		// todo: assign computed also??
@@ -167,14 +164,6 @@ export abstract class Port implements IPort{
 		throw Error("not defined");
 	}
 	
-	isFunction(): boolean{
-		return this._isFunction;
-	}
-
-	setIsFunction(){
-		this._isFunction = true;
-	}
-
 	isSelected(): boolean{
 		return this._selected; 
 	}

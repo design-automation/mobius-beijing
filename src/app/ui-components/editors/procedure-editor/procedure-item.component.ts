@@ -16,22 +16,26 @@ export class ProcedureItemComponent implements OnInit, OnDestroy{
 	@Input() prod: IProcedure;
 	@Input() active_procedure: IProcedure;
 	@Input() level: number;
+	@Input() root;
 
- 	@Output() action = new EventEmitter<{prod: IProcedure, type:string}>();
+ 	//@Output() action = new EventEmitter<{prod: IProcedure, type:string}>();
 
 	ngOnInit(){ }  
 
 	ngOnDestroy(){ }
 
 	updateProcedure($event, prod, comp){
-		console.log("prod updated");
 	}
 
-	onAction($event, prod, type): void{
-		if( !($event instanceof Event) )
-			this.action.emit({prod: $event, type: type}); 
-		else if($event["prod"])
-			this.action.emit({prod: prod, type: type});
+	onSelect($event): void{
+		this.root.active_procedure = this.prod;
 	}
+
+	// onAction($event, prod, type): void{
+	// 	if( !($event instanceof Event) )
+	// 		this.action.emit({prod: $event, type: type}); 
+	// 	else if($event["prod"])
+	// 		this.action.emit({prod: prod, type: type});
+	// }
 
 }

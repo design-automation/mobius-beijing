@@ -5,11 +5,14 @@ import {IComponent} from "./IComponent";
 
 export class DataProcedure extends Procedure{
 
+	private static count: number = 1;
+
 	constructor(data ?: {result: string, value: string}){
 		super(ProcedureTypes.Data, false); 
 
 		if(data == undefined){
-			data = {result: "variable_name", value: "value"}
+			data = {result: `var${DataProcedure.count}`, value: "value"};
+			DataProcedure.count++;
 		}
 
 		let left: IComponent = { expression: data.result, 

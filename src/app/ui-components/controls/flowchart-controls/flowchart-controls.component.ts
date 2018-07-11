@@ -5,11 +5,9 @@ import { MobiusService } from '../../../global-services/mobius.service';
 import { FlowchartService } from '../../../global-services/flowchart.service';
 import { ModuleService } from '../../../global-services/module.service';
 import { ConsoleService } from '../../../global-services/console.service';
-import { FileService } from '../../../global-services/file.service';
 
 import { ICodeGenerator, CodeFactory } from '../../../base-classes/code/CodeModule';
-import { IFlowchart, FlowchartReader } from '../../../base-classes/flowchart/FlowchartModule';
-
+import { IFlowchart, FlowchartReader, FlowchartWriter } from '../../../base-classes/flowchart/FlowchartModule';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +15,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PublishSettingsComponent } from '../publish-settings/publish-settings.component';
 
-import * as CircularJSON from 'circular-json';
 
 @Component({
   selector: 'app-flowchart-controls',
@@ -26,7 +23,14 @@ import * as CircularJSON from 'circular-json';
 })
 export class FlowchartControlsComponent implements OnInit{
 
-  private subscriptions = [];
+  //
+  //  FileInput View Child to open file for loading
+  //
+  @ViewChild('fileInput') fileInput: ElementRef;
+  open_picker(): void{
+    let el: HTMLElement = this.fileInput.nativeElement as HTMLElement;
+    el.click();
+  }
 
   // doesn't really need to extend viewer 
   constructor(private _mb: MobiusService, 
@@ -35,35 +39,43 @@ export class FlowchartControlsComponent implements OnInit{
               private _fs: FlowchartService, 
               private dialog: MatDialog) { }
 
-  ngOnInit(){ this.new_file(); }
+  //
+  //  Creates new file on loading
+  //
+  ngOnInit(){ this.new_flowchart(); }  
 
-  @ViewChild('fileInput') fileInput: ElementRef;
-  open_picker(): void{
-    let el: HTMLElement = this.fileInput.nativeElement as HTMLElement;
-    el.click();
-  }
-
-  new_file(): void{ 
-    this._fs.new_flowchart(this._mb.user);
-    this._mb.code_generator = CodeFactory.getCodeGenerator("js");
-    this._ms.load_modules();
-    this.$log.log("Created new file.");
-  }
-
+  //
+  //  Loads a new file by 
+  //  - Creating a new flowchart
+  //  - Setting the Code Generator to JS
+  //  - Loading the modules
+  //
   new_flowchart(): void{
-    this._fs.new_flowchart(this._mb.user);
-    this.$log.log("Created new flowchart.");
+    this._fs.new_flowchart();
   }
 
+  //
+  //  Adds a new node to the flowchart 
+  //
+  add_node(): void{
+    FlowchartUtils.add_node(this._fs.flowchart)
+  }
+
+
+  //
+  //
+  //  Loads a Mobius file from disk
+  //  String to Flowchart Conversion: Handled by FlowchartService
+  //
   load_file(url?: string): void{
     let file = this.fileInput.nativeElement.files[0];
     if (file) {
         var reader = new FileReader();
         reader.readAsText(file, "UTF-8");
-        let mb = this._mb;
+        let fs = this._fs;
         reader.onload = function (evt) {
             let fileString: string = evt.target["result"];
-            mb.load_file_from_string(fileString);
+            fs.load_flowchart_from_string(fileString);
         }
         reader.onerror = function (evt) {
             console.log("Error reading file");
@@ -71,35 +83,14 @@ export class FlowchartControlsComponent implements OnInit{
     }
   }
 
-  save_file(): void{ 
-    let flowchart = this._fs.flowchart;
-
-    let file = {};
-    let fileString: string;
-
-    file["language"] = "js";
-    file["modules"] = [];
-
-    let newFlowchart: IFlowchart = FlowchartReader.read_flowchart_from_data(flowchart);
-    file["flowchart"] = newFlowchart;
-    fileString = CircularJSON.stringify(file);
-
-    let fname: string = 'Scene' + (new Date()).getTime() + ".mob";
-    if(flowchart.name){
-      fname = flowchart.name;
-      if(!fname.endsWith(".mob")){
-        fname = fname + ".mob";
-      }
-    }
-    
-    FileService.downloadAsJSON(fileString, fname);
-  }
-
+  //
+  //  Opens the publish settings dialog box 
+  //
   publish_settings(): void{
     let dialogRef = this.dialog.open(PublishSettingsComponent, {
             height: '500px',
             width: '450px',          
-            data: {}
+            data: this._fs.flowchart
         });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -108,8 +99,12 @@ export class FlowchartControlsComponent implements OnInit{
 
   }
 
-  add_node(): void{
-    this._fs.push_flowchart(FlowchartUtils.add_node(this._fs.flowchart));
+  //
+  //  Uses FlowchartWriter to save the flowchart as a JSON file
+  //
+  save_file(): void{ 
+    FlowchartWriter.save_flowchart_as_json(this._fs.flowchart);
   }
+
 
 }

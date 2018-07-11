@@ -10,14 +10,12 @@ export class InputPort extends Port{
 	// input
 	// color
 	// file
-	private _fnValue: IGraphNode;
-
 	constructor(name: string, type?: {name: InputPortTypes, value: any}){ 
 		super(name);
 
 		if(type !== undefined){
 			this._type = type.name;
-			this.setDefaultValue(type.value);
+			this.setDefaultValue(type.value || "undefined");
 		}
 		else{
 			this._type = InputPortTypes.Input;
@@ -32,14 +30,6 @@ export class InputPort extends Port{
 
 	getOpts(): any{
 		return this.opts;
-	}
-
-	getFnValue(): IGraphNode{
-		return this._fnValue;
-	}
-
-	setFnValue(_fnValue: IGraphNode): void{
-		this._fnValue = _fnValue;
 	}
 
 }

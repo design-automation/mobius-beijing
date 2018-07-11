@@ -1,11 +1,20 @@
-import {IFlowchart} from './IFlowchart';
-import {Flowchart} from './Flowchart';
-import {IGraphNode, IEdge, GraphNode} from '../node/NodeModule';
-import {ICodeGenerator, IModule} from '../code/CodeModule';
-import {InputPort} from '../port/PortModule';
+import { IFlowchart } from './IFlowchart';
+import { Flowchart } from './Flowchart';
+
+import { IGraphNode, IEdge, GraphNode, NodeUtils } from '../node/NodeModule';
+import { ICodeGenerator, IModule } from '../code/CodeModule';
+import { InputPort, PortTypes } from '../port/PortModule';
+
 
 export class FlowchartConnectionUtils{
-	
+
+	// =============== Disconnect Nodes
+
+	//
+	//	Disconnects a node
+	//	Deletes any edges connected to the node
+	//	Resets all ports, connected to the edges, connected to the node
+	//
 	public static disconnect_node(flowchart: IFlowchart, idx: number): IFlowchart{
   		
 		let node = flowchart.nodes[idx];
@@ -26,7 +35,35 @@ export class FlowchartConnectionUtils{
   	}
 
 
-  	public static edges_with_node(flowchart: IFlowchart, node_index: number){
+	public static disconnect_edges_with_port_idx(flowchart: IFlowchart, nodeIndex: number, portIndex: number, type: string): number[]{
+      let splicedEdges: number[] = [];
+      let edges = flowchart.edges;
+      
+      for(let e=0; e < edges.length; e++){
+        let edge = edges[e];
+
+        // if type == "input"
+        if( type == "input" && edge.input_address[0] == nodeIndex && edge.input_address[1] == portIndex ){
+            let port = flowchart.nodes[edge.output_address[0]].outputs[edge.output_address[1]];
+            port.isConnected = false;
+            port.value = undefined;
+            splicedEdges.push(e);
+        }
+        else if( type == "output" && edge.output_address[0] == nodeIndex && edge.output_address[1] == portIndex ){
+            let port = flowchart.nodes[edge.input_address[0]].inputs[edge.input_address[1]];
+            port.isConnected = false;
+            port.value = undefined;
+            splicedEdges.push(e);
+        }
+      }
+
+      return splicedEdges;
+  }
+
+	//
+	//	Returns array of edge indices connected to a node
+	//
+  public static edges_with_node(flowchart: IFlowchart, node_index: number): number[]{
 		let linked_edges: number[] = [];
 		let edges = flowchart.edges;
 
@@ -48,5 +85,6 @@ export class FlowchartConnectionUtils{
 
 		return linked_edges;
   	}
+
 }
 

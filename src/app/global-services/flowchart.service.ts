@@ -11,8 +11,9 @@ import {IProcedure} from "../base-classes/procedure/IProcedure";
 
 import {ConsoleService, EConsoleMessageType} from "./console.service";
 import {ModuleService} from "./module.service";
+import {MobiusService} from "./mobius.service";
+import * as CircularJSON from 'circular-json';
 
-//import {LayoutService} from "./layout.service";
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
@@ -37,9 +38,13 @@ export class FlowchartService {
 	public node$ = this.nX.asObservable();
 
 
-	constructor(private consoleService: ConsoleService, 
-	          public dialog: MatDialog, private http: HttpClient) { 
+	constructor(private $log: ConsoleService, 
+              private _mb: MobiusService, 
+              private _ms: ModuleService,
+	            public dialog: MatDialog, 
+              private http: HttpClient) { 
 	};
+
 
   push_flowchart(fc: IFlowchart){
     this.fcX.next(fc);
@@ -53,20 +58,69 @@ export class FlowchartService {
     return this.fcX.getValue();
   }
 
+  update_modules(): void{
+    this._ms.load_modules();
+  }
+
+  update_code_generator(value): void{
+    this._mb.code_generator = value;
+  }
+
+  // ------------ File Functions
+
   //
+  // Creates a new flowchart
+  // Handles authorship, updates Modules and Code Generator
   //
-  //
-  new_flowchart(user: string): void{
-    let fc: IFlowchart = new Flowchart(user);
+  new_flowchart(): void{
+    let fc: IFlowchart = new Flowchart();
+    // get author from MobiusService
+    fc.author = this._mb.user;
+    
     this.push_flowchart(fc);
     this.push_node(undefined);
+
+    this.$log.log("Created new flowchart.");
   }
 
-  getCodeGenerator(): ICodeGenerator{
-    console.log("shouldn't")
-    return this.code_generator;
+  //
+  // Loads a file from a string
+  //
+  load_flowchart_from_string(fileString: string): void{
+      let _this = this;
+      let jsonData: {language: string, flowchart: JSON, modules: JSON};
+
+      try{
+        let data = CircularJSON.parse(fileString);
+
+        this.update_code_generator(CodeFactory.getCodeGenerator(data["language"]));
+        this.update_modules();
+
+        let flowchart: IFlowchart = FlowchartReader.read_flowchart_from_data(data["flowchart"]);
+        this.push_flowchart(flowchart);
+        // TODO: select a node
+      }
+      catch(err){
+        this.$log.log(`Error loading file from string: ${err}`);
+      }
   }
 
+  //
+  // Loads content from a URL and then passes a string, to be read as a flowchart
+  //
+  load_file_from_url(url: string): void{
+      try{
+          let fileString = this.http.get(url).subscribe(res => { 
+              this.load_flowchart_from_string(JSON.stringify(res));
+          });
+      }
+      catch(ex){
+          this.$log.log("Error fetching file from from URL: ${url}");
+      }
+  }
+
+
+  // ------------ Edge Utils
   addEdge(outputAddress: number[], inputAddress: number[]):  void{
 
       if(outputAddress[0] == inputAddress[0]){
@@ -74,11 +128,11 @@ export class FlowchartService {
       }
 
       try{
-         this.fcX.next(FlowchartUtils.add_edge(this._flowchart, outputAddress, inputAddress));
-        this.consoleService.addMessage("New Edge was added");
+        this.fcX.next(FlowchartUtils.add_edge(this.flowchart, outputAddress, inputAddress));
+        this.$log.log("New Edge was added");
       }
       catch(ex){
-        this.consoleService.addMessage(ex, EConsoleMessageType.Error);
+        this.$log.log(ex);
       }
   }
 
@@ -98,7 +152,7 @@ export class FlowchartService {
     FlowchartUtils.delete_edge(this._flowchart, edgeIndex);
     
     // print message to console
-    this.consoleService.addMessage("Edge was deleted");
+    this.$log.log("Edge was deleted");
   }
 
 }

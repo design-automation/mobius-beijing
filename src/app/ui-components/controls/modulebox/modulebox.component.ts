@@ -9,6 +9,55 @@ import {NodeUtils} from '../../../base-classes/node/NodeUtils';
 import {IGraphNode} from '../../../base-classes/node/NodeModule';
 import {PortTypes} from '../../../base-classes/port/PortModule';
 
+const getStringForProcedureType = function(type: ProcedureTypes): string{
+	let value:string = "";
+
+	switch(type){
+
+		case ProcedureTypes.Data: 
+			value = "Variable";
+			break;
+
+		case ProcedureTypes.Action: 
+			value = "Function";
+			break;
+
+		case ProcedureTypes.IfControl: 
+			value = "If";
+			break;
+
+		case ProcedureTypes.ElseControl: 
+			value = "Else";
+			break;
+
+		case ProcedureTypes.ElseIfControl: 
+			value = "Else-If";
+			break;
+
+		case ProcedureTypes.ForLoopControl: 
+			value = "For-loop";
+			break;
+
+		case ProcedureTypes.WhileControl: 
+			value = "While-loop";
+			break;
+
+		case ProcedureTypes.LoopBreak: 
+			value = "Break";
+			break;
+
+		case ProcedureTypes.LoopContinue: 
+			value = "Continue";
+			break;
+
+		case ProcedureTypes.Comment: 
+			value = "Comment";
+			break;
+	}
+
+	return value;
+}
+
 
 @Component({
   selector: 'app-modulebox',
@@ -17,6 +66,7 @@ import {PortTypes} from '../../../base-classes/port/PortModule';
 })
 export class ModuleboxComponent implements OnInit{
 
+	// Defines the currently allowed procedure types
   	readonly procedureTypes: ProcedureTypes[] = [
 		ProcedureTypes.Data, 
 		ProcedureTypes.ForLoopControl,
@@ -29,11 +79,16 @@ export class ModuleboxComponent implements OnInit{
 		ProcedureTypes.Comment
   	];
 
+  	// Port types: Input / Output
+  	readonly PTYPE = PortTypes;
+  	readonly getStr = getStringForProcedureType;
+
   	private subscriptions = [];
   	private active_node: IGraphNode;
+
   	_moduleList = [];
   	_category: string[] = [];
-
+ 
   	constructor(private _fs: FlowchartService, 
   				private _ms: ModuleService,
   				private layoutService: LayoutService) { }
@@ -59,8 +114,9 @@ export class ModuleboxComponent implements OnInit{
 	}
 
 	//
+	//  Adds a function from the function library to the procedure
+	// 
 	addActionProcedure(fn: {name: string, params: string[], module: string}){
-
 		if(this.active_node == undefined){
 			alert("Oops.. No Node Selected");
 			return;
@@ -72,59 +128,9 @@ export class ModuleboxComponent implements OnInit{
 		this.active_node = NodeUtils.add_procedure(this.active_node, prod);
 	}
 
-
-	getStringForProcedureType(type: ProcedureTypes): string{
-
-		let value:string = "";
-
-		switch(type){
-
-			case ProcedureTypes.Data: 
-				value = "Variable";
-				break;
-
-			case ProcedureTypes.Action: 
-				value = "Function";
-				break;
-
-			case ProcedureTypes.IfControl: 
-				value = "If";
-				break;
-
-			case ProcedureTypes.ElseControl: 
-				value = "Else";
-				break;
-
-			case ProcedureTypes.ElseIfControl: 
-				value = "Else-If";
-				break;
-
-			case ProcedureTypes.ForLoopControl: 
-				value = "For-loop";
-				break;
-
-			case ProcedureTypes.WhileControl: 
-				value = "While-loop";
-				break;
-
-			case ProcedureTypes.LoopBreak: 
-				value = "Break";
-				break;
-
-			case ProcedureTypes.LoopContinue: 
-				value = "Continue";
-				break;
-
-			case ProcedureTypes.Comment: 
-				value = "Comment";
-				break;
-
-
-		}
-
-		return value;
-	}
-
+	//
+	//	Adds a variable / for-loop / while-loop / if / else / else-if
+	//
 	addProcedure($event, type: ProcedureTypes): void{
 		$event.stopPropagation();
 		let prod:IProcedure;
@@ -132,11 +138,17 @@ export class ModuleboxComponent implements OnInit{
 		this.active_node = NodeUtils.add_procedure(this.active_node, ProcedureFactory.getProcedure(type));
 	}
 
-	addPort(type: string): void{
-	  NodeUtils.add_port(this.active_node, PortTypes.Input, undefined);
+
+	//
+	// Adds an input or output port to the node
+	//
+	addPort(port_type: PortTypes): void{
+	  NodeUtils.add_port(this.active_node, port_type, undefined);
     }
 
-
+    //
+    //	TODO: Opens Module Help Viewer
+    //
     openModuleHelp($event, category: string): void{
     	$event.stopPropagation();
     	this.layoutService.showHelp({module: category, name: undefined})

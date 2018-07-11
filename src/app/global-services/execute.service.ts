@@ -21,6 +21,11 @@ export class ExecuteService {
 
     private static consoleMessages = [];
 
+
+    //
+    //    Global print function supplied to the execution 
+    //    to print values to console viewer
+    //
     private static printFunction = function(varName: string, value: any){
         let consoleHTML: string = "";
         
@@ -50,6 +55,7 @@ export class ExecuteService {
         ExecuteService.consoleMessages.push(consoleHTML);
     }
   
+
     public execute(): any{
 
         let flowchart: IFlowchart = this._fs.flowchart;

@@ -33,10 +33,11 @@
 									[(ngModel)]="inp.name">
 							</div>
 
-							<div class='row' *ngIf='!inp.isFunction()'>
+							<div class='row'>
 								<!--<span class='label'>Type</span>-->
 								<span class='content'>
-									<select name={{inp.name}}_type
+									<select 
+									    name={{inp.name}}_type
 									    [(ngModel)]="inp.type">
 						         	    <option *ngFor="let x of inputPortOpts" [value]="x" [selected]="inp.type == x">
 						         	    	{{ x | port_type_name }}
@@ -45,12 +46,6 @@
 								</span>
 							</div>
 	
-							<div class="row" *ngIf='inp.isFunction()'>
-								<span class="content" (click)="addFunctionToProcedure(inp)" matTooltip="Add function to procedure">
-									<!-- <mat-icon>add</mat-icon> --> [add]
-								</span>
-							</div>
-							
 						</div>			
 
 						<div class="controls">

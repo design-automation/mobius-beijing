@@ -6,24 +6,27 @@
 		
 		<section class="filename">
 			<label>Name of the file</label>
-			<input [(ngModel)]="_flowchart.name">
+			<input [(ngModel)]="fw.name">
 		</section>
 
 		<section class="description">
 			<label>Description</label>
-			<textarea [(ngModel)]="_flowchart.description"  rows="4"></textarea>
+			<textarea [(ngModel)]="fw.description"  rows="4"></textarea>
 		</section>
 
 	</div>
 	
-	<div class="container">
+
+	<!-- Globals -->
+	<!-- <div class="container">
+		
 		<h3>
 			Global Variables <button (click)="addGlobal()">Add New </button>
 		</h3>
 		
 		<div class="global-container">
 			<div class='global' *ngFor="let inp of _globals; let i=index">
-
+	
 				<span class='name' contenteditable="true" (blur)="updateGlobal($event, inp)" spellcheck="false">
 						{{ inp.getName() }}
 				</span>
@@ -31,7 +34,7 @@
 				<select class='type' (change)="updateType($event.target.value, inp)">
 	         	    <option *ngFor="let x of inputPortOpts" [value]="x" [selected]="inp.getType() == x">{{getInputTypeName(x)}}</option>
 	            </select>
-
+	
 				<div class="controls">
 					<button (click)='openSettingsDialog(inp)'>
 						<mat-icon>settings</mat-icon>
@@ -40,33 +43,36 @@
 			    		<mat-icon>delete</mat-icon>
 				    </button>
 				</div>
-
+	
 			</div>
 		</div>
-	</div>
+	
+	</div> -->
 
-	<div class="container" *ngIf="_nodes.length>0">
+	<!-- Node Settings -->
+	<!-- <div class="container" *ngIf="fw.nodes.length">
 		<h3>Visible Node</h3>
 		
 		<section>
-
-			<label>Node to Display</label>
-			<select class='type' (change)="_flowchart.selectedNode = $event.target.value;">
-         	    <option *ngFor="let x of _nodes" 
-         	    	[value]="x.getId()" [selected]="_flowchart.selectedNode == x.getId()">{{x.getName()}}
-         	    </option>
+			<label>Node to Display{{fw.display_node}}</label>
+			<select class='type' 
+				[(ngModel)]="fw.display_node">
+         	    <option 
+         	    	*ngFor="let #x of fw.nodes; #i = index" 
+         	    	[value]="i" [selected]="fw.display_node == i">
+         	    	{{x.name}}{{fw.display_node == i}}         	    
+         	   	</option>
 	        </select>
 		
 		</section>
 
-	</div>
+	</div> -->
 
-	<div class="container" *ngIf="_nodes.length>0">
+	<div class="container" *ngIf="fw.nodes.length">
 		<h3>Should this flowchart be editable in the viewer?</h3>
 		
 		<section>
-			<mat-checkbox (change)="_flowchart.editable = !_flowchart.editable;" 
-			[checked]="_flowchart.editable"></mat-checkbox>
+			<mat-checkbox [(ngModel)] = "fw.editable"></mat-checkbox>
 		</section>
 
 	</div>
@@ -76,6 +82,7 @@
 
 	<div class="container" style="text-align: center">
 		<button mat-button (click)="save()">Save File</button>
+		<button mat-button (click)="close()">Close</button>
 	</div>
 
 </div>

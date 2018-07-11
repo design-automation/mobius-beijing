@@ -15,7 +15,6 @@ export class GraphNode implements IGraphNode{
 	private _name: string;
 	private _id: string; 
 	private _version: number = 1; 
-	private _enabled: boolean; 
 
 	private _type: string = undefined;
 
@@ -23,8 +22,8 @@ export class GraphNode implements IGraphNode{
 	private _outputs: OutputPort[] = [];
 	private _procedure: IProcedure[] = [];
 
+	private _enabled: boolean = true; 
 	private _hasExecuted: boolean = false;
-	private _isDisabled: boolean = false; 
 	public _hasError: boolean = false;
 
 
@@ -150,7 +149,7 @@ export class GraphNode implements IGraphNode{
 		this._position = nodeData["_position"] || [0, 0];
 
 		// map direct properties
-		this._isDisabled = nodeData["_isDisabled"];
+		this._enabled = nodeData["_enabled"];
 
 
 		// add inputs

@@ -1,11 +1,11 @@
 import { Component, Injector, Inject } from '@angular/core';
-import { FlowchartService } from '../../../global-services/flowchart.service';
-import { MobiusService } from '../../../global-services/mobius.service';
 
 import { IGraphNode } from '../../../base-classes/node/NodeModule';
 import { InputPort, OutputPort, InputPortTypes, OutputPortTypes } from '../../../base-classes/port/PortModule';
 import { ParameterSettingsDialogComponent } from '../../editors/parameter-editor/parameter-settings-dialog.component';
+
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { IFlowchart, FlowchartWriter } from '../../../base-classes/flowchart/FlowchartModule';
 
 @Component({
   selector: 'app-publish-settings',
@@ -14,12 +14,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class PublishSettingsComponent{
 
-  _flowchart;
-  _globals;
-  _nodes;
-  private subscriptions = [];
-  private active_node: IGraphNode;
-
+  fw;
 
   inputPortOpts: InputPortTypes[] = [
         InputPortTypes.Input,
@@ -29,31 +24,23 @@ export class PublishSettingsComponent{
         InputPortTypes.Checkbox
     ]; 
 
-  constructor(private _fs: FlowchartService,
-              private _mb: MobiusService,  
-              public dialogRef: MatDialogRef<PublishSettingsComponent>, 
-              @Inject(MAT_DIALOG_DATA) public data: any, 
-              public dialog: MatDialog) { }
-
-
-  ngOnInit(){
-    this.subscriptions.push(this._fs.flowchart$.subscribe( (fw) => {
-        this._flowchart = fw;
-        this._globals = this._flowchart.globals;
-        this._nodes = this._flowchart.node;
-    }));
-  }
-
-  ngOnDestroy(){
-    this.subscriptions.map(function(s){
-      s.unsubscribe();
-    })
-  }
+  constructor(public dialogRef: MatDialogRef<PublishSettingsComponent>, 
+              @Inject(MAT_DIALOG_DATA) public flowchart: IFlowchart, 
+              public dialog: MatDialog) { this.fw = flowchart }
 
   addGlobal(): void{
-  	let inputPort = new InputPort("global"  + this._globals.length);
-    this._globals.push(inputPort);
-  	this._flowchart.globals = this._globals;
+    //TODO: 
+  	let inputPort = new InputPort("global"  + this.fw._globals.length);
+    this.fw.globals.push(inputPort);
+  }
+
+  save(): void{
+    FlowchartWriter.save_flowchart_as_json(this.fw);
+    this.close();
+  }
+
+  close(): void{
+    this.dialogRef.close();
   }
 
   getInputTypeName(type: InputPortTypes): string{
@@ -99,36 +86,9 @@ export class PublishSettingsComponent{
   }
 
   deleteGlobal(index: number): void{
-    this._globals.splice(index, 1);
-    this._flowchart.globals = this._globals;
-  }
-
-  updateGlobal($event, port: InputPort|OutputPort): void{
-      let name: string =  $event.srcElement.innerText; 
-
-      // check for validity
-      name = name.replace(/[^\w]/gi, '');
-
-      if(name.trim().length > 0){
-        // put a timeout on this update or something similar to solve jumpiness
-        port.name = name;
-      }
-  }
-
-  updateType(type: InputPortTypes|OutputPortTypes, port: InputPort|OutputPort): void{
-        
-        port.type = (type);
-
-        //defaults
-        if(type == InputPortTypes.Slider){
-          port.setOpts({min: 0, max: 100, step: 1});
-          port.setDefaultValue(50);
-        }
-
-  }
-
-  save(): void{
-    //this._mb.save_file(this._flowchart);
+    // TODO:
+    /*this._globals.splice(index, 1);
+    this.fw.globals = this._globals;*/
   }
 
 }

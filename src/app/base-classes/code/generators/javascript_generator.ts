@@ -22,7 +22,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			let connector_lines: any = [];
 			let code_block: string = "";
 
-			let nodeOrder: number[] = FlowchartUtils.get_node_order(flowchart);
+			/*let nodeOrder: number[] = FlowchartUtils.get_node_order(flowchart);
 			let all_nodes: IGraphNode[] = flowchart.nodes;
 			let all_edges: IEdge[] = flowchart.edges;
 
@@ -57,8 +57,9 @@ export class CodeGeneratorJS extends CodeGenerator{
 				fn_calls.push( this.get_code_function_call(node) );
 			}
 
-			code_block = code_defs.join(";\n\n") + "\n" + fn_calls.join("\n");
-			return code_block;
+			code_block = code_defs.join(";\n\n") + "\n" + fn_calls.join("\n");*/
+			return "Currently Unavailable";
+			//return code_block;
 		}
 
 		get_code_function_call(node: IGraphNode, params?: any, executionCode?: boolean): string{
@@ -101,7 +102,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			// make function call and assign to variable of same name
 			fn_call = "let " + node.name +  "=" + node.name + node.version + "( " + param_values.join(", ") + " );" ;
 
-			if(node.enabled){
+			if(!node.enabled){
 				fn_call = "/* " + fn_call + " */";
 			}
 			
@@ -158,16 +159,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 			for( let o=0; o < outputs.length; o++ ){
 				let oname = outputs[o].name; 
 				nodeVars.push(oname);
-
 				results.push( oname + " : " + oname);
-
-				if(outputs[o].isFunction() && withoutFnOutput){
-					// do nothing
-				}
-				else{
-					opInits.push( this.get_code_port_output(outputs[o]) )
-				}
-
+				opInits.push( this.get_code_port_output(outputs[o]) )
 			}
 			
 			// add initialization for outputs
@@ -205,7 +198,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 			let code :string = "let " + destination_node.inputs[destination_port].name + "="
 								+ this.get_code_node_io(source_node, source_port) + ";";
 
-			if(destination_node.enabled || source_node.enabled){
+			if(!destination_node.enabled || !source_node.enabled){
 				code = "/* " + code + " */";
 			}
 
@@ -302,11 +295,11 @@ export class CodeGeneratorJS extends CodeGenerator{
 
 				// add statement
 				let statement: string = "";
-				if(prod_type == ProcedureTypes.IfElseControl){
-					statement = "// if-else";
+				if(prod_type == ProcedureTypes.IfControl){
+					statement = "if (" + procedure.left.expression + "){"
 				}
 				else if(prod_type == ProcedureTypes.IfControl){
-					statement = "if (" + procedure.left.expression + "){"
+					statement = "else if (" + procedure.left.expression + "){"
 				}
 				else if(prod_type == ProcedureTypes.ElseControl){
 					statement = "else {";
@@ -343,7 +336,7 @@ export class CodeGeneratorJS extends CodeGenerator{
 				});
 
 				// add ending
-				if (prod_type !== ProcedureTypes.IfElseControl) codeArr.push("}\n")
+				codeArr.push("}\n")
 				code = codeArr.join("\n");
 			}
 
@@ -368,11 +361,6 @@ export class CodeGeneratorJS extends CodeGenerator{
 		get_code_port_output(port: OutputPort): string{
 
 			let prepend: string = "let ";
-
-			if(port.isFunction()){
-				prepend = "const ";
-			}
-
 			return prepend + port.name + " = " + port.getDefaultValue(); 
 		}
 
@@ -390,6 +378,8 @@ export class CodeGeneratorJS extends CodeGenerator{
 			str +=	this.get_code_node(node, prodArr) + "\n" + 
 					this.get_code_function_call(node, [], true) + "\n" + 
 					"return " + node.name + ";" 
+
+			console.log(`Generated Script: ${str}`);
 
 			let result: any;
 

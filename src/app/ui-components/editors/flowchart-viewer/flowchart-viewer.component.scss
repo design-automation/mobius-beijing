@@ -5,6 +5,14 @@ split-area{
 }
 
 
+#flowchart__name{
+	margin: 0 auto;
+	font-size: 14px;
+	line-height: 28px;
+	font-weight: bold;
+	color: $color2;
+}
+
 .viewer{
 
 	@extend .viewer;

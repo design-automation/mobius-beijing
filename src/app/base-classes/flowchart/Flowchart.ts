@@ -25,13 +25,13 @@ export class Flowchart implements IFlowchart{
 	private _sortOrder: number[];
 
 	private _globals = [];
-	private _visibleNode;
+	private _displayed_node: number;
 
 	private _editable;
 
 	constructor(data?: any){ 
-		this._name = "new_mobius_flowchart";
-		this._description = "Nulla sed consequat ea est laboris ut commodo pariatur do laborum ut dolore veniam adipisicing anim.";
+		this._name = "new_flowchart.mob";
+		this._description = "Hello, World!";
 		this._author = "new_author";
 		this._editable = true;
 		this._globals = [];
@@ -102,23 +102,6 @@ export class Flowchart implements IFlowchart{
 		this._globals = arr;
 	}
 
-	set visibleNode(id: number){
-		console.log("why is this called?")
-		this._visibleNode = this._nodes[id];
-	}
-
-	get visibleNode(){
-		return this._visibleNode;
-	}
-
-	set editable(value){
-		this._editable = value;
-	}
-
-	get editable(): any{
-		return this._editable;
-	}
-
 	get nodes(): IGraphNode[]{
 		return this._nodes;
 	}
@@ -129,6 +112,22 @@ export class Flowchart implements IFlowchart{
 
 	set edges(edges: IEdge[]){
 		this._edges = edges;
+	}
+
+	set editable(value){
+		this._editable = value;
+	}
+
+	get editable(): any{
+		return this._editable;
+	}
+
+	get display_node(): number{
+		return this._displayed_node;
+	}
+
+	set display_node(index: number){
+		this._displayed_node = index;
 	}
 
 }

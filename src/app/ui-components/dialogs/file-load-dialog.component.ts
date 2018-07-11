@@ -14,14 +14,6 @@ export class FileLoadDialogComponent {
   message: string;
 
   constructor(public dialogRef: MatDialogRef<FileLoadDialogComponent>) {
-    // let myStorage = window.localStorage;
-    // let property = MOBIUS.PROPERTY.FLOWCHART;
-    // let storageString = myStorage.getItem(property);
-
-    // if(storageString){
-    //   this.message = "A file saved at " + CircularJSON.parse(storageString)["_lastSaved"] + " was found. \
-    //         Do you want to reload?"
-    // }
   }
 
   onNoClick(): void {

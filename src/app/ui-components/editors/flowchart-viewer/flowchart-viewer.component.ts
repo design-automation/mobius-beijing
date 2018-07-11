@@ -25,14 +25,26 @@ abstract class  FlowchartRenderUtils{
     return width;
   }
 
+  public static port_dom_element(node: IGraphNode, portIndex: number, portType: string): any{
+    let name: string = "n" + node.id + portType + portIndex;
+    let el: any = document.getElementById(name);
+
+    if(el == undefined) throw Error(`Element with ID ${name} not found`);
+    else console.log(`Element with ID ${name} was found`)
+
+    return el;
+  }  
+
   public static get_port_position(node: IGraphNode, portIndex: number, portType: string): {x: number, y: number}{
 
     let x: number;
     let y: number;
     let port_size: number = 15;
 
-    let name: string = "n" + node.id + portType + portIndex;
-    let el: any = document.getElementById(name);
+    // let name: string = "n" + node.id + portType + portIndex;
+    // let el: any = document.getElementById(name);
+
+    let el: any = FlowchartRenderUtils.port_dom_element(node, portIndex, portType);
 
     if(el == null || node == undefined){
       return {x: 0, y: 0};
@@ -55,6 +67,8 @@ abstract class  FlowchartRenderUtils{
     else{
       throw Error("Unknown port type");
     }
+
+    console.log(node.name, portIndex, portType, {x: x, y: y});
 
     return {x: x, y: y};
   }
@@ -79,23 +93,21 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   _selectedNodeIndex: number;
   _selectedPortIndex: number;
 
-
-  fc: IFlowchart;
-
   showLibrary: boolean = false;
 
   showDialog: {status: boolean, position: number[]} = {status: false, position: [0,0]};
 
   private subscriptions = [];
+  private fc: IFlowchart;
   private active_node: IGraphNode;
 
   constructor(private _fs: FlowchartService, 
     private _mb: MobiusService,
-    private consoleService: ConsoleService, 
+    private $log: ConsoleService, 
     private _ns: NodeLibraryService){}
 
   ngOnInit(){
-    this.subscriptions.push(this._fs.flowchart$.subscribe((fc) => this.render_flowchart(fc) ));
+    this.subscriptions.push(this._fs.flowchart$.subscribe((fc) => { this.fc = fc; this.render_flowchart(); }));
     this.subscriptions.push(this._fs.node$.subscribe( (node) => this.active_node = node ));
   }
 
@@ -113,8 +125,8 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     this._fs.push_node(this.active_node)
   }
 
-  render_flowchart(fc: IFlowchart){
-    this.fc = fc;
+  render_flowchart(){
+    let fc = this.fc;
     if(fc){
       this.fc.nodes.map( (node) => node["width"] = FlowchartRenderUtils.node_width(node) );
       this.fc.edges.map( (edge) => {
@@ -123,7 +135,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
       })
     }
 
-    console.log("Flowchart updated") 
+    this.$log.log("Flowchart was updated");
   }
 
 
@@ -178,7 +190,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     
     if(value > 0.2 && value < 1.5){
       this.zoom = Number( (value).toPrecision(2) );
-      this.updateEdges();
+      this.render_flowchart();
     }
   }
 
@@ -256,7 +268,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   }
 
   //
-  //  node dragging
+  //  Node Draggin
   //
   dragStart = {x: 0, y: 0};
   trend = {x: 1, y: 1};
@@ -298,7 +310,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
       }
     }
 
-    this.updateEdges();
+    this.render_flowchart();
   }
 
   nodeDragEnd($event, node): void{
@@ -318,11 +330,11 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
     this.trend = {x: 1, y: 1};
     this.shakeCount = 0;
 
-    this.updateEdges();
+    this.render_flowchart();
   }
 
   //
-  //  port dragging to link
+  //  Port Dragging to created edges
   //
   _startPort: InputPort|OutputPort;
   _endPort: InputPort|OutputPort;
@@ -349,9 +361,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
         type = "po";
       }
       
-
       let port_position = FlowchartRenderUtils.get_port_position(this.fc.nodes[address[0]], address[1], type);
-      console.log(port_position)
 
       this.mouse_pos.start = {x: port_position.x, y: port_position.y };
       this.mouse_pos.current = {x: port_position.x, y: port_position.y };
@@ -397,7 +407,6 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
       if(this._startPort !== undefined && this._endPort !== undefined){
 
-
         let inputPort: number[]; 
         let outputPort: number[];
 
@@ -421,13 +430,15 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
             this.addEdge(outputPort, inputPort);
         }
         else{
-            alert("Invalid connection")
+            this.$log.log("Invalid connection")
         }
 
         // clear the variables
         this._startPort = undefined; 
         this._endPort = undefined;
       }
+
+      this.render_flowchart(this._fs.flowchart);
   }
 
 
@@ -440,7 +451,7 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
   //
   // Edge drawing functions
   //
-  getEdgePath(edge: IEdge): string{
+  getEdgePath(edge: IEdge): {}{
 
     let output_position, input_position;
 
@@ -457,86 +468,9 @@ export class FlowchartViewerComponent implements OnInit, OnDestroy{
 
     }
 
-    return this.edgeString( output_position, input_position );
+    return edge;
 
   }
-
-
-  //
-  //  todo: Balu
-  //
-  //
-  edgeString(output_port_position: {x: number, y: number},  input_port_position: {x: number, y: number}): string{
-
-    if(output_port_position == undefined || input_port_position == undefined)
-      return "";
-
-    // add margin to output port in downward direction
-    //output_port_position.y += 30; 
-    // add margin to input port in upward direction
-    //input_port_position.y -= 30;
-    //
-    
-    let path: string;
-    let move: string = "M";
-    let line: string = " L";
-    let control: string = " Q";
-
-    // add the start point from output
-    let startPoint: string = output_port_position.x + " " + output_port_position.y;
-    let endPoint: string = input_port_position.x +  " " + input_port_position.y;
-
-    // move downwards/upwards in straight line
-    let translate: number = 10; 
-    let shifted_startPoint: string = output_port_position.x  + translate + " " + (output_port_position.y);
-    let shifted_endPoint: string = input_port_position.x - translate + " " + (input_port_position.y );
-
-    // compute curvy line
-    var x0 = output_port_position.x + translate;
-    var y0 = output_port_position.y ;
-    var x3 =  input_port_position.x - translate;
-    var y3 =  input_port_position.y ;
-    
-    var mx1=0.75*x0+0.25*x3;
-    var mx2=0.25*x0+0.75*x3;
-
-    var my1=0.75*y0+0.25*y3;
-    var my2=0.25*y0+0.75*y3;
-
-    var distance = 0.25*Math.round(Math.sqrt(Math.pow((x3-x0),2)+Math.pow((y3-y0),2)));
-    var pSlope =(x0-x3)/(y3-y0);
-    var multi = Math.round(Math.sqrt(distance*distance/(1+(pSlope*pSlope))));
-    
-    var x1,y1,x2,y2=0;
-    
-    x1 =mx1+multi;
-    x2 =mx2-multi;
-    
-    if(y0==y3){
-      y1=y0+distance;
-      y2=y0-distance;
-    }
-    else{
-      y1 =my1+(pSlope*multi);
-      y2 =my2-(pSlope*multi);
-    }
-  
-    //path="M"+x0+" "+y0+" C"+x1+" "+y1+" "+x2+" "+y2+" "+x3+" "+y3;*/
-
-    path = move + startPoint 
-          + line + shifted_startPoint 
-          + "C" + x1 + " " + y1 + " " + x2 + " " + y2 + " " + x3 + " " + y3
-          //+ line + shifted_endPoint 
-          + line + endPoint;
-    
-    return path;
-  }
-
-  edgeClicked(): void{
-    alert("Edge clicked");
-  }
-
-
 
 
 }

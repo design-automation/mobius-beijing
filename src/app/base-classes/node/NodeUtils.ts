@@ -7,21 +7,31 @@ import {ICodeGenerator, IModule} from "../code/CodeModule";
 
 export abstract class NodeUtils{
 
-	public static copy_node(node: IGraphNode): IGraphNode{
+	//
+	//	Takes IGraphNode and creates an exact or duplicate
+	//	Exact copy will have the same name and node ID (useful when loading from a file)
+	//	Duplicates will have different names and node IDs (useful when duplicating or adding from library)
+	//
+	public static copy_node(node: IGraphNode, exact?: boolean): IGraphNode{
 
 		let n: IGraphNode = new GraphNode();
 
-		let id = n.id;
-		n.update_properties(node);
-		n.name = node.name +  Math.floor(Math.random()*100);
-		n.id = id;
-		n.position  = [ Math.floor(Math.random()*100), Math.floor(Math.random()*100) ];
+		if(exact){
+			// do nothing
+			n.update_properties(node);
+		}
+		else{
+			let id = n.id;
+			n.update_properties(node);
+			n.name = node.name +  Math.floor(Math.random()*100);
+			n.id = id;
+			n.position  = [ Math.floor(Math.random()*100), Math.floor(Math.random()*100) ];
+		}
 
 		return n;
 	}	
  
 	public static add_port(node: IGraphNode, type: PortTypes, name?: string): IGraphNode{
-		console.log(type);
 		let default_name = type.toString().substring(0, 3) + node[`${type}s`].length; 
 
 		if( name !== undefined ){
@@ -49,10 +59,10 @@ export abstract class NodeUtils{
 
 		let prop = "";
 
-		if (port instanceof InputPort){
-			prop = "inputs"
+		if ( port instanceof InputPort ){
+			prop = "inputs";
 		}
-		else if( port instanceof OutputPort){
+		else if(port instanceof OutputPort ){
 			prop = "outputs";
 		}
 		else{
@@ -75,17 +85,31 @@ export abstract class NodeUtils{
 		return node;
 	}
 
+
+	//
+	//	Adds a given procedure line as child of active procedure 
+	//	If there is no active procedure, adds it to the node directly
+	//
 	public static add_procedure(node: IGraphNode, procedure: IProcedure): IGraphNode{
       
 		let active_procedure: IProcedure = node.active_procedure;
-		// TODO: Validate procedure
-		// this.checkProcedure(prod);
+
+		// TODO: Validate postioning of ElseIf / Else
+		// ElseIf / Else can only be placed after an If / ElseIf
 
 		if(active_procedure){
-		    if(active_procedure.hasChildren){
-		    	active_procedure = ProcedureUtils.add_child(active_procedure, procedure);
-		    }
-		    else{
+
+			//
+			// If the active procedure is an If or ElseIf
+			// and the next procedure being added is ElseIf / Else
+			// the next procedure should be a sibling of the active procedure
+			//
+			let if_else_conditional: boolean = (active_procedure.type == ProcedureTypes.IfControl || active_procedure.type == ProcedureTypes.ElseIfControl)
+					&& (procedure.type == ProcedureTypes.ElseControl || procedure.type == ProcedureTypes.ElseIfControl);
+
+			
+			// Check if the if-else conditional is true or the active procedure can't have children
+			if( if_else_conditional || !active_procedure.hasChildren ){
 		       if(active_procedure.parent){
 		           let parent: IProcedure = active_procedure.parent;
 		           let position: number = ProcedureUtils.get_child_position(parent, active_procedure);
@@ -95,13 +119,19 @@ export abstract class NodeUtils{
 		       	   let position: number = NodeUtils.get_child_position(node, active_procedure);
 		           NodeUtils.add_procedure_at_position(node, procedure, position + 1);
 		       }
-		    }
+			}
+			else{
+		    	active_procedure = ProcedureUtils.add_child(active_procedure, procedure);
+			}
 		}
 		else{
 			node.procedure.push(procedure);
 		}
 
       	node.active_procedure = procedure;
+
+      	// TODO: Lint the Node
+
 		return node;
 	}
 
@@ -179,19 +209,27 @@ export abstract class NodeUtils{
 	
 	public static execute_node(node: IGraphNode, code_generator: ICodeGenerator, modules: IModule[], print: Function, globals?: any): void{
 
+		console.log(`${node.name} is executing...`);
+
+		// To store the files in window_scope
 		let window_params: string[] = [];
 
+		// Params required for the node execution
 		let params: any[] = [];
 
+		// Count of data being downloaded from file URLs
 		let live_data_downloads = 0;
 
 		node.inputs.map(function(i, index){ 
 
-			// if any of the inputs is a web url, get data first
 			if(i.type == InputPortTypes.URL){
-				
+
+				///
+				///	 If type of input-port is URL,
+				///	 fetch data first
+				///
+
 				live_data_downloads++;
-				
 				let urlString: any = i.getOpts().url;
 				fetch(urlString)
 				.then((res) => res.text())
@@ -215,14 +253,6 @@ export abstract class NodeUtils{
 				})
 				.catch(err => { alert("Oops...Error fetching data from URL."); throw err; });
 			}
-			else if(i.isFunction()){
-				let oNode: IGraphNode = i.getFnValue();
-				let codeString: string = code_generator.get_code_node(oNode);
-
-				// converts string to functin
-				let fn_def = Function("return " + codeString)();
-				params[i.name] = fn_def;
-			}
 			else{
 				params[i.name] = i.value; 
 			}
@@ -231,14 +261,6 @@ export abstract class NodeUtils{
 
 		// this code runs only after live_data_downloads = 0;
 	    function outputProcessing(){
-			node.outputs.map(function(o){
-				if(o.isFunction()){
-					let node_code: string =  code_generator.get_code_node(node, undefined, true);
-					o.setDefaultValue( node_code );
-				}
-			});
-
-
 			// use code generator to execute code
 			let result: any  = code_generator.execute_node(node, params, modules, print, globals);
 
@@ -246,6 +268,7 @@ export abstract class NodeUtils{
 			for( let n=0;  n < node.outputs.length; n++ ){
 				let output_port = node.outputs[n];
 				output_port.value = (result[output_port.name]);
+				console.log(`${output_port.name} of node ${node.name} was assigned value ${output_port.value}`);
 			}
 
 			node.hasExecuted = true;

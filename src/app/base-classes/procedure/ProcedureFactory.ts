@@ -31,9 +31,6 @@ export class ProcedureFactory{
 			case ProcedureTypes.Comment:
 				return new StatementProcedure(type);
 
-			case ProcedureTypes.IfElseControl:
-				console.warn("Discontinued: IfElse");
-
 			case ProcedureTypes.IfControl:
 				return new IfControlProcedure(data);
 

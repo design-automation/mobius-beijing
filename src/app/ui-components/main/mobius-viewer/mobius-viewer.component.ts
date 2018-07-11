@@ -48,7 +48,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 				private http: HttpClient,
 				private layoutService: LayoutService, 
 				private _mb: MobiusService, 
-				private flowchartService: FlowchartService) {
+				private _fs: FlowchartService) {
 		
 		this.router = _router;
 
@@ -67,7 +67,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		this.sub = this.router.params.subscribe(params => {
 		   this.filepath = this.getFlowchart(params.id);
-		   this._mb.load_file_from_url(this.filepath);
+		   this._fs.load_file_from_url(this.filepath);
 		});
 
 		this.slider_state = 'slide_in';
@@ -75,7 +75,7 @@ export class MobiusViewerComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(){
 		this.visible = true;
-		//this.editable = this.flowchartService.getFlowchart().editable;
+		//this.editable = this._fs.getFlowchart().editable;
 	}
 
 	getFlowchart(filename: string){

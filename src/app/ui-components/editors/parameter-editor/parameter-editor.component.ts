@@ -21,11 +21,8 @@ export class ParameterEditorComponent{
     readonly inputPortOpts: InputPortTypes[] = [
       InputPortTypes.Input,
       InputPortTypes.Slider, 
-      InputPortTypes.FilePicker,
       InputPortTypes.URL,
-      InputPortTypes.Checkbox
-      // InputPortTypes.ColorPicker, 
-      // InputPortTypes.Dropdown
+      InputPortTypes.Checkbox,
     ]; 
 
     readonly outputPortOpts: OutputPortTypes[] = [

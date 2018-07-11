@@ -17,7 +17,20 @@ export class GraphEdgeComponent implements OnInit {
 
   _buffer: number = 50;
 
-  constructor() { }
+  constructor() {  }
+
+  ngOnInit() {
+      let canvas: HTMLCanvasElement = this.canvas.nativeElement;
+      let context  = canvas.getContext('2d');
+
+      this.drawEdge();
+  }
+
+  ngDoCheck(){
+      if(this.edge != undefined){
+        this.drawEdge()
+      }
+  }
 
   getTop(): number{
     // return smallest y value
@@ -153,17 +166,10 @@ export class GraphEdgeComponent implements OnInit {
         context.stroke();
   }
 
-  ngOnInit() {
-      let canvas: HTMLCanvasElement = this.canvas.nativeElement;
-      let context  = canvas.getContext('2d');
+  onSelect(): void{
 
-      this.drawEdge();
   }
 
-  ngDoCheck(){
-      if(this.edge != undefined){
-        this.drawEdge()
-      }
-  }
+
 
 }

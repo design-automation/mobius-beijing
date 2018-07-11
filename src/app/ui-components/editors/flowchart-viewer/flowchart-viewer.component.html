@@ -5,17 +5,22 @@
 		<split  direction="horizontal" 
               [gutterSize]="7" 
               [useTransition]="true" gutterColor=white>
+					
 
+			    <!-- Panel: Contains Flowchart Controls -->
 				<split-area class="sidebar" [size]="30" order="1">
 					<app-flowchart-controls></app-flowchart-controls>
 				</split-area>
 				
-		
+			
+				<!-- Graph: Nodes + Edges -->
 				<split-area order="2" [size]="70"
 					style="overflow: hidden; position: relative; display: flex; flex-direction: column;" 
 					(wheel)="scale($event)">
+					
+					<div id="flowchart__name">{{fc.name || "No flowchart"}}</div>
+
 				    <div class ="action-window">
-				    	
 
 				    	<div class="content-wrapper" (wheel)="scale($event)" 
 				    		style="flex-grow: 1;">
@@ -27,7 +32,7 @@
 								ondragover="return false" 
 								(mousedown)="pan($event)">
 
-								<!-- all nodes --> 
+								<!-- Nodes --> 
 								<div class="node-container content-wrapper">
 									
 									<!-- single  node -->
@@ -45,7 +50,7 @@
 													<!-- copy node -->
 													<div class="action-button" (click)="duplicate_node()" 		
 														matTooltip="Copy Node">
-														<mat-icon>copy</mat-icon>
+														<mat-icon>content_copy</mat-icon>
 													</div>
 
 													<!-- delete node -->
@@ -55,7 +60,7 @@
 													</div>
 													
 													<!-- disable / enable node -->
-													<div class="action-button" (click)="node.enabled = !node.enabled; push_flowchart();">
+													<div class="action-button" (click)="node.enabled = !node.enabled;">
 														<mat-icon>{{ node.enabled ? 'check_circle' : 'highlight_off' }} </mat-icon>
 													</div>
 
@@ -74,7 +79,7 @@
 											<div class="node-body" 
 												[class.library]="node.type !== undefined"
 												[class.error]="node._hasError"
-												[class.disabled] ="node.enabled" 
+												[class.disabled] ="!node.enabled" 
 												(click)="active_node = node; push_node();"
 												draggable=true  
 												(dragstart)="nodeDragStart($event, node)" 
@@ -94,7 +99,7 @@
 													
 													<div class="port input" 
 														*ngFor="let port of node.inputs; let pi=index"  
-														id="n{{node_index}}pi{{pi}}"
+														id="n{{node.id}}pi{{pi}}"
 														[class.hidden]="port.type != 'Input'">
 
 														<div class="port-grip" 
@@ -122,11 +127,8 @@
 														*ngFor="let port of node.outputs; let po=index;"
 														id="n{{node.id}}po{{po}}">
 
-														<!-- <span class="port-name" [class.isFunction]="port.isFunction()">{{port.name  | shortname: 10  }}</span> -->
-
 														<input matInput
 													    [(ngModel)]="port.name"
-													    [class.isFunction]="port.isFunction()"
 													    style="margin: 2px; min-width: 50px; max-width: 80px; text-align: right;"
 													    placeholder="Output Port Name" value="{{ port.name }}"/>
 
@@ -152,9 +154,14 @@
 											</div>
 									</div>
 								</div>
+								
 
+								<!-- Edges -->
 								<div class="edge-container">
-									<app-graph-edge *ngFor="let edge of fc?.edges" [edge]="edge"></app-graph-edge>
+									<app-graph-edge 
+										*ngFor="let edge of fc?.edges" 
+										[edge]="edge">
+									</app-graph-edge>
 									
 									<!-- temporary edge -->
 									<app-graph-edge 

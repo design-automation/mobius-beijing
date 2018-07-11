@@ -62,9 +62,7 @@ export class FunctionProcedure extends Procedure{
 	}
 
 	getOutputs(): string[]{
-		let outputs = this.node.outputs.filter(function(o){
-			return !o.isFunction();
-		}).map(function(output){
+		let outputs = this.node.outputs.map(function(output){
 			return output.name;
 		});
 		return outputs;

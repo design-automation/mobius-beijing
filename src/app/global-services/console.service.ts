@@ -64,7 +64,7 @@ export class ConsoleService {
 
 
 	log(msg: any){
-		console.log(new Date() + ": " + JSON.stringify(msg));
+		console.log(new Date() + ": " + msg);
 	}
 
 }

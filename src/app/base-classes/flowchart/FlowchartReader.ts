@@ -1,6 +1,7 @@
 import { IFlowchart } from './IFlowchart';
 import { Flowchart } from './Flowchart';
 import { FlowchartUtils } from './FlowchartUtils';
+import { FlowchartConnectionUtils } from './FlowchartConnectionUtils';
 
 import { IGraphNode, GraphNode, IEdge, NodeUtils } from '../node/NodeModule';
 import { FunctionProcedure } from '../procedure/FunctionProcedure';
@@ -20,7 +21,7 @@ export abstract class FlowchartReader{
 	    /// adding all nodes
 	    let all_nodes: IGraphNode[] = [];
 	    for(let node_data of nodes_data){	
-	    	let n: IGraphNode = NodeUtils.copy_node(node_data);
+	    	let n: IGraphNode = NodeUtils.copy_node(node_data, true);
 	    	fc.nodes.push(n);
 	    	//FlowchartUtils.add_node_from_data(fc, node_data);
 	    }

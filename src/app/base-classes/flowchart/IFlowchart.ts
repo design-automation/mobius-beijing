@@ -19,6 +19,7 @@ export interface IFlowchart{
 	summary: string;
 	description: string;
 	selected_node: number;
+	display_node: number;
 	
 	globals;
 	editable;

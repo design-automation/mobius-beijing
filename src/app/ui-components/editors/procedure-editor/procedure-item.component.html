@@ -6,7 +6,7 @@
 		[class.error]="prod.error" 
 		[class.disabled]="!prod.enabled"
 		[class.selected] = "prod.id == active_procedure?.id"
-		(click)="onAction($event, prod, 'select')">
+		(click)="onSelect($event)">
 
 		<!-- template for data -->
 		<div *ngIf="prod.type == 'Data'"> 
@@ -179,8 +179,8 @@
 	<app-procedure-item 
 		*ngFor="let child of prod.children" 
 		[prod]="child"
+		[root]="root"
 		[active_procedure]="active_procedure"
-		[level]="level+1"
-		(action)="onAction($event)">
+		[level]="level+1">
 	</app-procedure-item>
 </div>
