@@ -1,4 +1,4 @@
-https://design-automation.github.io/mobius-cesium/
+https://design-automation.github.io/mobius-beijing/
 
 ## Mobius 
 [![Build Status](https://travis-ci.org/akshatamohanty/mobius-modeller.svg?branch=master)](https://travis-ci.org/akshatamohanty/mobius-modeller)
